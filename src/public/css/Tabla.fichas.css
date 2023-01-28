@@ -1,0 +1,49 @@
+
+#tabla-fichas{
+    width: 150%;
+}
+#tabla-fichas td,#tabla-fichas th {
+    padding: 5px 2px;
+
+
+}
+
+.bg-vta {
+    background-color: #FFFF99;
+}
+
+.bg-ant {
+    background-color: #99CCFF;
+}
+
+.bg-meses {
+    background-color: #f5f5f5;
+}
+.bg-cuota {
+    background-color: #CCFFCC;
+}
+
+#tabla-fichas th{
+    border: 2px solid #000;
+    background-color: #FFFFCC;
+}
+#tabla-fichas .bg-adicional{
+    color: #000;
+    background: #BFBFBF ;
+}
+#tabla-fichas .bg-valor_unitario{
+    background-color: #366092;
+    color: #FFF;
+}
+#tabla-fichas .bg-adicional_datos{
+    background: #fff;
+    border: 1px gray solid;
+}
+
+
+
+
+
+
+
+
