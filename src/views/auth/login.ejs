@@ -4,39 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="css/styles.css">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
+    <link rel="stylesheet" href="css/auth/login/main.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Document</title>
 </head>
 
 <body>
 
-    <div class="div-background">
-        <div class="login-container">
+    <div class="background">
+        <div class="card-container">
 
-            <div class="login-container__cols">
-
-                <div class="login-container__input-container">
-                    <form class="login-container__input-container-container" method="POST" action="/login">
-                        <p class="login-container__input-container__title">Iniciar sesion</p>
-                        <input name="username" type="text" class="login-container__input-container__input">
-                        <input name="password" type="password" class="login-container__input-container__input">
-                        <input type="submit" class="login-container__input-container__input-btn" value="Ingresar">
-
-                        <% if( message.length >0)  { %>
-                            <div class="error-message"> <%= message %> </div>
-                        <% } %>
-
-                        </form>
-                </div>
-                <div class="login-container__image-container">
-                    <img src="img/logo.png" alt="Imagen no encontrada">
-                </div>
-            </div>
-
+            <div class="card-main-image"></div>
+            <form action="/login" method="POST" class="form-main">
+                <input type="text" class="input-text input-username" placeholder="Nombre de usuario" name="username"/>
+                <input type="password" class="input-text input-password" placeholder="Contraseña" name="password"/>
+                <input type="submit" value="Iniciar sesion" class="input-submit">
+            </form>
         </div>
     </div>
+
 </body>
 
 </html>
