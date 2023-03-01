@@ -4,7 +4,7 @@ const btn_submit = document.querySelector(".button input");
 const form = document.querySelector("form");
 const articulos = document.getElementsByName("ARTICULOS")[0];
 const cuotas = document.getElementsByName("CUOTAS")[0];
-
+//GIT
 //Funciones
 function asociarInputOption(displayedOptions, input) {
     //Recibe un input y un options
@@ -123,7 +123,8 @@ for (let i = 0; i < document.querySelectorAll("select").length; i++) {
 btn_nuevo.addEventListener("click", e => {
     //Limpiar input box
     let input_array = document.querySelectorAll(".input-box input");
-    input_array.forEach(e => e.value = "");
+    input_array.forEach(e => {if(!input_array[7].classList.contains("hidden")){ e.value = ""}});
+
     //Cambiar numero de cliente a nuevo
     document.getElementsByName("CTE")[0].value = "Nuevo";
 
