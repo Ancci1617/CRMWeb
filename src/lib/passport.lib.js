@@ -9,8 +9,7 @@ passport.use(new PassportLocal(async (username, password, done) => {
     //Si el ID es distinto de -1 encontro al usuario
     const user = await getUserByPassword(username, password);
 
-    if (user.ID !== -1)
-        return done(null, user);
+    if (user.ID !== -1) return done(null, user);
 
 
     //No encontro al usuario
@@ -32,5 +31,3 @@ passport.deserializeUser(async (id, done) => {
 
 })
 
-
-module.exports = passport

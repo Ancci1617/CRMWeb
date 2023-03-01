@@ -22,14 +22,13 @@
             <th>Zona</th>
             <th>VTA</th>
             <th>ANT</th>
-            <th>Ago</th>
-            <th>Sep</th>
-            <th>Oct</th>
-            <th>Nov</th>
-            <th>Dic</th>
-            <th>Ene</th>
+            <% for (var i = 6; i !== 0 ; i--) { %>
+                <th>
+                    <%= months[vigente-i <0? 12 + vigente-i:vigente-i]%>
+                </th>
+            <%}%>
             <th>Sal.Ant</th>
-            <th>Feb</th>
+            <th><%= months[vigente] %></th>
             <th>Sal.Act</th>
             <th>Cuota</th>
             <th class="bg-valor_unitario">V.U</th>
@@ -43,10 +42,9 @@
     </thead>
     <tbody>
         <tr>
-            <td>24/02/22</td>
-            <td>2130</td>
-            <td class="zona">D4</td>
-            <td>22200</td>
+            <td>0</td>
+            <td>0</td>
+            <td class="zona">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -57,20 +55,6 @@
             <td>0</td>
             <td>0</td>
             <td>0</td>
-            <td>3700</td>
-            <td>1,0</td>
-            <td>24/9/2022</td>
-            <td>6/12/2022</td>
-            <td>3,0</td>
-            <td>6,0</td>
-            <td>6,0</td>
-            <td>-30</td>
-        </tr>
-        <tr>
-            <td>24/02/22</td>
-            <td>2130</td>
-            <td class="zona">D4</td>
-            <td>22200</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -80,15 +64,6 @@
             <td>0</td>
             <td>0</td>
             <td>0</td>
-            <td>0</td>
-            <td>3700</td>
-            <td>1,0</td>
-            <td>24/9/2022</td>
-            <td>6/12/2022</td>
-            <td>3,0</td>
-            <td>6,0</td>
-            <td>6,0</td>
-            <td>-30</td>
         </tr>
     </tbody>
 </table>

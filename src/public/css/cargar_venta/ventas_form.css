@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #3b3a3a;
+
+}
+
+.container {
+  max-width: 700px;
+  width: 100%;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  height: 90%;
+  overflow-y: scroll;
+}
+
+.container .titles {
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+}
+
+.btn-green {
+  font-size: 14px;
+  text-decoration: none;
+  background-color: #44c767;
+  border-radius: 25px;
+  border: 1px solid #18ab29;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 8px 18px;
+  text-shadow: 1px 1px 1px #2f6627;
+}
+
+.container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+
+.content form .user-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+form .user-details .input-box {
+  margin-bottom: 15px;
+  width: calc(100% / 2 - 20px);
+}
+
+form .input-box span.details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.user-details .input-box input,.user-details .input-box select {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding-left: 15px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+.hidden{
+  display: none;
+}
+.user-details .input-box input:focus,
+.user-details .input-box input:valid {
+  border-color: #18ab29;
+}
+
+.button {
+  height: 45px;
+  width: 100%;
+}
+
+.button input {
+  height: 100%;
+  width: 100%;
+  margin-bottom: 35px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(135deg, #303e47, #453f47);
+}
+.aprobacion{
+  display: none;
+}
+@media(max-width: 584px) {
+  .container {
+    max-width: 100%;
+  }
+
+  form .user-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+
+  .content form .user-details {
+    max-height: 300px;
+  }
+
+  .user-details::-webkit-scrollbar {
+    width: 5px;
+  }
+
+}
+
+@media(max-width: 459px) {
+  .container .content .category {
+    flex-direction: column;
+  }
+}

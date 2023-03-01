@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+html, body{
+    background-color: #3b3a3a;
+    height: 100%;
+}
+
+
+.dashboard-container{
+    width: 100%;
+    max-width: 480px;
+    height: 90%;
+    margin-top: 16px ;
+    font-family: 'Poppins', Verdana;
+    border: 1px solid blue; 
+    display: flex;
+    flex-direction: column;
+    background-color: #EEE;
+}
+.dashboard-item{
+    padding: 4px 8px;
+    background-color: azure;
+}
+.dashboard-item:nth-child(even){
+    background-color: rgb(172, 233, 233);
+}
+.dashboard-item a{
+    font-family: 'Poppins', Verdana;
+    text-decoration: none;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

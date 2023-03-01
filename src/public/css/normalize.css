@@ -2,8 +2,19 @@
     margin: 0;
     padding: 0;
     font-family: Verdana;
+    box-sizing: border-box;
+}
+html,body{
+    height: 100%;
 }
 
+.page-container{    
+    display: flex;
+    justify-content: center;
+    height: calc(100% - 36px);
+    justify-content: center;
+    border: 1px solid red;
+}
 
 
 

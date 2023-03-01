@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <%- include("./partials/navigation/navigation-bar",username) %>
+        <div class="page-container">
+            
+            <div class="dashboard-container">
+                <div class="dashboard-item"><a href="/CRM">CRM</a></div>
+                <div class="dashboard-item"><a href="/ventas_cargadas">Ventas del dia</a></div>
+            </div>
+
+        </div>
+
+
+</body>
+
+</html>

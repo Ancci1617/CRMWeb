@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
+    <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
+    <link rel="stylesheet" href="css/CRM/general.css">
+    <link rel="stylesheet" href="css/cargar_venta/tabla.ventascargadas.css">
+
+
+</head>
+<title>Ventas cargadas</title>
+
+<body>
+    <%- include('../partials/navigation/navigation-bar.ejs')%>
+        <div class="page-container">
+            <div class="table-container">
+                <table class="tabla-ventascargadas tabla-clientes tabla-datos">
+                    <thead>
+                        <tr>
+                            <th>CTE</th>
+                            <th>FICHA</th>
+                            <th>ZONA</th>
+                            <th>NOMBRE</th>
+                            <th>CALLE</th>
+                            <th>ARTICULOS</th>
+                            <th>TOTAL</th>
+                            <th>CUOTA</th>
+                            <th>APROBADO</th>
+                            <th>RESPONSABLE</th>
+                            <th>ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < ventas.length; i++ ) { %>
+                        <tr>
+                            <td><%= ventas[i].CTE %></td>
+                            <td><%= ventas[i].FICHA %></td>
+                            <td class="zona"><%= ventas[i].ZONA %></td>
+                            <td><%= ventas[i].NOMBRE %></td>
+                            <td><%= ventas[i].CALLE %></td>
+                            <td><%= ventas[i].ARTICULOS %></td>
+                            <td><%= ventas[i].TOTAL %></td>
+                            <td><%= ventas[i].CUOTA %></td>
+                            <td><%= ventas[i].APROBADO %></td>
+                            <td><%= ventas[i].RESPONSABLE%></td>
+                            <td><a href="/eliminar_venta/<%= ventas[i].INDICE %>">Borrar</a></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+</body>
+
+</html>

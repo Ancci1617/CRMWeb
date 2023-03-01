@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const path = require("path");
 const flash = require("connect-flash");
 const session = require('express-session');
-const passport = require("./lib/passport.lib")
+const passport = require("passport")
 
 
 
@@ -14,12 +14,9 @@ const passport = require("./lib/passport.lib")
 app.use(express.static(path.join(__dirname, 'public')));
 app.set("views", path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(session({
-    secret: "Secret code",
-    resave: true,
-    saveUninitialized: true,
-    cookie: {maxAge:30000}
-}));
+
+
+
 
 //Set Variables;
 app.set("PORT", process.env.PORT || 3000);
@@ -28,27 +25,34 @@ app.set("PORT", process.env.PORT || 3000);
 
 
 //Middlewareas
+app.use(session({
+    key: 'session_cookie_name',
+    secret: 'session_cookie_secret',
+    store: require("./model/connection-sessionstorage"),
+    resave: false,
+    cookie: { maxAge: (1000 * 60 * 60) },
+    saveUninitialized: false
+}));
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.use(require("./model/connection-session.js"));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-
+require("./lib/passport.lib");
 
 
 
 //Routes
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
-app.use(require("./Router/auth/login.router"));
+app.use(require("./Router/auth/auth.router"));
+app.use(require('./Router/cargar_ventas/ventas.router'))
 
 
 
 
-
-
+//Ejecuta el servidor
 app.listen(app.get("PORT"), (err) => {
     if (err) {
         console.log("ERR: " + err);

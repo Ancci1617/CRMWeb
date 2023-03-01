@@ -4,19 +4,26 @@
     
     <title>Blanco Gusmar | CRM</title>
     <link rel="shortcut icon" href="images/BGM.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="css/Normalize.css">
-    <link rel="stylesheet" href="css/CRM/General.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/CRM/general.css">
     <link rel="stylesheet" href="css/CRM/interfaz.css">
     <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
     <link rel="stylesheet" href="css/CRM/tabla.fichas.css">
     <link rel="stylesheet" href="css/CRM/tabla.prestamos.css">
     <link rel="stylesheet" href="css/CRM/tabla.domicilio.css">
     <link rel="stylesheet" href="css/CRM/sidebar.css">
+    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <% const months = ["Ene", "Feb" , "Mar" , "Abr" , "May" , "Jun" , "Jul" , "Ago" , "Sep" , "Oct" , "Nov" , "Dec" ]; %>
+    <% const vigente = new Date(new Date().getTime()+(1000*3600*24*3)).getMonth() //el 26 de cada mes esto cambia %>
+
+    
+
 
 </head>
 
 <body>
+         <%- include('../partials/navigation/navigation-bar.ejs')%>
 
         <div class="sidebar">
             <div class="sidebar-lengueta-container">
@@ -30,18 +37,18 @@
         <div class="container">
         <%- include('../partials/CRM/tabla.disponible.ejs') %>
         <%- include('../partials/CRM/btn.container.ejs') %>
-        <%- include('../partials/CRM/tabla.clientes.ejs')%>
-        <%- include('../partials/CRM/tabla.fichas.ejs')%>
-        <%- include('../partials/CRM/tabla.prestamos.ejs')%>
+        <%- include('../partials/CRM/tabla.clientes.ejs') %>
+        <%- include('../partials/CRM/tabla.fichas.ejs', {months, vigente})  %>
+        <%- include('../partials/CRM/tabla.prestamos.ejs', {months, vigente})%>
         <%- include('../partials/CRM/tabla.masterec.ejs')%>
         <%- include('../partials/CRM/tabla.masterBGM.ejs')%>
 
 
     </div>
 
-    <script src="js/CRM.js"></script>
-    <script src="js/sidebar.js"></script>
-
+    <script src="js/CRM/CRM.js"></script>
+    <script src="js/CRM/sidebar.js"></script>
+    <script src="js/CRM/button_events.js"></script>
 
 </body>
 

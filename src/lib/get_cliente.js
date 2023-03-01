@@ -6,7 +6,6 @@ const getCliente = async (request_data) => {
    
     const data = request_data.Data;
     const tipo = request_data.tipo_de_dato;
-    console.log(request_data);
 
     switch(tipo) {
         case "Dni":

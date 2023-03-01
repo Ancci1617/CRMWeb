@@ -128,7 +128,7 @@ function getType(data) {
     }
 
     //Implicito
-    let hasString = (data.match("[a-b]") || data.match("[A-Z]"));
+    let hasString = (data.match("[a-z]") || data.match("[A-Z]"));
     let hasNumber = (data.match("[0-9+]"));
 
     if (!hasString && hasNumber) {

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <% var today=new Date() %>
+</head>
+
+<body>
+  
+  <div class="container">
+    <div class="titles">
+      <div class="title">Cargar venta</div>
+      <div>
+        <input class="btn-green btn-nuevo" type="button" value="Cliente nuevo">
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/cargar_venta" method="POST">
+
+        <div class="user-details">
+          <div class="input-box">
+            <span class="d  etails">Cliente</span>
+            <input type="text" disabled placeholder="Numero de cliente" value="<%= CTE ? CTE : "" %>" name="CTE"
+              required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Ficha</span>
+            <input type="number" placeholder="Numero de ficha" name="FICHA" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Apellido y nombre</span>
+            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE ? NOMBRE : "" %>" name="NOMBRE"
+            required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Zona</span>
+            <input type="text" placeholder="Zona" value="<%= ZONA ? ZONA : ""  %>" name="ZONA" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Calle</span>
+            <input type="text" placeholder="Domicilio" value="<%= CALLE ? CALLE : "" %>" name="CALLE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Telefono</span>
+            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP ? WHATSAPP : "" %>"
+            name="WHATSAPP">
+          </div>
+
+          <div class="input-box">
+            <span class="details">N° de documento</span>
+            <input type="number" placeholder="Numero de documento" value="<%= DNI ? DNI : 0 %>" name="DNI" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuotas</span>
+            <input type="number" placeholder="Cantidad de cuotas" name="CUOTAS" class="hidden" value="3">
+            <select class="options options-tipo selector-cuotas">
+              <option value="0">3</option>
+              <option value="1">6</option>
+              <option value="2">9</option>
+              <option value="3">12</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Articulos</span>
+            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS">
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Vta total</span>
+            <input type="text" placeholder="Suma de cuotas" name="TOTAL" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuota</span>
+            <input type="text" placeholder="Valor de cuota" name="CUOTA" required> 
+          </div>
+
+          <div class="input-box">
+            <span class="details">Anticipo</span>
+            <input type="text" placeholder="Anticipo cobrado" name="ANTICIPO">
+          </div>
+
+          <div class="input-box">
+            <span class="details">Tipo</span>
+            <input type="text" placeholder="Pedido,revisita..." name="TIPO" class="hidden" value="Pedido" required>
+            <select class="options options- tipo">
+              <option value="0">Pedido</option>
+              <option value="1">Revisita</option>
+              <option value="2">Timbreo</option>
+              <option value="3">Local</option>
+            </select>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Estatus</span>
+            <input type="text" placeholder="Entregado,Prepago..." name="ESTATUS" class="hidden" value="Entregado" required>
+            <select class="options options-tipo">
+              <option value="0">Entregado</option>
+              <option value="1">Con anticipo</option>
+              <option value="2">Para entregar</option>
+              <option value="3">Prepago</option>
+              <option value="4">Prepago entregado</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Primer pago</span>
+            <input type="date" placeholder="Primer fecha de pago" name="PRIMER_PAGO"
+              min="<%= today.getFullYear() %>-<%= (today.getMonth()+1).toString().padStart(2," 0") %>-<%=
+              today.getDate()%>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Dia de vencimiento</span>
+            <input type="text" placeholder="Vencimiento mensual" name="VENCIMIENTO" class="hidden" value="4" required>
+            <select class="options options-tipo">
+              <option value="0">4</option>
+              <option value="1">9</option>
+              <option value="2">14</option>
+              <option value="3">19</option>
+              <option value="4">24</option>
+              <option value="5">29</option>
+            </select>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Cuota de entrega</span>
+            <input type="text" placeholder="Cuotas pagas para la entrega" name="CUOTAS_PARA_ENTREGA">
+          </div>
+          <div class="input-box">
+            <span class="details">Fecha de venta</span>
+            <input type="date" placeholder="" name="FECHA_VENTA"
+              min="<%= today.getFullYear() %>-<%= (today.getMonth()+1).toString().padStart(2,"0") %>-<%=
+              today.getDate()-3%>"
+              max="<%= today.getFullYear() %>-<%= (today.getMonth()+1).toString().padStart(2,"0") %>-<%=
+                    today.getDate()%>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Se hace responsable el vendedor?</span>
+            <input type="text" class="responsable hidden" placeholder="" name="RESPONSABLE" value="NO">
+            <select class="options options-tipo">
+              <option value="0">NO</option>
+              <option value="1">SI</option>
+            </select>
+          </div>
+
+          <input type="text" class="aprobacion" placeholder="" name="APROBADO">
+          <div class="button">
+            <input type="submit" value="Registrar venta">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/cargar_venta/cargar_venta.js"></script>
+
+</body>
+
+</html>

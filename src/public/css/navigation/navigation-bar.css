@@ -1,0 +1,19 @@
+.navigation-bar{
+    height: 36px;
+    background-color: skyblue;
+    padding: 6px 12px;
+    font-weight: 500;
+
+    display: flex;
+    justify-content: space-between;
+    white-space: nowr   ap;
+}
+
+.navigation-bar a{
+    
+    margin-right: 16px;
+    text-decoration: none;
+
+}
+
+

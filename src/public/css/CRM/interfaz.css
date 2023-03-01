@@ -1,5 +1,5 @@
 .btn {
-
+    
     color: white;
     font-weight: 500;
     font-size: 1.1em;
@@ -56,22 +56,19 @@
 }
 
 .disponible-item {
+    
     border: 1px solid black;
     padding: 5px;
+
 }
 
 .disponible-oferta {
     background-color: #F2F2F2;
 }
 .buscador-disponible-container{
-    position: sticky;
     top: 0;
     z-index: 100;
 }
-
-
-
-
 
 .busqueda-container * {
     box-sizing: border-box;
@@ -89,8 +86,10 @@
 
 .busqueda-first-title{
     grid-column: 1/3;
-}
+} 
+
 .custom-selectbox select{
+    
     width: 100%;
     height: 100%;
     text-align: center;
