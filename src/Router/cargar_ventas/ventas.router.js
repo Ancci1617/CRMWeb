@@ -9,7 +9,6 @@ const { isLoggedIn , isNotLoggedIn } = require("../../lib/auth");
 const { getVentasDelDia, borrarVentasDelDia } = require("../../model/ventas/ventas.query");
 
 Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
-    console.log("params", req.params);
     const { cte } = req.params;
 
 
