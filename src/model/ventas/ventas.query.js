@@ -2,14 +2,14 @@ const pool = require("../../model/connection-database");
 
 async function getVentasDelDia(dia,usuario){
 
-    
+    console.log("dia",dia)
     const [ventas,dos] = await pool.query(
         "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, " + 
         "`CALLE`, `ARTICULOS`,`CUOTA`,`TOTAL`, " + 
         "`APROBADO`, `RESPONSABLE`,`INDICE` " + 
         "FROM VentasCargadas WHERE `FECHA_VENTA` = " + 
         "? AND USUARIO = ? AND VISIBLE = 1",[dia,usuario])
-    console.log(ventas,dos)
+   
     if(ventas.length > 0){
         return ventas;
     }
