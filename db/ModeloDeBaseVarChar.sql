@@ -41,6 +41,29 @@ CREATE TABLE `Clientes` (
   `OBS` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+  CREATE TABLE `VentasCargadas`  (
+      CTE  varchar(255) DEFAULT NULL, 
+      FICHA  varchar(255) DEFAULT NULL, 
+      NOMBRE  varchar(255) DEFAULT NULL, 
+      ZONA  varchar(255) DEFAULT NULL, 
+      CALLE  varchar(255) DEFAULT NULL, 
+      WHATSAPP  varchar(255) DEFAULT NULL, 
+      DNI  varchar(255) DEFAULT NULL, 
+      ARTICULOS  varchar(255) DEFAULT NULL, 
+      TOTAL  varchar(255) DEFAULT NULL, 
+      ANTICIPO  varchar(255) DEFAULT NULL, 
+      CUOTA  varchar(255) DEFAULT NULL, 
+      CUOTAS  varchar(255) DEFAULT NULL, 
+      TIPO  varchar(255) DEFAULT NULL, 
+      ESTATUS  varchar(255) DEFAULT NULL, 
+      PRIMER_PAGO  varchar(255) DEFAULT NULL, 
+      VENCIMIENTO  varchar(255) DEFAULT NULL, 
+      CUOTAS_PARA_ENTREGA  varchar(255) DEFAULT NULL, 
+      FECHA_VENTA  varchar(255) DEFAULT NULL, 
+      RESPONSABLE  varchar(255) DEFAULT NULL
+ )
+
 -- --------------------------------------------------------
 
 --
