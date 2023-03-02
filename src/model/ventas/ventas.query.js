@@ -5,8 +5,8 @@ async function getVentasDelDia(dia,usuario){
     console.log("dia",dia)
     const [ventas,dos] = await pool.query(
         "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, " + 
-        "`CALLE`, `ARTICULOS`,`CUOTA`,`TOTAL`, " + 
-        "`APROBADO`, `RESPONSABLE`,`INDICE` " + 
+        "`CALLE`,`WHATSAPP`,`DNI`,`ARTICULOS`,`CUOTAS`,`CUOTA`,`TOTAL`, " + 
+        "`VENCIMIENTO`,`PRIMER_PAGO`,`APROBADO`, `RESPONSABLE`,`INDICE` " + 
         "FROM VentasCargadas WHERE `FECHA_VENTA` = " + 
         "? AND USUARIO = ? AND VISIBLE = 1",[dia,usuario])
    
