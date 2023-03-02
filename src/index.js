@@ -7,8 +7,6 @@ const session = require('express-session');
 const passport = require("passport")
 
 
-//comentario
-//comentario2
 
 //Set config
 app.use(express.static(path.join(__dirname, 'public')));
@@ -19,7 +17,7 @@ app.set('view engine', 'ejs');
 
 
 //Set Variables;
-app.set("PORT", process.env.PORT || 3000);
+app.set("PORT", process.env.PORT || 80);
 
 
 
