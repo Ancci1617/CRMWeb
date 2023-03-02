@@ -57,7 +57,7 @@ app.listen(app.get("PORT"), (err) => {
     if (err) {
         console.log("ERR: " + err);
     }
-    console.log("Server running on port " + app.get("PORT"));
+    console.log("Server running on port, " + app.get("PORT"));
 })
 
 
