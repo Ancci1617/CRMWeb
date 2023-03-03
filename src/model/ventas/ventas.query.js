@@ -23,6 +23,8 @@ async function borrarVentasDelDia(indice,usuario){
         "WHERE INDICE = ? and USUARIO = ?"
         ,[indice,usuario])
     
+    
+
     return result;
 }
 

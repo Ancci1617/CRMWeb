@@ -26,6 +26,7 @@ Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 
     //RECIBIR EL JSON Y ENVIARLO A UNA BASE DE DATOS
+    console.log(req.body)   
     await insertVenta(req.body, req.user.Usuario);
     res.redirect("/");
 

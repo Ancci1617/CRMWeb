@@ -116,10 +116,15 @@ for (let i = 0; i < document.querySelectorAll("select").length; i++) {
 estatus_options.addEventListener("change",e=>{
     let selected_options = e.target;
     let selected_text = selected_options.options.item(selected_options.selectedIndex).innerText;
+    let input_block = document.querySelector(".input-box.cuotas_para_entrega");
+    let input_estatus = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0];
+
     if(selected_text.includes("Prepago")){
-       return document.querySelector(".input-box.cuotas_para_entrega").classList.remove("hidden");
+        input_estatus.setAttribute("required","")
+        return input_block.classList.remove("hidden");
     }
-    return document.querySelector(".input-box.cuotas_para_entrega").classList.add("hidden");
+    input_estatus.removeAttribute("required")
+    return input_block.classList.add("hidden");
 
 })
 
