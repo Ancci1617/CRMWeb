@@ -48,14 +48,19 @@
                             <td class="zona"><%= ventas[i].ZONA %></td>
                             <td><%= ventas[i].NOMBRE %></td>
                             <td><%= ventas[i].CALLE %></td>
+                            <td><%= ventas[i].WHATSAPP %></td>
+                            <td><%= ventas[i].DNI %></td>
                             <td><%= ventas[i].ARTICULOS %></td>
-                            <td><%= ventas[i].TOTAL %></td>
+                            <td><%= ventas[i].CUOTAS %></td>
                             <td><%= ventas[i].CUOTA %></td>
-                            
+                            <td><%= ventas[i].TOTAL %></td>
+                            <td><%= ventas[i].VENCIMIENTO  %></td>
+                            <td><%= ventas[i].PRIMER_PAGO %></td>
+ 
                             <td class="<%if(ventas[i].APROBADO == "DESAPROBADO"){%><%= "zona" %><%}%>"> 
                             <%=ventas[i].APROBADO%>
                             </td>
-                            
+
                             <td><%= ventas[i].RESPONSABLE%></td>
                             <td><a href="/eliminar_venta/<%= ventas[i].INDICE %>">Borrar</a></td>
                         </tr>

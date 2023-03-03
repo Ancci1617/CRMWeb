@@ -2,8 +2,8 @@ const pool = require("../../model/connection-database");
 
 async function getVentasDelDia(dia,usuario){
 
-    console.log("dia",dia)
-    const [ventas,dos] = await pool.query(
+    
+    const [ventas] = await pool.query(
         "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, " + 
         "`CALLE`,`WHATSAPP`,`DNI`,`ARTICULOS`,`CUOTAS`,`CUOTA`,`TOTAL`, " + 
         "`VENCIMIENTO`,`PRIMER_PAGO`,`APROBADO`, `RESPONSABLE`,`INDICE` " + 
