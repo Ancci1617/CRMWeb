@@ -19,7 +19,13 @@
 .tabla-prestamos .bg-fecha,.tabla-masterec .bg-fecha{
     background: #9863d4;
 }
+.tabla-prestamos .bg-deuda{
+    background-color: rgba(94, 73, 170, 0.959);
+}
 
+.tabla-masterec {
+    margin-bottom: 48px;
+}
 .tabla-masterec thead{
     background: #525050;
 }
@@ -28,7 +34,5 @@
     background: #4c645a;
 }
 
-.tabla-prestamos .bg-deuda{
-    background-color: rgba(94, 73, 170, 0.959);
-}
+
 
