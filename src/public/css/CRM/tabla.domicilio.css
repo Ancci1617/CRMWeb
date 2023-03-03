@@ -1,0 +1,23 @@
+.title-domicilio{
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+}
+.tabla-domicilio{
+    font-size: .7em;
+    justify-content: center;
+    background-color: aliceblue;
+}
+
+
+.tabla-domicilio * {
+    border: 2px solid #e0e0e0;
+    background-color: #f5f5f5;
+}
+
+.tabla-domicilio th {
+    background: #4fc3f7;
+}
+
+
+
