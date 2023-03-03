@@ -4,7 +4,9 @@ const btn_submit = document.querySelector(".button input");
 const form = document.querySelector("form");
 const articulos = document.getElementsByName("ARTICULOS")[0];
 const cuotas = document.getElementsByName("CUOTAS")[0];
-//GIT
+const estatus_options =document.querySelector(".options-estatus");
+
+
 //Funciones
 function asociarInputOption(displayedOptions, input) {
     //Recibe un input y un options
@@ -111,6 +113,15 @@ for (let i = 0; i < document.querySelectorAll("select").length; i++) {
     asociarInputOption(document.querySelectorAll("select")[i], document.querySelectorAll("input.hidden")[i]);
 }
 
+estatus_options.addEventListener("change",e=>{
+    let selected_options = e.target;
+    let selected_text = selected_options.options.item(selected_options.selectedIndex).innerText;
+    if(selected_text.includes("Prepago")){
+       return document.querySelector(".input-box.cuotas_para_entrega").classList.remove("hidden");
+    }
+    return document.querySelector(".input-box.cuotas_para_entrega").classList.add("hidden");
+
+})
 
 
 
