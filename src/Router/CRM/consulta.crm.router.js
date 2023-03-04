@@ -6,11 +6,12 @@ const { getCliente } = require("../../lib/get_cliente");
 const { getPrestamos } = require("../../model/CRM/get_tablas/get_prestamos.js");
 const { getMasterBGM, getMasterEC, getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
+const { isLoggedIn } = require("../../lib/auth");
 
 
 
 // var memo = [];
-Router.post("/query_CRM", async (req, res) => {
+Router.post("/query_CRM", isLoggedIn ,async (req, res) => {
 
     const query_result = {};
 

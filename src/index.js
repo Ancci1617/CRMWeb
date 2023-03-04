@@ -46,6 +46,7 @@ app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
 app.use(require("./Router/auth/auth.router"));
 app.use(require('./Router/cargar_ventas/ventas.router'))
+app.use(require("./Router/get.router"));
 
 
 

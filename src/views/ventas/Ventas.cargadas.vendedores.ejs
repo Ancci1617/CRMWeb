@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
+    <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
+    <link rel="stylesheet" href="css/CRM/General.css">
+    <link rel="stylesheet" href="css/cargar_venta/tabla.ventascargadas.css">
+    <link rel="stylesheet" href="css/ventas/ventas.cargadas.vendedores.css">
+    <link rel="stylesheet" href="css/CRM/interfaz.css">
+</head>
+<title>Blanco Gusmar | Ventas</title>
+<body>
+    <%- include('../partials/navigation/navigation-bar.ejs')%>
+    <div class="page-container">
+        <div class="menu">      
+            <div class="busqueda-container">
+                <div class="busqueda-first-title title">Cuadro de busqueda</div>
+                <div class="title">Vendedor</div>
+                <div class="title">Fecha</div>
+                
+                <div class="custom-selectbox">
+                    <select class="custom-selectbox select-vendedor" >
+                      <option value="0">Diego</option>
+                      <option value="1">Rosario</option>
+                    </select>
+                </div>      
+                <div class="custom-selectbox">
+                    <select class="custom-selectbox  select-fecha">
+                        <option value="0">2023-03-02</option>
+                        <option value="0">2023-03-03</option>
+                    </select>
+                </div>      
+            </div>
+            <div class="btn-container">
+                <input type="button" class="btn btn-ventas btn-consultar-ventas" value="Consultar"></input>
+            </div>
+        </div>
+        <iframe src="/ventas_cargadas_tabla" ></iframe>
+
+    </div>
+
+    <script src="js/cargar_venta/query.ventas.vendedores.js"></script>
+    <script src="js/lib/table.setData.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
+    <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
+    <link rel="stylesheet" href="css/CRM/General.css">
+    <link rel="stylesheet" href="css/cargar_venta/tabla.ventascargadas.css">
+    <link rel="stylesheet" href="css/ventas/ventas.cargadas.vendedores.css">
+    <link rel="stylesheet" href="css/CRM/interfaz.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="table-container">
+        <table class="tabla-ventascargadas tabla-clientes tabla-datos">
+            <thead>
+                <tr>
+                    <th>APROBADO</th>
+                    <th>CTE</th>
+                    <th>FICHA</th>
+                    <th>ZONA</th>
+                    <th>NOMBRE</th>
+                    <th>CALLE</th>
+                    <th>TEL</th>
+                    <th>DNI</th>
+                    <th>ART</th>
+                    <th>ANT</th>
+                    <th>CUOTAS</th>
+                    <th>CUOTA</th>
+                    <th>TOTAL</th>
+                    <th>VENCE</th>
+                    <th>PRIMER PAGO</th>
+                    <th>TIPO</th>
+                    <th>ESTATUS</th>                            
+                    <th>RESPONSABLE</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <%  for (let i = 0; i < ventas.length;i++) {  %>
+                <tr>
+                    <td class="<%if(ventas[i].APROBADO == "DESAPROBADO"){%><%= "zona" %><%}%>"> 
+                    <%=ventas[i].APROBADO%>
+                    </td>
+
+                    <td><%= ventas[i].CTE %></td>
+                    <td><%= ventas[i].FICHA %></td>
+                    <td class="zona"><%= ventas[i].ZONA %></td>
+                    <td><%= ventas[i].NOMBRE %></td>
+                    <td><%= ventas[i].CALLE %></td>
+                    <td><%= ventas[i].WHATSAPP %></td>
+                    <td><%= ventas[i].DNI %></td>
+                    <td><%= ventas[i].ARTICULOS %></td>
+                    <td><%= ventas[i].ANTICIPO %></td>
+                    <td><%= ventas[i].CUOTAS %></td>
+                    <td><%= ventas[i].CUOTA %></td>
+                    <td><%= ventas[i].TOTAL %></td>
+                    <td><%= ventas[i].VENCIMIENTO %></td>
+                    <td><%= ventas[i].PRIMER_PAGO %></td>
+                    <td><%= ventas[i].TIPO %></td>
+                    <td><%= ventas[i].ESTATUS %></td>
+                    <td><%= ventas[i].RESPONSABLE %></td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    
+</body>
+</html>
