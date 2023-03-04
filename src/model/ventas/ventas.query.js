@@ -34,7 +34,7 @@ async function getVentasVendedores(vendedor, fecha) {
         "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, `CALLE`, " +
         "`WHATSAPP`, `DNI`, `ARTICULOS`, `ANTICIPO`, `CUOTAS`, " +
         "`CUOTA`,`TOTAL`,`VENCIMIENTO`, `PRIMER_PAGO`, `TIPO`, " +
-        "`ESTATUS`,  `RESPONSABLE`, `APROBADO` FROM `VentasCargadas` " + 
+        "`ESTATUS`,  `RESPONSABLE`, `APROBADO` FROM `VentasCargadas` " +
         "where USUARIO = ? AND FECHA_VENTA = ? AND VISIBLE = 1"
         , [vendedor, fecha])
 
@@ -46,5 +46,24 @@ async function getVentasVendedores(vendedor, fecha) {
     return [];
 }
 
+async function getVendedores() {
+    const [ventas] = await pool.query("SELECT DISTINCT Usuario as VENDEDOR from VentasCargadas");
 
-module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores }
+    if (ventas.length > 0) {
+        return ventas;
+    }
+
+    return [];
+}
+
+async function getFechaDeVentas() {
+    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA from VentasCargadas");
+
+    if (fechas.length > 0) {
+        return fechas;
+    }
+
+    return [];
+}
+
+module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores ,getVendedores,getFechaDeVentas }

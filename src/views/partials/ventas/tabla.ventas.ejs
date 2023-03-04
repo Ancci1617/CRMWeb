@@ -5,12 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
     <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
     <link rel="stylesheet" href="css/CRM/General.css">
-    <link rel="stylesheet" href="css/cargar_venta/tabla.ventascargadas.css">
-    <link rel="stylesheet" href="css/ventas/ventas.cargadas.vendedores.css">
-    <link rel="stylesheet" href="css/CRM/interfaz.css">
+    <link rel="stylesheet" href="css/cargar_venta/tabla.ventascargadas.css"> 
     <title>Document</title>
 </head>
 <body>
@@ -37,7 +34,6 @@
                     <th>TIPO</th>
                     <th>ESTATUS</th>                            
                     <th>RESPONSABLE</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +42,6 @@
                     <td class="<%if(ventas[i].APROBADO == "DESAPROBADO"){%><%= "zona" %><%}%>"> 
                     <%=ventas[i].APROBADO%>
                     </td>
-
                     <td><%= ventas[i].CTE %></td>
                     <td><%= ventas[i].FICHA %></td>
                     <td class="zona"><%= ventas[i].ZONA %></td>

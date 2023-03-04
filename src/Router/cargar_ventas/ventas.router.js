@@ -5,7 +5,7 @@ const { getPrepagoEntrega } = require("../../model/productos/prepagos");
 const { insertVenta } = require("../../model/insert/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
-const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores } = require("../../model/ventas/ventas.query");
+const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores ,getFechaDeVentas} = require("../../model/ventas/ventas.query");
 
 Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
     const { cte } = req.params;
@@ -82,23 +82,25 @@ Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
 })
 
 Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
-
-
-    res.render("ventas/Ventas.cargadas.vendedores.ejs", { username: req.user.Usuario });
-
+    const vendedores = await getVendedores();
+    const fechas = await getFechaDeVentas();
+    res.render("ventas/Ventas.cargadas.vendedores.ejs", { username: req.user.Usuario ,vendedores , fechas });
 
 })
 
 Router.get("/ventas_cargadas_tabla", isLoggedIn, isAdmin, async (req, res) => {
-
+    
     if (req.query !== {}) {
         const ventas = await getVentasVendedores(req.query.VENDEDOR, req.query.FECHA);
-        console.log("query", req.query)
         return res.render("partials/ventas/tabla.ventas.ejs", { username: req.user.Usuario, ventas });
     }
 
     res.render("partials/ventas/tabla.ventas.ejs", { username: req.user.Usuario, ventas: [{}] });
+
 })
+
+
+
 
 module.exports = Router;
 

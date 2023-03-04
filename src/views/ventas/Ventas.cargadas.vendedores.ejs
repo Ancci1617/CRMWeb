@@ -24,14 +24,16 @@
                 
                 <div class="custom-selectbox">
                     <select class="custom-selectbox select-vendedor" >
-                      <option value="0">Diego</option>
-                      <option value="1">Rosario</option>
+                    <% for (let i = 0;i < vendedores.length ; i++){%>
+                      <option value="<%=i%>"><%= vendedores[i].VENDEDOR %></option>
+                    <%} %>
                     </select>
                 </div>      
                 <div class="custom-selectbox">
                     <select class="custom-selectbox  select-fecha">
-                        <option value="0">2023-03-02</option>
-                        <option value="0">2023-03-03</option>
+                        <% for (let i = 0;i < fechas.length ; i++){%>
+                            <option value="<%=i%>"><%=fechas[i].FECHA_VENTA %></option>
+                          <%} %>
                     </select>
                 </div>      
             </div>
