@@ -84,7 +84,7 @@ Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
 Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
 
 
-    res.render("ventas/ventas.cargadas.vendedores.ejs", { username: req.user.Usuario });
+    res.render("ventas/Ventas.cargadas.vendedores.ejs", { username: req.user.Usuario });
 
 
 })
