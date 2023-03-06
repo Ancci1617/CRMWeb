@@ -5,7 +5,7 @@ const { getPrepagoEntrega } = require("../../model/productos/prepagos");
 const { insertVenta } = require("../../model/insert/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
-const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas,getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 
 Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
     const { cte } = req.params;
@@ -91,11 +91,7 @@ Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) 
 Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
 
     //{VENDEDOR : 'DIEGO' , FECHA : '2023-03-04' ,  }
-    if (VENDEDOR == "GENERAL") {
-//        const ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
-    } else {
-        const ventas = await getVentasVendedores(req.body.VENDEDOR,req.body.FECHA);
-    }
+    const ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
 
     res.json(ventas);
 
