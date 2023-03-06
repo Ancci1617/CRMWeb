@@ -91,10 +91,10 @@ Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) 
 Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
 
     //{VENDEDOR : 'DIEGO' , FECHA : '2023-03-04' ,  }
-    if (!VENDEDOR == "TODOS") {
-        const ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
+    if (VENDEDOR == "GENERAL") {
+//        const ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
     } else {
-        const ventas = await getVentasDelDiaGeneral(req.body.FECHA);
+        const ventas = await getVentasVendedores(req.body.VENDEDOR,req.body.FECHA);
     }
 
     res.json(ventas);
