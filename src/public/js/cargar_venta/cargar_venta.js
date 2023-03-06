@@ -68,9 +68,9 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
         disponible = 0;
     } else if (master.BGM == "BLOQUEADO") {
         disponible = -1;
+    } else {
+        disponible = parseFloat(master.BGM.replace(",", "."));
     }
-    disponible = parseFloat(master.BGM.replace(",", "."));
-
 
     //Si el vendedor se hacer cargo esta aprobada
     if (responsable == "SI") return true;
