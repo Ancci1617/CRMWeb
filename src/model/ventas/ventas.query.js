@@ -31,10 +31,10 @@ async function borrarVentasDelDia(indice, usuario) {
 async function getVentasVendedores(vendedor, fecha) {
 
     const [ventas] = await pool.query(
-        "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, `CALLE`, " +
+        "SELECT `APROBADO`,`CTE`, `FICHA`, `ZONA`, `NOMBRE`, `CALLE`, " +
         "`WHATSAPP`, `DNI`, `ARTICULOS`, `ANTICIPO`, `CUOTAS`, " +
         "`CUOTA`,`TOTAL`,`VENCIMIENTO`, `PRIMER_PAGO`, `TIPO`, " +
-        "`ESTATUS`,  `RESPONSABLE`, `APROBADO` FROM `VentasCargadas` " +
+        "`ESTATUS`,  `RESPONSABLE` FROM `VentasCargadas` " +
         "where USUARIO = ? AND FECHA_VENTA = ? AND VISIBLE = 1"
         , [vendedor, fecha])
 

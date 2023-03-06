@@ -19,9 +19,18 @@ function setData(table_data, data) {
         let tr = document.createElement("tr");
 
         for (let i = 0; i < query_values.length; i++) {
-
+            //GENERA TD
             let td = document.createElement("td");
+
+            //INGRESA INNER TEXT DE LA CONSULTA
             td.innerText = query_values[i];
+
+            //CONDICIONAL DE FORMATOS
+            if (query_values[i] == "DESAPROBADO" || query_values[i] == "CLAVAZO") 
+                td.classList.add("zona");
+
+
+            //AGREGA LAS MISMAS CLASES QUE TIENE LA CELDA VIGENTE
             row_cl[i].forEach(e => {
                 td.classList.add(e);
             });

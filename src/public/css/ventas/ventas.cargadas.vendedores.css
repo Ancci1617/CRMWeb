@@ -3,12 +3,13 @@
     display: flex;
     flex-direction: column;
     height: calc(100% - 36px);
+    padding: 8px 15px;
     justify-content: flex-start;
+    overflow: scroll;
     border: 1px solid red;
 }
 
 .menu{
-    padding: 8px 15px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -16,9 +17,7 @@
 .busqueda-container{
     width: 285px;
 }
-.busqueda-container * {
-    font-weight: 400;
-}
+
 
 .title {
     font-family:  Verdana, sans-serif;
@@ -26,10 +25,10 @@
     color: black;
     background-color: skyblue;
 }
-iframe{
-    border: none;
-    height: 100%;
-}
+
+
+
+
 
 
 
