@@ -91,7 +91,12 @@ Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) 
 Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
 
     //{VENDEDOR : 'DIEGO' , FECHA : '2023-03-04' ,  }
-    const ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
+    let ventas;
+    if (req.body.VENDEDOR == "General") {
+        ventas = await getVentasDelDiaGeneral(req.body.FECHA);
+    } else {
+        ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
+    }
 
     res.json(ventas);
 

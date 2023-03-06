@@ -66,4 +66,21 @@ async function getFechaDeVentas() {
     return [];
 }
 
-module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores ,getVendedores,getFechaDeVentas }
+async function getVentasDelDiaGeneral(fecha) {
+
+    const [ventas] = await pool.query(
+        "SELECT `APROBADO`,`CTE`, `FICHA`, `ZONA`, `NOMBRE`, `CALLE`, " +
+        "`WHATSAPP`, `DNI`, `ARTICULOS`, `ANTICIPO`, `CUOTAS`, " +
+        "`CUOTA`,`TOTAL`,`VENCIMIENTO`, `PRIMER_PAGO`, `TIPO`, " +
+        "`ESTATUS`,  `RESPONSABLE` FROM `VentasCargadas` " +
+        "where FECHA_VENTA = ? AND VISIBLE = 1 ORDER BY FICHA"
+        , [fecha])
+
+    if (ventas.length > 0) {
+        return ventas;
+    }
+
+    return [];
+}
+
+module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral }
