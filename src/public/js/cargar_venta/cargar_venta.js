@@ -4,7 +4,8 @@ const btn_submit = document.querySelector(".button input");
 const form = document.querySelector("form");
 const articulos = document.getElementsByName("ARTICULOS")[0];
 const cuotas = document.getElementsByName("CUOTAS")[0];
-const estatus_options =document.querySelector(".options-estatus");
+const cuota = document.getElementsByName("CUOTA")[0];
+const estatus_options = document.querySelector(".options-estatus");
 
 
 //Funciones
@@ -45,8 +46,9 @@ async function autoCompletarPrecios() {
 
 
 }
-async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido) {
+async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
+
     const sabana = 24000; //Transformar esto a consulta SQL
     const master_resumen = await fetch("/query_masterresumen", {
         method: 'POST',
@@ -60,13 +62,21 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     })
     const master = await master_resumen.json();
 
+    //Genera el disponible
+    let disponible;
+    if (master.BGM == "REVISAR" || master.BGM == "ATRASADO") {
+        disponible = 0;
+    } else if (master.BGM == "BLOQUEADO") {
+        disponible = -1;
+    }
+    disponible = parseFloat(master.BGM.replace(",", "."));
+
 
     //Si el vendedor se hacer cargo esta aprobada
     if (responsable == "SI") return true;
 
+
     //Si es prepago solo hace evaluacion de la cuotas de entrega
-    console.log(CTE, responsable, Estatus, cuotas_para_entrega, vendido)
-    console.log("prepago",Estatus === 'Prepago');
     if (Estatus === 'Prepago') {
 
         const cuotas = document.getElementsByName("CUOTAS")[0].value
@@ -87,19 +97,11 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
 
     }
 
-    //Si lo vendido es menor al disponible
-    console.log(master);
-    let disponible = parseFloat(master.BGM.replace(",", "."))
-    let anticipo = 4000; //TRANSFORMAR EN PARAMETRO
 
+    //AUMENTA EL DISPONIBLE, Si es con anticipo
+    if (anticipo >= cuota.value || Estatus.includes("Con anticipo")) disponible += 1;
 
-    //AUMENTA EL DISPONIBLE CON EL ANTICIPO?
-    if(anticipo >= cuotas.value ){
-        
-    }
-    
-    
-
+    //Chequea si le da el disponible
     if (vendido / sabana <= disponible) return true;
 
 
@@ -113,14 +115,14 @@ for (let i = 0; i < document.querySelectorAll("select").length; i++) {
     asociarInputOption(document.querySelectorAll("select")[i], document.querySelectorAll("input.hidden")[i]);
 }
 
-estatus_options.addEventListener("change",e=>{
+estatus_options.addEventListener("change", e => {
     let selected_options = e.target;
     let selected_text = selected_options.options.item(selected_options.selectedIndex).innerText;
     let input_block = document.querySelector(".input-box.cuotas_para_entrega");
     let input_estatus = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0];
 
-    if(selected_text.includes("Prepago")){
-        input_estatus.setAttribute("required","")
+    if (selected_text.includes("Prepago")) {
+        input_estatus.setAttribute("required", "")
         return input_block.classList.remove("hidden");
     }
     input_estatus.removeAttribute("required")
@@ -139,7 +141,7 @@ estatus_options.addEventListener("change",e=>{
 btn_nuevo.addEventListener("click", e => {
     //Limpiar input box
     let input_array = document.querySelectorAll(".input-box input");
-    input_array.forEach(e => {if(!input_array[7].classList.contains("hidden")){ e.value = ""}});
+    input_array.forEach(e => { if (!input_array[7].classList.contains("hidden")) { e.value = "" } });
 
     //Cambiar numero de cliente a nuevo
     document.getElementsByName("CTE")[0].value = "Nuevo";
@@ -156,9 +158,11 @@ form.addEventListener("submit", async e => {
     const Estatus = document.getElementsByName("ESTATUS")[0].value;
     const cuotas_para_entrega = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0].value;
     const vendido = document.getElementsByName("TOTAL")[0].value;
+    const anticipo = document.getElementsByName("ANTICIPO")[0].value;
+
     let aprobado = document.getElementsByName("APROBADO")[0];
 
-    if (await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido)) {
+    if (await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido, anticipo)) {
         aprobado.value = "APROBADO";
         CTE.disabled = false;
         return e.target.submit();
