@@ -83,4 +83,7 @@ async function getVentasDelDiaGeneral(fecha) {
     return [];
 }
 
+
+
 module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral }
+

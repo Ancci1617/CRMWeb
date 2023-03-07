@@ -92,11 +92,24 @@ Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res)
 
     //{VENDEDOR : 'DIEGO' , FECHA : '2023-03-04' ,  }
     let ventas;
+    let total = 0;
+
     if (req.body.VENDEDOR == "General") {
         ventas = await getVentasDelDiaGeneral(req.body.FECHA);
     } else {
         ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
     }
+    //Suma de totales
+    ventas.forEach(venta => {
+        total += parseFloat(venta.TOTAL);
+    })
+    //Agrega el resumen
+    ventas = {VENTAS : ventas,
+              RESUMEN : {
+                FICHAS : ventas.length,
+                TOTAL : total
+              }
+             }
 
     res.json(ventas);
 

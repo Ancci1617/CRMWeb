@@ -30,8 +30,10 @@ btn_consulta.addEventListener("click", async e => {
     })
     const ventas = await response.json();
 
-    setData(tabla_ventas,ventas);
-
+    //Inserta los datos de la consulta en la tabla y en EL RESUMEN
+    setData(tabla_ventas,ventas.VENTAS);
+    document.querySelector(".fichas-value span").innerText = ventas.RESUMEN.FICHAS;
+    document.querySelector(".total-value span").innerText = ventas.RESUMEN.TOTAL;
 
 });
 

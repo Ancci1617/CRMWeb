@@ -48,8 +48,8 @@ async function autoCompletarPrecios() {
 }
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
-
-    const sabana = 24000; //Transformar esto a consulta SQL
+    //Transformar esto a consulta SQL
+    const sabana = 24000; 
     const master_resumen = await fetch("/query_masterresumen", {
         method: 'POST',
         mode: 'cors',
@@ -62,7 +62,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     })
     const master = await master_resumen.json();
 
-    //Genera el disponible
+    //Genera el disponible en funcion de su calificaicon O BIEN, si tiene disponible
     let disponible;
     if (master.BGM == "REVISAR" || master.BGM == "ATRASADO") {
         disponible = 0;
