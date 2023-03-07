@@ -37,7 +37,6 @@ Router.post("/query_CRM", isLoggedIn ,async (req, res) => {
 
 
     let hora = new Date(new Date().getTime()-1000*60*60*3).toISOString().substring(0,19);
-    
     gurdar_respuesta_crm(req.user.Usuario, JSON.stringify(req.body) ,JSON.stringify(query_result) , hora);
 
 
