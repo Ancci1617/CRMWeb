@@ -1,8 +1,5 @@
 const pool = require("../connection-database");
 
-
-
-
 const insertVenta = async (parametros,usuario) => {
     
     const resultados = Object.entries(parametros).map(e=> e[1]);

@@ -7,8 +7,7 @@ const { getPrestamos } = require("../../model/CRM/get_tablas/get_prestamos.js");
 const { getMasterBGM, getMasterEC, getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
 const { isLoggedIn } = require("../../lib/auth");
-
-
+const { gurdar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js");
 
 // var memo = [];
 Router.post("/query_CRM", isLoggedIn ,async (req, res) => {
@@ -37,18 +36,13 @@ Router.post("/query_CRM", isLoggedIn ,async (req, res) => {
     //Appendiarlo junto a la data que va a ser respondida
 
 
+    let hora = new Date(new Date().getTime()-1000*60*60*3).toISOString().substring(0,19);
+    
+    gurdar_respuesta_crm(req.user.Usuario, JSON.stringify(req.body) ,JSON.stringify(query_result) , hora);
+
+
     res.json(query_result);
 })
-
-Router.post("/save_response", async (req, res) => {
-    pool.query("INSERT INTO `RespuestasDeConsulta` " +
-        "(`Usuario`, `Busqueda`, `Respuesta`, `Hora`) " +
-        "VALUES " +
-        "(?,?,?,?)", [])
-
-});
-
-
 
 
 

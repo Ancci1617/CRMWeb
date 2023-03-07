@@ -10,12 +10,10 @@ Router.get("/CRM", isLoggedIn, (req, res) => {
 })
 
 Router.get("/main", isLoggedIn ,(req,res)=> {
-    console.log(req.user)
-    res.render("main-menu",{user : req.user} )
-    
+    res.render("main-menu",{user : req.user} )    
 })
 
-Router.get("/",(req,res)=>{
+Router.get("/", (req,res)=>{
     res.redirect("/main")
 })
 

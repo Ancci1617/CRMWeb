@@ -26,9 +26,9 @@ function setData(table_data, data) {
             td.innerText = query_values[i];
 
             //CONDICIONAL DE FORMATOS
-            if (query_values[i] == "DESAPROBADO" || query_values[i] == "CLAVAZO") 
+            if (query_values[i] == "DESAPROBADO" || query_values[i] == "CLAVAZO")
                 td.classList.add("zona");
-
+            if (query_values[i] == "APROBADO") td.classList.remove("zona")
 
             //AGREGA LAS MISMAS CLASES QUE TIENE LA CELDA VIGENTE
             row_cl[i].forEach(e => {
