@@ -16,7 +16,7 @@ const getMasterBGM = async (cte) => {
 const getMasterEC = async (cte) => {
 
     const [rows] = await pool.query(
-        "SELECT DATE_FORMAT(`FECHA`,'%e/%m/%Y') as FECHA, `Prestamo`, `Zona`, `Capital`, " +
+        "SELECT DATE_FORMAT(`FECHA`,'%d-%b-%y') as FECHA, `Prestamo`, `Zona`, `Capital`, " +
         "`Ant`, `Cuota 0`, `Cuota 1`, `Cuota 2`, `Cuota 3`, `Cuota 4`, `Cuota 5`, " +
         "`Saldo Ant`, `Cuota 6`, `Saldo Act`, `Cuota`, `Cuo`, `SIT`,DATE_FORMAT(`COBRO`,'%e/%m/%Y') as `COBRO` " +
         "FROM `MasterEC` WHERE cte = ?"

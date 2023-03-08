@@ -5,6 +5,7 @@ const path = require("path");
 const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
+const {poolConfig} = require("./model/connection-config.js");
 
 //Comentario final
 
@@ -52,7 +53,10 @@ app.use(require("./Router/get.router"));
 
 
 //Ejecuta el servidor
-app.listen(app.get("PORT"), (err) => {
+app.listen(app.get("PORT"),async (err) => {
+    //Configura el lenguaje de la sesion en las fechas
+    await poolConfig();
+
     if (err) {
         console.log("ERR: " + err);
     }

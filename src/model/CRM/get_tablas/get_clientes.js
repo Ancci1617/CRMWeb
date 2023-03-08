@@ -1,7 +1,9 @@
 const pool = require("../../connection-database.js");
 
 const getClientes = async (cte) => {
-
+    
+    await pool.query("SET lc_time_names = 'es_ES'");
+    
     const [rows] = await pool.query(
         "SELECT " +
         "`CTE`, `ZONA`, `APELLIDO Y NOMBRE` as NOMBRE, " +
