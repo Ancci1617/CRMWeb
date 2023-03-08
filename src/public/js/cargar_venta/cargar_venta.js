@@ -72,9 +72,9 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
         disponible = parseFloat(master.BGM.replace(",", "."));
     }
 
+    
     //Si el vendedor se hacer cargo esta aprobada
     if (responsable == "SI") return true;
-
 
     //Si es prepago solo hace evaluacion de la cuotas de entrega
     if (Estatus === 'Prepago') {
