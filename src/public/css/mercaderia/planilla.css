@@ -1,0 +1,60 @@
+
+.page-container{
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 4px 0 0 0;
+}
+
+.btn{
+    border: 2px solid black;
+    margin: 0 8px;
+}
+
+.btn-container{
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.planilla-container{
+    width: 100%;
+    max-width: 570px;
+    display: flex;
+}
+
+.tabla-carga{
+    margin-top: 12px;
+    flex:1;
+
+}
+
+.tabla-carga thead th{
+    background-color: rgb(50, 95, 95);
+}
+
+.tabla-carga tbody{
+    background-color: aliceblue;
+}
+
+.tabla-carga tbody td select{
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+
+
+
+.data-container{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: aquamarine;
+    width: 100%;
+}
