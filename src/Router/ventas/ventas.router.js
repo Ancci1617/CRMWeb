@@ -99,11 +99,13 @@ Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res)
     } else {
         ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
     }
+    
     //Suma de totales
     ventas.forEach(venta => {
-        total += parseFloat(venta.TOTAL);
+        total += parseFloat( venta.TOTAL.replaceAll(".","").replaceAll(",",""));
     })
-    //Agrega el resumen
+
+    //Agrega el resumen 
     ventas = {VENTAS : ventas,
               RESUMEN : {
                 FICHAS : ventas.length,

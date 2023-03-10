@@ -1,4 +1,6 @@
-
+.hidden{
+    display: none;
+}
 .page-container{
     flex-direction: column;
     justify-content: flex-start;
@@ -8,12 +10,6 @@
     overflow-x: auto;
     padding: 4px 0 0 0;
 }
-
-.btn{
-    border: 2px solid black;
-    margin: 0 8px;
-}
-
 .btn-container{
     margin: 0;
     width: 100%;
@@ -22,7 +18,14 @@
     justify-content: center;
 }
 
-.planilla-container{
+.btn{
+    border: 2px solid black;
+    margin: 0 18px;
+}
+
+
+
+.planilla-container, form{
     width: 100%;
     max-width: 570px;
     display: flex;
@@ -31,8 +34,8 @@
 .tabla-carga{
     margin-top: 12px;
     flex:1;
-
 }
+
 
 .tabla-carga thead th{
     background-color: rgb(50, 95, 95);

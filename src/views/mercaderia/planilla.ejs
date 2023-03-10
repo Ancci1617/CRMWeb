@@ -30,6 +30,7 @@
 
 
             <div class="planilla-container">
+                <form action="/insertar_planilla" method="POST">
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -44,20 +45,22 @@
                     </thead>
                     <tbody>
                       
-                        <% for(let i = 0 ; i < planilla_object.ARTICULOS.length;i++){ %>
+                        <% for(let i = 0 ; i < planilla.ARTICULOS.length;i++){ %>
                         <tr>
-                            <td><%= planilla_object.ARTICULOS[i].CTE %></td>
-                            <td><%= planilla_object.ARTICULOS[i].FICHA %></td>
-                            <td><%= planilla_object.ARTICULOS[i].ANT %></td>
-                            <td><%= planilla_object.ARTICULOS[i].ESTATUS %></td>
-                            <td><%= planilla_object.ARTICULOS[i].ART %></td>                        
-                            <td class="opciones">
-                                <select>
-                                    <option value="0">Cargado</option>
-                                    <option value="1">No cargado</option>
+                            <td><%= planilla.ARTICULOS[i].CTE %></td>
+                            <td><%= planilla.ARTICULOS[i].FICHA %></td>
+                            <td><%= planilla.ARTICULOS[i].ANT %></td>
+                            <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
+                            <td><%= planilla.ARTICULOS[i].ART %></td> 
+                            <td>
+                                <select class="option-input">
+                                    <option value="0" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == null){ %> <%= "selected" %> <%}%>></option>
+                                    <option value="1" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "Cargado"){ %> <%= "selected" %> <%}%>>Cargado</option>
+                                    <option value="2" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "No cargado"){ %> <%= "selected" %> <%}%>>No cargado</option>
                                 </select>
                             </td>
 
+                            <input type="" class="hidden" value="<%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO %>"/>
                             <!-- RENDERIZAR EN DISTINTO ORDEN EN FUNCION DE VENDEDOR / CONTROL-->
                             <td>Cargado</td>
                         </tr>
@@ -66,6 +69,7 @@
                     </tbody>
 
                 </table>
+            </form>
             </div>
 
             <div class="data-container">
@@ -74,7 +78,7 @@
                 <span>Dia: 2023-03-07</span><br>
             </div>
         </div>
-
+        <script src="/js/lib/asociar.input.js"></script>
         <script src="/js/mercaderia/planilla.js"></script>
     </body>
 
