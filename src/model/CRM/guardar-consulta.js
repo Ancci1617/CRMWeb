@@ -1,7 +1,7 @@
 
 const pool = require("../connection-database.js");
 
-const gurdar_respuesta_crm = async (usuario,busqueda,respuesta,dia_hora) => {
+const guardar_respuesta_crm = async (usuario,busqueda,respuesta,dia_hora) => {
     
     const [insert_response] = await pool.query(
         "Insert into RespuestasDeConsulta " + 
@@ -15,7 +15,7 @@ const gurdar_respuesta_crm = async (usuario,busqueda,respuesta,dia_hora) => {
 
 }
 
-module.exports = {gurdar_respuesta_crm}
+module.exports = {guardar_respuesta_crm}
 
 
 
