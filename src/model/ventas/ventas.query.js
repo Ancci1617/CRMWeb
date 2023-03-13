@@ -1,5 +1,17 @@
 const pool = require("../../model/connection-database");
 
+async function getVendedoresConVentas(dia) {
+    const [vendedores] = await pool.query(
+        "Select distinct `USUARIO` AS VENDEDOR from " + 
+        "VentasCargadas where FECHA_VENTA = ?", [dia])
+
+    if (vendedores.length > 0) {
+        return vendedores;
+    }
+    return ["sin vendedores"];
+
+}
+
 async function getVentasDelDia(dia, usuario) {
 
 
@@ -22,8 +34,6 @@ async function borrarVentasDelDia(indice, usuario) {
         "UPDATE `VentasCargadas` SET `VISIBLE`='0' " +
         "WHERE INDICE = ? and USUARIO = ?"
         , [indice, usuario])
-
-
 
     return result;
 }
@@ -57,7 +67,7 @@ async function getVendedores() {
 }
 
 async function getFechaDeVentas() {
-    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA from VentasCargadas");
+    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas");
 
     if (fechas.length > 0) {
         return fechas;
@@ -85,5 +95,10 @@ async function getVentasDelDiaGeneral(fecha) {
 
 
 
-module.exports = { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral }
+module.exports = {
+    getVentasDelDia, borrarVentasDelDia,
+    getVentasVendedores, getVendedores, 
+    getFechaDeVentas, getVentasDelDiaGeneral, 
+    getVendedoresConVentas
+}
 

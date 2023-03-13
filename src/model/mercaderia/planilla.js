@@ -1,5 +1,13 @@
 const pool = require("../connection-database");
 
+const getFechasPlanillasHabilitadas = async (vendedor) => {
+    const [fechas] = await pool.query(
+        "Select DISTINCT FECHA from PlanillasDeCarga where VENDEDOR = ?",
+        [vendedor]);
+
+    return fechas;
+}
+
 const getDatosParaPlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
         "Select CTE,FICHA,ANTICIPO,TOTAL,ESTATUS,ARTICULOS,USUARIO from VentasCargadas " +
@@ -19,7 +27,7 @@ const existePlanilla = async (vendedor, fecha) => {
 
 const getPlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
-        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR from PlanillasDeCarga where " +
+        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO from PlanillasDeCarga where " +
         "VENDEDOR = ? and FECHA = ?;", [vendedor, fecha]);
 
     return result[0];
@@ -31,7 +39,8 @@ const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulo
         "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR) " +
         "VALUES (?,?,?,?,?,?) "
         , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor]);
-    console.log(result);
+
+
     return result;
 }
 
@@ -45,13 +54,63 @@ const insertPlanillaControl = async (json) => {
 }
 
 
-const insertPlanillaVendedor = async (e) => {
+const insertarArticulos = async (fecha, vendedor, articulos, dato) => {
+    let query = "";
+    
+    if (dato == "VENDEDOR") {
+        console.log("PERMISOS vendedor");
+        query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_VENDEDOR`= ?  WHERE FECHA = ? and VENDEDOR = ?";
+    } else if (dato == "ADMIN") {
+        console.log("PERMISOS admin");
+        query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_CONTROL`= ?  WHERE FECHA = ? and VENDEDOR = ?";
+    } else {
+        console.log("PERMISOS NO DISPONIBLES");
+        return "PERMISOS NO DISPONIBLES";
+    }
 
+    console.log("CONSULTA",query);
+
+    const [result] = await pool.query(query, [articulos, fecha , vendedor]);
+    return result;
+}
+
+const cerrarPlanillaVendedor = async (fecha,vendedor)  => {
+    const [result] = await pool.query(
+        "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='0' where VENDEDOR = ? and FECHA = ?"
+        , [vendedor, fecha]);
+
+    return result;
+}
+const cerrarPlanilla = async (fecha,vendedor)  => {
+    const [result] = await pool.query(
+        "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='0',`isEditableControl` = '0'  where VENDEDOR = ? and FECHA = ?"
+        , [vendedor, fecha]);
+
+    return result;
 }
 
 
+const habilitarVendedor = async (fecha,vendedor) => {
+    const [result] = await pool.query(
+        "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='1'  where VENDEDOR = ? and FECHA = ?"
+        , [vendedor, fecha]);
 
-module.exports = { getDatosParaPlanilla, insertPlanillaControl, insertPlanillaVendedor, existePlanilla, crearPlanilla, getPlanilla }
+    return result;
+}
+const borrarPlanilla = async (fecha,vendedor) => {
+    const [result] = await pool.query(
+        "Delete from `PlanillasDeCarga` where VENDEDOR = ? and FECHA = ?"
+        , [vendedor, fecha]);
+
+    return result;
+}
+
+module.exports = {
+    getDatosParaPlanilla, insertPlanillaControl,
+     existePlanilla, crearPlanilla,
+    getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
+    cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla
+}
 
 
 

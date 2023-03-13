@@ -21,14 +21,6 @@
     <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
 
         <div class="page-container">
-            <div class="btn-container">
-                <div class="btn-ventas btn-actualiza btn">Actualizar</div>
-                <div class="btn-ventas btn-cerrar btn">Cerrar planilla</div>
-                <div class="btn-ventas btn-abrir btn">Abrir planilla vendedor</div>
-                <input type="submit" value="">
-            </div>
-
-
 
             <div class="planilla-container">
                 <form action="/insertar_estados" method="POST" class="form-planilla">
@@ -52,21 +44,9 @@
                             <td><%= planilla.ARTICULOS[i].FICHA %></td>
                             <td><%= planilla.ARTICULOS[i].ANT %></td>
                             <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
-                            <td><%= planilla.ARTICULOS[i].ART %></td> 
-                            
-                            
-                            <td>
-                               
-                                <select class="option-input">
-                                    <option value="0" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == null){ %> <%= "selected" %> <%}%>></option>
-                                    <option value="1" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "Cargado"){ %> <%= "selected" %> <%}%>>Cargado</option>
-                                    <option value="2" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "No cargado"){ %> <%= "selected" %> <%}%>>No cargado</option>
-                                </select>
-                             
-                            </td>
-                            <input name="ESTADO" type="" class="hidden" value="<%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO %>" />                     
-
-                            <td>Cargado</td>
+                            <td><%= planilla.ARTICULOS[i].ART %></td>                                             
+                            <td><%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO%></td>
+                            <td><%= ARTICULOS_VENDEDOR.ARTICULOS[i].ESTADO%></td>
                             
                         </tr>
                         <%}%>
@@ -76,14 +56,10 @@
                 </table>
                 <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
                 <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                <input type="submit" class="btn-submit hidden">
             </form>
             </div>
 
-            <div class="data-container">
-                <span>Vendedor: Diego</span><br>
-                <span>Camioneta: AB717</span><br>
-                <span>Dia: 2023-03-07</span><br>
-            </div>
         </div>
         <script src="/js/lib/asociar.input.js"></script>
         <script src="/js/mercaderia/planilla.js"></script>
