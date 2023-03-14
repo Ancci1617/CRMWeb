@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blanco Gusmar | Cargas</title>
+    <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="/css/navigation/navigation-bar.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/CRM/General.css">
+    <link rel="stylesheet" href="/css/CRM/interfaz.css">
+    <link rel="stylesheet" href="/css/mercaderia/planilla.css">
+
+
+</head>
+
+<body>
+    <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
+
+        <div class="page-container">
+
+            <div class="btn-container">
+                <div class="btn-ventas btn-actualiza btn"></span>Cargar</span></div>
+            </div>
+
+            <div class="planilla-container">
+                <form action="/mis_planillas/generar_sobrecarga" method="POST" class="form-planilla">
+                <table class="tabla-datos tabla-carga">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Ficha</th>
+                            <th>Art</th>
+                            <th>obs</th>
+                        </tr>
+                    </thead>
+                    <tbody>            
+                        <tr>
+                            <td><input type="number" placeholder="Cte"></td>
+                            <td><input type="number" placeholder="Ficha"></td>
+                            <td><input type="text" placeholder="1 solo art"></td>
+                            <td><input type="text"></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </form>
+            </div>
+
+        </div>
+        <script src="/js/lib/asociar.input.js"></script>
+        <script src="/js/mercaderia/planilla.js"></script>
+    </body>
+
+</html>
+
+
+
+
+
+
+

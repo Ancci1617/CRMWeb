@@ -82,3 +82,9 @@
 }
 
 
+input{
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+}

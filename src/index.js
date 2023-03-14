@@ -47,7 +47,9 @@ app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
 app.use(require("./Router/auth/auth.router"));
 app.use(require('./Router/ventas/ventas.router'))
+app.use(require('./Router/ventas/ventas.archivos.js'))
 app.use(require("./Router/get.router"));
+app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
 
 

@@ -13,16 +13,15 @@
     <link rel="stylesheet" href="/css/CRM/General.css">
     <link rel="stylesheet" href="/css/CRM/interfaz.css">
     <link rel="stylesheet" href="/css/mercaderia/planilla.css">
-
-
 </head>
+
 
 <body>
     <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
 
         <div class="page-container">
             <div class="btn-container">
-                <div class="btn-ventas btn-actualiza btn">Actualizar</div>
+                <div class="btn-ventas btn-actualiza btn">Cargar</div>
                 <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
                 <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/habilitar_vendedor">Habilitar vendedor</a></div>
                 <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/borrar_planilla">Borrar planilla</a></div>

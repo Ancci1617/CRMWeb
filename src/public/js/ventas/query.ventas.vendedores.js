@@ -5,13 +5,6 @@ const btn_consulta = document.querySelector(".btn-consultar-ventas");
 const tabla_ventas = document.querySelector(".tabla-ventascargadas tbody");
 
 
-btn_consulta.addEventListener("click", async e => {
-    // let vendedor = select_vendedor.options.item(select_vendedor.selectedIndex).innerText;
-    // let fecha_de_venta = select_fecha.options.item(select_fecha.selectedIndex).innerText;
-    // let location = tabla_ventas.contentWindow.location;
-    // location.href = location.origin + location.pathname + "?VENDEDOR=" + vendedor + "&FECHA=" + fecha_de_venta;
-
-});
 
 btn_consulta.addEventListener("click", async e => {
     let vendedor = select_vendedor.options.item(select_vendedor.selectedIndex).innerText;

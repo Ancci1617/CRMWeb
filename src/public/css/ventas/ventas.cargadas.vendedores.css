@@ -46,20 +46,23 @@
     border: none;
 }
 
-
-
 .table-container{
     overflow: scroll;
     overflow-y: auto;
-    height: 100%;
+    overflow-x: auto;
     padding: 0;
-    margin-bottom: 16px;
 }
 
 .table-container thead{
     position: sticky;
     top: 0;
 }
+
+.table-container h3{
+    margin-bottom: .4rem;
+}
+
+
 
 
 @media screen and (max-width: 500px) {

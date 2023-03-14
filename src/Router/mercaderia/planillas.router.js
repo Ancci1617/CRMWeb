@@ -224,6 +224,9 @@ Router.get("/mis_planillas/:fecha/:vendedor/borrar_planilla", isLoggedIn, isAdmi
 
 });
 
+Router.get("/mis_planillas/sobrecargas",isLoggedIn,(req,res)=>{
+    
+})
 
 
 
