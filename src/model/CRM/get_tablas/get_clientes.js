@@ -16,7 +16,7 @@ const getClientes = async (cte) => {
     }
 
     return [{
-        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, DNI: null
+        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES : null, CRUCES2:null, DNI: null
     }];
 
 }

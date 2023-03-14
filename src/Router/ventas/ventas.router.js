@@ -14,6 +14,7 @@ Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
     //Si el cliente no existe envia una matriz vacia
     //"Teoricamente no es posible evaluar un cliente que no exista"
     let cte_data = await getClientes(cte);
+    console.log(cte_data);
     cte_data[0].username = req.user.Usuario;
 
     res.render("ventas/Ventas.cargar.ejs", cte_data[0]);
