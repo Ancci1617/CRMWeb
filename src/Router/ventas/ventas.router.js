@@ -22,7 +22,6 @@ Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
 
 Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
     res.redirect("/cargar_venta/0");
-
 });
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
