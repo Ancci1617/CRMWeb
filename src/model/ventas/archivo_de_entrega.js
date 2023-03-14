@@ -7,7 +7,7 @@ async function getArchivoDeEntregaVentas(vendedor,dia) {
         "'formula' as n11,'formula' as n12,'formula' as n13,'formula' as n14,'formula' as n15,'formula' as n16 ,'formula' as n17," + 
         "'formula' as n18,'formula' as n19,'formula' as n20,'formula' as n21,null as n22, " + 
         "Concat(year(FECHA_VENTA),'-',Month(FECHA_VENTA),'-',VENCIMIENTO) as VENCIMIENTO from VentasCargadas where " + 
-        "USUARIO = ? and FECHA_VENTA = ? ", [vendedor,dia])
+        "USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1", [vendedor,dia])
 
     if (ventas.length > 0) {
         return ventas;
@@ -21,7 +21,7 @@ async function getArchivoDeEntregaAccess(vendedor,dia) {
     const [ventas] = await pool.query(
         "Select FECHA_VENTA,CTE,FICHA,NOMBRE,ZONA,CALLE,NULL as n1,NULL as n2,WHATSAPP, "+
         "DNI,ARTICULOS,TOTAL,ANTICIPO,CUOTA,TIPO,ESTATUS,PRIMER_PAGO,Usuario from VentasCargadas "+
-        "where USUARIO = ? and FECHA_VENTA = ?"
+        "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1"
         ,[vendedor,dia])
 
     if (ventas.length > 0) {

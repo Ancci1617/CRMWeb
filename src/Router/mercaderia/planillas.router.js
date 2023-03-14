@@ -76,7 +76,6 @@ Router.get("/mis_planillas/:fecha", async (req, res) => {
 
     if (req.user.RANGO == "ADMIN") {
         const vendedores = await getVendedoresConVentas(req.params.fecha);
-
         res.render("mercaderia/planilla-nombre-vendedores.ejs", {
             user: req.user,
             datos: {

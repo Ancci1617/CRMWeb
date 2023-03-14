@@ -3,7 +3,7 @@ const pool = require("../../model/connection-database");
 async function getVendedoresConVentas(dia) {
     const [vendedores] = await pool.query(
         "Select distinct `USUARIO` AS VENDEDOR from " + 
-        "VentasCargadas where FECHA_VENTA = ?", [dia])
+        "VentasCargadas where FECHA_VENTA = ? and VISIBLE = 1", [dia])
 
     if (vendedores.length > 0) {
         return vendedores;
@@ -67,7 +67,7 @@ async function getVendedores() {
 }
 
 async function getFechaDeVentas() {
-    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas");
+    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1");
 
     if (fechas.length > 0) {
         return fechas;

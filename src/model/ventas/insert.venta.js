@@ -7,10 +7,10 @@ const insertVenta = async (parametros,usuario) => {
     
     const [response] = await pool.query(
         "INSERT INTO `VentasCargadas` " + 
-        "(`CTE`, `FICHA`, `NOMBRE`, `ZONA`, `CALLE`, `WHATSAPP`, `DNI`, " + 
-        "`CUOTAS`, `ARTICULOS`, `TOTAL`,`CUOTA`, `ANTICIPO`,     `TIPO`, "+
+        "(`CTE`, `FICHA`, `NOMBRE`, `ZONA`, `CALLE`,`CRUCES`,`CRUCES2`, `WHATSAPP`, `DNI`, " + 
+        "`CUOTAS`, `ARTICULOS`, `TOTAL`,`CUOTA`, `ANTICIPO`,`TIPO`, "+
         "`ESTATUS`, `PRIMER_PAGO`, `VENCIMIENTO`, `CUOTAS_PARA_ENTREGA`, `FECHA_VENTA`, `RESPONSABLE`,`APROBADO`,`USUARIO`) "+
-        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
         ,resultados);
 
     if (response > 0) {
