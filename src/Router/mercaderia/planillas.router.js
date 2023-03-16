@@ -16,7 +16,7 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
     for (let i = 0; i < datos_para_planilla.length; i++) {
 
         //GENERA UN ARRAY CON LOS ARTICULOS DE LAS VENTAS DEL DIA ANTERIOR
-        const arts = datos_para_planilla[i].ARTICULOS.split(" ");
+        const arts = datos_para_planilla[i].ARTICULOS.trim().split(" ");
 
         //POR CADA ARTICULOS INSERTA UN OBJETO EN EL ARRAY DE la planilla
         for (let j = 0; j < arts.length; j++) {
