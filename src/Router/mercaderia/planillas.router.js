@@ -72,7 +72,7 @@ Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
 })
 
 
-Router.get("/mis_planillas/:fecha", async (req, res) => {
+Router.get("/mis_planillas/:fecha", isLoggedIn,async (req, res) => {
 
     if (req.user.RANGO == "ADMIN") {
         const vendedores = await getVendedoresConVentas(req.params.fecha);
@@ -223,9 +223,7 @@ Router.get("/mis_planillas/:fecha/:vendedor/borrar_planilla", isLoggedIn, isAdmi
 
 });
 
-Router.get("/mis_planillas/sobrecargas",isLoggedIn,(req,res)=>{
-    
-})
+
 
 
 

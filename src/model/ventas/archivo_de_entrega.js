@@ -19,7 +19,7 @@ async function getArchivoDeEntregaVentas(vendedor,dia) {
 
 async function getArchivoDeEntregaAccess(vendedor,dia) {
     const [ventas] = await pool.query(
-        "Select FECHA_VENTA,CTE,FICHA,NOMBRE,ZONA,CALLE,NULL as n1,NULL as n2,WHATSAPP, "+
+        "Select FECHA_VENTA,CTE,FICHA,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,WHATSAPP, "+
         "DNI,ARTICULOS,TOTAL,ANTICIPO,CUOTA,TIPO,ESTATUS,PRIMER_PAGO,Usuario from VentasCargadas "+
         "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1"
         ,[vendedor,dia])
