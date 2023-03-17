@@ -42,12 +42,16 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
         })
     })
 
+    const sobrecarga = [];
+
     //Genera la planilla de carga
     await crearPlanilla(VENDEDOR, FECHA,
         JSON.stringify(planilla_object),
         user.Usuario,
         JSON.stringify(control_vendedor_articulos),
-        JSON.stringify(control_vendedor_articulos));
+        JSON.stringify(control_vendedor_articulos),
+        JSON.stringify(sobrecarga));
+
 }
 
 
@@ -72,7 +76,7 @@ Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
 })
 
 
-Router.get("/mis_planillas/:fecha", isLoggedIn,async (req, res) => {
+Router.get("/mis_planillas/:fecha", isLoggedIn, async (req, res) => {
 
     if (req.user.RANGO == "ADMIN") {
         const vendedores = await getVendedoresConVentas(req.params.fecha);
@@ -99,8 +103,6 @@ Router.get("/mis_planillas/:fecha", isLoggedIn,async (req, res) => {
 Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
     const VENDEDOR = req.params.vendedor;
     const FECHA = req.params.fecha;
-    console.log("VENDEDOR", VENDEDOR);
-    console.log("FECHA", FECHA);
 
     //Si la planilla no existe la crea
     if (!await existePlanilla(VENDEDOR, FECHA)) {
@@ -115,25 +117,26 @@ Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
     const planilla = JSON.parse(response.PLANILLA);
     const ARTICULOS_CONTROL = JSON.parse(response.ARTICULOS_CONTROL);
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
-
-    // console.log("",response);
+    const SOBRECARGA = JSON.parse(response.SOBRECARGA);
+    
+    console.log(SOBRECARGA);
 
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
-        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR ,SOBRECARGA});
     }
 
     if (response.VENDEDOR == req.user.Usuario) {
         if (response.isEditableVendedor == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
         }
-        return res.render("mercaderia/planilla-vendedor.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+        return res.render("mercaderia/planilla-vendedor.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
     if (response.CONTROL == req.user.Usuario) {
         if (response.isEditableControl == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
         }
-        return res.render("mercaderia/planilla-control.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+        return res.render("mercaderia/planilla-control.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
     }
 
 

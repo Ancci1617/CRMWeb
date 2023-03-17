@@ -1,6 +1,6 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
-const { getDatosParaPlanilla, insertPlanillaControl,
+const { getDatosParaPlanilla, insertPlanillaControl, insertSobreCarga,
     existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
     insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla } = require("../../model/mercaderia/planilla")
 const { getFechaDeVentas, getVendedoresConVentas } = require("../../model/ventas/ventas.query");
@@ -10,7 +10,7 @@ async function generarSobrecarga(VENDEDOR, FECHA, user) {
 
     let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] };
 
-    
+
     //Con las ventas de ayer, genera los articulos
     const datos_para_planilla = await getDatosParaPlanilla(VENDEDOR, FECHA);
 
@@ -58,28 +58,17 @@ async function generarSobrecarga(VENDEDOR, FECHA, user) {
 
 
 
-Router.get("/mis_planillas/sobrecargas", isLoggedIn, async (req, res) => {
+Router.post("/sobrecarga", isLoggedIn, async (req, res) => {
 
-    let nombres = {};
-    nombres.usuarios = await getNombresDeUsuarios();
+    const { CTE, FICHA, ART, CARGA, TIPO, OBS, FECHA, VENDEDOR } = req.body;
+    const response = await getPlanilla(VENDEDOR, FECHA);
+    const nueva_sobrecarga = { CTE, FICHA, ART, CARGA, TIPO, OBS, CONTROL : "No confirmado" }
+    const sobrecarga = JSON.parse(response.SOBRECARGA);
+    sobrecarga.push(nueva_sobrecarga);
 
-    res.render("mercaderia/planilla-sobrecarga-nombres.ejs", { user: req.user, datos: nombres })
+    await insertSobreCarga(JSON.stringify(sobrecarga), FECHA, VENDEDOR);
 
-});
-
-Router.get("/mis_planillas/sobrecargas/:vendedor", isLoggedIn, isAdmin, async (req, res) => {
-
-    //Renderizar planilla de carga
-    res.render("mercaderia/planilla-sobrecarga-carga.ejs", { user: req.user });
-
-});
-
-Router.post("/mis_planillas/generar_sobrecarga", isLoggedIn, isAdmin, async (req, res) => {
-
-    //Renderizar planilla de carga
-
-
-
+    res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
 
 });
 

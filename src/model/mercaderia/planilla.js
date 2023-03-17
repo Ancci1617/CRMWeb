@@ -27,18 +27,18 @@ const existePlanilla = async (vendedor, fecha) => {
 
 const getPlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
-        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO from PlanillasDeCarga where " +
+        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO,SOBRECARGA from PlanillasDeCarga where " +
         "VENDEDOR = ? and FECHA = ?;", [vendedor, fecha]);
 
     return result[0];
 
 }
 
-const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor) => {
+const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor,sobrecarga) => {
     const [result] = await pool.query(
-        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR) " +
-        "VALUES (?,?,?,?,?,?) "
-        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor]);
+        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,SOBRECARGA) " +
+        "VALUES (?,?,?,?,?,?,?) "
+        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor,sobrecarga]);
 
 
     return result;
@@ -68,7 +68,6 @@ const insertarArticulos = async (fecha, vendedor, articulos, dato) => {
         return "PERMISOS NO DISPONIBLES";
     }
 
-    console.log("CONSULTA",query);
 
     const [result] = await pool.query(query, [articulos, fecha , vendedor]);
     return result;
@@ -105,11 +104,21 @@ const borrarPlanilla = async (fecha,vendedor) => {
     return result;
 }
 
+const insertSobreCarga = async (json,fecha,vendedor) => {
+    const [result] = await pool.query(
+        "UPDATE `PlanillasDeCarga` SET SOBRECARGA = ? " +
+        "WHERE VENDEDOR = ? AND FECHA = ? "
+        , [json,vendedor, fecha]);
+
+    return result;
+}
+
 module.exports = {
     getDatosParaPlanilla, insertPlanillaControl,
      existePlanilla, crearPlanilla,
     getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
-    cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla
+    cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla,
+    insertSobreCarga
 }
 
 

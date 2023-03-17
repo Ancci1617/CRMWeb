@@ -74,6 +74,43 @@
             </form>
             </div>
 
+            <form action="/sobrecarga" method="post" class="form-sobrecarga">
+                <table class="tabla-datos tabla-carga tabla-sobrecarga">
+                    <thead>
+                        <th>Cliente</th>
+                        <th>Ficha</th>
+                        <th>Articulo</th>
+                        <th>Carga</th>
+                        <th>Tipo</th>
+                        <th>Observacion</th>
+                        <th>Cargar</th>
+                        <th>Control</th>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0 ; i < SOBRECARGA.length; i++ ) { %>
+                        <tr>
+                            <td><%= SOBRECARGA[i].CTE %></td> 
+                            <td><%= SOBRECARGA[i].FICHA %></td>
+                            <td><%= SOBRECARGA[i].ART %></td>
+                            <td><%= SOBRECARGA[i].CARGA %></td>
+                            <td><%= SOBRECARGA[i].TIPO %></td>
+                            <td><%= SOBRECARGA[i].OBS %></td>
+                            <td><%= "Cerrado" %></td>  
+                            <td><a href="">Confirmar</a></td>                      
+                        </tr>
+    
+                        <% } %>
+
+                    </tbody>
+                </table>
+                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+            </form>
+
+
+
+
+
 
         </div>
         <script src="/js/lib/asociar.input.js"></script>

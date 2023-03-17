@@ -64,15 +64,69 @@
                         <%}%>
 
                     </tbody>
-
+                    
                 </table>
                 <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
                 <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
                 <input type="submit" class="btn-submit hidden"> 
             </form>
+
             </div>
+            
+            <form action="/sobrecarga" method="post" class="form-sobrecarga">
+            <table class="tabla-datos tabla-carga tabla-sobrecarga">
+                <thead>
+                    <th>Cliente</th>
+                    <th>Ficha</th>
+                    <th>Articulo</th>
+                    <th>Carga</th>
+                    <th>Tipo</th>
+                    <th>Observacion</th>
+                    <th>Cargar</th>
+                    <th>Control</th>
+                </thead>
+                <tbody>
+                    <% for (let i = 0 ; i < SOBRECARGA.length; i++ ) { %>
+                    <tr>
+                        <td><%= SOBRECARGA[i].CTE %></td> 
+                        <td><%= SOBRECARGA[i].FICHA %></td>
+                        <td><%= SOBRECARGA[i].ART %></td>
+                        <td><%= SOBRECARGA[i].CARGA %></td>
+                        <td><%= SOBRECARGA[i].TIPO %></td>
+                        <td><%= SOBRECARGA[i].OBS %></td>
+                        <td><%= "Cerrado" %></td>  
+                        <td><%= SOBRECARGA[i].CONTROL %></td>                      
+                    </tr>
 
-
+                    <% } %>
+                    <tr>
+                        <td><input type="number" name="CTE" value=""></td>
+                        <td><input type="number" name="FICHA"></td>
+                        <td><input type="text" name="ART" maxlength="5"></td>
+                        <td>                            
+                            <select class="option-input">
+                                <option value="0">Carga</option>
+                                <option value="1">Descarga</option>
+                            </select>  
+                            <input type="text" name="CARGA" class="hidden select_input" value="Carga">
+                        </td>
+                        <td>                                
+                            <select class="option-input">
+                                <option value="0">Sobrecarga</option>
+                                <option value="1">Reclamo</option>
+                                <option value="2">Devolucion</option>
+                            </select>
+                            <input type="text" name="TIPO" class="hidden select_input" value="Sobrecarga">
+                        </td>
+                        <td><input type="text" name="OBS"></td>
+                        <td><input type="submit" value="Confirmar" class="btn btn-ventas"></td>  
+                        <td>No confirmado..</td>       
+                    </tr>
+                </tbody>
+            </table>
+            <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
+            <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+        </form>
         </div>
         <script src="/js/lib/asociar.input.js"></script>
         <script src="/js/mercaderia/planilla.js"></script>
