@@ -53,7 +53,7 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
         JSON.stringify(sobrecarga));
 
 }
-
+//
 
 
 Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
