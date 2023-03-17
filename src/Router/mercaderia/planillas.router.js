@@ -121,6 +121,7 @@ Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
     
 
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
+        
         return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR ,SOBRECARGA});
     }
 
