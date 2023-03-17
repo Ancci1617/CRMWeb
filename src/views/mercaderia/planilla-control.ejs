@@ -96,7 +96,13 @@
                             <td><%= SOBRECARGA[i].TIPO %></td>
                             <td><%= SOBRECARGA[i].OBS %></td>
                             <td><%= "Cerrado" %></td>  
-                            <td><a href="">Confirmar</a></td>                      
+                            <td>
+                                <% if(SOBRECARGA[i].CONTROL == "No confirmado") {%>
+                                    <a href="<%= planilla.RESUMEN.VENDEDOR %>/confirmar_sobrecarga/<%= i %>">Confirmar</a>
+                                <%} else {%>
+                                    <%= SOBRECARGA[i].CONTROL %>
+                                <% } %>
+                            </td>                      
                         </tr>
     
                         <% } %>

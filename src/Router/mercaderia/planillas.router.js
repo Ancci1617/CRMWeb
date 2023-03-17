@@ -119,7 +119,6 @@ Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
     const SOBRECARGA = JSON.parse(response.SOBRECARGA);
     
-    console.log(SOBRECARGA);
 
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
         return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR ,SOBRECARGA});
@@ -141,7 +140,7 @@ Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
 
 
 
-    res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR });
+    res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
 
 })
 
