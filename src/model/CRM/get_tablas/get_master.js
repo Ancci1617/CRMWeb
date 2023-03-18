@@ -5,7 +5,7 @@ const getMasterBGM = async (cte) => {
         "SELECT `Mes`,`FECHA`, `FICHA`, `Z`, `VTA`, " +
         "`Atraso`, `Anticipo`, `Cuota 1`, `Cuota 2`, `Cuota 3`, " +
         "`Cuota 4`, `Cuota 5`, `Sal Ant`, `Cuota 6`, `Sal Act`, `Cuota`, " +
-        "`Cuotas`, `Valor Unitario` FROM`BaseDetalle` WHERE cte = ? "
+        "`Cuotas`, `Valor Unitario`,ORIGINALES FROM `BaseDetalle` WHERE cte = ? "
         , [cte, cte]);
     if (rows.length > 0) {
         return rows;
