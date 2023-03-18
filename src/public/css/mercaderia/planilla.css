@@ -1,6 +1,10 @@
 .hidden{
     display: none;
 }
+a{
+    text-decoration: none;
+}
+
 
 .page-container{
     flex-direction: column;
@@ -38,6 +42,27 @@
     width: 100%;
     height: 100%;
     text-align: center;
+}
+.btn-green{
+    background-color: #6e8839;
+}
+
+.no-generado-container{
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: row;
+    gap: .5em;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 6px;
+}
+.no-generado-container * {
+    text-align: center;
+    white-space: nowrap;
+    flex: 1;
+    color: aliceblue;
 }
 
 
@@ -105,9 +130,6 @@ input[type="text"], input[type="number"]{
     width: auto;
     position: relative;
     white-space: normal;
-}
-td a{
-    text-decoration: none;
 }
 
 

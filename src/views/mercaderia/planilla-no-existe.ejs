@@ -18,6 +18,9 @@
     <div class="page-container">
             
         <div class="dashboard-container">
+            <% if(!planilla) {%>
+                <div>Esta planialla no existe <button>generar</button></div>
+            <% } %>
             Esta planilla no se genero aun: 
             <div class="btn-ventas">GENERAR PLANILLA</div>
         </div>

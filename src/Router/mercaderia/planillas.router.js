@@ -1,18 +1,17 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
-const { getDatosParaPlanilla, insertPlanillaControl,
+const { getDatosParaPlanilla, insertarBaseArticulos,
     existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
-    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla } = require("../../model/mercaderia/planilla")
-const { getFechaDeVentas, getVendedoresConVentas } = require("../../model/ventas/ventas.query");
+    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla, crearPlanillaParcial } = require("../../model/mercaderia/planilla")
+const { getFechaDeVentas,getVendedores } = require("../../model/ventas/ventas.query");
 
 
 async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
-    let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] };
-    planilla_object.RESUMEN.UNIDAD = "AB717";
-
 
     //Con las ventas de ayer, genera los articulos
+    let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] };
     const datos_para_planilla = await getDatosParaPlanilla(VENDEDOR, FECHA);
+
     for (let i = 0; i < datos_para_planilla.length; i++) {
 
         //GENERA UN ARRAY CON LOS ARTICULOS DE LAS VENTAS DEL DIA ANTERIOR
@@ -33,7 +32,6 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
     //Por cada articulo del objeto planilla, genera un objeto vacio
     //Que es el ESTADO del movimiento del articulo del vendedor
     let control_vendedor_articulos = { ARTICULOS: [] };
-
     planilla_object.ARTICULOS.forEach(e => {
         control_vendedor_articulos.ARTICULOS.push({
             FICHA: e.FICHA,
@@ -42,24 +40,28 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
         })
     })
 
-    const sobrecarga = [];
 
     //Genera la planilla de carga
-    await crearPlanilla(VENDEDOR, FECHA,
+    await insertarBaseArticulos(FECHA, VENDEDOR,
         JSON.stringify(planilla_object),
         user.Usuario,
         JSON.stringify(control_vendedor_articulos),
-        JSON.stringify(control_vendedor_articulos),
-        JSON.stringify(sobrecarga));
+        JSON.stringify(control_vendedor_articulos));
 
 }
-//
+
+async function generarPlanillaDeCargaParcial(VENDEDOR, FECHA) {
+    let planilla_object = { RESUMEN: { FECHA, VENDEDOR }, ARTICULOS: [] };
+    planilla_object.RESUMEN.UNIDAD = "AB717";
+
+    //Genera la planilla de carga
+    await crearPlanilla(VENDEDOR, FECHA, JSON.stringify(planilla_object), null, null, null, "[]");
+
+}
 
 
 Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
 
-
-    //Si es vendedor
     let fechas;
     if (req.user.RANGO == "VENDEDOR") {
         fechas = await getFechasPlanillasHabilitadas(req.user.Usuario);
@@ -69,6 +71,10 @@ Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
         return res.redirect("/");
     }
 
+    const today = new Date().toISOString().split("T")[0];
+    if(fechas.filter(e => e.FECHA == today).length == 0){
+        fechas.push({FECHA : today});
+    }
 
     //Si es control
     res.render("mercaderia/mis-planillas.ejs", { user: req.user, fechas });
@@ -79,7 +85,7 @@ Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
 Router.get("/mis_planillas/:fecha", isLoggedIn, async (req, res) => {
 
     if (req.user.RANGO == "ADMIN") {
-        const vendedores = await getVendedoresConVentas(req.params.fecha);
+        const vendedores = await getVendedores(req.params.fecha);
         res.render("mercaderia/planilla-nombre-vendedores.ejs", {
             user: req.user,
             datos: {
@@ -100,51 +106,59 @@ Router.get("/mis_planillas/:fecha", isLoggedIn, async (req, res) => {
 
 
 
-Router.get("/mis_planillas/:fecha/:vendedor", isLoggedIn, async (req, res) => {
-    const VENDEDOR = req.params.vendedor;
-    const FECHA = req.params.fecha;
+Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
+    const { VENDEDOR, FECHA } = req.params;
 
     //Si la planilla no existe la crea
     if (!await existePlanilla(VENDEDOR, FECHA)) {
+        //Genera Sobrecargas y la fila de la planilla
         if (req.user.RANGO !== "ADMIN") {
-            return res.redirect("/mis_planillas")
+            return res.redirect("/mis_planillas");
         }
-        await generarPlanillaDeCarga(VENDEDOR, FECHA, req.user);
+        await generarPlanillaDeCargaParcial(VENDEDOR, FECHA);
     }
+
+
 
     //Get de datos para renderizar planilla
     const response = await getPlanilla(VENDEDOR, FECHA);
     const planilla = JSON.parse(response.PLANILLA);
+    const SOBRECARGA = JSON.parse(response.SOBRECARGA);
     const ARTICULOS_CONTROL = JSON.parse(response.ARTICULOS_CONTROL);
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
-    const SOBRECARGA = JSON.parse(response.SOBRECARGA);
-    
+
+
 
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
-        
-        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR ,SOBRECARGA});
+        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
     if (response.VENDEDOR == req.user.Usuario) {
         if (response.isEditableVendedor == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
         }
         return res.render("mercaderia/planilla-vendedor.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
     if (response.CONTROL == req.user.Usuario) {
         if (response.isEditableControl == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
         }
-        return res.render("mercaderia/planilla-control.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
+        return res.render("mercaderia/planilla-control.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
 
 
-    res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR,SOBRECARGA });
+    res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
 
 })
 
+Router.get("/mis_planillas/:FECHA/:VENDEDOR/generar_planilla_de_carga", isLoggedIn, isAdmin, async (req, res) => {
+    const { VENDEDOR, FECHA } = req.params;
+    
+    await generarPlanillaDeCarga(VENDEDOR,FECHA,req.user);
+    res.redirect('/mis_planillas/' + FECHA + '/' + VENDEDOR);
+})
 
 Router.post("/insertar_estados", isLoggedIn, async (req, res) => {
     //Si vendedor en vendedor, si control control/ sino NO PERMITIDO
@@ -219,10 +233,12 @@ Router.get("/mis_planillas/:fecha/:vendedor/borrar_planilla", isLoggedIn, isAdmi
     let FECHA = req.params.fecha;
     let VENDEDOR = req.params.vendedor;
 
-    await borrarPlanilla(FECHA, VENDEDOR);
+    let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] }
+    
+    await borrarPlanilla(FECHA, VENDEDOR,JSON.stringify(planilla_object));
 
 
-    res.redirect("/mis_planillas");
+    res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
 
 });
 

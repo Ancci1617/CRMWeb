@@ -21,11 +21,12 @@
     <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
 
         <div class="page-container">
+            <% if(planilla.ARTICULOS.length > 0) {%>
             <div class="btn-container">
                 <div class="btn-ventas btn-actualiza btn"></span>Cargar</span></div>
                 <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
             </div>
-
+            <% } %>
 
 
             <div class="planilla-container">

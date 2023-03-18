@@ -1,10 +1,6 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
-const { getDatosParaPlanilla, insertPlanillaControl, insertSobreCarga,
-    existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
-    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla } = require("../../model/mercaderia/planilla")
-const { getFechaDeVentas, getVendedoresConVentas } = require("../../model/ventas/ventas.query");
-const { getNombresDeUsuarios } = require("../../model/auth/getUsers");
+const { insertSobreCarga,getPlanilla } = require("../../model/mercaderia/planilla")
 
 
 
@@ -34,6 +30,12 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/confirmar_sobrecarga/:ID", isLoggedI
     res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
 
 })
+
+
+
+
+
+
 
 
 

@@ -43,6 +43,15 @@ const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulo
 
     return result;
 }
+const crearPlanillaParcial = async (vendedor, fecha,sobrecarga) => {
+    const [result] = await pool.query(
+        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,SOBRECARGA) " +
+        "VALUES (?,?,?) "
+        , [vendedor, fecha,sobrecarga]);
+
+
+    return result;
+}
 
 const insertPlanillaControl = async (json) => {
     const [result] = await pool.query(
@@ -96,10 +105,10 @@ const habilitarVendedor = async (fecha,vendedor) => {
 
     return result;
 }
-const borrarPlanilla = async (fecha,vendedor) => {
+const borrarPlanilla = async (fecha,vendedor,planilla) => {
     const [result] = await pool.query(
-        "Delete from `PlanillasDeCarga` where VENDEDOR = ? and FECHA = ?"
-        , [vendedor, fecha]);
+        "UPDATE `PlanillasDeCarga` set PLANILLA = ?, CONTROL = null where VENDEDOR = ? and FECHA = ?"
+        , [planilla,vendedor, fecha]);
 
     return result;
 }
@@ -113,12 +122,22 @@ const insertSobreCarga = async (json,fecha,vendedor) => {
     return result;
 }
 
+const insertarBaseArticulos = async (fecha,vendedor,planilla,control,articulos_control,articulos_vendedor) => {
+    const [result] = await pool.query(
+        "UPDATE `PlanillasDeCarga` SET CONTROL = ?, PLANILLA = ? ,ARTICULOS_CONTROL = ?,ARTICULOS_VENDEDOR = ? " +
+        "WHERE VENDEDOR = ? AND FECHA = ? "
+        , [control,planilla,articulos_control,articulos_vendedor,vendedor, fecha]);
+
+    return result;
+}
+
+
 module.exports = {
     getDatosParaPlanilla, insertPlanillaControl,
      existePlanilla, crearPlanilla,
     getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
     cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla,
-    insertSobreCarga
+    insertSobreCarga,crearPlanillaParcial,insertarBaseArticulos
 }
 
 
