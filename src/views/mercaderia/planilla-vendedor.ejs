@@ -101,6 +101,7 @@
 
                     <% } %>
                     
+                    <% if(planilla.RESUMEN.FECHA == new Date().toISOString().split("T")[0]) { %>
                     <tr>
                         <td><input type="number" name="CTE" value=""></td>
                         <td><input type="number" name="FICHA"></td>
@@ -124,7 +125,7 @@
                         <td><input type="submit" value="Confirmar" class="btn btn-ventas"></td>  
                         <td>No confirmado..</td>       
                     </tr>
-
+                    <% } %>
 
                 </tbody>
             </table>
