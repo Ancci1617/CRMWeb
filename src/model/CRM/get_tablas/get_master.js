@@ -35,7 +35,7 @@ const getMasterResumen = async (cte) => {
     if (rows.length > 0) {
         return rows;
     }
-    return [{BGM : "1", CAPITAL : "5000", CALIF : "Sin calif"}];
+    return [{BGM : "1", CAPITAL : "5000", CALIF : "Nuevo"}];
 }
 
 

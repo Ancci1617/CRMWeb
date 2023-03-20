@@ -91,7 +91,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
             body: JSON.stringify({ calificacion: master.CALIF, cuotas })
         })
         const cuotas_entrega = await entrega_res.json();
-
+        
         if (cuotas_para_entrega >= cuotas_entrega.Entrega) return true;
         return false;
 

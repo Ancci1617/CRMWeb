@@ -7,7 +7,7 @@ const { getFechaDeVentas,getVendedores } = require("../../model/ventas/ventas.qu
 
 
 async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
-
+    
     //Con las ventas de ayer, genera los articulos
     let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] };
     const datos_para_planilla = await getDatosParaPlanilla(VENDEDOR, FECHA);
@@ -128,9 +128,8 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
 
 
-
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
-        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
+        return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA, datos : response  });
     }
 
     if (response.VENDEDOR == req.user.Usuario) {

@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="/css/CRM/General.css">
     <link rel="stylesheet" href="/css/CRM/interfaz.css">
     <link rel="stylesheet" href="/css/mercaderia/planilla.css">
-
-
 </head>
 
 <body>
@@ -27,10 +25,13 @@
                     <h4>PLANILLA NO GENERADA</h4>
                     <div class="btn btn-green"><a href="<%= planilla.RESUMEN.VENDEDOR %>/generar_planilla_de_carga/">Generar</a></a></div>
                 </div>
-            <% }else{ %>                
+            <% }else{ %>
 
             <div class="planilla-container">
                 <form action="/insertar_estados" method="POST" class="form-planilla">
+                <h3>Fecha : <%=planilla.RESUMEN.FECHA%></h3>
+                <h3>Responsable : <%=planilla.RESUMEN.CONTROL%></h3>
+                <h3>Vendedor : <%=planilla.RESUMEN.VENDEDOR%></h3>
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -51,10 +52,9 @@
                             <td><%= planilla.ARTICULOS[i].FICHA %></td>
                             <td><%= planilla.ARTICULOS[i].ANT %></td>
                             <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
-                            <td><%= planilla.ARTICULOS[i].ART %></td>                                             
+                            <td><%= planilla.ARTICULOS[i].ART %></td>
                             <td><%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO%></td>
                             <td><%= ARTICULOS_VENDEDOR.ARTICULOS[i].ESTADO%></td>
-                            
                         </tr>
                         <%}%>
 
@@ -67,9 +67,10 @@
             </form>
             </div>
 
-            <% } %>
+            <%}%>
 
             <form action="/sobrecarga" method="post" class="form-sobrecarga">
+                <h3>Sobrecarga</h3>
                 <table class="tabla-datos tabla-carga tabla-sobrecarga">
                     <thead>
                         <th>Cliente</th>
@@ -99,8 +100,8 @@
                                 <% } %>
                             </td>                      
                         </tr>
-    
-                        <% } %>
+
+                        <%}%>
                         
 
 
