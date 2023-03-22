@@ -127,7 +127,7 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
     const ARTICULOS_CONTROL = JSON.parse(response.ARTICULOS_CONTROL);
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
 
-    console.log(datos);
+    console.log(response);
     if (response.isEditableVendedor == 0 && response.isEditableControl == 0) {
         return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA, datos : response  });
     }
