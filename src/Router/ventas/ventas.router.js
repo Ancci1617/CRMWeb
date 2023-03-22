@@ -36,8 +36,11 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
 
     const { calificacion, cuotas } = req.body;
-    console.log(calificacion,cuotas);
-    const cuotas_para_entregar = await getPrepagoEntrega(calificacion, cuotas);
+
+    console.log(calificacion.trim(), cuotas);
+
+    const cuotas_para_entregar = await getPrepagoEntrega(calificacion.trim(), cuotas);
+    console.log("ENTREGA",cuotas_para_entregar);
     res.json(cuotas_para_entregar[0]);
 
 })

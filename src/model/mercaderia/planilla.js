@@ -67,13 +67,10 @@ const insertarArticulos = async (fecha, vendedor, articulos, dato) => {
     let query = "";
     
     if (dato == "VENDEDOR") {
-        console.log("PERMISOS vendedor");
         query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_VENDEDOR`= ?  WHERE FECHA = ? and VENDEDOR = ?";
     } else if (dato == "ADMIN") {
-        console.log("PERMISOS admin");
         query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_CONTROL`= ?  WHERE FECHA = ? and VENDEDOR = ?";
     } else {
-        console.log("PERMISOS NO DISPONIBLES");
         return "PERMISOS NO DISPONIBLES";
     }
 

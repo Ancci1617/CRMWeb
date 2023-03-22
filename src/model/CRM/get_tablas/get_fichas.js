@@ -12,8 +12,8 @@ const getFichas = async (cte) => {
         "UNION " +
         "SELECT DATE_FORMAT(`Fecha`, '%d/%m/%y'),`Ficha`,`Zona`,`Total`,null,null,null,null,null,null,null,Total,Cobrado,Saldo,Cuota,`Valor Unitario`, " +
         "DATE_FORMAT(PrimerVencimiento,'%d-%b') as PrimerVencimiento,DATE_FORMAT(`Fecha cobro`,'%d-%b') as `Fecha cobro`,Vencidas,`Cuotas Pagas`,`Cuotas`,`Atraso` FROM Ventas where CTE = ?", [cte, cte]);
-    
-        console.log(rows);
+
+
         
     if (rows.length > 0) {
         return rows;

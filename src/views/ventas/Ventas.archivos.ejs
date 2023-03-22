@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
     <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
     <link rel="stylesheet" href="css/CRM/General.css">
     <link rel="stylesheet" href="css/CRM/interfaz.css">
@@ -178,7 +177,7 @@
 
      
         </div>
-
+        <%- include("../partials/links/nav.logic.ejs")  %>
         <script src="js/ventas/query.ventas.archivo_de_entrega.js"></script>
         <script src="js/lib/table.setData.js"></script>
 </body>

@@ -10,7 +10,7 @@ const getPrepagoEntrega = async (calificacion, cuotas_vendido) => {
         "`Entrega` " +
         " FROM `Prepagos` " +
         "WHERE `CALIFICACION` = ? AND `CUOTASVENDIDO` = ? LIMIT 1;", [calificacion, cuotas_vendido]);
-
+        
     if (cuota_entrega.length > 0) {
         return cuota_entrega;
     }

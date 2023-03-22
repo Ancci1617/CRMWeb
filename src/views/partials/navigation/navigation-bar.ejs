@@ -1,7 +1,12 @@
 <nav class="navigation-bar">
-    <div>Usuario: <%= username %></div>
-    <div>
-        <a href="/logout">Cerrar sesion</a>
-        <a href="/">Panel</a>
-    </div>
+    <span class="user">
+        Usuario : <%= username %>
+    </span>
+    <ul class="show">
+        <li><a href="/logout">Cerrar sesion</a></li>
+        <li><a href="/">Panel</a></li>
+    </ul>
+    <span class="burguer">
+        <i class="fa fa-bars fa-2x"></i>
+    </span>
 </nav>

@@ -39,7 +39,6 @@ btn_consulta.addEventListener("click", async e => {
     })
 
     const access = await response_access.json();
-    console.log(access);
 
     setData(tabla_access, access);
 

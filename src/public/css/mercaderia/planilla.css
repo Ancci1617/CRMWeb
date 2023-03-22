@@ -1,133 +1,164 @@
+/*GENERALES*/
 .hidden{
     display: none;
 }
-a{
-    text-decoration: none;
-}
-
-
-.page-container{
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    overflow: scroll;
-    overflow-y: auto;
-    overflow-x: auto;
-    padding: 4px 0 0 0;
-}
-
-
-.btn-container{
-    margin: 0;
-    width: 100%;
-    max-width: 620px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: .4em;
-}
-
-.btn{
-    border: 2px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    white-space: nowrap;
-}
+/*BOTONES*/
 .btn a{
     text-decoration: none;
-    color: white;
-    width: 100%;
-    height: 100%;
+}
+.btn {
+    position: relative;
+    font-size: 1.2rem;
+    padding: .5em 3em;
+    box-shadow: 1px 1px 4px black;
     text-align: center;
+    cursor: pointer;
+}
+.btn:hover{
+    left: .1rem;
+    top: .1rem;
+}
+.btn-radius{
+    border-radius: 2rem;
 }
 .btn-green{
-    background-color: #6e8839;
+    background: #679567;
 }
 
-.no-generado-container{
-    width: 100%;
-    max-width: 520px;
+
+/*VARIABLES*/
+:root{
+    --vw : 82vw; 
+}
+
+
+
+/*NORMAL*/
+
+body {
+    display: flex;  
+    min-height: 100vh;
+    align-items: center;
+    flex-direction: column;
+    background-color: #bebebe;
+}
+
+
+.btn-container {
+    margin-top: .5rem;
+    width: var(--vw);
     display: flex;
-    flex-direction: row;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+.btn-container *{
+    flex: 1;
+    display: grid;
+    align-items: center;    
+    color: #0c580c;
+    background: #979797;
+}
+.btn:hover *,.btn:hover  {
+    color: #74d574;
+}    
+.btn-confirmar{
+    padding: .2em .8em;
+    background-color: #a19c9c;
+}
+input,select{
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: .9rem;
+    width: 100%;
+}
+select{
+    width: auto;
+}
+
+
+
+
+
+.no-generado-container{
+    width: var(--vw);
+    display: flex;
+    flex-direction: column;
     gap: .5em;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
     padding: 6px;
 }
 .no-generado-container * {
     text-align: center;
     white-space: nowrap;
-    flex: 1;
-    color: aliceblue;
 }
 
-.planilla-container, form{
-    margin-top: 1.2em;
-    width: 100%;
-    max-width: 720px;
-    display: flex;
-    overflow: scroll;
-    overflow-y: auto;
-    overflow-x: auto;
-}
 
-.tabla-carga{
-    flex:1;
-    border-radius: .7em;
+
+
+.table {
+    width: 82vw;
+    height: 60vh;
+    max-height: 60vh;
+    
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px black;
+    margin-top: 1.5rem;
     overflow: hidden;
+    background-color: rgb(211, 212, 212);
+}
+
+.table__header {
+    width: 100%;
+    padding: .8rem 1rem;
+    background-color: #a5a5a5;
+
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 
-.tabla-carga thead th{
-    font-size: 1.2em;
-    background-color: rgb(50, 95, 95);
+.table__body {
+    width: 95%;
+    max-height: calc(50vh - 1.6rem);
+
+
+    margin: .8rem auto;
+    border-radius: .6rem;
+    overflow: auto;
 }
 
-.tabla-carga tbody{
-    background-color: aliceblue;
+table {
+    width: 100%;
+}
+
+thead {
+    background-color: rgb(65, 97, 97);
+    color: rgb(219, 216, 216);
+}
+
+table,
+table th,
+table td {
+    padding: .8rem;
+}
+table th{
+    padding-inline: 1.3rem;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: rgb(226, 229, 230);
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: rgb(249, 251, 252);
 }
 
 
-.tabla-carga tbody td,.tabla-carga tbody th {
-    padding: 0.4rem;
-    border-left: 2px solid lightgrey;
-}
-
-.tabla-carga tbody td select{
-    font-size: 1.1em;
-    outline: none;
-    border: none;
-    background-color: transparent;
-}
 
 
-input{
-    border: none;
-    outline: none;
-    background: transparent;
-}
-
-input[type="text"], input[type="number"]{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.tabla-carga thead{
-    position: sticky;
-    top: 0;
-}
-
-.tabla-sobrecarga tr td{
-    width: auto;
-    position: relative;
-    white-space: normal;
-}
 
 

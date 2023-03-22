@@ -4,7 +4,6 @@ let btn_actualiza = document.querySelector(".btn-actualiza");
 const form_planilla = document.querySelector("form");
 
 
-
 //Asociar hidden input con select
 for(i = 0; i < options_selector.length; i++){
     asociarInputOption(options_selector[i], input[i]);
@@ -12,7 +11,7 @@ for(i = 0; i < options_selector.length; i++){
 
 
 btn_actualiza.addEventListener("click", e=> {
-    console.log("subir");
+
     form_planilla.submit(); 
 
    

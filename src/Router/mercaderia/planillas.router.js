@@ -134,21 +134,21 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
 
     if (response.VENDEDOR == req.user.Usuario) {
         if (response.isEditableVendedor == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA, datos : response  });
         }
         return res.render("mercaderia/planilla-vendedor.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
     if (response.CONTROL == req.user.Usuario) {
         if (response.isEditableControl == 0) {
-            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
+            return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA, datos : response  });
         }
         return res.render("mercaderia/planilla-control.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
     }
 
 
 
-    res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA });
+    return res.render("mercaderia/planilla-visual.ejs", { user: req.user, planilla, ARTICULOS_CONTROL, ARTICULOS_VENDEDOR, SOBRECARGA, datos : response  });
 
 })
 

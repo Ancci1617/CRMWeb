@@ -1,19 +1,89 @@
-.navigation-bar{
-    height: 36px;
-    background-color: skyblue;
-    padding: 6px 12px;
-    font-weight: 500;
+
+/*navigation bar*/
+.navigation-bar {
+    width: 100%;
+    background-color: rgb(131, 131, 130);
+    height: 3rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    padding-inline: 1em;
     white-space: nowrap;
-    border-bottom: 2px solid black;
+    font-size: 1.1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.navigation-bar a{
-    
-    margin-right: 16px;
+ul {
+    transition: top .3s;
+    list-style-type: none;
+    overflow: hidden; 
+}
+
+ul li,
+ul li a {
+    color: black;
     text-decoration: none;
+    display: inline-block;
+    margin-inline: .2rem;
+    transition: transform .2s;
 
 }
 
+ul li {
+    background-color: #bebebe;
+    padding: 4px 16px;
+    border-radius: 1em;
+}
 
+ul li a:hover {
+    color: #5a5a5a;
+    transform: scale(1.1);
+}
+
+
+.burguer {
+    display: none;
+    cursor: pointer;
+}
+
+ul.show {
+    top: -100vh;
+}
+
+@media screen and (max-width:500px) {
+    .burguer {
+        display: block;
+    }
+
+    ul {
+        font-size: 1.5rem;
+        align-content: start;
+        gap: .1em;
+        height: calc(100vh - 3rem);
+        background-color: rgba(61, 60, 60, 0.9);
+        display: grid;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 3rem;
+    }
+
+    ul li {
+        padding: .4rem;
+        text-align: center;
+        background-color: transparent;
+    }
+
+    ul li:hover {
+        background-color: rgba(61, 60, 60, 1);
+    }
+
+    ul li a {
+        display: block;
+    }
+
+
+
+}

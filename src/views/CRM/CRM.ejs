@@ -3,8 +3,9 @@
 <head>
     
     <title>Blanco Gusmar | CRM</title>
-    <link rel="shortcut icon" href="images/BGM.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="css/normalize.css">
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+
+
     <link rel="stylesheet" href="css/CRM/General.css">
     <link rel="stylesheet" href="css/CRM/interfaz.css">
     <link rel="stylesheet" href="css/CRM/tabla.clientes.css">
@@ -12,7 +13,6 @@
     <link rel="stylesheet" href="css/CRM/tabla.prestamos.css">
     <link rel="stylesheet" href="css/CRM/tabla.domicilio.css">
     <link rel="stylesheet" href="css/CRM/sidebar.css">
-    <link rel="stylesheet" href="css/navigation/navigation-bar.css">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <% const months = ["Ene", "Feb" , "Mar" , "Abr" , "May" , "Jun" , "Jul" , "Ago" , "Sep" , "Oct" , "Nov" , "Dec" ]; %>
     <% const vigente = new Date(new Date().getTime()+(1000*3600*24*3)).getMonth() //el 26 de cada mes esto cambia %>
@@ -44,10 +44,11 @@
             <%- include('../partials/CRM/tabla.masterBGM.ejs')%>
         </div>
 
+
     <script src="js/CRM/CRM.js"></script>
     <script src="js/CRM/sidebar.js"></script>
     <script src="js/CRM/button_events.js"></script>
-
+    <%- include("../partials/links/nav.logic.ejs")  %>        
 </body>
 
 </html>
