@@ -7,7 +7,7 @@ const { getFechaDeVentas,getVendedores } = require("../../model/ventas/ventas.qu
 
 
 async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
-    
+
     //Con las ventas de ayer, genera los articulos
     let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] };
     const datos_para_planilla = await getDatosParaPlanilla(VENDEDOR, FECHA);

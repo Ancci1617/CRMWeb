@@ -11,7 +11,7 @@ const getFechasPlanillasHabilitadas = async (vendedor) => {
 const getDatosParaPlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
         "Select CTE,FICHA,ANTICIPO,TOTAL,ESTATUS,ARTICULOS,USUARIO from VentasCargadas " +
-        "where USUARIO = ? and FECHA_VENTA = ?", [vendedor, fecha]);
+        "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1", [vendedor, fecha]);
 
     return result;
 
