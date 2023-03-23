@@ -74,7 +74,7 @@
             <div class="table__header">
                 <h3>Sobrecarga</h3>
             </div>
-            <form class="table__body">
+            <form class="table__body" method="POST" action="/sobrecarga">
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -130,6 +130,9 @@
                             <% } %>
                     </tbody>
                 </table>
+                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                
             </form>
         </section>
 

@@ -7,7 +7,7 @@ const session = require('express-session');
 const passport = require("passport")
 const {poolConfig} = require("./model/connection-config.js");
 
-//Comentario final
+
 
 //Set config
 app.use(express.static(path.join(__dirname, 'public')));

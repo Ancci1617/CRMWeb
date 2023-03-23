@@ -19,7 +19,6 @@ passport.use(new PassportLocal(async (username, password, done) => {
 
 //SEREALIZACION DE PASSPORT
 passport.serializeUser(function (user, done) {
-
     done(null, user.ID);
 })
 passport.deserializeUser(async (id, done) => {

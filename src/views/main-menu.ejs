@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blanco Gusmar | Panel</title>
     <%- include("./partials/links/normalize-fa-nav.styles.ejs") %>
-
     <link rel="stylesheet" href="css/main.css">
     <title>Document</title>
 </head>
@@ -20,7 +19,7 @@
                 <div class="dashboard-item"><a href="/CRM">CRM</a></div>
                 <div class="dashboard-item"><a href="/ventas_cargadas">Ventas del dia</a></div>
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/ventas_cargadas_vendedores">Ventas vendedores</a></div><%}%>
-                <div class="dashboard-item"><a href="/mis_planillas">Planillas</a></div>
+                <div class="dashboard-item"><a href="/mis_planillas">Planillas de carga</a></div>
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/archivo_de_entrega">Archivo de entrega</a></div><%}%> 
 
             </div>
