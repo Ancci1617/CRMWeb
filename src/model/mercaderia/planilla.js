@@ -2,7 +2,7 @@ const pool = require("../connection-database");
 
 const getFechasPlanillasHabilitadas = async (vendedor) => {
     const [fechas] = await pool.query(
-        "Select DISTINCT FECHA from PlanillasDeCarga where VENDEDOR = ?",
+        "Select DISTINCT FECHA from PlanillasDeCarga where VENDEDOR = ? ORDER BY FECHA",
         [vendedor]);
 
     return fechas;
