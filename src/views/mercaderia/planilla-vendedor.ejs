@@ -30,7 +30,7 @@
                 </h3>
                 <h3>Control: <%= datos.CONTROL %></h3>
             </div>
-            <form action="/insertar_estados" method="POST" class="table__body" >
+            <form action="/insertar_estados" method="POST" class="table__body form-carga" >
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -134,9 +134,9 @@
         </section>
 
 
-        <%- include("../partials/links/nav.logic.ejs")  %>
-        <script src="/js/mercaderia/planilla.js"></script>
         <script src="/js/lib/asociar.input.js"></script>
+        <script src="/js/mercaderia/planilla.js"></script>
+        <%- include("../partials/links/nav.logic.ejs")  %>
 </body> 
 
 </html>
