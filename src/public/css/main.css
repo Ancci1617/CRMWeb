@@ -4,11 +4,11 @@
 
 
 .dashboard-container{
-    width: 100%;
-    max-width: 480px;
-    height: 90%;
-    margin-top: 16px ;
     font-family: 'Poppins', Verdana;
+    max-width: 480px;
+    width: 100%;
+    margin: 1rem;
+    box-shadow: 3px 3px 5px rgba(0,0,0,.5);
     border: 1px solid blue; 
     display: flex;
     flex-direction: column;

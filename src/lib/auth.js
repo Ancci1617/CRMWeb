@@ -19,6 +19,14 @@ module.exports = {
 			return next();
 		}
 		return res.redirect('/main');
+	},
+	
+	isAdminOrVendedor(req,res,next){
+		if (req.user.RANGO === "ADMIN" || req.user.RANGO === "VENDEDOR"){
+			return next();
+		}
+		return res.redirect('/main');
+
 	}
 
 

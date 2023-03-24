@@ -3,7 +3,7 @@ const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("../../lib/auth");
 
 
-Router.get("/login", (req, res) => {
+Router.get("/login", isNotLoggedIn ,(req, res) => {
     res.render("auth/login")
 });
 

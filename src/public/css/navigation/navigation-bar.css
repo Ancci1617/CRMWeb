@@ -27,8 +27,7 @@ ul li a {
     text-decoration: none;
     display: inline-block;
     margin-inline: .2rem;
-    transition: transform .2s;
-
+    transition: transform .2s step-end;
 }
 
 ul li {
@@ -49,7 +48,7 @@ ul li a:hover {
 }
 
 ul.show {
-    top: -100vh;
+    top: -200vh;
 }
 
 @media screen and (max-width:500px) {
