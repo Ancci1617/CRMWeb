@@ -138,16 +138,16 @@ estatus_options.addEventListener("change", e => {
 
 
 //Listeners
-btn_nuevo.addEventListener("click", e => {
-    //Limpiar input box
-    let input_array = document.querySelectorAll(".input-box input");
-    input_array.forEach(e => { if (!input_array[7].classList.contains("hidden")) { e.value = "" } });
+// btn_nuevo.addEventListener("click", e => {
+//     //Limpiar input box
+//     let input_array = document.querySelectorAll(".input-box input");
+//     input_array.forEach(e => { if (!input_array[7].classList.contains("hidden")) { e.value = "" } });
 
-    //Cambiar numero de cliente a nuevo
-    document.getElementsByName("CTE")[0].value = "Nuevo";
+//     //Cambiar numero de cliente a nuevo
+//     document.getElementsByName("CTE")[0].value = "Nuevo";
 
 
-})
+// })
 
 
 form.addEventListener("submit", async e => {

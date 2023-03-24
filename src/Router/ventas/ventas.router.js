@@ -51,6 +51,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
     const query_result = { total: 0, cuota: 0 };
 
     for (let i = 0; i < data.articulos.length; i++) {
+        
         let respuesta = await getPrecio(data.articulos[i], data.cuotas);
 
         if (respuesta.PRECIO == "no encontrado") {
@@ -58,6 +59,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
             query_result.cuota = "articulo " + data.articulos[i] + " no encontrado";
             break;
         }
+        
 
         query_result.total += respuesta.PRECIO ? respuesta.PRECIO : 0;
 

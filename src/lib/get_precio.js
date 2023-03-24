@@ -3,7 +3,7 @@ const { getPrecioCuotas12,getPrecioCuotas9,getPrecioCuotas6,getPrecioCuotas3,get
 
 
 const getPrecio = async (articulo,cuotas) => {
-
+    
 
     switch(cuotas) {
         case "1":

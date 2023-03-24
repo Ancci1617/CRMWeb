@@ -97,7 +97,7 @@ select{
 
 
 .table {
-    width: 82vw;
+    width: var(--vw);
     height: 60vh;
     max-height: 60vh;
     
@@ -156,7 +156,11 @@ table tbody tr:nth-child(odd) {
     background-color: rgb(249, 251, 252);
 }
 
-
+@media screen and (max-width:480px) {
+    :root{
+        --vw : 95vw;
+    }
+}
 
 
 

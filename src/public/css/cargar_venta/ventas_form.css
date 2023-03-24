@@ -46,6 +46,7 @@ body {
   color: #ffffff;
   padding: 8px 18px;
   text-shadow: 1px 1px 1px #2f6627;
+  display: inline-block;
 }
 
 .container .title {
