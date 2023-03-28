@@ -7,8 +7,6 @@ const table_master_ec = document.querySelector(".tabla-masterec tbody");
 const table_domicilio = document.querySelector(".tabla-domicilio tbody");
 
 
-
-
 var btn_evaluar = document.querySelector(".btn-evaluar");
 var input_busqueda = document.querySelector(".inputtext-CTE");
 

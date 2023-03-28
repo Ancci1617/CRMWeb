@@ -2,7 +2,8 @@ const Router = require("express").Router();
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
 const { getDatosParaPlanilla, insertarBaseArticulos,
     existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
-    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla, crearPlanillaParcial } = require("../../model/mercaderia/planilla")
+    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,
+    cargarStockPlanilla} = require("../../model/mercaderia/planilla")
 const { getFechaDeVentas,getVendedores } = require("../../model/ventas/ventas.query");
 
 
@@ -185,30 +186,56 @@ Router.post("/insertar_estados", isLoggedIn, async (req, res) => {
 
 });
 
-Router.get("/mis_planillas/:fecha/:vendedor/cerrar_planilla", isLoggedIn, async (req, res) => {
+Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, async (req, res) => {
     let usuario = req.user.Usuario;
-    let FECHA = req.params.fecha;
-    let VENDEDOR = req.params.vendedor;
+    let {FECHA,VENDEDOR} = req.params;
     let response = await getPlanilla(VENDEDOR, FECHA);
     const planilla = JSON.parse(response.PLANILLA);
     const ARTICULOS_CONTROL = JSON.parse(response.ARTICULOS_CONTROL);
     const ARTICULOS_VENDEDOR = JSON.parse(response.ARTICULOS_VENDEDOR);
-
+    
 
     if (usuario !== response.CONTROL && usuario !== response.VENDEDOR) {
+    
         return res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
+    
     }
     if (usuario == response.VENDEDOR) {
+    
         await cerrarPlanillaVendedor(FECHA, VENDEDOR);
-
+    
     } else if (usuario == response.CONTROL) {
         if (JSON.stringify(ARTICULOS_CONTROL) == JSON.stringify(ARTICULOS_VENDEDOR) && response.isEditableVendedor == 0) {
 
-            await cerrarPlanilla(FECHA, VENDEDOR);
+            //VUELVE LA PLANILLA NO EDITABLE
+            // await cerrarPlanilla(FECHA, VENDEDOR);
+ 
+            //GENERA LA LISTA DE ARTICULOS PARA INSERTAR EN LA TABLA DE STOCK
+            const articulos = [];
+            for(let i = 0 ;i < planilla.ARTICULOS.length;i++ ){
+
+                const estado = ARTICULOS_CONTROL.ARTICULOS[i].ESTADO;
+                let efecto = estado == "Cargado" ? -1 : 0;
+                let articulo = planilla.ARTICULOS[i];
+                articulos.push([
+                    "AB717",
+                    articulo.CTE,
+                    articulo.FICHA,
+                    articulo.ART,
+                    VENDEDOR,
+                    usuario,
+                    articulo.ESTATUS,
+                    estado,estado,estado,
+                    FECHA,efecto,"CARGA"
+                ]);
+            }
+
+            //INSERTA LOS ARTICULOS EN LA TABLA DE STOCK
+            await cargarStockPlanilla(articulos);
 
         } else {
 
-            //ACA IRIA EL ENVIO DEL FLASH MESSAGE
+            //ACA IRIA EL ENVIO DEL FLASH MESSAGEN "NO AUTORIZADO"
         }
     }
     res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);

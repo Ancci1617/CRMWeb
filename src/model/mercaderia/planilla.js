@@ -43,15 +43,6 @@ const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulo
 
     return result;
 }
-const crearPlanillaParcial = async (vendedor, fecha,sobrecarga) => {
-    const [result] = await pool.query(
-        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,SOBRECARGA) " +
-        "VALUES (?,?,?) "
-        , [vendedor, fecha,sobrecarga]);
-
-
-    return result;
-}
 
 const insertPlanillaControl = async (json) => {
     const [result] = await pool.query(
@@ -90,7 +81,6 @@ const cerrarPlanilla = async (fecha,vendedor)  => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='0',`isEditableControl` = '0'  where VENDEDOR = ? and FECHA = ?"
         , [vendedor, fecha]);
-
     return result;
 }
 
@@ -102,6 +92,8 @@ const habilitarVendedor = async (fecha,vendedor) => {
 
     return result;
 }
+
+
 const borrarPlanilla = async (fecha,vendedor,planilla) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` set PLANILLA = ?, CONTROL = null where VENDEDOR = ? and FECHA = ?"
@@ -129,12 +121,26 @@ const insertarBaseArticulos = async (fecha,vendedor,planilla,control,articulos_c
 }
 
 
+
+
+const cargarStockPlanilla = async (articulos) => {
+
+    query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " + 
+    "`ART`, `VENDEDOR`, `CONTROL`, `ESTADO`, `CARGADO`, " +
+    "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`) VALUES ? "
+
+
+    await pool.query(query,[articulos]);
+
+}
+
+
 module.exports = {
     getDatosParaPlanilla, insertPlanillaControl,
      existePlanilla, crearPlanilla,
     getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
     cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla,
-    insertSobreCarga,crearPlanillaParcial,insertarBaseArticulos
+    insertSobreCarga,insertarBaseArticulos,cargarStockPlanilla
 }
 
 
