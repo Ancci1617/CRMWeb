@@ -18,7 +18,7 @@ app.set('view engine', 'ejs');
 
 
 //Set Variables;
-app.set("PORT", process.env.PORT || 3000);
+app.set("PORT", process.env.PORT || 80);
 
 
 
