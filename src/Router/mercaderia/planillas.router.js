@@ -269,20 +269,6 @@ Router.get("/mis_planillas/:fecha/:vendedor/borrar_planilla", isLoggedIn, isAdmi
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = Router
+
+

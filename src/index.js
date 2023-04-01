@@ -22,7 +22,6 @@ app.set("PORT", process.env.PORT || 3000);
 
 
 
-
 //Middlewareas
 app.use(session({
     key: 'session_cookie_name',
@@ -52,7 +51,7 @@ app.use(require("./Router/get.router"));
 app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
 app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
-
+                            
 
 //Ejecuta el servidor
 app.listen(app.get("PORT"),async (err) => {
