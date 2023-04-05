@@ -72,8 +72,9 @@ Router.get("/mis_planillas", isLoggedIn, async (req, res) => {
     }
 
     const today = new Date().toISOString().split("T")[0];
+    console.log(fechas);
     if(fechas.filter(e => e.FECHA == today).length == 0){
-        fechas.push({FECHA : today});
+        fechas.unshift({FECHA : today});
     }
 
     //Si es control

@@ -67,7 +67,9 @@ async function getVendedores() {
 }
 
 async function getFechaDeVentas() {
-    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1");
+    const [fechas] = await pool.query(
+        "SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1 order by FECHA desc"
+        );
 
     if (fechas.length > 0) {
         return fechas;
