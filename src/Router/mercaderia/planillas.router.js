@@ -2,8 +2,10 @@
 
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
+const { getUserByUsuario } = require("../../model/auth/getUser");
+
 const { insertarBaseArticulos,
-    existePlanilla, crearPlanilla, getPlanilla, 
+    existePlanilla, crearPlanilla, getPlanilla,
     insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,
     cargarStockPlanilla } = require("../../model/mercaderia/planilla")
 const { getFechaDeVentas, getVendedores, getVentasVendedores } = require("../../model/ventas/ventas.query");
@@ -42,10 +44,10 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
 
 }
 
-async function generarPlanillaDeCargaParcial(VENDEDOR, FECHA) {
+async function generarPlanillaDeCargaParcial(VENDEDOR, FECHA, UNIDAD) {
     let planilla_object = { ARTICULOS: [] };
     //Genera la planilla de carga
-    await crearPlanilla(VENDEDOR, FECHA, JSON.stringify(planilla_object), null, null, null, "[]");
+    await crearPlanilla(VENDEDOR, FECHA, JSON.stringify(planilla_object), null, null, null, "[]", UNIDAD);
 
 }
 
@@ -91,12 +93,13 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
         if (RANGO !== "ADMIN")
             return res.redirect("/mis_planillas");
 
-        await generarPlanillaDeCargaParcial(VENDEDOR, FECHA);
+        const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
+        await generarPlanillaDeCargaParcial(VENDEDOR, FECHA, VENDEDOR_USER.UNIDAD);
 
-        //Acumula la sobrecarga del dia anterior en la hoja de stock
         //Si la planilla del dia anterior existe, acumula al sobrecarga en stock
         const prevDay = new Date(new Date(FECHA) - 1000 * 60 * 60 * 24).toISOString().split("T")[0];
         const response = await getPlanilla(VENDEDOR, prevDay);
+
         if (response && JSON.parse(response.SOBRECARGA).length > 0) {
             const SOBRECARGA = JSON.parse(response.SOBRECARGA);
             const articulos = [];
@@ -104,9 +107,9 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
             SOBRECARGA.forEach(articulo => {
                 const { CTE, FICHA, ART, CARGA, CONTROL } = articulo;
                 //Define el efecto
-                let efecto = CARGA == "Cargado" || CARGA == "Carga" ? -1 : 0;
+                let efecto = CARGA == "Cargado" ? -1 : CARGA == "Descargado" ? -1 : 0;
                 articulos.push([
-                    "AB717", CTE, FICHA, ART, VENDEDOR,
+                    VENDEDOR_USER.UNIDAD, CTE, FICHA, ART, VENDEDOR,
                     Usuario, "Sobrecarga",
                     CARGA, CONTROL, CARGA,
                     prevDay, efecto, "SOBRECARGA"
@@ -182,18 +185,20 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, isAdmi
         //Condiciones para cerrar planilla
         Usuario == response.CONTROL &&
         JSON.stringify(ARTICULOS_CONTROL) == JSON.stringify(ARTICULOS_VENDEDOR) &&
-        response.isEditableVendedor == 0 && 
+        response.isEditableVendedor == 0 &&
         response.isEditableControl == 1
     ) {
         //GENERA LA LISTA DE ARTICULOS PARA INSERTAR EN LA TABLA DE STOCK
         const articulos = [];
+        const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
         for (let i = 0; i < planilla.ARTICULOS.length; i++) {
 
             const estado = ARTICULOS_CONTROL.ARTICULOS[i].ESTADO;
-            const efecto = estado == "Cargado" ? -1 : 0;
+            const efecto = estado == "Cargado" ? -1 : estado == "Descargado" ? -1 : 0;
+
             const { CTE, FICHA, ART, ESTATUS } = planilla.ARTICULOS[i];
             articulos.push([
-                "AB717",
+                VENDEDOR_USER.UNIDAD,
                 CTE, FICHA, ART, VENDEDOR, Usuario,
                 ESTATUS, estado, estado, estado,
                 FECHA, efecto, "CARGA"
@@ -222,16 +227,9 @@ Router.get("/mis_planillas/:fecha/:vendedor/habilitar_vendedor", isLoggedIn, isA
 
 });
 
-Router.get("/mis_planillas/:fecha/:vendedor/borrar_planilla", isLoggedIn, isAdmin, async (req, res) => {
-    let usuario = req.user.Usuario;
-    let FECHA = req.params.fecha;
-    let VENDEDOR = req.params.vendedor;
-
-    let planilla_object = { RESUMEN: { VENDEDOR, FECHA }, ARTICULOS: [] }
-
-    await borrarPlanilla(FECHA, VENDEDOR, JSON.stringify(planilla_object));
-
-
+Router.get("/mis_planillas/:FECHA/:VENDEDOR/borrar_planilla", isLoggedIn, isAdmin, async (req, res) => {
+    const { FECHA, VENDEDOR } = req.params;
+    await borrarPlanilla(FECHA, VENDEDOR, JSON.stringify({ ARTICULOS: [] }));
     res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
 
 });

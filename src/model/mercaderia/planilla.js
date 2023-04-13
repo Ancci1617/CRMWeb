@@ -8,15 +8,7 @@ const getFechasPlanillasHabilitadas = async (vendedor) => {
     return fechas;
 }
 
-// const getDatosParaPlanilla = async (vendedor, fecha) => {
 
-//     const [result] = await pool.query(
-//         "Select CTE,FICHA,ANTICIPO AS ANT,TOTAL,ESTATUS,ARTICULOS,USUARIO from VentasCargadas " +
-//         "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1", [vendedor, fecha]);
-
-//     return result;
-
-// }
 const existePlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
         "Select Count(FECHA) AS CANTIDAD from PlanillasDeCarga where " +
@@ -39,24 +31,17 @@ const getPlanilla = async (vendedor, fecha) => {
 
 }
 
-const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga) => {
+const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga,unidad) => {
     const [result] = await pool.query(
-        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,SOBRECARGA) " +
-        "VALUES (?,?,?,?,?,?,?) "
-        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga]);
+        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,SOBRECARGA,UNIDAD) " +
+        "VALUES (?,?,?,?,?,?,?,?) "
+        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga,unidad]);
 
 
     return result;
 }
 
-const insertPlanillaControl = async (json) => {
-    const [result] = await pool.query(
-        "INSERT INTO `PlanillasDeCarga`(`FECHA`,`VENDEDOR`,`ARTICULOS`) " +
-        "VALUES (?,?,?) "
-        , [vendedor, fecha]);
 
-    return result;
-}
 
 
 const insertarArticulos = async (fecha, vendedor, articulos, RANGO) => {   
@@ -119,9 +104,6 @@ const insertarBaseArticulos = async (fecha, vendedor, planilla, control, articul
     return result;
 }
 
-
-
-
 const cargarStockPlanilla = async (articulos) => {
 
     query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " +
@@ -135,7 +117,7 @@ const cargarStockPlanilla = async (articulos) => {
 
 
 module.exports = {
-    insertPlanillaControl,
+    
     existePlanilla, crearPlanilla,
     getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
     cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,

@@ -1,10 +1,5 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../../lib/auth");
-const {  insertarBaseArticulos,
-    existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
-    insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla, crearPlanillaParcial } = require("../../../model/mercaderia/planilla")
-const { getFechaDeVentas, getVendedores } = require("../../../model/ventas/ventas.query");
-
 
 
 Router.get("/cargas_camionetas", isLoggedIn, isAdminOrVendedor, async (req, res) => {
