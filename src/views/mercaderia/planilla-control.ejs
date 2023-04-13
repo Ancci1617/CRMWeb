@@ -13,14 +13,14 @@
 </head>
 
 <body>
-    <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
+    <%- include("../partials/navigation/navigation-bar") %>
 
 
     <div class="btn-container">
         <div class="btn-ventas btn-actualiza btn">Cargar</div>
-        <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
-        <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/habilitar_vendedor">Habilitar vendedor</a></div>
-        <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/borrar_planilla">Borrar planilla</a></div>
+        <div class="btn-ventas btn-cerrar btn"><a href="<%=datos.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
+        <div class="btn-ventas btn-cerrar btn"><a href="<%=datos.VENDEDOR%>/habilitar_vendedor">Habilitar vendedor</a></div>
+        <div class="btn-ventas btn-cerrar btn"><a href="<%=datos.VENDEDOR%>/borrar_planilla">Borrar planilla</a></div>
     </div>
 
 
@@ -50,7 +50,7 @@
                             <tr>
                                 <td><%= planilla.ARTICULOS[i].CTE %></td>
                                 <td><%= planilla.ARTICULOS[i].FICHA %></td>
-                                <td><%= planilla.ARTICULOS[i].ANT %></td>
+                                <td><%= planilla.ARTICULOS[i].ANTICIPO %></td>
                                 <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
                                 <td><%= planilla.ARTICULOS[i].ART %></td>
                                 <td>
@@ -66,8 +66,8 @@
                             <%}%>
                     </tbody>
                 </table>
-                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
-                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                <input name="FECHA" type="" class="hidden" value="<%= datos.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= datos.VENDEDOR %>" />
                 <input type="submit" class="btn-submit hidden">
             </form>
         </section>
@@ -102,7 +102,7 @@
                             <td><%= "Cerrado" %></td>  
                             <td>
                                 <% if(SOBRECARGA[i].CONTROL == "No confirmado") {%>
-                                    <a href="<%= planilla.RESUMEN.VENDEDOR %>/confirmar_sobrecarga/<%= i %>">Confirmar</a>
+                                    <a href="<%= datos.VENDEDOR %>/confirmar_sobrecarga/<%= i %>">Confirmar</a>
                                 <%} else {%>
                                     <%= SOBRECARGA[i].CONTROL %>
                                 <% } %>

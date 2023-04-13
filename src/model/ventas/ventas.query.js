@@ -14,7 +14,6 @@ async function getVendedoresConVentas(dia) {
 
 async function getVentasDelDia(dia, usuario) {
 
-
     const [ventas] = await pool.query(
         "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, " +
         "`CALLE`,`WHATSAPP`,`DNI`,`ARTICULOS`,`CUOTAS`,`CUOTA`,`TOTAL`, " +
@@ -67,7 +66,9 @@ async function getVendedores() {
 }
 
 async function getFechaDeVentas() {
-    const [fechas] = await pool.query("SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1");
+    const [fechas] = await pool.query(
+        "SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1 ORDER BY FECHA DESC"
+        );
 
     if (fechas.length > 0) {
         return fechas;
@@ -75,6 +76,8 @@ async function getFechaDeVentas() {
 
     return [];
 }
+
+
 
 async function getVentasDelDiaGeneral(fecha) {
 

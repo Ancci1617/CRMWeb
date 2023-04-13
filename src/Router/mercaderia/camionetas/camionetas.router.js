@@ -1,6 +1,6 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../../lib/auth");
-const { getDatosParaPlanilla, insertarBaseArticulos,
+const {  insertarBaseArticulos,
     existePlanilla, crearPlanilla, getPlanilla, getFechasPlanillasHabilitadas,
     insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla, crearPlanillaParcial } = require("../../../model/mercaderia/planilla")
 const { getFechaDeVentas, getVendedores } = require("../../../model/ventas/ventas.query");
@@ -9,8 +9,9 @@ const { getFechaDeVentas, getVendedores } = require("../../../model/ventas/venta
 
 Router.get("/cargas_camionetas", isLoggedIn, isAdminOrVendedor, async (req, res) => {
 
+
     if (req.user.RANGO == "ADMIN")
-        return res.render("mercaderia/camionetas/lista_de_camionetas.ejs",{username : req.user.Usuario, user : req.user});
+        return res.render("mercaderia/camionetas/lista_de_camionetas.ejs");
     
 
     const camioneta_vendedor = "AB717" //CONVERTIR EN CONSULTA

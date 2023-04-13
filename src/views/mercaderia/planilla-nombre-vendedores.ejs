@@ -9,16 +9,21 @@
     <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
     <link rel="stylesheet" href="/css/main.css">
 
-
 </head>
+
+
 <body>
-    <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
+    <%- include("../partials/navigation/navigation-bar") %>
     <div class="page-container">
 
         <div class="dashboard-container">
             <% for(let i = 0 ; i < datos.vendedores.length ; i++){ %>
 
-                <div class="dashboard-item"><a href="/mis_planillas/<%=datos.fecha%>/<%=datos.vendedores[i].VENDEDOR%>"><%=datos.vendedores[i].VENDEDOR%></a></div>
+                <div class="dashboard-item">
+                    <a href="/mis_planillas/<%= datos.FECHA %>/<%= datos.vendedores[i].VENDEDOR %>">
+                        <%=datos.vendedores[i].VENDEDOR%>
+                    </a>
+                </div>
            
             <%}%>
         </div>

@@ -6,6 +6,8 @@ const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
 const {poolConfig} = require("./model/connection-config.js");
+const {userView} = require("./middlewares/user.middlewares.js");
+
 
 
 
@@ -37,6 +39,7 @@ app.use(express.json());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(userView);
 require("./lib/passport.lib");
 
 

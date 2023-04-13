@@ -9,7 +9,12 @@ const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
 const { isLoggedIn } = require("../../lib/auth");
 const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js");
 
-// var memo = [];
+
+Router.get("/CRM", isLoggedIn, (req, res) => {
+    res.render("CRM/CRM");
+})
+
+
 Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     const query_result = {};
@@ -44,6 +49,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     res.json(query_result);
 })
+
 
 
 
