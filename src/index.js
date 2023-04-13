@@ -6,6 +6,8 @@ const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
 const {poolConfig} = require("./model/connection-config.js");
+const {userView} = require("./middlewares/user.middlewares.js");
+
 
 
 
@@ -19,7 +21,6 @@ app.set('view engine', 'ejs');
 
 //Set Variables;
 app.set("PORT", process.env.PORT || 3000);
-
 
 
 
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(userView);
 require("./lib/passport.lib");
 
 
@@ -46,13 +48,13 @@ require("./lib/passport.lib");
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
 app.use(require("./Router/auth/auth.router"));
-app.use(require('./Router/ventas/ventas.router'))
-app.use(require('./Router/ventas/ventas.archivos.js'))
+app.use(require("./Router/ventas/ventas.router"))
+app.use(require("./Router/ventas/ventas.archivos.js"))
 app.use(require("./Router/get.router"));
 app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
-
-
+app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
+                            
 
 //Ejecuta el servidor
 app.listen(app.get("PORT"),async (err) => {

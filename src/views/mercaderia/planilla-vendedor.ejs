@@ -11,13 +11,13 @@
 </head>
 
 <body>
-    <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
+    <%- include("../partials/navigation/navigation-bar") %>
 
 
     <% if(planilla.ARTICULOS.length > 0) {%>
         <div class="btn-container">
             <div class="btn-ventas btn-actualiza btn"></span>Cargar</span></div>
-            <div class="btn-ventas btn-cerrar btn"><a href="<%=planilla.RESUMEN.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
+            <div class="btn-ventas btn-cerrar btn"><a href="<%=datos.VENDEDOR%>/cerrar_planilla">Cerrar planilla</a></div>
         </div>
         <% } %>
 
@@ -48,7 +48,7 @@
                             <tr>
                                 <td><%= planilla.ARTICULOS[i].CTE %></td>
                                 <td><%= planilla.ARTICULOS[i].FICHA %></td>
-                                <td><%= planilla.ARTICULOS[i].ANT %></td>
+                                <td><%= planilla.ARTICULOS[i].ANTICIPO %></td>
                                 <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
                                 <td><%= planilla.ARTICULOS[i].ART %></td>                                                         
                                 <td><%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO%></td>                                                                             
@@ -64,8 +64,8 @@
                             <%}%>
                     </tbody>
                 </table>
-                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
-                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                <input name="FECHA" type="" class="hidden" value="<%= datos.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= datos.VENDEDOR %>" />
                 <input type="submit" class="btn-submit hidden">
             </form>
         </section>
@@ -103,15 +103,15 @@
         
                             <% } %>
                             
-                            <% if(planilla.RESUMEN.FECHA == new Date().toISOString().split("T")[0]) { %>
+                            <% if(datos.FECHA == new Date().toISOString().split("T")[0]) { %>
                             <tr>
                                 <td><input type="number" name="CTE" value=""></td>
                                 <td><input type="number" name="FICHA"></td>
                                 <td><input type="text" name="ART" maxlength="5"></td>
                                 <td>                            
                                     <select class="option-input">
-                                        <option value="0">Carga</option>
-                                        <option value="1">Descarga</option>
+                                        <option value="0">Cargado</option>
+                                        <option value="1">Descargado</option>
                                     </select>  
                                     <input type="text" name="CARGA" class="hidden select_input" value="Carga">
                                 </td>
@@ -130,8 +130,8 @@
                             <% } %>
                     </tbody>
                 </table>
-                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
-                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                <input name="FECHA" type="" class="hidden" value="<%= datos.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= datos.VENDEDOR %>" />
                 
             </form>
         </section>

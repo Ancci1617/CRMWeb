@@ -40,7 +40,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
     console.log(calificacion.trim(), cuotas);
 
     const cuotas_para_entregar = await getPrepagoEntrega(calificacion.trim(), cuotas);
-    console.log("ENTREGA",cuotas_para_entregar);
+    console.log("ENTREGA", cuotas_para_entregar);
     res.json(cuotas_para_entregar[0]);
 
 })
@@ -51,7 +51,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
     const query_result = { total: 0, cuota: 0 };
 
     for (let i = 0; i < data.articulos.length; i++) {
-        
+
         let respuesta = await getPrecio(data.articulos[i], data.cuotas);
 
         if (respuesta.PRECIO == "no encontrado") {
@@ -59,7 +59,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
             query_result.cuota = "articulo " + data.articulos[i] + " no encontrado";
             break;
         }
-        
+
 
         query_result.total += respuesta.PRECIO ? respuesta.PRECIO : 0;
 
@@ -81,7 +81,7 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
     const ventas = await getVentasDelDia(date, req.user.Usuario);
 
 
-    res.render("ventas/Ventas.cargadas.ejs", { username: req.user.Usuario, ventas });
+    res.render("ventas/Ventas.cargadas.ejs", { ventas });
 })
 
 Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
@@ -95,8 +95,8 @@ Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
 Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
     const vendedores = await getVendedores();
     const fechas = await getFechaDeVentas();
-    
-    res.render("ventas/Ventas.cargadas.vendedores.ejs", { username: req.user.Usuario, vendedores, fechas });
+
+    res.render("ventas/Ventas.cargadas.vendedores.ejs", {vendedores, fechas });
 
 })
 
@@ -111,19 +111,20 @@ Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res)
     } else {
         ventas = await getVentasVendedores(req.body.VENDEDOR, req.body.FECHA);
     }
-    
+
     //Suma de totales
     ventas.forEach(venta => {
-        total += parseFloat( venta.TOTAL.replaceAll(".","").replaceAll(",",""));
+        total += parseFloat(venta.TOTAL.replaceAll(".", "").replaceAll(",", ""));
     })
 
     //Agrega el resumen 
-    ventas = {VENTAS : ventas,
-              RESUMEN : {
-                FICHAS : ventas.length,
-                TOTAL : total
-              }
-             }
+    ventas = {
+        VENTAS: ventas,
+        RESUMEN: {
+            FICHAS: ventas.length,
+            TOTAL: total
+        }
+    }
 
     res.json(ventas);
 

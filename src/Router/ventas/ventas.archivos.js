@@ -15,7 +15,7 @@ Router.get("/archivo_de_entrega",isLoggedIn,isAdmin,async (req,res)=> {
     const vendedores = await getVendedores();
     const fechas = await getFechaDeVentas();
     
-    res.render("ventas/Ventas.archivos.ejs",{username: req.user.Usuario, vendedores, fechas });
+    res.render("ventas/Ventas.archivos.ejs",{ vendedores, fechas });
 
 });
 

@@ -11,13 +11,13 @@
 </head>
 
 <body>
-    <%- include("../partials/navigation/navigation-bar",{username : user.Usuario}) %>
+    <%- include("../partials/navigation/navigation-bar") %>
 
 
     <% if(planilla.ARTICULOS.length == 0) {%>
         <div class="no-generado-container">
             <h3>PLANILLA NO GENERADA</h3>
-            <div class="btn btn-green btn-radius"><a href="<%= planilla.RESUMEN.VENDEDOR %>/generar_planilla_de_carga/">Generar</a></a></div>
+            <div class="btn btn-green btn-radius"><a href="<%= datos.VENDEDOR %>/generar_planilla_de_carga/">Generar</a></a></div>
         </div>
     <% }else{ %>
 
@@ -48,7 +48,7 @@
                             <tr>
                                 <td><%= planilla.ARTICULOS[i].CTE %></td>
                                 <td><%= planilla.ARTICULOS[i].FICHA %></td>
-                                <td><%= planilla.ARTICULOS[i].ANT %></td>
+                                <td><%= planilla.ARTICULOS[i].ANTICIPO %></td>
                                 <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
                                 <td><%= planilla.ARTICULOS[i].ART %></td>
                                 <td><%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO%></td>
@@ -57,8 +57,8 @@
                             <%}%>
                     </tbody>
                 </table>
-                <input name="FECHA" type="" class="hidden" value="<%= planilla.RESUMEN.FECHA %>" />
-                <input name="VENDEDOR" type="" class="hidden" value="<%= planilla.RESUMEN.VENDEDOR %>" />
+                <input name="FECHA" type="" class="hidden" value="<%= datos.FECHA %>" />
+                <input name="VENDEDOR" type="" class="hidden" value="<%= datos.VENDEDOR %>" />
                 <input type="submit" class="btn-submit hidden">
             </form>
         </section>
@@ -94,7 +94,7 @@
                             <td><%= "Cerrado" %></td>  
                             <td>
                                 <% if(SOBRECARGA[i].CONTROL == "No confirmado") {%>
-                                    <a href="<%= planilla.RESUMEN.VENDEDOR %>/confirmar_sobrecarga/<%= i %>">Confirmar</a>
+                                    <a href="<%= datos.VENDEDOR %>/confirmar_sobrecarga/<%= i %>">Confirmar</a>
                                 <%} else {%>
                                     <%= SOBRECARGA[i].CONTROL %>
                                 <% } %>

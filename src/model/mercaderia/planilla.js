@@ -8,14 +8,15 @@ const getFechasPlanillasHabilitadas = async (vendedor) => {
     return fechas;
 }
 
-const getDatosParaPlanilla = async (vendedor, fecha) => {
-    const [result] = await pool.query(
-        "Select CTE,FICHA,ANTICIPO,TOTAL,ESTATUS,ARTICULOS,USUARIO from VentasCargadas " +
-        "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1", [vendedor, fecha]);
+// const getDatosParaPlanilla = async (vendedor, fecha) => {
 
-    return result;
+//     const [result] = await pool.query(
+//         "Select CTE,FICHA,ANTICIPO AS ANT,TOTAL,ESTATUS,ARTICULOS,USUARIO from VentasCargadas " +
+//         "where USUARIO = ? and FECHA_VENTA = ? and VISIBLE = 1", [vendedor, fecha]);
 
-}
+//     return result;
+
+// }
 const existePlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
         "Select Count(FECHA) AS CANTIDAD from PlanillasDeCarga where " +
@@ -30,24 +31,19 @@ const getPlanilla = async (vendedor, fecha) => {
         "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO,SOBRECARGA from PlanillasDeCarga where " +
         "VENDEDOR = ? and FECHA = ?;", [vendedor, fecha]);
 
-    return result[0];
+    if (result.length > 0) {
+        return result[0];
+    }
+
+    return;
 
 }
 
-const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor,sobrecarga) => {
+const crearPlanilla = async (vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga) => {
     const [result] = await pool.query(
         "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,PLANILLA,CONTROL,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,SOBRECARGA) " +
         "VALUES (?,?,?,?,?,?,?) "
-        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor,sobrecarga]);
-
-
-    return result;
-}
-const crearPlanillaParcial = async (vendedor, fecha,sobrecarga) => {
-    const [result] = await pool.query(
-        "INSERT INTO PlanillasDeCarga (VENDEDOR,FECHA,SOBRECARGA) " +
-        "VALUES (?,?,?) "
-        , [vendedor, fecha,sobrecarga]);
+        , [vendedor, fecha, planilla_object, control, articulos_control, articulos_vendedor, sobrecarga]);
 
 
     return result;
@@ -63,78 +59,87 @@ const insertPlanillaControl = async (json) => {
 }
 
 
-const insertarArticulos = async (fecha, vendedor, articulos, dato) => {
-    let query = "";
+const insertarArticulos = async (fecha, vendedor, articulos, RANGO) => {   
     
-    if (dato == "VENDEDOR") {
-        query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_VENDEDOR`= ?  WHERE FECHA = ? and VENDEDOR = ?";
-    } else if (dato == "ADMIN") {
-        query = "UPDATE `PlanillasDeCarga` SET `ARTICULOS_CONTROL`= ?  WHERE FECHA = ? and VENDEDOR = ?";
-    } else {
-        return "PERMISOS NO DISPONIBLES";
-    }
+    //Si es admin o vendedor, lo inserta en un lugar distinto
+    query = `UPDATE PlanillasDeCarga SET ` +
+            `${RANGO == "VENDEDOR" ? "ARTICULOS_VENDEDOR" : "ARTICULOS_CONTROL"} = ? ` +
+            `WHERE FECHA = ? and VENDEDOR = ?`;
 
+    await pool.query(query, [articulos, fecha, vendedor]);
 
-    const [result] = await pool.query(query, [articulos, fecha , vendedor]);
-    return result;
 }
-
-const cerrarPlanillaVendedor = async (fecha,vendedor)  => {
+const cerrarPlanillaVendedor = async (fecha, vendedor) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='0' where VENDEDOR = ? and FECHA = ?"
         , [vendedor, fecha]);
 
     return result;
 }
-const cerrarPlanilla = async (fecha,vendedor)  => {
+const cerrarPlanilla = async (fecha, vendedor) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='0',`isEditableControl` = '0'  where VENDEDOR = ? and FECHA = ?"
         , [vendedor, fecha]);
-
     return result;
 }
 
 
-const habilitarVendedor = async (fecha,vendedor) => {
+const habilitarVendedor = async (fecha, vendedor) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET `isEditableVendedor`='1'  where VENDEDOR = ? and FECHA = ?"
         , [vendedor, fecha]);
 
     return result;
 }
-const borrarPlanilla = async (fecha,vendedor,planilla) => {
+
+
+const borrarPlanilla = async (fecha, vendedor, planilla) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` set PLANILLA = ?, CONTROL = null where VENDEDOR = ? and FECHA = ?"
-        , [planilla,vendedor, fecha]);
+        , [planilla, vendedor, fecha]);
 
     return result;
 }
 
-const insertSobreCarga = async (json,fecha,vendedor) => {
+const insertSobreCarga = async (json, fecha, vendedor) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET SOBRECARGA = ? " +
         "WHERE VENDEDOR = ? AND FECHA = ? "
-        , [json,vendedor, fecha]);
+        , [json, vendedor, fecha]);
 
     return result;
 }
 
-const insertarBaseArticulos = async (fecha,vendedor,planilla,control,articulos_control,articulos_vendedor) => {
+const insertarBaseArticulos = async (fecha, vendedor, planilla, control, articulos_control, articulos_vendedor) => {
     const [result] = await pool.query(
         "UPDATE `PlanillasDeCarga` SET CONTROL = ?, PLANILLA = ? ,ARTICULOS_CONTROL = ?,ARTICULOS_VENDEDOR = ? " +
         "WHERE VENDEDOR = ? AND FECHA = ? "
-        , [control,planilla,articulos_control,articulos_vendedor,vendedor, fecha]);
+        , [control, planilla, articulos_control, articulos_vendedor, vendedor, fecha]);
 
     return result;
+}
+
+
+
+
+const cargarStockPlanilla = async (articulos) => {
+
+    query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " +
+        "`ART`, `VENDEDOR`, `CONTROL`, `ESTADO`, `CARGADO`, " +
+        "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`) VALUES ? "
+
+
+    await pool.query(query, [articulos]);
+
 }
 
 
 module.exports = {
-    getDatosParaPlanilla, insertPlanillaControl,
-     existePlanilla, crearPlanilla,
+    insertPlanillaControl,
+    existePlanilla, crearPlanilla,
     getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
-    cerrarPlanillaVendedor,cerrarPlanilla,habilitarVendedor,borrarPlanilla,
-    insertSobreCarga,crearPlanillaParcial,insertarBaseArticulos
+    cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,
+    insertSobreCarga, insertarBaseArticulos, cargarStockPlanilla
 }
 
 
