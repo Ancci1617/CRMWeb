@@ -1,0 +1,30 @@
+.tabla-datos{
+    border-collapse: collapse;
+    margin: 1rem auto;
+    width:100%;
+    max-width: 80%;
+}
+
+
+
+.tabla-datos *{
+    padding: .5rem 1.5rem;
+    text-align:center;
+}
+.tabla-datos thead{
+    border: 1px solid black;
+    background: #d7d9da;
+}
+.tabla-datos tbody{
+    border: 1px solid black;
+}
+
+.tabla-datos tbody tr:nth-child(even){
+    background:   #838e95;
+}
+.tabla-datos tbody tr:nth-child(odd){
+    background:   #bac1c5;
+}
+.tabla-datos tbody tr:hover{
+    background: #5c6164;
+}

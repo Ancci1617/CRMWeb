@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <!---<title> Responsive Registration Form | CodingLab </title>--->
+    <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+    <link rel="stylesheet" href="/css/entrega_retiros/entrega_retiros.css">
+      
+
+    <title>Blanco Gusmar | Entregas y retiros</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="titles">
+            <div class="title">Entregas y retiros</div>
+            <div>
+                <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+            </div>
+        </div>
+        <div class="content">
+            <form action="/entrega_retiro" method="POST">
+
+                <table class="tabla-datos">
+                    <thead>
+                        <tr>
+                            <th>Ficha</th>
+                            <th>Arts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for( let i = 0 ; i < cte_data.length;i++){ %>
+                        <tr>
+                            <td><%=cte_data[i].FICHA%></td>
+                            <td><%=cte_data[i].ARTICULO%></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">Cliente</span>
+                        <input type="text" name="CTE" readonly placeholder="Numero de cliente" value="<%= CTE %>" required>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="details">Entrega/Retiro</span>
+                        <input type="text" name="ENTREGA_RETIRO" class="hidden" value="Entregado">
+                        <select class="options options-tipo selector-cuotas">
+                            <option value="0">Entregado</option>
+                            <option value="1">Retirado</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="details">Ficha</span>
+                        <input type="text" name="FICHA" class="hidden" value="<%=cte_data[0].FICHA%>">
+
+                        <select class="options options-tipo selector-cuotas">
+                            <% for( let i = 0 ; i < cte_data.length;i++){ %>
+                                <option value="<%=i%>"><%=cte_data[i].FICHA%></option>
+                            <% } %>
+                        </select>
+
+                    </div>
+
+
+                    <div class="input-box">
+                        <span class="details">Articulo</span>
+                        <input type="text" name="ART" required>
+                    </div>
+
+                    <div class="button">
+                        <input type="submit" value="Cargar">
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/lib/asociar.input.js"></script>
+    <script src="/js/mercaderia/entrega.retiros.js"></script>
+    
+</body>
+
+</html>

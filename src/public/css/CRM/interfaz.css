@@ -1,17 +1,27 @@
 .btn {
-
-    color: white;
-    font-weight: 500;
-    font-size: 1.1em;
     padding: 5px 15px;
     box-shadow: 2px 2px 5px #000;
-
+    border-style: outset;
+    border-color: buttonborder;
+    display: inline-block;
 }
-
+.btn-text{
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
 .btn:hover {
     position: relative;
     left: 2px;
     top: 2px;
+}
+
+.btn-container {
+    margin: 15px 10px 10px 0px;
+    display: flex;
+    gap: 1rem;
 }
 
 .btn-evaluar {
@@ -23,11 +33,11 @@
     background-color: #E06000;
 }
 
-
-
-.btn-container {
-    margin: 15px 10px 10px 0px;
+.btn-mercaderia{
+    background-color: #366092;
 }
+
+
 
 
 

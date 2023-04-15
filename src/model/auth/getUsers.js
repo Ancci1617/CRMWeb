@@ -13,4 +13,16 @@ async function getNombresDeUsuarios() {
 }
 
 
-module.exports = { getNombresDeUsuarios}
+async function getUnidades() {
+    const [unidades] = await pool.query('SELECT DISTINCT UNIDAD FROM `Usuarios` WHERE UNIDAD != ""');
+    
+    if (unidades.length > 0) {
+        return unidades;
+    }
+    
+    return { unidades: -1 };
+
+}
+
+
+module.exports = { getNombresDeUsuarios,getUnidades}

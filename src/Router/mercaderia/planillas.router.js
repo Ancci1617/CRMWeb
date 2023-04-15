@@ -96,28 +96,6 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
         const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
         await generarPlanillaDeCargaParcial(VENDEDOR, FECHA, VENDEDOR_USER.UNIDAD);
 
-        //Si la planilla del dia anterior existe, acumula al sobrecarga en stock
-        const prevDay = new Date(new Date(FECHA) - 1000 * 60 * 60 * 24).toISOString().split("T")[0];
-        const response = await getPlanilla(VENDEDOR, prevDay);
-
-        if (response && JSON.parse(response.SOBRECARGA).length > 0) {
-            const SOBRECARGA = JSON.parse(response.SOBRECARGA);
-            const articulos = [];
-
-            SOBRECARGA.forEach(articulo => {
-                const { CTE, FICHA, ART, CARGA, CONTROL } = articulo;
-                //Define el efecto
-                let efecto = CARGA == "Cargado" ? -1 : CARGA == "Descargado" ? -1 : 0;
-                articulos.push([
-                    VENDEDOR_USER.UNIDAD, CTE, FICHA, ART, VENDEDOR,
-                    Usuario, "Sobrecarga",
-                    CARGA, CONTROL, CARGA,
-                    prevDay, efecto, "SOBRECARGA"
-                ]);
-            })
-            await cargarStockPlanilla(articulos);
-        }
-
 
     }
 
@@ -193,15 +171,19 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, isAdmi
         const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
         for (let i = 0; i < planilla.ARTICULOS.length; i++) {
 
-            const estado = ARTICULOS_CONTROL.ARTICULOS[i].ESTADO;
-            const efecto = estado == "Cargado" ? -1 : estado == "Descargado" ? -1 : 0;
-
             const { CTE, FICHA, ART, ESTATUS } = planilla.ARTICULOS[i];
+            const { ESTADO } = ARTICULOS_CONTROL.ARTICULOS[i];
+
+            //Define el efecto
+            let efecto = ESTADO == "Cargado" ? -1 : 0            
+            let efecto_unidad = ESTATUS.toUpperCase().includes("ENTREGADO") ?  -1 : 0;
+            efecto_unidad += efecto * -1;
+
             articulos.push([
                 VENDEDOR_USER.UNIDAD,
                 CTE, FICHA, ART, VENDEDOR, Usuario,
-                ESTATUS, estado, estado, estado,
-                FECHA, efecto, "CARGA"
+                ESTATUS, ESTADO, ESTADO, ESTADO,
+                FECHA, efecto, "CARGA", efecto_unidad
             ]);
         }
 

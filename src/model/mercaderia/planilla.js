@@ -20,7 +20,7 @@ const existePlanilla = async (vendedor, fecha) => {
 
 const getPlanilla = async (vendedor, fecha) => {
     const [result] = await pool.query(
-        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO,SOBRECARGA from PlanillasDeCarga where " +
+        "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO,SOBRECARGA,UNIDAD from PlanillasDeCarga where " +
         "VENDEDOR = ? and FECHA = ?;", [vendedor, fecha]);
 
     if (result.length > 0) {
@@ -106,10 +106,10 @@ const insertarBaseArticulos = async (fecha, vendedor, planilla, control, articul
 
 const cargarStockPlanilla = async (articulos) => {
 
-    query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " +
-        "`ART`, `VENDEDOR`, `CONTROL`, `ESTADO`, `CARGADO`, " +
-        "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`) VALUES ? "
-
+    query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " + 
+        "`ART`, `VENDEDOR`, `CONTROL`, `ESTADO`, `CARGADO`, " + 
+        "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`,`EFECTO_UNIDAD`) VALUES ? "
+    
 
     await pool.query(query, [articulos]);
 
