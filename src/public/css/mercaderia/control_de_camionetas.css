@@ -58,7 +58,6 @@ thead th {
     position: sticky;
     top: 0;
     background-color: #d5d1defe;
-    position: relative;
     font-size: 1.3rem;
 }
 td > input{
