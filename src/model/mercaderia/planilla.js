@@ -18,7 +18,7 @@ const existePlanilla = async (vendedor, fecha) => {
 
 }
 
-const getPlanilla = async (vendedor, fecha) => {
+const getPlanillaCarga = async (vendedor, fecha) => {
     const [result] = await pool.query(
         "Select PLANILLA,ARTICULOS_CONTROL,ARTICULOS_VENDEDOR,CONTROL,VENDEDOR,FECHA,isEditableVendedor,isEditableControl,TIPO,SOBRECARGA,UNIDAD from PlanillasDeCarga where " +
         "VENDEDOR = ? and FECHA = ?;", [vendedor, fecha]);
@@ -119,7 +119,7 @@ const cargarStockPlanilla = async (articulos) => {
 module.exports = {
     
     existePlanilla, crearPlanilla,
-    getPlanilla, getFechasPlanillasHabilitadas, insertarArticulos,
+    getPlanillaCarga, getFechasPlanillasHabilitadas, insertarArticulos,
     cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,
     insertSobreCarga, insertarBaseArticulos, cargarStockPlanilla
 }

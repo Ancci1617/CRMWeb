@@ -1,9 +1,10 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdminOrVendedor } = require("../../../lib/auth");
 const { getClientesFull } = require("../../../model/CRM/get_tablas/get_clientes");
-const { getPlanilla, cargarStockPlanilla, insertSobreCarga } = require("../../../model/mercaderia/planilla");
+const { getPlanilla } = require("../../../lib/mercaderia/planillasDeCarga"); 
+const { cargarStockPlanilla, insertSobreCarga } = require("../../../model/mercaderia/planilla");
 const { getUnidades } = require("../../../model/auth/getUsers");
-
+const { getCargaVigente } = require("../../../model/mercaderia/camionetas/camionetas.model");
 
 Router.get("/entrega_retiro/0", isLoggedIn, (req, res) => {
     res.redirect("/CRM");
@@ -72,11 +73,13 @@ Router.get("/cargas_camionetas", isLoggedIn, isAdminOrVendedor, async (req, res)
 });
 
 
-Router.get("/cargas_camionetas/:CAMIONETA", isLoggedIn, isAdminOrVendedor, async (req, res) => {
-
-    res.render("mercaderia/camionetas/control_de_camionetas.ejs");    
-
+Router.get("/cargas_camionetas/:UNIDAD", isLoggedIn, isAdminOrVendedor, async (req, res) => {
+    const { UNIDAD } = req.params;
+    const stock = await getCargaVigente(UNIDAD)
+    res.render("mercaderia/camionetas/control_de_camionetas.ejs", { UNIDAD, stock });
 });
+
+
 
 
 

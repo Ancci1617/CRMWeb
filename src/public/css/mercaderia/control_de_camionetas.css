@@ -2,8 +2,22 @@ body{
     background-color: #bebebe;
 }
 
+.details-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+    font-size: 1rem;
+}
+.unidad-details{
+    background-color: rgb(173, 130, 173);
+    border-radius: 1rem;
+    color: white;
+    font-size: 1.4rem;
+    padding: .9rem;
+}
+
 main.table{
-    width: 82vw;
+    width: 90vw;
     height: 70vh;
     background-color: #b9afaf;
     box-shadow: 0 .4rem .8rem #0005;
@@ -25,7 +39,7 @@ main.table{
 .table__body {
     width: 95%;
     max-height: calc(89% - 1.6rem);
-    background-color: #fffb;
+    background-color: #b9afaf;
 
     margin: .8rem auto;
     border-radius: .6rem;
@@ -35,4 +49,36 @@ main.table{
 }
 table{
     width: 100%;
+    background-color: #cabcb1;
 }
+table td,table input{
+    font-size: 1.2rem;
+}
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #d5d1defe;
+    position: relative;
+    font-size: 1.3rem;
+}
+td > input{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: absolute;
+    inset: 0;
+}
+
+
+@media screen and (max-width:700px) {
+    main.table {
+        width: 96vw;
+    }
+}
+
+
+
+
+
+
+

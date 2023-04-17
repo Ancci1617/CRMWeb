@@ -2,8 +2,8 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
 const { getUserByUsuario } = require("../../model/auth/getUser");
-const { insertSobreCarga, getPlanilla, cargarStockPlanilla } = require("../../model/mercaderia/planilla");
-
+const { insertSobreCarga, cargarStockPlanilla } = require("../../model/mercaderia/planilla");
+const {getPlanilla} = require("../../lib/mercaderia/planillasDeCarga");
 
 
 
@@ -36,6 +36,7 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/confirmar_sobrecarga/:ID", isLoggedI
 
     
     const efecto = CARGA == "Cargado" ? -1 : CARGA == "Descargado" ? 1 : 0;
+
     const articulos = [[
         response.UNIDAD, CTE, FICHA, ART, VENDEDOR,
         Usuario, TIPO,
@@ -44,11 +45,6 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/confirmar_sobrecarga/:ID", isLoggedI
     ]];
 
     await cargarStockPlanilla(articulos);
-
-
-
-
-
     res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
 
 })

@@ -7,18 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
         <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
-        <link rel="stylesheet" href="/css/CRM/General.css">
         <link rel="stylesheet" href="/css/mercaderia/control_de_camionetas.css">
 </head>
-<title>Blanco Gusmar | AB717</title>
+<title>Blanco Gusmar | <%= UNIDAD %></title>
 
 <body>
     <%- include('../../partials/navigation/navigation-bar.ejs') %>
 
     <div class="details-container">
         <div class="unidad-details">
-            Unidad : AB717
-            Usuario : Diego
+            Unidad : <%= UNIDAD %>
         </div>
     </div>
 
@@ -27,21 +25,20 @@
             <h3>Control de mercaderia</h3>
         </div>
         <div class="table__body" >
-            <table class="tabla-datos tabla-carga">
+            <table class="">
                 <thead>
                     <tr>
                         <th>Art</th>
-                        <th>Estandar</th>
                         <th>Vigente</th>
-                        <th>Modificacion</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <% for(let i = 0 ; i < stock.length ; i++) {%>
                     <tr>
-                        <td><input type="text" value="1"></td>
-                        <td><input type="text" value="2"></td>
-                        <td><input type="text" value="6"></td>
+                        <td><%= stock[i].ART  %></td>
+                        <td><%= stock[i].VIGENTE %></td>
                     </tr>
+                    <% } %>        
                 </tbody>
             </table>
         </div>

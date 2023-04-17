@@ -3,9 +3,9 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getUserByUsuario } = require("../../model/auth/getUser");
-
+const {getPlanilla} = require("../../lib/mercaderia/planillasDeCarga");
 const { insertarBaseArticulos,
-    existePlanilla, crearPlanilla, getPlanilla,
+    existePlanilla, crearPlanilla,
     insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,
     cargarStockPlanilla } = require("../../model/mercaderia/planilla")
 const { getFechaDeVentas, getVendedores, getVentasVendedores } = require("../../model/ventas/ventas.query");
@@ -44,12 +44,7 @@ async function generarPlanillaDeCarga(VENDEDOR, FECHA, user) {
 
 }
 
-async function generarPlanillaDeCargaParcial(VENDEDOR, FECHA, UNIDAD) {
-    let planilla_object = { ARTICULOS: [] };
-    //Genera la planilla de carga
-    await crearPlanilla(VENDEDOR, FECHA, JSON.stringify(planilla_object), null, null, null, "[]", UNIDAD);
 
-}
 
 
 Router.get("/mis_planillas", isLoggedIn, isAdminOrVendedor, async (req, res) => {
@@ -86,19 +81,6 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
     const { VENDEDOR, FECHA } = req.params;
     const { Usuario, RANGO } = req.user;
 
-    //Si la planilla no existe la crea
-    if (!await existePlanilla(VENDEDOR, FECHA)) {
-
-        //Genera Sobrecargas en STOCK y la fila de la planilla
-        if (RANGO !== "ADMIN")
-            return res.redirect("/mis_planillas");
-
-        const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
-        await generarPlanillaDeCargaParcial(VENDEDOR, FECHA, VENDEDOR_USER.UNIDAD);
-
-
-    }
-
     //Get de datos para renderizar planilla
     const response = await getPlanilla(VENDEDOR, FECHA);
     const planilla = JSON.parse(response.PLANILLA);
@@ -122,7 +104,6 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR", isLoggedIn, async (req, res) => {
 
 Router.get("/mis_planillas/:FECHA/:VENDEDOR/generar_planilla_de_carga", isLoggedIn, isAdmin, async (req, res) => {
     const { VENDEDOR, FECHA } = req.params;
-
     await generarPlanillaDeCarga(VENDEDOR, FECHA, req.user);
     res.redirect('/mis_planillas/' + FECHA + '/' + VENDEDOR);
 })
