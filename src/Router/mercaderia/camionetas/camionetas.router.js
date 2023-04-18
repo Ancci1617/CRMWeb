@@ -13,7 +13,6 @@ Router.get("/entrega_retiro/0", isLoggedIn, (req, res) => {
 Router.get("/entrega_retiro/:CTE", isLoggedIn, async (req, res) => {
     const { CTE } = req.params;
     const cte_data = await getClientesFull(CTE);
-
     res.render("mercaderia/entregas-retiros.ejs", { CTE, cte_data });
 
 });

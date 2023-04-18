@@ -6,7 +6,7 @@ const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
 const {poolConfig} = require("./model/connection-config.js");
-const {userView} = require("./middlewares/user.middlewares.js");
+const { userView } = require("./middlewares/user.middlewares.js");
 
 
 
@@ -54,16 +54,15 @@ app.use(require("./Router/get.router"));
 app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
 app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
-                            
+
 
 //Ejecuta el servidor
-app.listen(app.get("PORT"),async (err) => {
+app.listen(app.get("PORT"), async (err) => {
     //Configura el lenguaje de la sesion en las fechas
     await poolConfig();
 
-    if (err) {
-        console.log("ERR: " + err);
-    }
+    if (err) console.log("ERR: " + err);
+
     console.log("Server running on port, " + app.get("PORT"));
 })
 

@@ -67,6 +67,9 @@ td > input{
     position: absolute;
     inset: 0;
 }
+table tr:nth-child(even){
+    background:#ccacac;
+}
 
 
 @media screen and (max-width:700px) {

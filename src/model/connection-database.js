@@ -7,9 +7,12 @@ try {
     const pool = mysql.createPool(objConnection);
     module.exports = pool;
 
+
 } catch (error) {
+
     console.log("ERROR EN  MODEL/CONNECTION-DATABASE");
     console.log(error);
+
 }
 
 
