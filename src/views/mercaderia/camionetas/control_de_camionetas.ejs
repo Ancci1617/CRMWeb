@@ -47,6 +47,42 @@
     </main>
 
 
+    <main class="table table__historial">
+        <div class="table__header">
+            <h3>Historial</h3>
+            <input type="text" placeholder="Filtro de busqueda" class="input-search">
+        </div>
+        <div class="table__body">
+            <table >
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>CTE</th>
+                        <th>FICHA</th>
+                        <th>ART</th>
+                        <th>CONTROL</th>
+                        <th>Carga/Descarga</th>
+                        <th>MOTIVO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i = 0 ; i < movimientos.length ; i++) {%>
+                    <tr>
+                        <td class="nw"><%= movimientos[i].FECHA  %></td>
+                        <td><%= movimientos[i].CTE %></td>
+                        <td><%= movimientos[i].FICHA %></td>
+                        <td><%= movimientos[i].ART %></td>
+                        <td><%= movimientos[i].CONTROL %></td>
+                        <td><%= movimientos[i].CARGADO %></td>
+                        <td><%= movimientos[i].MOTIVO %></td>
+                    </tr>
+                    <% } %>        
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="/js/mercaderia/filtro-de-historial.js"></script>
+    <script src="/js/lib/table.setData.js"></script>
     <%- include("../../partials/links/nav.logic.ejs") %>
 </body>
 

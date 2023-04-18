@@ -4,7 +4,7 @@ const { getClientesFull } = require("../../../model/CRM/get_tablas/get_clientes"
 const { getPlanilla } = require("../../../lib/mercaderia/planillasDeCarga"); 
 const { cargarStockPlanilla, insertSobreCarga } = require("../../../model/mercaderia/planilla");
 const { getUnidades } = require("../../../model/auth/getUsers");
-const { getCargaVigente } = require("../../../model/mercaderia/camionetas/camionetas.model");
+const { getCargaVigente ,getMovimientosUnidad,getMovimientosFiltro } = require("../../../model/mercaderia/camionetas/camionetas.model");
 
 Router.get("/entrega_retiro/0", isLoggedIn, (req, res) => {
     res.redirect("/CRM");
@@ -36,7 +36,7 @@ Router.post("/entrega_retiro", isLoggedIn, async (req, res) => {
             UNIDAD, CTE, FICHA,
             arts[i], Usuario, Usuario,
             ENTREGA_RETIRO, ENTREGA_RETIRO, ENTREGA_RETIRO, ENTREGA_RETIRO,
-            FECHA, efecto, "SOBRECARGA", efecto_unidad
+            FECHA, efecto, "ENT/RET", efecto_unidad
         ]);
 
         //CARGA A LA PLANILLA DE SOBRECARGA (YA CONFIRMADO)
@@ -75,10 +75,16 @@ Router.get("/cargas_camionetas", isLoggedIn, isAdminOrVendedor, async (req, res)
 Router.get("/cargas_camionetas/:UNIDAD", isLoggedIn, isAdminOrVendedor, async (req, res) => {
     const { UNIDAD } = req.params;
     const stock = await getCargaVigente(UNIDAD)
-    res.render("mercaderia/camionetas/control_de_camionetas.ejs", { UNIDAD, stock });
+    const movimientos = await getMovimientosUnidad(UNIDAD)
+    res.render("mercaderia/camionetas/control_de_camionetas.ejs", { UNIDAD, stock ,movimientos});
 });
 
+Router.post("/cargas_camionetas/filtro", isLoggedIn, isAdminOrVendedor, async (req, res) => {
+    const { UNIDAD,FILTRO } = req.body;
 
+    const movimientos = await getMovimientosFiltro(UNIDAD,FILTRO);
+    res.json(movimientos);
+})
 
 
 

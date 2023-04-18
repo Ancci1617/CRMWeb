@@ -59,10 +59,17 @@ thead th {
     top: 0;
     background-color: #d5d1defe;
     font-size: 1.3rem;
+    z-index: 1000;
 }
-td > input{
+.table__header input{
     border: none;
     outline: none;
+    height: 100%;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 1em;
+}
+td > input{
     background-color: transparent;
     position: absolute;
     inset: 0;

@@ -30,4 +30,6 @@ body{
     background-color: #bebebe;
 }
 
-
+.nw{
+    white-space: nowrap;
+}
