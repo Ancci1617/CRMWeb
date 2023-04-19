@@ -43,9 +43,9 @@ const getControlesHistorial = async (UNIDAD,FECHAHORA) => {
 
     return almacen;
 }
-const getFechasHistorialControles = async () => {
+const getFechasHistorialControles = async (UNIDAD) => {
     const [fechas] = await pool.query(
-        "SELECT DISTINCT CONCAT(FECHA, ' ' , HORA) AS FECHA FROM AlmacenDeControles order by FECHA DESC;")
+        "SELECT DISTINCT CONCAT(FECHA, ' ' , HORA) AS FECHA FROM AlmacenDeControles WHERE UNIDAD = ? order by FECHA DESC;",[UNIDAD])
 
     return fechas;
 }

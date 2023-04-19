@@ -70,6 +70,13 @@ thead th {
     padding: 1rem;
     border-radius: 1em;
 }
+.table__header select {
+    border-radius: 1rem;
+    padding: .5rem;
+    border: none;
+    outline: none;
+
+}
 td > input{
     background-color: transparent;
     position: absolute;
