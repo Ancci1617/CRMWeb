@@ -4,6 +4,11 @@
     border-style: outset;
     border-color: buttonborder;
     display: inline-block;
+
+}
+.btn-flex{
+    display: flex;
+    align-items: center;
 }
 .btn-text{
     font-weight: 500;
@@ -31,6 +36,9 @@
 
 .btn-ventas {
     background-color: #E06000;
+}
+.btn-pedido{
+    background-color: #82b96b;
 }
 
 .btn-mercaderia{

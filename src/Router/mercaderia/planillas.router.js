@@ -151,7 +151,7 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, isAdmi
         const articulos = [];
         const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
         for (let i = 0; i < planilla.ARTICULOS.length; i++) {
-
+            
             const { CTE, FICHA, ART, ESTATUS } = planilla.ARTICULOS[i];
             const { ESTADO } = ARTICULOS_CONTROL.ARTICULOS[i];
 

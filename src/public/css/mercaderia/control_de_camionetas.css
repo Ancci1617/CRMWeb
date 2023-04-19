@@ -7,6 +7,7 @@ body{
     justify-content: space-between;
     margin: 1rem;
     font-size: 1rem;
+    gap : 1rem;
 }
 .unidad-details{
     background-color: rgb(173, 130, 173);
@@ -72,6 +73,7 @@ thead th {
 td > input{
     background-color: transparent;
     position: absolute;
+    border: none;
     inset: 0;
 }
 table tr:nth-child(even){

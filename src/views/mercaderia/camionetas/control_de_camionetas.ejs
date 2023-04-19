@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
         <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
+        <link rel="stylesheet" href="/css/CRM/interfaz.css">
         <link rel="stylesheet" href="/css/mercaderia/control_de_camionetas.css">
 </head>
 <title>Blanco Gusmar | <%= UNIDAD %></title>
@@ -17,6 +18,9 @@
     <div class="details-container">
         <div class="unidad-details">
             Unidad : <%= UNIDAD %>
+        </div>
+        <div class="btn btn-flex btn-pedido btn-text btn-cargar_control">
+            <span>Cargar control</span>
         </div>
     </div>
 
@@ -29,16 +33,20 @@
                 <thead>
                     <tr>
                         <th>Art</th>
+                        <th>Estandar</th>
                         <th>Vigente</th>
                         <th>Producto</th>
+                        <th>Control</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for(let i = 0 ; i < stock.length ; i++) {%>
                     <tr>
-                        <td><%= stock[i].ART  %></td>
-                        <td><%= stock[i].VIGENTE %></td>
+                        <td class="articulo"><%= stock[i].ART  %></td>
+                        <td class="carga_estandar"><%= stock[i].CARGA_ESTANDAR %></td>
+                        <td class="carga_vigente"><%= stock[i].VIGENTE %></td>
                         <td><%= stock[i].PRODUCTO %></td>
+                        <td><input class="input-control" type="number" value="<%= stock[i].VIGENTE %>"></td>
                     </tr>
                     <% } %>        
                 </tbody>
@@ -81,7 +89,43 @@
             </table>
         </div>
     </main>
+
+    <main class="table table__controles">
+        <div class="table__header">
+            <h3>Historial de controles</h3>
+            <select class="custom-selectbox select_horarios">
+                <% for(let i = 0 ; i < fechas.length;i++) {%>
+                <option value="<%= i %>"><%= fechas[i].FECHA %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="table__body">
+            <table >
+                <thead>
+                    <tr>
+                        <th>RESPONSABLE</th>
+                        <th>ART</th>
+                        <th>VIGENTE</th>
+                        <th>CONTROL</th>
+                        <th>DIFERENCIA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>       
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
     <script src="/js/mercaderia/filtro-de-historial.js"></script>
+    <script src="/js/mercaderia/control.camionetas.js"></script>
     <script src="/js/lib/table.setData.js"></script>
     <%- include("../../partials/links/nav.logic.ejs") %>
 </body>
