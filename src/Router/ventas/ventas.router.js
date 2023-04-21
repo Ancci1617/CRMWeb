@@ -49,7 +49,7 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     } catch (err) {
         console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: " , err);
     }
-
+    
     imagenes.forEach(imagen => {
         imagen.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${imagen.name}`,
         err => {
