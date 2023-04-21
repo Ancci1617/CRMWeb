@@ -20,12 +20,12 @@ input.addEventListener("change", async e => {
         body: JSON.stringify({ UNIDAD, FILTRO })
     })
     const respuesta = await res.json();
-    setData(table__historial__body,respuesta);
+    setData(table__historial__body, respuesta);
 
 
 });
 
-select_horarios.addEventListener("change",async e => {
+select_horarios.addEventListener("change", async e => {
     const FECHAHORA = e.target.selectedOptions[0].innerText;
 
     let res = await fetch("/cargas_camionetas/consulta_controles", {
@@ -36,10 +36,14 @@ select_horarios.addEventListener("change",async e => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ UNIDAD,FECHAHORA })
+        body: JSON.stringify({ UNIDAD, FECHAHORA })
     })
 
     const respuesta = await res.json();
-    setData(table__controles__body,respuesta);
+    setData(table__controles__body, respuesta);
 
-})
+});
+
+select_horarios.addEventListener("focus", e => {
+    e.target.selectedIndex = -1;
+});

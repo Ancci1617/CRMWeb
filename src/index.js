@@ -7,7 +7,7 @@ const session = require('express-session');
 const passport = require("passport")
 const {poolConfig} = require("./model/connection-config.js");
 const { userView } = require("./middlewares/user.middlewares.js");
-
+const fileUpload = require('express-fileupload')
 
 
 
@@ -25,6 +25,7 @@ app.set("PORT", process.env.PORT || 3000);
 
 
 //Middlewareas
+app.use(fileUpload())
 app.use(session({
     key: 'session_cookie_name',
     secret: 'session_cookie_secret',
@@ -41,7 +42,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(userView);
 require("./lib/passport.lib");
-
 
 
 //Routes

@@ -6,6 +6,9 @@ const { insertVenta } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
 const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const fs = require('fs');
+
+
 
 Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
     const { cte } = req.params;
@@ -14,7 +17,6 @@ Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
     //Si el cliente no existe envia una matriz vacia
     //"Teoricamente no es posible evaluar un cliente que no exista"
     let cte_data = await getClientes(cte);
-    console.log(cte_data);
     cte_data[0].username = req.user.Usuario;
 
     res.render("ventas/Ventas.cargar.ejs", cte_data[0]);
@@ -27,10 +29,48 @@ Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 
-    //RECIBIR EL JSON Y ENVIARLO A UNA BASE DE DATOS 
-    await insertVenta(req.body, req.user.Usuario);
-    res.redirect("/");
+    const { Usuario } = req.user;
+    const { CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
+        CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO,
+        CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
 
+    //Array de parametros para la consulta SQL
+    const valores = Object.values(req.body);
+    valores.push(Usuario);
+    await insertVenta(valores);
+
+
+    //Cargar imagen de frente y dorso a servidor
+    const imagenes  = Object.values(req.files);
+    //Si la carpeta del cliente no existe la genera
+    try {
+        if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
+            fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
+    } catch (err) {
+        console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: " , err);
+    }
+
+    imagenes.forEach(imagen => {
+        imagen.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${imagen.name}`,
+        err => {
+            if (err) console.log("Archivos no se cargó: ", CTE, " - ", imagen.name)
+        });
+    })
+    // FRENTE.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${FRENTE.name}`,
+    //     err => {
+    //         if (err) console.log("Archivos no se cargó: ", CTE, " - ", FRENTE.name)
+    //     });
+    // DORSO.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-dorso-${DORSO.name}`,
+    //     err => {
+    //         if (err) console.log("Archivos no se cargó: ", CTE, " - ", DORSO.name)
+    //     });
+    // ROSTRO.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-rostro-${ROSTRO.name}`,
+    //     err => {
+    //         if (err) console.log("Archivos no se cargó: ", CTE, " - ", ROSTRO.name)
+    //     });
+
+    res.redirect("/");
+    // res.sendStatus(200);
 });
 
 Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
@@ -38,9 +78,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
     const { calificacion, cuotas } = req.body;
 
     console.log(calificacion.trim(), cuotas);
-
     const cuotas_para_entregar = await getPrepagoEntrega(calificacion.trim(), cuotas);
-    console.log("ENTREGA", cuotas_para_entregar);
     res.json(cuotas_para_entregar[0]);
 
 })
@@ -96,7 +134,7 @@ Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) 
     const vendedores = await getVendedores();
     const fechas = await getFechaDeVentas();
 
-    res.render("ventas/Ventas.cargadas.vendedores.ejs", {vendedores, fechas });
+    res.render("ventas/Ventas.cargadas.vendedores.ejs", { vendedores, fechas });
 
 })
 
@@ -129,7 +167,6 @@ Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res)
     res.json(ventas);
 
 })
-
 
 
 

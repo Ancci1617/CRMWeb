@@ -100,7 +100,7 @@ Router.post("/cargas_camionetas/cargar_diferencias", isLoggedIn, isAdminOrVended
     const FECHA = new Date(new Date() - 1000 * 60 * 60 * 3).toISOString().split("T")[0];
     const HORA = new Date(new Date() - 1000 * 60 * 60 * 3).toISOString().split("T")[1].substring(0,5);
 
-    let submit_array = CONTROL.map(articulo =>
+    const submit_array = CONTROL.map(articulo =>
         [RESUMEN.UNIDAD, Usuario, articulo.ART ,articulo.VIGENTE,
         articulo.CONTROL, articulo.DIFERENCIA, FECHA,HORA]
     );

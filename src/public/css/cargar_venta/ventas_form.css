@@ -73,7 +73,7 @@ form .input-box span.details {
   margin-bottom: 5px;
 }
 
-.user-details .input-box input,.user-details .input-box select {
+.user-details .input-box input,.user-details .input-box select,label {
   height: 45px;
   width: 100%;
   outline: none;
@@ -83,6 +83,10 @@ form .input-box span.details {
   border: 1px solid #ccc;
   border-bottom-width: 2px;
   transition: all 0.3s ease;
+}
+label{
+  display: inline-block;
+  position: relative;
 }
 .hidden{
   display: none;
@@ -111,6 +115,13 @@ form .input-box span.details {
 }
 .aprobacion{
   display: none;
+}
+.user-details .input-box .inputfile-for-label{
+  position: absolute;
+  height: 5px;
+  width: 5px;
+  border: transparent;
+  bottom: 0;
 }
 @media(max-width: 584px) {
   .container {
