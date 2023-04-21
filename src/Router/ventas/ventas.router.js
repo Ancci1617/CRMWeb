@@ -41,21 +41,21 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 
 
     //Cargar imagen de frente y dorso a servidor
-    const imagenes  = Object.values(req.files);
-    //Si la carpeta del cliente no existe la genera
-    try {
-        if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
-            fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
-    } catch (err) {
-        console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: " , err);
-    }
-    
-    imagenes.forEach(imagen => {
-        imagen.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${imagen.name}`,
-        err => {
-            if (err) console.log("Archivos no se cargó: ", CTE, " - ", imagen.name)
-        });
-    })
+    // const imagenes  = Object.values(req.files);
+    // //Si la carpeta del cliente no existe la genera
+    // try {
+    //     if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
+    //         fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
+    // } catch (err) {
+    //     console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: " , err);
+    // }
+
+    // imagenes.forEach(imagen => {
+    //     imagen.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${imagen.name}`,
+    //     err => {
+    //         if (err) console.log("Archivos no se cargó: ", CTE, " - ", imagen.name)
+    //     });
+    // })
     // FRENTE.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${FRENTE.name}`,
     //     err => {
     //         if (err) console.log("Archivos no se cargó: ", CTE, " - ", FRENTE.name)
