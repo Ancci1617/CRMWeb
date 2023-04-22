@@ -3,7 +3,7 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getUserByUsuario } = require("../../model/auth/getUser");
-const {getPlanilla} = require("../../lib/mercaderia/planillasDeCarga");
+const { getPlanilla } = require("../../lib/mercaderia/planillasDeCarga");
 const { insertarBaseArticulos,
     existePlanilla, crearPlanilla,
     insertarArticulos, cerrarPlanillaVendedor, cerrarPlanilla, habilitarVendedor, borrarPlanilla,

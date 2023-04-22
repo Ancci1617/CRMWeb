@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+        <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
+        <link rel="stylesheet" href="/css/CRM/interfaz.css">
+        <link rel="stylesheet" href="/css/mercaderia/control_de_camionetas.css">
+</head>
+<title>Blanco Gusmar | Deposito</title>
+
+<body>
+    <%- include('../partials/navigation/navigation-bar.ejs') %>
+
+    <div class="details-container">
+        <div class="unidad-details">
+            Unidad : BGM
+        </div>
+        <div class="btn btn-flex btn-pedido btn-text btn-cargar_control">
+            <span>Cargar control</span>
+        </div>
+    </div>
+
+    <main class="table">
+        <div class="table__header">
+            <h3>Control de mercaderia</h3>
+        </div>
+        <div class="table__body" >
+            <table class="">
+                <thead>
+                    <tr>
+                        <th>ART</th>
+                        <th>Producto</th>
+                        <th>Vigente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i = 0 ; i < para_control.length ; i++) {%>
+                    <tr>
+                        <td class="articulo"><%= para_control[i].Art  %></td>
+                        <td><%= para_control[i].Producto %></td>
+                        <td ><input type="number" value="" class="input-control"></td>
+                    </tr>
+                    <% } %>        
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+    <script src="/js/mercaderia/deposito.control.js"></script>
+    <!-- <script src="/js/lib/table.setData.js"></script> -->
+    <%- include("../partials/links/nav.logic.ejs") %>
+</body> 
+
+</html>

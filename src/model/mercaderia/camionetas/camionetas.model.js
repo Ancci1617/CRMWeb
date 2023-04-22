@@ -18,6 +18,7 @@ const getMovimientosUnidad = async (UNIDAD) => {
     return movimientos;
 }
 
+
 const getMovimientosFiltro = async (UNIDAD, FILTRO) => {
     const [movimientos] = await pool.query(
         "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CTE,FICHA,ART,CONTROL,CARGADO,MOTIVO " +
@@ -35,19 +36,40 @@ const insertarControlDeUnidades = async (insercion) => {
 
     return almacen;
 }
-const getControlesHistorial = async (UNIDAD,FECHAHORA) => {
+const getControlesHistorial = async (UNIDAD, FECHAHORA) => {
     const [almacen] = await pool.query(
-        "SELECT DISTINCT RESPONSABLE,ART,VIGENTE,CONTROL,DIFERENCIA FROM AlmacenDeControles WHERE CONCAT(FECHA,' ',HORA) = ? " + 
+        "SELECT DISTINCT RESPONSABLE,ART,VIGENTE,CONTROL,DIFERENCIA FROM AlmacenDeControles WHERE CONCAT(FECHA,' ',HORA) = ? " +
         "AND UNIDAD = ? ORDER BY DIFERENCIA DESC,ART ;"
-        , [FECHAHORA,UNIDAD])
+        , [FECHAHORA, UNIDAD])
 
     return almacen;
 }
 const getFechasHistorialControles = async (UNIDAD) => {
     const [fechas] = await pool.query(
-        "SELECT DISTINCT CONCAT(FECHA, ' ' , HORA) AS FECHA FROM AlmacenDeControles WHERE UNIDAD = ? order by FECHA DESC;",[UNIDAD])
+        "SELECT DISTINCT CONCAT(FECHA, ' ' , HORA) AS FECHA FROM AlmacenDeControles WHERE UNIDAD = ? order by FECHA DESC;", [UNIDAD])
 
     return fechas;
 }
 
-module.exports = { getCargaVigente, getMovimientosUnidad, getMovimientosFiltro,insertarControlDeUnidades,getControlesHistorial ,getFechasHistorialControles}
+
+
+const getMovimientosGeneralesFiltro = async ( FILTRO) => {
+    const [movimientos] = await pool.query(
+        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CAMIONETA,CTE,FICHA,ART,ESTADO,CONTROL,MOTIVO,CARGADO,OBS FROM `STOCK` " +
+        "where " +
+        "(FECHA LIKE ? OR CTE LIKE ? OR FICHA LIKE ? OR ART LIKE ? OR CONTROL LIKE ? OR MOTIVO LIKE ? OR CARGADO LIKE ? OR CAMIONETA LIKE ?) ORDER BY FECHA"
+        , [ `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`]);
+    return movimientos;
+}
+const getMovimientosTodasUnidades = async () => {
+    const [movimientos] = await pool.query(
+        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CAMIONETA,CTE,FICHA,ART,ESTADO,CONTROL,MOTIVO,CARGADO,OBS FROM `STOCK` " +
+        "order by FECHA;"
+        );
+
+    return movimientos;
+}
+
+
+
+module.exports = { getCargaVigente, getMovimientosUnidad, getMovimientosFiltro, insertarControlDeUnidades, getControlesHistorial, getFechasHistorialControles,getMovimientosTodasUnidades ,getMovimientosGeneralesFiltro}

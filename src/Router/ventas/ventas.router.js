@@ -37,6 +37,7 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     //Array de parametros para la consulta SQL
     const valores = Object.values(req.body);
     valores.push(Usuario);
+    console.log("cargar venta : ",valores);
     await insertVenta(valores);
 
 

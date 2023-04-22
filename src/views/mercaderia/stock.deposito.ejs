@@ -5,19 +5,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
         <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
         <link rel="stylesheet" href="/css/CRM/interfaz.css">
         <link rel="stylesheet" href="/css/mercaderia/control_de_camionetas.css">
 </head>
-<title>Blanco Gusmar | <%= UNIDAD %></title>
+<title>Blanco Gusmar | Deposito</title>
 
 <body>
-    <%- include('../../partials/navigation/navigation-bar.ejs') %>
+    <%- include('../partials/navigation/navigation-bar.ejs') %>
 
     <div class="details-container">
         <div class="unidad-details">
-            Unidad : <%= UNIDAD %>
+            Unidad : BGM
         </div>
         <div class="btn btn-flex btn-pedido btn-text btn-cargar_control">
             <span>Cargar control</span>
@@ -32,27 +32,26 @@
             <table class="">
                 <thead>
                     <tr>
-                        <th>Art</th>
-                        <th>Estandar</th>
+                        <th>ART</th>
                         <th>Vigente</th>
                         <th>Producto</th>
-                        <th>Control</th>
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <% for(let i = 0 ; i < stock.length ; i++) {%>
                     <tr>
-                        <td class="articulo"><%= stock[i].ART  %></td>
-                        <td class="carga_estandar"><%= stock[i].CARGA_ESTANDAR %></td>
-                        <td class="carga_vigente"><%= stock[i].VIGENTE %></td>
-                        <td><%= stock[i].PRODUCTO %></td>
-                        <td><input class="input-control" type="number" value="<%= stock[i].VIGENTE %>"></td>
+                        <td><%= stock[i].Art  %></td>
+                        <td><%= stock[i].CANTIDAD %></td>
+                        <td><%= stock[i].Producto %></td>
                     </tr>
                     <% } %>        
                 </tbody>
             </table>
         </div>
     </main>
+
+
 
 
     <main class="table table__historial">
@@ -72,7 +71,7 @@
                         <th>ESTADO</th>
                         <th>CONTROL</th>
                         <th>MOTIVO</th>
-                        <th>Cargado</th>
+                        <th>CARGADO</th>
                         <th>OBS</th>
                     </tr>
                 </thead>
@@ -96,6 +95,9 @@
         </div>
     </main>
 
+
+
+
     <main class="table table__controles">
         <div class="table__header">
             <h3>Historial de controles</h3>
@@ -109,11 +111,11 @@
             <table >
                 <thead>
                     <tr>
-                        <th>RESPONSABLE</th>
-                        <th>ART</th>
-                        <th>VIGENTE</th>
-                        <th>CONTROL</th>
-                        <th>DIFERENCIA</th>
+                        <th>Responsable</th>
+                        <th>Articulo</th>
+                        <th>Vigente</th>
+                        <th>Control</th>
+                        <th>Diferencia</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -130,10 +132,11 @@
     </main>
 
 
-    <script src="/js/mercaderia/filtro-de-historial.js"></script>
+
+    <script src="/js/mercaderia/deposito.filtro.js"></script>
     <script src="/js/mercaderia/control.camionetas.js"></script>
     <script src="/js/lib/table.setData.js"></script>
-    <%- include("../../partials/links/nav.logic.ejs") %>
+    <%- include("../partials/links/nav.logic.ejs") %>
 </body>
 
 </html>
