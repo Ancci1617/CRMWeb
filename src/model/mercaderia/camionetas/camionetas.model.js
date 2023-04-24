@@ -11,7 +11,7 @@ const getCargaVigente = async (UNIDAD) => {
 }
 const getMovimientosUnidad = async (UNIDAD) => {
     const [movimientos] = await pool.query(
-        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CTE,FICHA,ART,CONTROL,MOTIVO,CARGADO,OBS FROM `STOCK` " +
+        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CTE,FICHA,ART,ESTADO,CONTROL,MOTIVO,CARGADO,OBS FROM `STOCK` " +
         "WHERE CAMIONETA = ? and MOTIVO != 'CARGA ESTANDAR' order by FECHA"
         , [UNIDAD]);
 
@@ -21,8 +21,8 @@ const getMovimientosUnidad = async (UNIDAD) => {
 
 const getMovimientosFiltro = async (UNIDAD, FILTRO) => {
     const [movimientos] = await pool.query(
-        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CTE,FICHA,ART,CONTROL,CARGADO,MOTIVO " +
-        "FROM `STOCK` WHERE CAMIONETA = ? AND MOTIVO != 'CARGA ESTANDAR' AND " +
+        "SELECT DATE_FORMAT(FECHA,'%d-%b') as FECHA,CTE,FICHA,ART,ESTADO,CONTROL,MOTIVO,CARGADO,OBS FROM `STOCK` " +
+        "WHERE CAMIONETA = ? AND MOTIVO != 'CARGA ESTANDAR' AND " +
         "(FECHA LIKE ? OR CTE LIKE ? OR FICHA LIKE ? OR ART LIKE ? OR CONTROL LIKE ? OR MOTIVO LIKE ? OR CARGADO LIKE ?) ORDER BY FECHA"
         , [UNIDAD, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`, `%${FILTRO}%`]);
     return movimientos;
