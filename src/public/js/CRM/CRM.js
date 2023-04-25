@@ -45,7 +45,6 @@ btn_evaluar.addEventListener("click", async (e) => {
     setData(table_master_ec, query_response.MasterEC);
     setData(table_master_bgm, query_response.MasterBGM);
     setData(table_domicilio, query_response.Domicilio);
-    img_cte.src = `/${query_response.Clientes[0].CTE}/CTE-${query_response.Clientes[0].CTE}-ROSTRO.jpg`;
     
     
     const ofertas = document.querySelectorAll(".disponible-oferta");
@@ -59,6 +58,7 @@ btn_evaluar.addEventListener("click", async (e) => {
         ofertas[2].innerText = query_response.Disponible[0].CALIF;
     }
 
+    img_cte.src = `/${query_response.Clientes[0].CTE}/CTE-${query_response.Clientes[0].CTE}-ROSTRO.jpg`;
 
 });
 
