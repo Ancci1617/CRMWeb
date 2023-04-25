@@ -2,15 +2,25 @@
 
 .sidebar {
     right: 0;
-    transform: translate(50vw);
-    transition: transform .3s;
+    transition: translate .35s;
     position: fixed;
-    user-select: none;
-    height: 100vh;
-    width: calc(50vw + 20px);
+    height: 100%;
+    width: 50vw;
     display: flex;
     z-index: 200;
 }
+.unshow{
+    translate: calc(50vw - 20px);
+}
+@media (max-width:550px){
+    .sidebar{
+        width : 100vw;
+    }
+    .unshow{
+        translate: calc(100vw - 20px);
+    }
+}
+
 
 
 .sidebar-contenido {
