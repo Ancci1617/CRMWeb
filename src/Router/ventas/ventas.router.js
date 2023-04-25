@@ -5,7 +5,7 @@ const { getPrepagoEntrega } = require("../../model/productos/prepagos");
 const { insertVenta } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
-const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const { getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const fs = require('fs');
 
 
@@ -28,16 +28,17 @@ Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
 });
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
-
     const { Usuario } = req.user;
-    const { CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
-        CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO,
-        CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
-    
-    console.log("Body venta por carga, ", req.body);
+    const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
+    const body = Object.assign(req.body, { CTE });
+
+
+
+    console.log("Body venta por carga, ", body);
     //Array de parametros para la consulta SQL
-    const valores = Object.values(req.body);
+    const valores = Object.values(body);
     valores.push(Usuario);
+    
     console.log("cargar venta : ", valores);
     await insertVenta(valores);
 
@@ -72,7 +73,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
     const cuotas_para_entregar = await getPrepagoEntrega(calificacion.trim(), cuotas);
     res.json(cuotas_para_entregar[0]);
 
-})
+});
 
 Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
@@ -101,7 +102,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
     res.json(query_result);
 
-})
+});
 
 Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
 
@@ -111,7 +112,7 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
 
 
     res.render("ventas/Ventas.cargadas.ejs", { ventas });
-})
+});
 
 Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
 
@@ -119,7 +120,7 @@ Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
     const result = await borrarVentasDelDia(indice, req.user.Usuario);
     res.redirect("/ventas_cargadas");
 
-})
+});
 
 Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
     const vendedores = await getVendedores();

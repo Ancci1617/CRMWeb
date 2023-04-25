@@ -76,7 +76,19 @@ async function getFechaDeVentas() {
 
     return [];
 }
+//SELECT MIN(CTE) AS CTE FROM `NCTE` where tomado = false;
+async function getNuevoNumeroDeCte() {
+    const [CTE] = await pool.query(
+        "SELECT MIN(CTE) AS CTE FROM `NCTE` where tomado = false;"
+        );
 
+    if (CTE.length > 0) {
+        await pool.query("UPDATE `NCTE` SET `TOMADO`='1' WHERE CTE = ?",[CTE[0].CTE]);
+        return CTE[0].CTE;
+    }
+
+    return [];
+}
 
 
 async function getVentasDelDiaGeneral(fecha) {
@@ -102,6 +114,6 @@ module.exports = {
     getVentasDelDia, borrarVentasDelDia,
     getVentasVendedores, getVendedores, 
     getFechaDeVentas, getVentasDelDiaGeneral, 
-    getVendedoresConVentas
+    getVendedoresConVentas,getNuevoNumeroDeCte
 }
 

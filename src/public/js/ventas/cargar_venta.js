@@ -8,6 +8,7 @@ const cuota = document.getElementsByName("CUOTA")[0];
 const estatus_options = document.querySelector(".options-estatus");
 
 
+
 //Funciones
 function asociarInputOption(displayedOptions, input) {
     //Recibe un input y un options
@@ -49,7 +50,7 @@ async function autoCompletarPrecios() {
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
-    const sabana = 26400; 
+    const sabana = 26400;
     const master_resumen = await fetch("/query_masterresumen", {
         method: 'POST',
         mode: 'cors',
@@ -72,7 +73,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
         disponible = parseFloat(master.BGM.replace(",", "."));
     }
 
-    
+
     //Si el vendedor se hacer cargo esta aprobada
     if (responsable == "SI") return true;
 
@@ -91,7 +92,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
             body: JSON.stringify({ calificacion: master.CALIF, cuotas })
         })
         const cuotas_entrega = await entrega_res.json();
-        
+
         if (cuotas_para_entrega >= cuotas_entrega.Entrega) return true;
         return false;
 
@@ -130,6 +131,19 @@ estatus_options.addEventListener("change", e => {
 
 })
 
+
+const input_file_arr = document.querySelectorAll("input[type='file']")
+
+input_file_arr.forEach(input => {
+
+    input.addEventListener("change", e => {
+
+        const files = e.target.files;
+        const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")}`);        
+        span_text.innerText = files && files.length > 0 ? files[0].name : "Sin foto cargada..";
+
+    })
+})
 
 
 
