@@ -8,9 +8,14 @@ const { getMasterBGM, getMasterEC, getMasterResumen } = require("../../model/CRM
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
 const { isLoggedIn } = require("../../lib/auth");
 const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js");
+const express = require("express");
+const path = require("path");
 
 
-Router.get("/CRM", isLoggedIn, (req, res) => {
+Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
+
+
+Router.get("/CRM", isLoggedIn, (req, res) => {    
     res.render("CRM/CRM");
 })
 
@@ -28,7 +33,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     // if(memo[cte]) return res.json(memo[cte]);
     if (cte === -1) {
-        guardar_respuesta_crm(req.user.Usuario, JSON.stringify(req.body), JSON.stringify({CTE : "No encontrado"}), hora);
+        guardar_respuesta_crm(req.user.Usuario, JSON.stringify(req.body), JSON.stringify({ CTE: "No encontrado" }), hora);
         return res.json({ "Clientes": [{ CTE: -1 }] });
     }
 
@@ -49,7 +54,6 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     res.json(query_result);
 })
-
 
 
 

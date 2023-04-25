@@ -160,17 +160,15 @@ form.addEventListener("submit", async e => {
     const vendido = document.getElementsByName("TOTAL")[0].value;
     const anticipo = document.getElementsByName("ANTICIPO")[0].value;
 
-    let aprobado = document.getElementsByName("APROBADO")[0];
+    const aprobado = document.getElementsByName("APROBADO")[0];
 
     if (await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido, anticipo)) {
         aprobado.value = "APROBADO";
-        CTE.disabled = false;
         return e.target.submit();
     }
 
     if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")) {
         aprobado.value = "DESAPROBADO";
-        CTE.disabled = false;
         return e.target.submit();
     }
 

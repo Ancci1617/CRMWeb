@@ -31,9 +31,9 @@
       <form action="/cargar_venta" method="POST" enctype="multipart/form-data">
 
         <div class="user-details">
-          <div class="input-box">
+          <div class="input-box ">
             <span class="details">Cliente</span>
-            <input type="text" disabled placeholder="Numero de cliente" value="<%= CTE? CTE : 0%>" name="CTE"
+            <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE? CTE : 0%>" name="CTE"
               required>
           </div>
 
@@ -202,8 +202,13 @@
             </label>
           </div>
           
+          <div class="input-box aprobacion-input-box">
+            <span class="details">Aprobado/Desaprobado</span>
+            <input type="text" class="aprobacion" placeholder="APROBACION..." readonly name="APROBADO">
+          </div>
+          
+          
           <!-- BOTONES DE SUBMIT -->
-          <input type="text" class="aprobacion" placeholder="" name="APROBADO">
           <div class="button">
             <input type="submit" value="Registrar venta">
           </div>

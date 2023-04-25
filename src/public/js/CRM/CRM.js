@@ -5,7 +5,7 @@ const table_prestamos = document.querySelector(".tabla-prestamos tbody");
 const table_master_bgm = document.querySelector(".tabla_master_bgm tbody");
 const table_master_ec = document.querySelector(".tabla-masterec tbody");
 const table_domicilio = document.querySelector(".tabla-domicilio tbody");
-
+const img_cte = document.querySelector(".img-cte");
 
 var btn_evaluar = document.querySelector(".btn-evaluar");
 var input_busqueda = document.querySelector(".inputtext-CTE");
@@ -37,15 +37,17 @@ btn_evaluar.addEventListener("click", async (e) => {
     if (query_response.Clientes[0].CTE === -1) return alert(tipo_de_dato + " no se encuentra en la base de datos");
 
     //Clientes no consulta longitud
-    //Tabla clientes, primer fila, todos los td,mapear la lista de clases(un array de classList)
+    //Tabla clientes, primer fila, todos los td,mapear la lista de clases(un array de classList)3
+    console.log(query_response);
     setData(table_clientes, query_response.Clientes);
     setData(table_fichas, query_response.Fichas);
     setData(table_prestamos, query_response.Prestamos);
     setData(table_master_ec, query_response.MasterEC);
     setData(table_master_bgm, query_response.MasterBGM);
     setData(table_domicilio, query_response.Domicilio);
-
-
+    img_cte.src = `/${query_response.Clientes[0].CTE}/CTE-${query_response.Clientes[0].CTE}-ROSTRO.jpg`;
+    
+    
     const ofertas = document.querySelectorAll(".disponible-oferta");
     //Insertar ofertasDisponibles
     ofertas[0].innerText = 0;

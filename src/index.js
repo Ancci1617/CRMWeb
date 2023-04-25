@@ -5,16 +5,17 @@ const path = require("path");
 const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
-const {poolConfig} = require("./model/connection-config.js");
+const { poolConfig } = require("./model/connection-config.js");
 const { userView } = require("./middlewares/user.middlewares.js");
-const fileUpload = require('express-fileupload')
+const fileUpload = require('express-fileupload');
+const { isLoggedIn } = require('./lib/auth.js');
 
 
 
 //Set config
-app.use(express.static(path.join(__dirname, 'public')));
 app.set("views", path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use( express.static(path.join(__dirname, 'public')));
 
 
 
@@ -45,9 +46,9 @@ require("./lib/passport.lib");
 
 
 //Routes
+app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
-app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/ventas/ventas.router"))
 app.use(require("./Router/ventas/ventas.archivos.js"))
 app.use(require("./Router/get.router"));
@@ -55,6 +56,11 @@ app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
 app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
 app.use(require("./Router/mercaderia/deposito.router.js"));
+
+
+
+
+
 
 
 //Ejecuta el servidor

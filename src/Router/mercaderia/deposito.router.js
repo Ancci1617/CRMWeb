@@ -6,24 +6,25 @@ const { insertarControlDeUnidades, getControlesHistorial,getFechasHistorialContr
 
 //Menu
 Router.get("/stock", isLoggedIn, isAdmin, async (req, res) => {
-    const data = { title: "Stock", items: ["Deposito", "Controles"], links: ["/stock/deposito", "stock/deposito_controles"] };
+    const data = { title: "Stock", items: ["Deposito", "Controlar mercaderia"], links: ["/stock/deposito", "stock/deposito_controles"] };
     res.render("list-items.ejs", { data });
 })
 
 
 //Deposito
 Router.get("/stock/deposito", isLoggedIn, isAdmin, async (req, res) => {
+
     const stock = await getStockDeposito();
     const fechas = await getFechasHistorialControles('BGM');
     const movimientos = await getMovimientosTodasUnidades();
-    res.render("mercaderia/stock.deposito.ejs", { stock, fechas, movimientos });
+    res.render("mercaderia/deposito.stock.ejs", { stock, fechas, movimientos });
 
 });
 //Controles
 Router.get("/stock/deposito_controles", isLoggedIn, isAdmin, async (req, res) => {
 
     const para_control = await getRandomControl();
-    res.render("mercaderia/deposito.controles.ejs", { para_control });
+    res.render("mercaderia/deposito.control.ejs", { para_control });
 
 });
 
@@ -69,7 +70,7 @@ Router.post("/stock/consultar_controles", isLoggedIn, isAdmin, async (req, res) 
 
 });
 
-Router.post("/stock/consultar_movimientos_generales", isLoggedIn, isAdmin, async (req, res) => {
+Router.post("/stock/filtrar_movimientos_generales", isLoggedIn, isAdmin, async (req, res) => {
 
     const { FILTRO } = req.body;
 

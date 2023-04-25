@@ -1,6 +1,6 @@
 const btn_cargar_control = document.querySelector(".btn-cargar_control");
 
-async function cargarControl() {
+btn_cargar_control.addEventListener("click", async e => {
     const controles = document.querySelectorAll(".input-control");
     const articulos = document.querySelectorAll(".articulo");
 
@@ -13,20 +13,8 @@ async function cargarControl() {
     }
 
     //CARGA EL POST
-    const res = await fetch("insertar_deposito_control", {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(query_obj)
-    })
-    const respuesta = await res.json();
+    const respuesta = await fetchPost("/stock/insertar_deposito_control", query_obj );
     alert(respuesta.msg);
-}
-
-btn_cargar_control.addEventListener("click", cargarControl);
+});
 
 

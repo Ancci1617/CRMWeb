@@ -33,18 +33,19 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     const { CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO,
         CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
-
+    
+    console.log("Body venta por carga, ", req.body);
     //Array de parametros para la consulta SQL
     const valores = Object.values(req.body);
     valores.push(Usuario);
-    console.log("cargar venta : ",valores);
+    console.log("cargar venta : ", valores);
     await insertVenta(valores);
 
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {
-        const imagenes = Object.values(req.files);
-        //Si la carpeta del cliente no existe la genera
+        const entries = Object.entries(req.files);
+
         try {
             if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
                 fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
@@ -52,14 +53,14 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
             console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: ", err);
         }
 
-        imagenes.forEach(imagen => {
-            imagen.mv(`../ImagenesDeClientes/${CTE}/${CTE}-${FICHA}-frente-${imagen.name}`,
+        entries.forEach(entry => {
+            entry[1].mv(`../ImagenesDeClientes/${CTE}/CTE-${CTE}-${entry[0]}.jpg`,
                 err => {
-                    if (err) console.log("Archivos no se cargó: ", CTE, " - ", imagen.name)
+                    if (err) console.log("Archivos no se cargó: ", CTE)
                 });
         })
     }
-    
+
     res.redirect("/");
 });
 

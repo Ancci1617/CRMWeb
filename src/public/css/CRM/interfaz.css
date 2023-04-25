@@ -90,6 +90,21 @@
     background-color: #F2F2F2;
 }
 
+.img-container{
+    overflow: hidden;
+    border: 2px solid black;
+    border-radius: 1rem;
+    width: 100px;
+    background: whitesmoke;
+    box-shadow: 3px 3px 3px black;
+}
+.img-cte{
+    object-fit: cover;
+    object-position: top;
+    aspect-ratio: 1 / 1;
+    width: 100px;
+}
+
 
 .busqueda-container * {
     border: 1px solid black;
@@ -128,9 +143,15 @@
 
 }
 
-@media screen and (max-width:700px) {
-    .buscador-disponible-container * {
+@media screen and (max-width:500px) {
+    .busqueda-container, .disponible-container{
         width: 100%;
         /* flex: 0 0 1; */
+    }
+    .img-container{
+        order: 30;
+    }
+    .buscador-disponible-container{
+        justify-content: center;
     }
 }
