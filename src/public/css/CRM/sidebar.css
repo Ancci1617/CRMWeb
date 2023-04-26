@@ -2,7 +2,7 @@
 
 .sidebar {
     right: 0;
-    transition: translate .35s;
+    transition: transform .35s;
     position: fixed;
     height: 100%;
     width: 50vw;
@@ -10,26 +10,28 @@
     z-index: 200;
 }
 .unshow{
-    translate: calc(50vw - 20px);
+    transform: translate( calc(50vw - 20px) );
 }
+
+
+
 @media (max-width:550px){
     .sidebar{
         width : 100vw;
     }
     .unshow{
-        translate: calc(100vw - 20px);
+        transform: translate( calc(100vw - 20px) );
     }
 }
 
 
 
 .sidebar-contenido {
-    background-color: #366092;
+    background-color: #4c6f98;
     border-left: 1px solid wheat;
-    height: 100%;
-    right: 0;
+    padding: .2rem .3rem;
     flex-grow: 1;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
 }
