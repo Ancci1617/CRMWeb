@@ -24,20 +24,19 @@
                         <div class="title">Vendedor</div>
                         <div class="title">Fecha</div>
 
-                        <div class="custom-selectbox">
-                            <select class="custom-selectbox select-vendedor">
+
+                            <select class="custom-selectbox-select select-vendedor">
                                 <% for (let i=0;i < vendedores.length ; i++){%>
                                     <option value="<%=i%>"><%=vendedores[i].VENDEDOR%></option>
                                     <%}%>
                             </select>
-                        </div>
-                        <div class="custom-selectbox">
-                            <select class="custom-selectbox  select-fecha">
+
+                            <select class="custom-selectbox-select  select-fecha">
                                 <% for (let i=0;i < fechas.length ; i++){%>
                                     <option value="<%=i%>"><%=fechas[i].FECHA%></option>
                                 <%} %>
                             </select>
-                        </div>
+
                     </div>
                 </div>
                 <div class="btn-container">
