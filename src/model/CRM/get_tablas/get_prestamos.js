@@ -3,7 +3,7 @@
 const pool = require("../../connection-database.js");
 
 const getPrestamos = async (cte) => {
-
+    
     const [rows] = await pool.query(
         "SELECT DATE_FORMAT(`FECHA`,'%d-%b'), `Prestamo`, `Zona`, `Capital`, " +
         "`Ant`, `Mes 0`, `Mes 1`, `mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, " +
