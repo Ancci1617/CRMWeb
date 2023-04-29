@@ -28,20 +28,18 @@ Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
 });
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
+    //Inicializa variables
     const { Usuario } = req.user;
+    const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
+        CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO,
+        VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
+    //Asigna numero de cte nuevo
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-    const body = Object.assign(req.body, { CTE });
-
-
-
-    console.log("Body venta por carga, ", body);
-    //Array de parametros para la consulta SQL
-    const valores = Object.values(body);
-    valores.push(Usuario);
+    //Carga la venta    
+    await insertVenta(CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
+        ARTICULOS, TOTAL, ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO,
+        VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, "BGM");
     
-    console.log("cargar venta : ", valores);
-    await insertVenta(valores);
-
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {

@@ -56,6 +56,7 @@ app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));
 app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
 app.use(require("./Router/mercaderia/deposito.router.js"));
+app.use(require("./Router/ventas/contado/contado.router.js"));
 
 
 

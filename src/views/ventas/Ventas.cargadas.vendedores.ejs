@@ -25,18 +25,18 @@
                         <div class="title">Fecha</div>
 
 
-                            <select class="custom-selectbox-select select-vendedor">
-                                <option value="GENERAL">General</option>
-                                <% for (let i=0;i < vendedores.length ; i++){%>
-                                    <option value="<%=i%>"><%=vendedores[i].VENDEDOR%></option>
-                                <%}%>
-                            </select>
+                        <select class="custom-selectbox-select select-vendedor">
+                            <option value="GENERAL">General</option>
+                            <% for (let i=0;i < vendedores.length ; i++){%>
+                                <option value="<%=i%>"><%=vendedores[i].VENDEDOR%></option>
+                            <%}%>
+                        </select>
 
-                            <select class="custom-selectbox-select select-fecha">
-                                <% for (let i = 0;i < fechas.length ; i++){ %>
-                                    <option value="<%=i%>"><%=fechas[i].FECHA %></option>
-                                <% } %>
-                            </select>
+                        <select class="custom-selectbox-select select-fecha">
+                            <% for (let i = 0;i < fechas.length ; i++){ %>
+                                <option value="<%=i%>"><%=fechas[i].FECHA %></option>
+                            <% } %>
+                        </select>
 
                     </div>
                     <div class="resumen-container busqueda-container">

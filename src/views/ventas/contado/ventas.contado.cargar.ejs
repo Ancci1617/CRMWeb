@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<!-- Created By CodingLab - www.codinglabweb.com -->
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% var today=new Date().toISOString().substring(0,10) %>
+  <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <title>Balu Home | Cargar venta</title>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="titles">
+      <div class="title">Cargar venta</div>
+      <div>
+        <a class="btn-green btn-crm" type="button" href="/locales/BH">Menu</a>
+      </div>
+    </div>
+    <div class="content">
+      <form id="cargar_venta" action="/locales/cargar_venta_contado" method="POST" enctype="multipart/form-data">
+
+        <div class="user-details">
+          <div class="input-box ">
+            <span class="details">N° de documento</span>
+            <input type="number" placeholder="Numero de cliente"  name="DNI" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Apellido y nombre</span>
+            <input type="text" placeholder="APELLIDO Nombre" name="NOMBRE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Telefono</span>
+            <input type="number" placeholder="Numero de telefono"  name="WHATSAPP">
+          </div>
+
+          <div class="input-box">
+            <span class="details">Calle</span>
+            <input type="text" placeholder="Domicilio" name="CALLE" >
+          </div>
+          
+          <div class="input-box">
+            <span class="details">Zona</span>
+            <input type="text" placeholder="Zona" name="ZONA" required>
+          </div>
+          
+          <div class="input-box">
+            <span class="details">Articulos</span>
+            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Vta total</span>
+            <input type="number" placeholder="Suma de cuotas" name="TOTAL" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Metodo de pago</span>
+            <select class="options options-tipo" form="cargar_venta" name="TIPO"  required>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="MP">Mercado Pago</option>
+              <option value="DEBITO">Debito</option>
+              <option value="CREDITO">Tarjeta de credito</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Fecha de venta</span>
+            <input type="date" placeholder="" name="FECHA_VENTA" value="<%= today %>" required>
+          </div>
+          
+          
+          <!-- BOTONES DE SUBMIT -->
+          <div class="button">
+            <input type="submit" value="Registrar venta">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/lib/getApi.js"></script>
+  <script src="/js/ventas/contado/cargar_venta.js"></script>
+
+</body>
+
+</html>
