@@ -50,7 +50,7 @@ async function autoCompletarPrecios() {
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
-    const sabana = 26400;
+    const sabana = 29400;
     const master_resumen = await fetch("/query_masterresumen", {
         method: 'POST',
         mode: 'cors',
