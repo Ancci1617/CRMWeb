@@ -147,23 +147,6 @@ input_file_arr.forEach(input => {
 
 
 
-
-
-
-
-//Listeners
-// btn_nuevo.addEventListener("click", e => {
-//     //Limpiar input box
-//     let input_array = document.querySelectorAll(".input-box input");
-//     input_array.forEach(e => { if (!input_array[7].classList.contains("hidden")) { e.value = "" } });
-
-//     //Cambiar numero de cliente a nuevo
-//     document.getElementsByName("CTE")[0].value = "Nuevo";
-
-
-// })
-
-
 form.addEventListener("submit", async e => {
     e.preventDefault();
 
@@ -173,16 +156,15 @@ form.addEventListener("submit", async e => {
     const cuotas_para_entrega = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0].value;
     const vendido = document.getElementsByName("TOTAL")[0].value;
     const anticipo = document.getElementsByName("ANTICIPO")[0].value;
-
     const aprobado = document.getElementsByName("APROBADO")[0];
-
-    if (await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido, anticipo)) {
-        aprobado.value = "APROBADO";
+    
+    aprobado.value = "APROBADO";
+    const isAprobado = await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
+    if(isAprobado)
         return e.target.submit();
-    }
-
+    
+    aprobado.value = "DESAPROBADO";
     if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")) {
-        aprobado.value = "DESAPROBADO";
         return e.target.submit();
     }
 

@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/cargar_venta" method="POST" enctype="multipart/form-data">
+      <form action="/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
 
         <div class="user-details">
           <div class="input-box ">
@@ -81,19 +81,18 @@
 
           <div class="input-box">
             <span class="details">Cuotas</span>
-            <input type="number" placeholder="Cantidad de cuotas" name="CUOTAS" class="hidden" value="3">
-            <select class="options options-tipo selector-cuotas">
-              <option value="0">3</option>
-              <option value="1">6</option>
-              <option value="2">9</option>
-              <option value="3">12</option>
-              <option value="4">1</option>
+            <select form="form_cargar_venta" class="selector-cuotas" name="CUOTAS" required>
+              <option value="3">3</option>
+              <option value="6">6</option>
+              <option value="9">9</option>
+              <option value="12">12</option>
+              <option value="1">1</option>
             </select>
           </div>
 
           <div class="input-box">
             <span class="details">Articulos</span>
-            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS">
+            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS" required>
           </div>
 
 
@@ -114,25 +113,23 @@
 
           <div class="input-box">
             <span class="details">Tipo</span>
-            <input type="text" placeholder="Pedido,revisita..." name="TIPO" class="hidden" value="Pedido" required>
-            <select class="options options- tipo">
-              <option value="0">Pedido</option>
-              <option value="1">Revisita</option>
-              <option value="2">Timbreo</option>
-              <option value="3">Local</option>
+            <select class="" form="form_cargar_venta" name="TIPO" required>
+              <option value="Pedido">Pedido</option>
+              <option value="Revisita">Revisita</option>
+              <option value="Timbreo">Timbreo</option>
+              <option value="Local">Local</option>
             </select>
           </div>
 
 
           <div class="input-box">
             <span class="details">Estatus</span>
-            <input type="text" placeholder="Entregado,Prepago..." name="ESTATUS" class="hidden" value="Entregado" required>
-            <select class="options options-tipo options-estatus">
-              <option value="0">Entregado</option>
-              <option value="1">Con anticipo</option>
-              <option value="2">Para entregar</option>
-              <option value="3">Prepago</option>
-              <option value="4">Prepago entregado</option>
+            <select class="options-estatus" form="form_cargar_venta" name="ESTATUS" required>
+              <option value="Entregado">Entregado</option>
+              <option value="Con anticipo">Con anticipo</option>
+              <option value="Para entregar">Para entregar</option>
+              <option value="Prepago">Prepago</option>
+              <option value="Prepago entregado">Prepago entregado</option>
             </select>
           </div>
 
@@ -144,14 +141,13 @@
 
           <div class="input-box">
             <span class="details">Dia de vencimiento</span>
-            <input type="text" placeholder="Vencimiento mensual" name="VENCIMIENTO" class="hidden" value="4" required>
-            <select class="options options-tipo">
-              <option value="0">4</option>
-              <option value="1">9</option>
-              <option value="2">14</option>
-              <option value="3">19</option>
-              <option value="4">24</option>
-              <option value="5">29</option>
+            <select class="" name="VENCIMIENTO" required form="form_cargar_venta">
+              <option value="4">4</option>
+              <option value="9">9</option>
+              <option value="14">14</option>
+              <option value="19">19</option>
+              <option value="24">24</option>
+              <option value="29">29</option>
             </select>
           </div>
 
@@ -163,16 +159,17 @@
           <div class="input-box">
             <span class="details">Fecha de venta</span>
             <input type="date" placeholder="" name="FECHA_VENTA"
+              value="<%= today %>"
               min="<%= treeDaysAgo %>"
-              max="<%= today %>" required>
+              max="<%= today %>" 
+              required>
           </div>
 
           <div class="input-box">
             <span class="details">Se hace responsable el vendedor?</span>
-            <input type="text" class="responsable hidden" placeholder="" name="RESPONSABLE" value="NO">
-            <select class="options options-tipo">
-              <option value="0">NO</option>
-              <option value="1">SI</option>
+            <select class="options" name="RESPONSABLE" form="form_cargar_venta" required>
+              <option value="NO">NO</option>
+              <option value="SI">SI</option>
             </select>
           </div>
 
@@ -202,9 +199,9 @@
             </label>
           </div>
           
+          <!-- input hidden  Venta Aprobada/Desaprobada -->
           <div class="input-box aprobacion-input-box">
-            <span class="details">Aprobado/Desaprobado</span>
-            <input type="text" class="aprobacion" placeholder="APROBACION..." readonly name="APROBADO">
+            <input type="text" class="aprobacion" readonly value="APROBADO" name="APROBADO"/>
           </div>
           
           

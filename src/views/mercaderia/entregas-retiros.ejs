@@ -53,7 +53,7 @@
                     <div class="input-box">
                         <span class="details">Entrega/Retiro</span>
                         <input type="text" name="ENTREGA_RETIRO" class="hidden" value="Entregado">
-                        <select class="options options-tipo selector-cuotas">
+                        <select class="options  selector-cuotas">
                             <option value="0">Entregado</option>
                             <option value="1">Retirado</option>
                         </select>
@@ -63,7 +63,7 @@
                         <span class="details">Ficha</span>
                         <input type="text" name="FICHA" class="hidden" value="<%=cte_data[0].FICHA%>">
 
-                        <select class="options options-tipo selector-cuotas">
+                        <select class="options  selector-cuotas">
                             <% for( let i = 0 ; i < cte_data.length;i++){ %>
                                 <option value="<%=i%>"><%=cte_data[i].FICHA%></option>
                             <% } %>

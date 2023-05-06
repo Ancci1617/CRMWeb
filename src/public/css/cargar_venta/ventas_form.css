@@ -91,9 +91,13 @@ label{
 .hidden{
   display: none;
 }
-.user-details .input-box input:focus,
-.user-details .input-box input:valid {
+.user-details .input-box input:valid ,
+.user-details .input-box select:valid{
   border-color: #18ab29;
+} 
+.user-details .input-box input:invalid ,
+.user-details .input-box select:invalid{
+  border-color: rgb(247, 27, 27);
 }
 
 .button {
