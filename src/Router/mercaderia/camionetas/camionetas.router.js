@@ -7,18 +7,18 @@ const { getUnidades } = require("../../../model/auth/getUsers");
 const { getCargaVigente, getMovimientosUnidad, getMovimientosFiltro ,insertarControlDeUnidades ,
         getControlesHistorial, getFechasHistorialControles } = require("../../../model/mercaderia/camionetas/camionetas.model");
 
-Router.get("/entrega_retiro/0", isLoggedIn, (req, res) => {
+Router.get("/entrega_retiro/0", isLoggedIn,isAdminOrVendedor, (req, res) => {
     res.redirect("/CRM");
 });
 
-Router.get("/entrega_retiro/:CTE", isLoggedIn, async (req, res) => {
+Router.get("/entrega_retiro/:CTE", isLoggedIn,isAdminOrVendedor, async (req, res) => {
     const { CTE } = req.params;
     const cte_data = await getClientesFull(CTE);
     res.render("mercaderia/entregas-retiros.ejs", { CTE, cte_data });
 
 });
 
-Router.post("/entrega_retiro", isLoggedIn, async (req, res) => {
+Router.post("/entrega_retiro", isLoggedIn,isAdminOrVendedor, async (req, res) => {
     const { CTE, ENTREGA_RETIRO, FICHA, ART } = req.body;
     const { Usuario, UNIDAD } = req.user;
     const FECHA = new Date().toISOString().split("T")[0];

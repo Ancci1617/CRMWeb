@@ -14,14 +14,15 @@
 <body>
     <%- include("./partials/navigation/navigation-bar") %>
         <div class="page-container">
-            
+
+            <!------------------- REPENSAR -------------------->
             <div class="dashboard-container">
                 <div class="dashboard-item"><a href="/CRM">CRM</a></div>
-                <div class="dashboard-item"><a href="/ventas_cargadas">Ventas del dia</a></div>
+                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/ventas_cargadas">Ventas del dia</a></div><%}%>
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/ventas_cargadas_vendedores">Ventas vendedores</a></div><%}%>
-                <div class="dashboard-item"><a href="/mis_planillas">Planillas de carga</a></div>
+                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/mis_planillas">Planillas de carga</a></div><%}%>
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/archivo_de_entrega">Archivo de entrega</a></div><%}%> 
-                <div class="dashboard-item"><a href="/cargas_camionetas">Carga de camionetas</a></div>
+                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/cargas_camionetas">Carga de camionetas</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/stock">Stock</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/locales">Lista de locales</a></div><%}%> 
 

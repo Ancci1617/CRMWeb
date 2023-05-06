@@ -9,14 +9,7 @@ const estatus_options = document.querySelector(".options-estatus");
 
 
 
-//Funciones
-function asociarInputOption(displayedOptions, input) {
-    //Recibe un input y un options
-    displayedOptions.addEventListener("change", e => {
-        input.value = displayedOptions.options.item(displayedOptions.selectedIndex).innerText;
-    })
 
-}
 async function autoCompletarPrecios() {
 
     let total = document.getElementsByName("TOTAL")[0];
@@ -42,9 +35,6 @@ async function autoCompletarPrecios() {
 
     cuota.value = precios.cuota;
     total.value = precios.total;
-
-
-
 
 }
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
@@ -111,10 +101,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
 
 }
 
-//ASOCIA TODOS LOS INPUTS CON SU SELECTOR RESPECTIVO EN EL ORDEN
-for (let i = 0; i < document.querySelectorAll("select").length; i++) {
-    asociarInputOption(document.querySelectorAll("select")[i], document.querySelectorAll("input.hidden")[i]);
-}
+
 
 estatus_options.addEventListener("change", e => {
     let selected_options = e.target;
@@ -132,21 +119,18 @@ estatus_options.addEventListener("change", e => {
 })
 
 
+//ASOCIAR INPUT-FILE CON LABEL, para appendear el nombre del archivo
 const input_file_arr = document.querySelectorAll("input[type='file']")
-
 input_file_arr.forEach(input => {
-
     input.addEventListener("change", e => {
-
         const files = e.target.files;
         const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")}`);        
         span_text.innerText = files && files.length > 0 ? files[0].name : "Sin foto cargada..";
-
     })
 })
 
 
-
+//EVALUACION DE LA VENTA
 form.addEventListener("submit", async e => {
     e.preventDefault();
 
@@ -170,20 +154,15 @@ form.addEventListener("submit", async e => {
 
 })
 
-articulos.addEventListener("change", e => {
-    //Antes tiene que escribir la cantidad de cuotas
-    if (cuotas.value == "") {
-        articulos.value = "";
-        return alert("Antes debe escribir la cantidad de cuotas");
-    }
-    autoCompletarPrecios();
-})
+// articulos.addEventListener("change", e => {
+//     autoCompletarPrecios();
+// })
 
-document.querySelector(".selector-cuotas").addEventListener("change", e => {
-    //Antes tiene que escribir la cantidad de cuotas
-    if (articulos.value == "") return;
-    autoCompletarPrecios();
-})
+// document.querySelector(".selector-cuotas").addEventListener("change", e => {
+//     //Antes tiene que escribir la cantidad de cuotas
+//     if (articulos.value == "") return;
+//     autoCompletarPrecios();
+// })
 
 
 

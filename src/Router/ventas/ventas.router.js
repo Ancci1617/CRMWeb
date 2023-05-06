@@ -4,13 +4,13 @@ const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { getPrepagoEntrega } = require("../../model/productos/prepagos");
 const { insertVenta } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
-const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
+const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const fs = require('fs');
 
 
 
-Router.get("/cargar_venta/:cte", isLoggedIn, async (req, res) => {
+Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor , async (req, res) => {
     const { cte } = req.params;
 
 
