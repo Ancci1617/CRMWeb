@@ -154,15 +154,14 @@ form.addEventListener("submit", async e => {
 
 })
 
-// articulos.addEventListener("change", e => {
-//     autoCompletarPrecios();
-// })
 
-// document.querySelector(".selector-cuotas").addEventListener("change", e => {
-//     //Antes tiene que escribir la cantidad de cuotas
-//     if (articulos.value == "") return;
-//     autoCompletarPrecios();
-// })
+//AutoCompletado de los precios
+articulos.addEventListener("change", e => {
+    autoCompletarPrecios();
+});
+document.querySelector(".selector-cuotas").addEventListener("change", e => {
+    autoCompletarPrecios();
+})
 
 
 
