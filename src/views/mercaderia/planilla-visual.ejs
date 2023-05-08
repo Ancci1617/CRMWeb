@@ -21,7 +21,18 @@
         </div>
     <% }else{ %>
 
-
+        <div class="detalles">
+            <span>Estado de la planilla: </span>
+            <span class = <%= datos.isEditableControl == 0 ? "CERRADO" : "ABIERTO" %> >
+                <% if(datos.isEditableVendedor) {%>
+                    Editable por vendedor
+                <% }else if(datos.isEditableControl) {%>
+                    Editable por control
+                <% } else {%>
+                    Cerrada
+                <% } %>
+            </span>
+        </div>
         <section class="table">
             <div class="table__header">
                 <h3>V: <%= datos.VENDEDOR %></h3>

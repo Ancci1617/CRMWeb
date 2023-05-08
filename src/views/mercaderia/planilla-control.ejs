@@ -16,6 +16,18 @@
 <body>
     <%- include("../partials/navigation/navigation-bar") %>
 
+    <div class="detalles">
+        <span>Estado de la planilla: </span>
+        <span class = <%= datos.isEditableControl == 0 ? "CERRADO" : "ABIERTO" %> >
+            <% if(datos.isEditableVendedor) {%>
+                Editable por vendedor
+            <% }else if(datos.isEditableControl) {%>
+                Editable por control
+            <% } else {%>
+                Cerrada
+            <% } %>
+        </span>
+    </div>
 
     <div class="btn-container">
         <div class="btn-ventas btn-actualiza btn">Cargar</div>
@@ -33,7 +45,7 @@
                 </h3>
                 <h3>Control: <%= datos.CONTROL %></h3>
             </div>
-            <form action="/insertar_estados" method="POST" class="table__body form-carga" >
+            <form action="/insertar_estados" method="POST" id="planilla_form" class="table__body form-carga" >
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -55,14 +67,14 @@
                                 <td><%= planilla.ARTICULOS[i].ESTATUS %></td>
                                 <td><%= planilla.ARTICULOS[i].ART %></td>
                                 <td>
-                                    <select class="option-input">
-                                        <option value="0" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == null){ %> <%= "selected" %> <%}%>></option>
-                                        <option value="1" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "Cargado"){ %> <%= "selected" %> <%}%>>Cargado</option>
-                                        <option value="2" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "No cargado"){ %> <%= "selected" %> <%}%>>No cargado</option>
+                                    <select class="option-input" name="ESTADO" form="planilla_form">
+                                        <option value="" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == ""){ %> <%= " selected" %> <%}%>></option>
+                                        <option value="Cargado" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "Cargado"){ %> <%= " selected" %> <%}%>>Cargado</option>
+                                        <option value="No cargado" <%if(ARTICULOS_CONTROL.ARTICULOS[i].ESTADO == "No cargado"){ %> <%= " selected" %> <%}%>>No cargado</option>
                                     </select>
                                 </td>
                                 <td><%= ARTICULOS_VENDEDOR.ARTICULOS[i].ESTADO%></td>
-                                <input name="ESTADO" type="" class="hidden select_input" value="<%= ARTICULOS_CONTROL.ARTICULOS[i].ESTADO %>" />
+                                <!-- <input name="ESTADO" type="" class="hidden select_input" value="<%= //ARTICULOS_CONTROL.ARTICULOS[i].ESTADO %>" /> -->
                             </tr>
                             <%}%>
                     </tbody>
@@ -116,7 +128,7 @@
         </section>
 
 
-        <script src="/js/lib/asociar.input.js"></script>
+        <!-- <script src="/js/lib/asociar.input.js"></script> -->
         <script src="/js/mercaderia/planilla.js"></script>
         <%- include("../partials/links/nav.logic.ejs")  %>
 </body>

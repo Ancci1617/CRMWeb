@@ -93,8 +93,18 @@ select{
     white-space: nowrap;
 }
 
-
-
+.detalles{
+    width: var(--vw);
+    font-size: 1.3rem;
+    margin-top: 1rem;
+    text-align: center;
+}
+.ABIERTO{
+    color: green;
+}
+.CERRADO{
+    color: red;
+}
 
 .table {
     width: var(--vw);

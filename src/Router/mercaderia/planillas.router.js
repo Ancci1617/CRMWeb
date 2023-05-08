@@ -113,15 +113,19 @@ Router.post("/insertar_estados", isLoggedIn, isAdminOrVendedor, async (req, res)
     const { VENDEDOR, FECHA, ESTADO } = req.body;
     const { RANGO } = req.user;
 
+    console.log("body",req.body);
     //Datos de la planilla vigente
     const planilla = await getPlanilla(VENDEDOR, FECHA);
     const articulos = JSON.parse(planilla.ARTICULOS_CONTROL);
 
     //Por cada articulo del body, lo inserta en la matriz de articulos de la planilla
-
-    for (let i = 0; i < articulos.ARTICULOS.length; i++) {
-        articulos.ARTICULOS[i].ESTADO = ESTADO[i];
+    articulos.ARTICULOS[0].ESTADO = ESTADO;
+    if (typeof ESTADO == "object") {
+        for (let i = 0; i < articulos.ARTICULOS.length; i++) {
+            articulos.ARTICULOS[i].ESTADO = ESTADO[i];
+        }
     }
+
 
     await insertarArticulos(FECHA, VENDEDOR, JSON.stringify(articulos), RANGO);
     res.redirect("/mis_planillas/" + FECHA + "/" + VENDEDOR);
@@ -151,13 +155,13 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, isAdmi
         const articulos = [];
         const VENDEDOR_USER = await getUserByUsuario(VENDEDOR);
         for (let i = 0; i < planilla.ARTICULOS.length; i++) {
-            
+
             const { CTE, FICHA, ART, ESTATUS } = planilla.ARTICULOS[i];
             const { ESTADO } = ARTICULOS_CONTROL.ARTICULOS[i];
 
             //Define el efecto
-            let efecto = ESTADO == "Cargado" ? -1 : 0            
-            let efecto_unidad = ESTATUS.toUpperCase().includes("ENTREGADO") ?  -1 : 0;
+            let efecto = ESTADO == "Cargado" ? -1 : 0
+            let efecto_unidad = ESTATUS.toUpperCase().includes("ENTREGADO") ? -1 : 0;
             efecto_unidad += efecto * -1;
 
             articulos.push([
