@@ -3,7 +3,7 @@ const pool = require("../../../model/connection-database");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../../lib/auth");
 const { insertVenta } = require("../../../model/ventas/insert.venta");
 const { cargarStockPlanilla } = require("../../../model/mercaderia/planilla");
-const { getVentasContado, getFechaDeVentasContado } = require("../../../model/ventas/ventas.query");
+const { getVentasContado, getFechaDeVentasContado,deleteVentasContado } = require("../../../model/ventas/ventas.query");
 
 Router.get("/locales", isLoggedIn, (req, res) => {
     const data = { title: "Lista de locales", items: ["BH"], links: ["/locales/BH"] };
@@ -34,10 +34,10 @@ Router.get("/locales/:LOCAL/historial/:FECHA", async (req, res) => {
 
 });
 
-Router.get("/locales/:LOCAL/historial/eliminar_venta_contado/:INDICE",async (req,res)=> {
-    const {LOCAL} = req.params;
-    
-    res.redirect()
+Router.get("/locales/:LOCAL/historial/:FECHA/eliminar_venta_contado/:INDICE",async (req,res)=> {
+    const {LOCAL,INDICE,FECHA} = req.params;
+    deleteVentasContado(INDICE);
+    res.redirect(`/locales/${LOCAL}/historial/${FECHA}`);
 });
 
 Router.get("/locales/BH/cargar_venta", isLoggedIn, (req, res) => {
@@ -55,7 +55,7 @@ Router.post("/locales/:LOCAL/cargar_venta_contado", isLoggedIn, isAdmin, async (
         WHATSAPP, DNI, ARTICULOS, TOTAL, 0, 0, 0, TIPO, null, null, null, null, FECHA_VENTA, null, "APROBADO", Usuario, 'CONTADO');
 
     articulos.forEach(articulo => {
-        articulos_stock.push([LOCAL, 0, 0, articulo, Usuario, Usuario, "Entregado", "Cargado", "", "", FECHA_VENTA, 0, "VENTA", -1, venta_id.insertId]);
+        articulos_stock.push([LOCAL, 0, 0, articulo, Usuario, Usuario, "Entregado", "Cargado", "", "", FECHA_VENTA, 0, "CONTADO", -1, venta_id.insertId]);
     });
     cargarStockPlanilla(articulos_stock);
 

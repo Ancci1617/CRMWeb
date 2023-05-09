@@ -5,6 +5,7 @@
     height: calc(100% - 36px);
     padding: 8px 15px 0 15px;
     justify-content: flex-start;
+    overflow: auto;
 }
 .menu{
     width: 100%;
@@ -46,10 +47,9 @@
 }
 
 .table-container{
-    overflow: scroll;
-    overflow-y: auto;
-    overflow-x: auto;
+    overflow: auto;
     padding: 0;
+    width: 100%;
 }
 
 .table-container thead{
