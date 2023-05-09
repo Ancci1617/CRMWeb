@@ -78,7 +78,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
     const data = req.body;
     const query_result = { total: 0, cuota: 0 };
-
+    
     for (let i = 0; i < data.articulos.length; i++) {
 
         let respuesta = await getPrecio(data.articulos[i], data.cuotas);

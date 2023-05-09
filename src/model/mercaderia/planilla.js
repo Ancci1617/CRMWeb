@@ -104,11 +104,11 @@ const insertarBaseArticulos = async (fecha, vendedor, planilla, control, articul
     return result;
 }
 
-const cargarStockPlanilla = async (articulos) => {
+const cargarStockPlanilla = async (articulos,ID = 0) => {
 
     query = "INSERT INTO `STOCK` (`CAMIONETA`, `CTE`, `FICHA`, " + 
         "`ART`, `VENDEDOR`, `CONTROL`, `ESTADO`, `CARGADO`, " + 
-        "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`,`EFECTO_UNIDAD`) VALUES ? "
+        "`ARTICULOS_CONTROL`, `ARTICULOS_VENDEDOR`, `FECHA`, `EFECTO`,`MOTIVO`,`EFECTO_UNIDAD`,`ID_VENTA`) VALUES ? "
     
 
     await pool.query(query, [articulos]);

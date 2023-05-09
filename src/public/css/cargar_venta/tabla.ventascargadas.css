@@ -1,11 +1,11 @@
-
 .table-container{
-    display: flex;
+    display:flex;    
     flex-direction: column;
-    overflow-y: auto;
-    height: 100%;
-    padding: 0 15px;
+    overflow: auto;
+    padding: .8rem;
+    margin:2rem auto;
 }
+
 
 a{
     text-decoration: none;

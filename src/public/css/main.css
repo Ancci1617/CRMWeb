@@ -10,8 +10,8 @@
     margin: 1rem;
     box-shadow: 3px 3px 5px rgba(0,0,0,.5);
     border: 1px solid blue; 
-    display: flex;
-    flex-direction: column;
+    border-radius: 1rem;
+    overflow: hidden;
     background-color: #EEE;
 }
 .dashboard-item{
@@ -24,7 +24,8 @@
 .dashboard-item a{
     font-family: 'Poppins', Verdana;
     text-decoration: none;
-    width: 100%;
+    display: block;
+    text-align: left;
 }
 
 

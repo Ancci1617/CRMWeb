@@ -19,20 +19,28 @@
             <h3>PLANILLA NO GENERADA</h3>
             <div class="btn btn-green btn-radius"><a href="<%= datos.VENDEDOR %>/generar_planilla_de_carga/">Generar</a></a></div>
         </div>
-    <% }else{ %>
+    <% } else { %>
 
         <div class="detalles">
-            <span>Estado de la planilla: </span>
+            <span>Estado de la planilla: <br></span>
             <span class = <%= datos.isEditableControl == 0 ? "CERRADO" : "ABIERTO" %> >
                 <% if(datos.isEditableVendedor) {%>
                     Editable por vendedor
-                <% }else if(datos.isEditableControl) {%>
+                <% } else if(datos.isEditableControl) {%>
                     Editable por control
                 <% } else {%>
                     Cerrada
                 <% } %>
             </span>
         </div>
+
+        <div class="detalles">
+            <span>Unidad: </span>
+            <span class="ABIERTO">
+                <%= datos.UNIDAD %>
+            </span>
+        </div>
+        
         <section class="table">
             <div class="table__header">
                 <h3>V: <%= datos.VENDEDOR %></h3>

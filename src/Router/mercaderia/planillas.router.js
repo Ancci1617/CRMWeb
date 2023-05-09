@@ -113,7 +113,6 @@ Router.post("/insertar_estados", isLoggedIn, isAdminOrVendedor, async (req, res)
     const { VENDEDOR, FECHA, ESTADO } = req.body;
     const { RANGO } = req.user;
 
-    console.log("body",req.body);
     //Datos de la planilla vigente
     const planilla = await getPlanilla(VENDEDOR, FECHA);
     const articulos = JSON.parse(planilla.ARTICULOS_CONTROL);

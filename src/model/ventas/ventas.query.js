@@ -108,12 +108,38 @@ async function getVentasDelDiaGeneral(fecha) {
     return [];
 }
 
+async function getVentasContado(fecha) {
+
+    const [ventas] = await pool.query(
+        "SELECT `NOMBRE`, `ZONA`, `CALLE`, `WHATSAPP`, `DNI`, `ARTICULOS`, `TOTAL`, `TIPO`, " +
+        "`ESTATUS`, `FECHA_VENTA`,  `APROBADO`, `USUARIO`, `MODO`, `INDICE` FROM `VentasCargadas` " +
+        "WHERE VISIBLE = 1 and FECHA_VENTA = ? and MODO = 'CONTADO'"                                
+        , [fecha])
+
+    if (ventas.length > 0) {
+        return ventas;
+    }
+
+    return [];
+}
+async function getFechaDeVentasContado() {
+    const [fechas] = await pool.query(
+        "SELECT DISTINCT FECHA_VENTA AS FECHA from VentasCargadas where VISIBLE = 1 and MODO = 'CONTADO' ORDER BY FECHA DESC"
+        );
+
+    if (fechas.length > 0) {
+        return fechas;
+    }
+
+    return [];
+}
 
 
 module.exports = {
     getVentasDelDia, borrarVentasDelDia,
     getVentasVendedores, getVendedores, 
     getFechaDeVentas, getVentasDelDiaGeneral, 
-    getVendedoresConVentas,getNuevoNumeroDeCte
+    getVendedoresConVentas,getNuevoNumeroDeCte,
+    getVentasContado,getFechaDeVentasContado
 }
 

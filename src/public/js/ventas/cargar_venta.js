@@ -20,7 +20,9 @@ async function autoCompletarPrecios() {
         articulos: articulos.value.trim().split(" "),
         cuotas: cuotas.value
     };
+
     const precios = await fetchPost("/query_precio",query)
+    
     cuota.value = precios.cuota;
     total.value = precios.total;
 
@@ -28,8 +30,9 @@ async function autoCompletarPrecios() {
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
-    const sabana_obj = await fetchPost("/query_precio",{articulos : "36",cuotas : 6})
+    const sabana_obj = await fetchPost("/query_precio",{articulos : ["36"],cuotas : '6'})
     const sabana = sabana_obj.total;
+
     const master = await fetchPost("/query_masterresumen",{CTE});
     //Genera el disponible en funcion de su calificaicon O BIEN, si tiene disponible
     let disponible;

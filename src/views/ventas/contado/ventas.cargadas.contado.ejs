@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
+    <link rel="stylesheet" href="/css/CRM/General.css">
+    <link rel="stylesheet" href="/css/cargar_venta/tabla.ventascargadas.css">
+
+
+</head>
+<title>Blanco Gusmar | Ventas</title>
+
+<body>
+    <%- include('../../partials/navigation/navigation-bar.ejs')%>
+        <div class="table__container">
+            <div class="table-container">
+                <table class="tabla-ventascargadas tabla-clientes tabla-datos">
+                    <thead>
+                        <tr>
+                            <th>NOMBRE</th>
+                            <th>ZONA</th>
+                            <th>CALLE</th>
+                            <th>TELEFONO</th>
+                            <th>DNI</th>
+                            <th>ART</th>
+                            <th>TOTAL</th>
+                            <th>TIPO</th>
+                            <th>VENDEDOR</th>
+                            <th>ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < ventas.length; i++ ) { %>
+                        <tr>
+                            <td><%= ventas[i].NOMBRE %></td>
+                            <td class="zona"><%= ventas[i].ZONA %></td>
+                            <td><%= ventas[i].CALLE %></td>
+                            <td><%= ventas[i].WHATSAPP %></td>
+                            <td><%= ventas[i].DNI %></td>
+                            <td><%= ventas[i].ARTICULOS %></td>
+                            <td><%= ventas[i].TOTAL %></td>
+                            <td><%= ventas[i].TIPO %></td>
+                            <td><%= ventas[i].USUARIO %></td>
+                            <td><a href="<%= FECHA %>/eliminar_venta_contado/<%= ventas[i].INDICE %>">Borrar</a></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <%- include("../../partials/links/nav.logic.ejs")  %>
+</body>
+
+</html>
