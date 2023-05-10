@@ -19,7 +19,7 @@ async function getVentasDelDia(dia, usuario) {
         "`CALLE`,`WHATSAPP`,`DNI`,`ARTICULOS`,`CUOTAS`,`CUOTA`,`TOTAL`, " +
         "`VENCIMIENTO`,`PRIMER_PAGO`,`APROBADO`, `RESPONSABLE`,`INDICE` " +
         "FROM VentasCargadas WHERE `FECHA_VENTA` = " +
-        "? AND USUARIO = ? AND VISIBLE = 1 and MODO != 'CONTADO'", [dia, usuario])
+        "? AND USUARIO = ? AND VISIBLE = 1 and AND (MODO != 'CONTADO' or MODO IS NULL) ORDER BY FICHA", [dia, usuario])
 
     if (ventas.length > 0) {
         return ventas;
@@ -98,7 +98,7 @@ async function getVentasDelDiaGeneral(fecha) {
         "`WHATSAPP`, `DNI`, `ARTICULOS`, `ANTICIPO`, `CUOTAS`, " +
         "`CUOTA`,`TOTAL`,`VENCIMIENTO`, `PRIMER_PAGO`, `TIPO`, " +
         "`ESTATUS`,  `RESPONSABLE` FROM `VentasCargadas` " +
-        "where FECHA_VENTA = ? AND VISIBLE = 1 AND MODO != 'CONTADO' ORDER BY FICHA"
+        "where FECHA_VENTA = ? AND VISIBLE = 1 AND (MODO != 'CONTADO' or MODO IS NULL) ORDER BY FICHA"
         , [fecha])
 
     if (ventas.length > 0) {

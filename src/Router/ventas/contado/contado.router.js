@@ -50,7 +50,7 @@ Router.post("/locales/:LOCAL/cargar_venta_contado", isLoggedIn, async (req, res)
     const { Usuario } = req.user;
     const articulos = ARTICULOS.trim().split(" ");
     const articulos_stock = [];
-
+    
     const venta_id = await insertVenta("0", "0", NOMBRE, ZONA, CALLE, null, null,
         WHATSAPP, DNI, ARTICULOS, TOTAL, 0, 0, 0, TIPO, null, null, null, null, FECHA_VENTA, null, "APROBADO", Usuario, 'CONTADO');
 
