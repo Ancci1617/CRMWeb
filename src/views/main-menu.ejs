@@ -24,7 +24,7 @@
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/archivo_de_entrega">Archivo de entrega</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/cargas_camionetas">Carga de camionetas</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/stock">Stock</a></div><%}%> 
-                <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/locales">Lista de locales</a></div><%}%> 
+                <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/locales">Lista de locales</a></div><%}%> 
 
             </div>
         </div>

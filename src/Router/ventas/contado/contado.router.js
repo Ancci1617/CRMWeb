@@ -14,7 +14,7 @@ Router.get("/locales/BH", isLoggedIn, (req, res) => {
     const data = { title: "BH", items: ["Cargar venta", "Historial de venta"], links: ["/locales/BH/cargar_venta", "/locales/BH/historial"] };
     res.render("list-items.ejs", { data });
 });
-Router.get("/locales/:LOCAL/historial", async (req, res) => {
+Router.get("/locales/:LOCAL/historial",isLoggedIn, async (req, res) => {
     const { LOCAL } = req.params;
     const fechas = await getFechaDeVentasContado();
     const items = fechas.map(fecha => fecha.FECHA);
@@ -26,7 +26,7 @@ Router.get("/locales/:LOCAL/historial", async (req, res) => {
 
 });
 
-Router.get("/locales/:LOCAL/historial/:FECHA", async (req, res) => {
+Router.get("/locales/:LOCAL/historial/:FECHA", isLoggedIn,async (req, res) => {
 
     const { FECHA } = req.params;
     const ventas = await getVentasContado(FECHA);
@@ -34,7 +34,7 @@ Router.get("/locales/:LOCAL/historial/:FECHA", async (req, res) => {
 
 });
 
-Router.get("/locales/:LOCAL/historial/:FECHA/eliminar_venta_contado/:INDICE",async (req,res)=> {
+Router.get("/locales/:LOCAL/historial/:FECHA/eliminar_venta_contado/:INDICE",isLoggedIn,async (req,res)=> {
     const {LOCAL,INDICE,FECHA} = req.params;
     deleteVentasContado(INDICE);
     res.redirect(`/locales/${LOCAL}/historial/${FECHA}`);
@@ -44,7 +44,7 @@ Router.get("/locales/BH/cargar_venta", isLoggedIn, (req, res) => {
     res.render("ventas/contado/ventas.contado.cargar.ejs");
 });
 
-Router.post("/locales/:LOCAL/cargar_venta_contado", isLoggedIn, isAdmin, async (req, res) => {
+Router.post("/locales/:LOCAL/cargar_venta_contado", isLoggedIn, async (req, res) => {
     const { LOCAL } = req.params;
     const { DNI, NOMBRE, WHATSAPP, CALLE, ZONA, ARTICULOS, TOTAL, TIPO, FECHA_VENTA } = req.body
     const { Usuario } = req.user;
