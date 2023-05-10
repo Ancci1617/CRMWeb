@@ -55,12 +55,18 @@ table{
 table td,table input{
     font-size: 1.2rem;
 }
+td{
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
 thead th {
     position: sticky;
     top: 0;
     background-color: #d5d1defe;
     font-size: 1.3rem;
     z-index: 1000;
+    padding: 1rem;
 }
 .table__header input{
     border: none;
@@ -93,8 +99,6 @@ table tr:nth-child(even){
         width: 96vw;
     }
 }
-
-
 
 
 
