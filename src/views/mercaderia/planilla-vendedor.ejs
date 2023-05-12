@@ -95,7 +95,7 @@
             <div class="table__header">
                 <h3>Sobrecarga</h3>
             </div>
-            <form class="table__body" method="POST" action="/sobrecarga">
+            <form class="table__body" method="POST" action="/sobrecarga" id="form_sobrecarga">
                 <table class="tabla-datos tabla-carga">
                     <thead>
                         <tr>
@@ -130,19 +130,17 @@
                                 <td><input type="number" name="FICHA"></td>
                                 <td><input type="text" name="ART" maxlength="5"></td>
                                 <td>                            
-                                    <select class="option-input">
-                                        <option value="0">Cargado</option>
-                                        <option value="1">Descargado</option>
+                                    <select class="option-input" name="CARGA" form="form_sobrecarga">
+                                        <option value="Cargado">Cargado</option>
+                                        <option value="Descargado">Descargado</option>
                                     </select>  
-                                    <input type="text" name="CARGA" class="hidden select_input" value="Cargado">
                                 </td>
                                 <td>                                
-                                    <select class="option-input">
-                                        <option value="0">Sobrecarga</option>
-                                        <option value="1">Reclamo</option>
-                                        <option value="2">Devolucion</option>
+                                    <select class="option-input" name="TIPO" form="form_sobrecarga">
+                                        <option value="Sobrecarga">Sobrecarga</option>
+                                        <option value="Reclamo">Reclamo</option>
+                                        <option value="Devolucion">Devolucion</option>
                                     </select>
-                                    <input type="text" name="TIPO" class="hidden select_input" value="Sobrecarga">
                                 </td>
                                 <td><input type="text" name="OBS"></td>
                                 <td><input type="submit" value="Confirmar" class="btn btn-confirmar"></td>  
@@ -159,7 +157,7 @@
 
         
         <!-- <script src="/js/lib/asociar.input.js"></script> -->
-        <script src="/js/mercaderia/planilla.js"></script>
+        <!-- <script src="/js/mercaderia/planilla.js"></script> -->
         <%- include("../partials/links/nav.logic.ejs")  %>
 </body> 
 

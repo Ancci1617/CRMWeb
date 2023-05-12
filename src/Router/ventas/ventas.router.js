@@ -29,6 +29,8 @@ Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     //Inicializa variables
+    console.log("body al cargar la venta",req.body);
+
     const { Usuario } = req.user;
     const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO,
@@ -40,7 +42,6 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
         ARTICULOS, TOTAL, ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO,
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, "BGM");
 
-    console.log("body",req.body);
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {
