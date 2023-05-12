@@ -125,9 +125,7 @@ label{
   border: transparent;
   bottom: 0;
 }
-.aprobacion,.aprobacion-input-box{
-  display: none;
-}
+
 @media(max-width: 584px) {
   .container {
     max-width: 100%;
