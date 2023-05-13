@@ -9,7 +9,7 @@ const getDirectories = async src => (await fs.readdir(src, { withFileTypes: true
 
 Router.get("/dnis",async (req, res) => {
     const dirs = await getDirectories(path.join("..","ImagenesDeClientes"));
-    const dirs_ordered = dirs.sort()
+    const dirs_ordered = dirs.map( e => parseInt(e) ).filter(e => !isNaN(e)).sort();
     const links = dirs_ordered.map(dir_name => `/dnis/${dir_name}`);
     const data = { title : "Dnis" , items : dirs_ordered,links };
     res.render("list-items.ejs", { data });
