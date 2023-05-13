@@ -8,6 +8,10 @@
     font-family: sans-serif;
     margin-left: .3rem;
 }
+.back-arrow-container a:hover{
+    color: #bf2a2a;
+}
+
 .img-main-container{
     display: flex;
     flex-wrap: wrap;
@@ -24,13 +28,14 @@
     color: white;
     border-radius: 0.5rem;
     margin-bottom: 2rem;
+    box-sizing: 3px 3px 7px rgb(44, 44, 44);
 }
 .img-title{
     font-size: 1.5rem;
     margin-bottom: .5rem;
 }
 
-.img-container img{
+.img-container .imagen {
     width: calc( 100% - 2rem);
     border-radius: 1rem;
 }
