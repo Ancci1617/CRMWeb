@@ -1,12 +1,22 @@
-.back-arrow-container a{
+.top-container{
     font-size: 2rem;
     padding: .5rem;
+    display: flex;
+    justify-content: space-between;
+}
+.top-container span{
+    display: grid;
+    align-items: center;
+}
+
+.back-arrow-container a{
     text-decoration: none;
     color: white;
 }
 .back-arrow-container a span{
     font-family: sans-serif;
     margin-left: .3rem;
+    display: inline;
 }
 .back-arrow-container a:hover{
     color: #bf2a2a;
