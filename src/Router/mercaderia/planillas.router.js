@@ -56,7 +56,7 @@ Router.get("/mis_planillas", isLoggedIn, isAdminOrVendedor, async (req, res) => 
     //Renderiza
     res.render("mercaderia/mis-planillas.ejs", { fechas });
 
-})
+});
 
 
 Router.get("/mis_planillas/:FECHA", isLoggedIn, isAdminOrVendedor, async (req, res) => {

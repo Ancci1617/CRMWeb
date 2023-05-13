@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8108</title>
+    <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/ventas/dnis.css">
+
+</head>
+<body>
+    <%- include('../../partials/navigation/navigation-bar.ejs') %>
+    <div class="back-arrow-container">
+        <a class="fa fa-angle-double-left" href="/dnis"><span>Volver</span></a>
+    </div>
+
+    <div class="img-main-container">  
+
+        <div class="img-container">
+            <div class="img-title">Rostro</div>
+            <img src="/<%= CTE %>/CTE-<%= CTE %>-ROSTRO.jpg" alt="">
+        </div>
+        <div class="img-container">
+            <div class="img-title">Frente</div>
+            <img src="/<%= CTE %>/CTE-<%= CTE %>-FRENTE.jpg" alt="">
+        </div>
+        <div class="img-container">
+            <div class="img-title">Dorso</div>
+            <img src="/<%= CTE %>/CTE-<%= CTE %>-DORSO.jpg" alt="">
+        </div>
+    </div>
+
+    <%- include("../../partials/links/nav.logic.ejs")  %>
+</body>
+</html>

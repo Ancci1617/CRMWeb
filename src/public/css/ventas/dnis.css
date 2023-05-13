@@ -1,0 +1,46 @@
+.back-arrow-container a{
+    font-size: 2rem;
+    padding: .5rem;
+    text-decoration: none;
+    color: white;
+}
+.back-arrow-container a span{
+    font-family: sans-serif;
+    margin-left: .3rem;
+}
+.img-main-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+.img-container{
+    display: inline-block;
+    text-align: center;
+    /* margin-top: 2.5rem; */
+    padding: .5rem;
+    width: 15rem;
+    background-color: hsl(216, 39%, 19%);
+    color: white;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+.img-title{
+    font-size: 1.5rem;
+    margin-bottom: .5rem;
+}
+
+.img-container img{
+    width: calc( 100% - 2rem);
+    border-radius: 1rem;
+}
+
+
+
+
+
+
+
+
+
+
