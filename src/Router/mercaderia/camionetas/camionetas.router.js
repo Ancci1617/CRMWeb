@@ -37,7 +37,7 @@ Router.post("/entrega_retiro", isLoggedIn,isAdminOrVendedor, async (req, res) =>
             UNIDAD, CTE, FICHA,
             arts[i], Usuario, Usuario,
             ENTREGA_RETIRO, ENTREGA_RETIRO, ENTREGA_RETIRO, ENTREGA_RETIRO,
-            FECHA, efecto, "ENT/RET", efecto_unidad,null
+            FECHA, efecto, "ENT/RET", efecto_unidad,null,""
         ]);
 
         //CARGA A LA PLANILLA DE SOBRECARGA (YA CONFIRMADO)

@@ -167,7 +167,7 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/cerrar_planilla", isLoggedIn, isAdmi
                 VENDEDOR_USER.UNIDAD,
                 CTE, FICHA, ART, VENDEDOR, Usuario,
                 ESTATUS, ESTADO, ESTADO, ESTADO,
-                FECHA, efecto, "CARGA", efecto_unidad,null
+                FECHA, efecto, "CARGA", efecto_unidad,null,""
             ]);
         }
 

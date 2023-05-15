@@ -55,7 +55,8 @@ Router.post("/locales/:LOCAL/cargar_venta_contado", isLoggedIn, async (req, res)
         WHATSAPP, DNI, ARTICULOS, TOTAL, 0, 0, 0, TIPO, null, null, null, null, FECHA_VENTA, null, "APROBADO", Usuario, 'CONTADO');
 
     articulos.forEach(articulo => {
-        articulos_stock.push([LOCAL, 0, 0, articulo, Usuario, Usuario, "Entregado", "Cargado", "", "", FECHA_VENTA, 0, "CONTADO", -1, venta_id.insertId]);
+        articulos_stock.push([LOCAL, 0, 0, articulo, Usuario, Usuario, "Entregado", "Cargado", "", "", 
+                              FECHA_VENTA, 0, "CONTADO", -1, venta_id.insertId,""]);
     });
     cargarStockPlanilla(articulos_stock);
 

@@ -41,7 +41,7 @@ Router.get("/mis_planillas/:FECHA/:VENDEDOR/confirmar_sobrecarga/:ID", isLoggedI
         response.UNIDAD, CTE, FICHA, ART, VENDEDOR,
         Usuario, TIPO,
         CARGA, CONTROL, CARGA,
-        FECHA, efecto, "SOBRECARGA", efecto * -1,null
+        FECHA, efecto, "SOBRECARGA", efecto * -1,null,""
     ]];
 
     await cargarStockPlanilla(articulos);

@@ -1,15 +1,16 @@
-body{
+body {
     background-color: #bebebe;
 }
 
-.details-container{
+.details-container {
     display: flex;
     justify-content: space-between;
     margin: 1rem;
     font-size: 1rem;
-    gap : 1rem;
+    gap: 1rem;
 }
-.unidad-details{
+
+.unidad-details {
     background-color: rgb(173, 130, 173);
     border-radius: 1rem;
     color: white;
@@ -17,15 +18,22 @@ body{
     padding: .9rem;
 }
 
-main.table{
+main.table,
+form.table {
     width: 90vw;
-    height: 70vh;
     background-color: #b9afaf;
     box-shadow: 0 .4rem .8rem #0005;
     border-radius: .8rem;
     overflow: hidden;
     margin: 1rem auto;
 }
+form.table tr{
+    height: 3rem;
+}
+main.table {
+    height: 70vh;
+}
+
 .table__header {
     width: 100%;
     height: 10%;
@@ -48,14 +56,18 @@ main.table{
     overflow: auto;
     overflow: overlay;
 }
-table{
+
+table {
     width: 100%;
     background-color: #cabcb1;
 }
-table td,table input{
+
+table td,
+table input ,table select{
     font-size: 1.2rem;
 }
-td{
+
+td {
     padding-top: .5rem;
     padding-bottom: .5rem;
 }
@@ -68,7 +80,8 @@ thead th {
     z-index: 1000;
     padding: 1rem;
 }
-.table__header input{
+
+.table__header input {
     border: none;
     outline: none;
     height: 100%;
@@ -76,6 +89,7 @@ thead th {
     padding: 1rem;
     border-radius: 1em;
 }
+
 .table__header select {
     border-radius: 1rem;
     padding: .5rem;
@@ -83,24 +97,25 @@ thead th {
     outline: none;
 
 }
-td > input{
+td>input,td>select {
     background-color: transparent;
     position: absolute;
     border: none;
     inset: 0;
 }
-table tr:nth-child(even){
-    background:#ccacac;
+
+
+table tr:nth-child(even) {
+    background: #ccacac;
 }
 
+.btn-confirmar{
+    background-color: #626262;
+    color: white;
+}
 
 @media screen and (max-width:700px) {
     main.table {
         width: 96vw;
     }
 }
-
-
-
-
-

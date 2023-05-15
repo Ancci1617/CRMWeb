@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+        <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
+        <link rel="stylesheet" href="/css/CRM/interfaz.css">
+        <link rel="stylesheet" href="/css/mercaderia/control_de_camionetas.css">
+</head>
+<title>Blanco Gusmar | Deposito</title>
+
+<body>
+    <%- include('../partials/navigation/navigation-bar.ejs') %>
+
+    <div class="details-container">
+        <div class="unidad-details">
+            Unidad : BGM
+        </div>
+    </div>
+
+    <main class="table table__historial">
+        <div class="table__header">
+            <h3>Historial</h3>
+        </div>
+        <div class="table__body">
+            <table >
+                <thead>
+                    <tr>
+                        <th>ART</th>
+                        <th>CONTROL</th>
+                        <th>CANTIDADES</th>
+                        <th>FECHA</th>
+                        <th>OBS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0 ; i < stock.length;i++){ %>
+                    <tr>
+                        <th><%= stock[i].ART  %></th>
+                        <th><%= stock[i].CONTROL  %></th>
+                        <th><%= stock[i].EFECTO  %></th>
+                        <th><%= stock[i].FECHA  %></th>
+                        <th><%= stock[i].OBS  %></th>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+    <form class="table" action="/stock/ingresar_mercaderia" method="POST" id="form-ingreso-egreso">
+        <div class="table__header">
+            <h3>Control de mercaderia</h3>
+            <input type="submit" class="btn btn-confirmar" value="Cargar"></div>
+        </div>
+        <div class="table__body">
+            <table >
+                <thead>
+                    <tr>
+                        <th>ART</th>
+                        <th>Ingreso/Egreso</th>
+                        <th>Cantidad</th>
+                        <th>Obs</th>
+                        <th>FECHA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" name="Articulo" required/></td>
+                        <td>
+                            <select name="ingresoEgreso" required form="form-ingreso-egreso">
+                                <option value="ingreso">Ingreso</option>
+                                <option value="egreso">Egreso</option>
+                            </select>
+                        </td>
+                        <td><input type="number" name="cantidad" required/></td>
+                        <td><input type="text" name="Observaciones" required/></td>
+                        <td><input type="date" name="fecha" required/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    
+
+
+
+    <script src="/js/lib/fetch.helper.js"></script>
+    <script src="/js/mercaderia/deposito.js"></script>
+
+    <!-- <script src="/js/mercaderia/control.camionetas.js"></script> -->
+    <script src="/js/lib/table.setData.js"></script>
+    <%- include("../partials/links/nav.logic.ejs") %>
+</body>
+
+</html>
