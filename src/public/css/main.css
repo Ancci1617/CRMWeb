@@ -3,145 +3,35 @@
 
 
 
-.dashboard-container{
+.dashboard-container {
     font-family: 'Poppins', Verdana;
     max-width: 480px;
     width: 100%;
     margin: 1rem;
-    box-shadow: 3px 3px 5px rgba(0,0,0,.5);
-    border: 1px solid blue; 
-    border-radius: 1rem;
-    overflow: hidden;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, .5);
+    border: 1px solid blue;
+    border-radius: 1rem 0 0 1rem;
+    overflow: auto;
+    max-height: 80vh;
     background-color: #EEE;
 }
-.dashboard-item{
+
+
+
+
+
+.dashboard-item {
     padding: 4px 8px;
     background-color: azure;
 }
-.dashboard-item:nth-child(even){
+
+.dashboard-item:nth-child(even) {
     background-color: rgb(172, 233, 233);
 }
-.dashboard-item a{
+
+.dashboard-item a {
     font-family: 'Poppins', Verdana;
     text-decoration: none;
     display: block;
     text-align: left;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

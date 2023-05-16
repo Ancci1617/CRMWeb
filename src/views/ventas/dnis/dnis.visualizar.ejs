@@ -17,22 +17,34 @@
         </div>
         <span>CTE : <%= CTE %></span>
     </div>
-    <div class="img-main-container">  
 
-        <div class="img-container">
+    <div class="img-main-container">  
+        <form method="POST" action="/dnis/cargar_imagen/<%= CTE %>" enctype="multipart/form-data"  class="img-container">
             <div class="img-title">Rostro</div>
             <img class="imagen" src="/<%= CTE %>/CTE-<%= CTE %>-ROSTRO.jpg" alt="No encontrado">
-        </div>
+            <div class="btn-container">
+                <input type="file" name="ROSTRO" accept="image/*" id="" required>
+                <input type="submit" class="btn-cargarimagen" value="Cargar">
+            </div>
+        </form>
 
-        <div class="img-container">
+        <form method="POST" action="/dnis/cargar_imagen/<%= CTE %>" enctype="multipart/form-data"  class="img-container">
             <div class="img-title">Frente</div>
             <img class="imagen" src="/<%= CTE %>/CTE-<%= CTE %>-FRENTE.jpg" alt="No encontrado">
-        </div>
+            <div class="btn-container">
+                <input type="file" name="FRENTE" accept="image/*" id="" required>
+                <input type="submit" class="btn-cargarimagen" value="Cargar">
+            </div>
+        </form>
 
-        <div class="img-container">
+        <form method="POST" action="/dnis/cargar_imagen/<%= CTE %>" enctype="multipart/form-data"  class="img-container">
             <div class="img-title">Dorso</div>
             <img  class="imagen" src="/<%= CTE %>/CTE-<%= CTE %>-DORSO.jpg" alt="No encontrado">
-        </div>
+            <div class="btn-container">
+                <input type="file" name="DORSO" accept="image/*" id="" required>
+                <input type="submit" class="btn-cargarimagen" value="Cargar">
+            </div>
+        </form>
     </div>
 
     <%- include("../../partials/links/nav.logic.ejs")  %>

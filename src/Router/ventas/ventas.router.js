@@ -46,7 +46,7 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {
         const entries = Object.entries(req.files);
-
+        console.log("ent",entries);
         try {
             if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
                 fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
