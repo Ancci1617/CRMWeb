@@ -102,6 +102,7 @@ td>input,td>select {
     position: absolute;
     border: none;
     inset: 0;
+    max-width: 100%;
 }
 
 
