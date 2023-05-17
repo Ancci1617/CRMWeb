@@ -6,7 +6,7 @@ const { insertVenta } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
-const fs = require('fs');
+const {saveFileFromEntry} = require("../../lib/files");
 
 
 
@@ -44,22 +44,9 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 
 
     //Cargar imagen de frente y dorso a servidor
-    if (req.files) {
+    if(req.files){
         const entries = Object.entries(req.files);
-        console.log("ent",entries);
-        try {
-            if (!fs.existsSync(`../ImagenesDeClientes/${CTE}`))
-                fs.mkdirSync(`../ImagenesDeClientes/${CTE}`);
-        } catch (err) {
-            console.error("ERROR NO EXISTE LA CARPETA PARA GUARDAR IMAGENES DEL CLIENTE: ", err);
-        }
-
-        entries.forEach(entry => {
-            entry[1].mv(`../ImagenesDeClientes/${CTE}/CTE-${CTE}-${entry[0]}.jpg`,
-                err => {
-                    if (err) console.log("Archivos no se cargó: ", CTE)
-                });
-        })
+        saveFileFromEntry(entries,CTE);
     }
 
     res.redirect("/");

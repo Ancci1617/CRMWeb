@@ -19,7 +19,7 @@ function saveFileFromEntry(fileEntries, CTE) {
             err => {
                 if (err) console.log("Archivos no se cargó: ", CTE)
             });
-    })
+    });
 
 }
 
