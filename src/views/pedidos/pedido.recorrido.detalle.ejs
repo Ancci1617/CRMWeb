@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blanco Gusmar | Recorrido</title>
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/pedidos/recorrido.css">
+</head>
+
+
+<body>
+    <%- include("../partials/navigation/navigation-bar") %>
+    
+
+    <main class="main__container">
+        <h2 class="main__container__title">Pedidos</h2>
+        
+        
+        <div class="slide__container">
+            
+            <div class="pedido pedido__slide">
+                <div class="pedido__title pedido__detail">
+                    <span class="CTE"><%= pedido.CTE %></span>
+                    <span class="zona"><%= pedido.ZONA %></span>
+                    <span class="hidden pedido__ID"><%= pedido.ID %></span>
+                </div>    
+                <div class="pedido__title pedido__ofertas pedido__detail">
+                    <span class="sabana"><%= cte_data.Disponible.BGM  %></span>
+                    <span class="capital"><%= cte_data.Disponible.CAPITAL  %></span>
+                </div>
+                <div class="pedido__detail"><%= pedido.NOMBRE  %></div>
+                <div class="pedido__detail"><%= pedido.CALLE %></div>
+                <div class="pedido__detail"><%= pedido.CRUCES  %> - <%= pedido.CRUCES2  %></div>
+                <div class="pedido__detail"><%= pedido.TELEFONO  %></div>
+                <div class="pedido__detail"><%= pedido.QUE_NECESITA  %></div>
+                <div class="pedido__detail "><%= pedido.DESDE  %> - <%= pedido.HASTA  %></div>
+                <div class="pedido__detail fecha"><%= pedido.DIA  %></div>
+            </div>
+
+         
+        </div>
+
+
+        
+        <button class="slide__button button__right" onclick="plusDivs(-1)">&#10095;</button>
+        <button class="slide__button button__left" onclick="plusDivs(1)">&#10094;</button>
+        
+        
+        <div class="btn__container">
+            <div class="btn nw btn__vendi">Vendi</div>
+            <div class="btn nw btn__cancelar">Cancelar</div>
+            <div class="btn nw btn__reprogramar">Reprogramar</div>
+            <div class="btn nw btn__reasignar">Reasignar pedido</div>
+        </div>
+
+</main>
+    
+    <%- include("../partials/links/nav.logic.ejs")  %>
+    <script src="/js/pedidos/pedidos.recorrido.detalle.js"></script>
+
+</body>
+
+</html>

@@ -30,6 +30,17 @@ body{
     background-color: #bebebe;
 }
 
+.link-nulldecoration{
+    text-decoration: none;
+    color: white;
+}
+.zona{
+    color: red;
+    font-weight: 800;
+}
+.hidden{
+    display: none;
+}
 .nw{
     white-space: nowrap;
 }

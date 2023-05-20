@@ -11,7 +11,16 @@ async function getNombresDeUsuarios() {
     return { ID: -1 };
 
 }
+async function getNombresDeUsuariosByRango(RANGO) {
+    const [user] = await pool.query("SELECT Usuario FROM Usuarios where RANGO = ?",[RANGO]);
 
+    if (user.length > 0) {
+        return user;
+    }
+    
+    return { ID: -1 };
+
+}
 
 async function getUnidades() {
     const [unidades] = await pool.query('SELECT DISTINCT UNIDAD FROM `Usuarios` WHERE UNIDAD != ""');
@@ -25,4 +34,4 @@ async function getUnidades() {
 }
 
 
-module.exports = { getNombresDeUsuarios,getUnidades}
+module.exports = { getNombresDeUsuarios,getUnidades,getNombresDeUsuariosByRango}

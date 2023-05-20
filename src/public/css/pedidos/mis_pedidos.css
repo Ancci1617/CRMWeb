@@ -1,0 +1,78 @@
+.zona{
+    color: red;
+    font-weight: 800;
+}
+.pedidos__main__container{
+    margin: 1rem auto;
+    width: 95vw;
+    overflow: hidden;
+    border: 1px solid black;
+    border-radius: 1rem;
+}
+.pedidos__header{
+    padding: .5em;
+    background-color: aliceblue;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+}
+.pedidos__header .btn-cargar-cambios{
+    border: none;
+    background-color: transparent;
+    position: relative;
+    left: 3px;
+    top: 3px;
+    font-size: 1.1rem;
+    border: 1px black solid;
+}
+.pedidos__container{
+    overflow: hidden;
+    padding: .8em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.pedido{
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+    width: 18rem;
+    font-size: 1.3rem;
+    padding: .5em;
+    position: relative;
+    background-color: rgb(83, 70, 202);
+    color: whitesmoke;
+}
+.cte__details div{
+    margin-bottom: .8rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.cte__details .cte__nombre{
+    max-width: 80%;
+}
+.pedido .zona{
+    position: absolute;
+    right: .5em;
+    top: .5em;    
+    background-color: white;
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.pedido__ghost{
+    opacity: 0.5 ;
+    margin: 0;
+    padding: 0;
+    position: absolute ;
+    left: 0;
+    top: 0;
+
+}
+
+
+.pedidos__pendientes{
+    border-top: 1px rgb(116, 2, 2) dashed;
+}
+

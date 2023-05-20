@@ -1,0 +1,79 @@
+
+.main__container{
+    padding: .3rem;
+}
+
+.main__container__title{
+    font-size: 1.5rem;
+}
+
+
+.slide__container {
+    position: relative;
+    padding: 1rem;
+}
+.slide__button{
+    display: none;
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    transform:translate(0%,-50%)
+}
+.slide__container .button__right{
+    right: 0;
+}
+.slide__container .button__left{
+    left: 0;
+}
+
+
+
+.pedido__slide{
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgb(230, 230, 230);
+    border: 1px solid black;
+}
+.pedido__title{
+    display: flex;
+    justify-content: space-between;
+}
+.pedido__title span{
+    flex: 1;
+    font-size: 1.4rem;
+    border:1px solidk black;
+}
+.pedido__detail{
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+
+
+.btn__container{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    gap: .3rem;
+}
+.btn__container .btn{
+    flex: 1;
+    border: 1px solid black;
+    border-radius: .5rem;
+    padding: .5rem;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
