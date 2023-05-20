@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.body__form {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-color: #3b3a3a;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+
+  overflow-y: auto;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3rem;
+  margin: auto; 
+  transition: top .5s;
+  z-index: 10000000000;
+}
+
+.container .titles {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  text-align: center;
+}
+
+.btn__title__container{
+    display: grid;
+    align-items: center;
+}
+
+.btn-green {
+  font-size: 14px;
+  text-decoration: none;
+  background-color: #44c767;
+  border-radius: 25px;
+  border: 1px solid #18ab29;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 8px 18px;
+  text-shadow: 1px 1px 1px #2f6627;
+  display: inline-block;
+}
+
+
+.container .title {
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+}
+
+
+
+.content form .user-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+form .user-details .input-box {
+  margin-bottom: 15px;
+  width: calc(100% / 2 - 20px);
+}
+
+form .input-box span.details {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.user-details .input-box input,.user-details .input-box select,label {
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding-left: 15px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+label{
+  display: inline-block;
+  position: relative;
+}
+.hidden{
+  display: none;
+}
+.user-details .input-box input:valid ,
+.user-details .input-box select:valid{
+  border-color: #18ab29;
+} 
+.user-details .input-box input:invalid ,
+.user-details .input-box select:invalid{
+  border-color: rgb(247, 27, 27);
+}
+
+.button {
+  height: 45px;
+  width: 100%;
+}
+
+.button input {
+  height: 100%;
+  width: 100%;
+  margin-bottom: 35px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  background: linear-gradient(135deg, #303e47, #453f47);
+}
+
+.user-details .input-box .inputfile-for-label{
+  position: absolute;
+  height: 5px;
+  width: 5px;
+  border: transparent;
+  bottom: 0;
+}
+
+@media(max-width: 584px) {
+  .container {
+    max-width: 90%;
+  }
+
+  form .user-details .input-box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+
+  .content form .user-details {
+    max-height: 300px;
+  }
+
+  .user-details::-webkit-scrollbar {
+    width: 5px;
+  }
+
+}
+
+/*  */
+
+/*  */

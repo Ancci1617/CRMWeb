@@ -25,15 +25,16 @@ async function insertPedido(DIA, HORA, CTE, ZONA, NOMBRE, CALLE, CRUCES, CRUCES2
 }
 
 
-async function getPedidosByDesignado(DESIGNADO) {
-
+async function getPedidosByDesignado(DESIGNADO,ESTADO = "%") {
+ 
     const [pedidos] = await pool.query(
         "SELECT `ID`, `DIA`, `HORA`, `CTE`, `ZONA`, `NOMBRE`, `CALLE`, " +
         "`CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, " +
         "`DESDE`, `HASTA`, `DESIGNADO`, `ORDEN`, `ESTADO`, `EVALUACION`, " +
-        "`EVALUACION_DETALLE` FROM `Pedidos` WHERE `DESIGNADO` = ?"
-        , [DESIGNADO]);
-
+        "`EVALUACION_DETALLE` FROM `Pedidos` WHERE `DESIGNADO` = ? and ESTADO LIKE ?"
+        , [DESIGNADO,`${ESTADO}`]);
+    
+    console.log("pedido",pedidos);
 
     if (pedidos.length > 0) {
         return pedidos;
@@ -61,6 +62,8 @@ async function getPedidoByID(ID) {
 
 
 }
+
+
 async function updateOrdersAndEstadoById(ID_VALUES) {
 
     const connection = await pool.getConnection();
@@ -101,11 +104,27 @@ async function updateOrdersAndEstadoById(ID_VALUES) {
 
 }
 
-async function updatePedidosCerrar(MOTIVO, ID) {
+
+
+async function updatePedidosCerrar(ESTADO,MOTIVO, ID) {
 
     const [pedidos] = await pool.query(
-        "UPDATE `Pedidos` SET `ESTADO` = 'HECHO', `MOTIVO` = ?  WHERE ID = ? "
-        , [MOTIVO, ID]);
+        "UPDATE `Pedidos` SET `ESTADO` = ?, `MOTIVO` = ?  WHERE ID = ? "
+        , [ESTADO,MOTIVO, ID]);
+
+
+    if (pedidos.length > 0) {
+        return pedidos;
+    }
+
+    return null;
+
+}
+async function updatePedidosReprogramar({MOTIVO ,ESTADO ,ID ,FECHA,DESDE,HASTA }) {
+
+    const [pedidos] = await pool.query(
+        "UPDATE `Pedidos` SET `MOTIVO` = ?, `ESTADO` = ? ,`DIA_VISITA` = ?,`DESDE` = ? , `HASTA` = ?,`ORDEN` = 0  WHERE ID = ? "
+        , [MOTIVO,ESTADO,FECHA,DESDE,HASTA,ID]);
 
 
     if (pedidos.length > 0) {
@@ -117,4 +136,4 @@ async function updatePedidosCerrar(MOTIVO, ID) {
 }
 
 
-module.exports = { insertPedido, getPedidosByDesignado, updateOrdersAndEstadoById, updatePedidosCerrar ,getPedidoByID}
+module.exports = { insertPedido, getPedidosByDesignado, updateOrdersAndEstadoById, updatePedidosCerrar ,getPedidoByID,updatePedidosReprogramar}

@@ -2,56 +2,172 @@
 <html lang="en">
     
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blanco Gusmar | Recorrido</title>
     <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
     <link rel="stylesheet" href="/css/pedidos/recorrido.css">
 </head>
 
 
 <body>
     <%- include("../partials/navigation/navigation-bar") %>
+    <span class="bg__black hidden"></span>
     
+    <!-- ///////////////////////  CANCELAR PÉDIDO  /////////////////////////// -->
+    <div class="container cancelar__pedido__form unshow">
+        <div class="titles">
+          <div class="title">Cancelar pedido</div>
+          <div class="btn__title__container">
+            <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+          </div>
 
+        </div>
+        <div class="content">
+          <form action="/pedidos/cancelar" method="POST" enctype="" >    
+            <div class="user-details">
+
+              <div class="input-box">
+                <span class="details">Motivo</span>
+                <input type="text" placeholder="-" value="<%=  %>" name="MOTIVO" required>
+                <input type="hidden" name="ID">
+            </div>
+
+    
+              
+              <!-- BOTONES DE SUBMIT -->
+              <div class="button">
+                <input type="submit" value="Cancelar pedido">
+              </div>
+            </div>
+    
+          </form>
+        </div>
+      </div>
+
+
+      <!-- /////////////////   REPROGRAMAR PEDIDO   ///////////////// -->
+
+      <div class="container reprogramar__pedido__form unshow">
+        <div class="titles">
+          <div class="title">Reprogramar pedido</div>
+          <div class="btn__title__container">
+            <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+          </div>
+
+        </div>
+        <div class="content">
+          <form action="/pedidos/reprogramar" method="POST" >
+    
+            <div class="user-details">
+
+              <div class="input-box ">
+                <span class="details">Fecha</span>
+                <input type="date" placeholder="Numero de cliente" value="<%=  %>" name="FECHA" required>
+              </div>
+
+              <div class="input-box ">
+                <span class="details">Desde</span>
+                <input type="time" placeholder="Numero de cliente" value="<%= %>" name="DESDE">
+              </div>
+              
+              <div class="input-box">
+                <span class="details">Hasta</span>
+                <input type="time" placeholder="Numero de cliente" value="<%= %>" name="HASTA">
+              </div>
+
+              <input type="hidden" name="ID" value="">
+
+              <!-- BOTONES DE SUBMIT -->
+              <div class="button">
+                <input type="submit" value="Reprogramar pedido">
+              </div>
+            </div>
+    
+          </form>
+        </div>
+      </div>
+
+    <!-- /////////////////   REASIGNAR PEDIDO   ///////////////// -->
+
+    <div class="container reasignar__pedido__form unshow">
+        <div class="titles">
+          <div class="title">Reasignar pedido</div>
+          <div class="btn__title__container">
+            <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+          </div>
+
+        </div>
+        <div class="content">
+          <form action="/pedidos/reasignar" method="POST" id="reasignar__pedido__form">
+    
+            <div class="user-details">
+
+              <div class="input-box ">
+                <span class="details">Motivo</span>
+                <input type="text" placeholder="Numero de cliente" name="MOTIVO">
+              </div>
+
+              <div class="input-box">
+                <span class="details">Nuevo usuario</span>
+                <select class="options" name="USUARIO" form="reasignar__pedido__form" required>
+                    <% usuarios.forEach(usuario => { %>
+                        <option value="<%= usuario.Usuario %>"><%= usuario.Usuario %></option>
+                    <% }) %>
+                </select>
+              </div>
+    
+              <input type="hidden" name="ID" value="">
+
+              <!-- BOTONES DE SUBMIT -->
+              <div class="button">
+                <input type="submit" value="Reasignar pedido">
+              </div>
+            </div>
+    
+          </form>
+        </div>
+      </div>
+      
+    
     <main class="main__container">
         <h2 class="main__container__title">Pedidos</h2>
         
         
         <div class="slide__container">
-            
+            <% //pedidos.forEach(pedido => {%>
             <div class="pedido pedido__slide">
                 <div class="pedido__title pedido__detail">
-                    <span class="CTE"><%= pedido.CTE %></span>
-                    <span class="zona"><%= pedido.ZONA %></span>
-                    <span class="hidden pedido__ID"><%= pedido.ID %></span>
-                </div>    
+                    <span class="CTE"><%= pedidos[0].CTE %></span>
+                    <span class="zona"><%= pedidos[0].ZONA %></span>
+                    <span class="hidden pedido__ID"><%= pedidos[0].ID %></span>
+                </div>
                 <div class="pedido__title pedido__ofertas pedido__detail">
                     <span class="sabana"><%= cte_data.Disponible.BGM  %></span>
                     <span class="capital"><%= cte_data.Disponible.CAPITAL  %></span>
                 </div>
-                <div class="pedido__detail"><%= pedido.NOMBRE  %></div>
-                <div class="pedido__detail"><%= pedido.CALLE %></div>
-                <div class="pedido__detail"><%= pedido.CRUCES  %> - <%= pedido.CRUCES2  %></div>
-                <div class="pedido__detail"><%= pedido.TELEFONO  %></div>
-                <div class="pedido__detail"><%= pedido.QUE_NECESITA  %></div>
-                <div class="pedido__detail "><%= pedido.DESDE  %> - <%= pedido.HASTA  %></div>
-                <div class="pedido__detail fecha"><%= pedido.DIA  %></div>
+                <div class="pedido__detail"><%= pedidos[0].NOMBRE  %></div>
+                <div class="pedido__detail"><%= pedidos[0].CALLE %></div>
+                <div class="pedido__detail"><%= pedidos[0].CRUCES  %> - <%= pedidos[0].CRUCES2  %></div>
+                <div class="pedido__detail"><%= pedidos[0].TELEFONO  %></div>
+                <div class="pedido__detail"><%= pedidos[0].QUE_NECESITA  %></div>
+                <div class="pedido__detail "><%= pedidos[0].DESDE  %> - <%= pedidos[0].HASTA  %></div>
+                <div class="pedido__detail fecha"><%= pedidos[0].DIA  %></div>
             </div>
-
+            <% //}) %>
          
         </div>
 
 
-        
-        <button class="slide__button button__right" onclick="plusDivs(-1)">&#10095;</button>
-        <button class="slide__button button__left" onclick="plusDivs(1)">&#10094;</button>
-        
+        <div class="slide__buttons_container">
+            <button class="slide__button button__left" onclick="plusDivs(1)">&#10094;</button>
+            <button class="slide__button button__right" onclick="plusDivs(-1)">&#10095;</button>
+        </div>
         
         <div class="btn__container">
-            <div class="btn nw btn__vendi">Vendi</div>
+            <div class="btn nw btn__vendi">Venta</div>
             <div class="btn nw btn__cancelar">Cancelar</div>
             <div class="btn nw btn__reprogramar">Reprogramar</div>
             <div class="btn nw btn__reasignar">Reasignar pedido</div>

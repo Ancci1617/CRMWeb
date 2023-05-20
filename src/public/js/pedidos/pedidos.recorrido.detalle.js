@@ -1,23 +1,67 @@
 
 const btn__vendi = document.querySelector(".btn__vendi");
+const btn__cancelar = document.querySelector(".btn__cancelar");
+const btn__reprogramar = document.querySelector(".btn__reprogramar");
+const btn__reasignar = document.querySelector(".btn__reasignar");
+
+
+const bg__black = document.querySelector(".bg__black");
+const CLASS_HIDDEN = "hidden"; 
+const CLASS_UNSHOW = "unshow";
+const cancelar__pedido__form = document.querySelector(".cancelar__pedido__form");
+const reprogramar__pedido__form = document.querySelector(".reprogramar__pedido__form");
+const reasignar__pedido__form = document.querySelector(".reasignar__pedido__form");
 
 function getPedidoActivo(){
     return document.querySelector(".pedido__ID").innerHTML;
 }
+
+function ocultarFormularios(){
+    document.querySelectorAll(".container").forEach(container => {
+        container.classList.add(CLASS_UNSHOW);
+    });
+    bg__black.classList.add(CLASS_HIDDEN);
+}
+
+function mostrarFormularios(form){
+    form.classList.remove(CLASS_UNSHOW);
+
+    bg__black.classList.remove(CLASS_HIDDEN);
+}
+
+
+
+btn__reprogramar.addEventListener("click", () =>{
+    mostrarFormularios(reprogramar__pedido__form);
+});
+
+btn__cancelar.addEventListener("click", () => {
+    mostrarFormularios(cancelar__pedido__form);
+});
+
+btn__reasignar.addEventListener("click", () => {
+    mostrarFormularios(reasignar__pedido__form);
+});
+
 
 btn__vendi.addEventListener("click", e => {
     const ID = getPedidoActivo();
     const link = document.createElement("a");
     link.href = `/pedidos/pedido_vendi/${ID}`;
     link.click();
-
-
-
 });
 
 
-
-
+//PRE SUBMIT
+function setIdOnSubmit(e){
+    e.preventDefault();
+    const ID = getPedidoActivo();
+    const input = e.target.querySelector("input[name='ID']");
+    input.value  = ID;
+    e.target.submit();
+}
+cancelar__pedido__form.addEventListener("submit", setIdOnSubmit);
+reprogramar__pedido__form.addEventListener("submit", setIdOnSubmit);
 
 
 
