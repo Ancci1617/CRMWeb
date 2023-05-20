@@ -9,7 +9,7 @@ const { insertPedido, getPedidosByDesignado, updateOrdersAndEstadoById, updatePe
 Router.get("/pedidos/cargar_pedido/:CTE", async (req, res) => {
     const { CTE } = req.params;
     const cte_data = await getClientes(CTE);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR"]); //Cambiar este Magic String
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR"],[""]); //Cambiar este Magic String
 
     res.render("pedidos/pedidos.cargar.ejs", { cte_data: cte_data[0], usuarios });
 
@@ -62,13 +62,11 @@ Router.get("/pedidos/recorrido/detalle/:ID", async (req, res) => {
     const {Usuario} = req.user;
     const pedidos = await getPedidosByDesignado(Usuario,"ACTIVO");
 
-
     const cte_data = {};
     cte_data.Disponible = await getMasterResumen(pedidos.CTE || 0);
-    cte_data.Clientes = await getClientes(pedidos.CTE || 0);
-    
+
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"],["RODRIGO","PAULA","NAHUEL","LAUTARO1","JULIAN","TIAGO"]);
-    console.log("USUARIOS",usuarios);
+    
     res.render("pedidos/pedido.recorrido.detalle.ejs", { cte_data, pedidos, usuarios });
 
 });

@@ -1,10 +1,15 @@
-
-.main__container{
+.main__container {
     padding: .3rem;
+    max-width: 400px;
+    border: 1px solid black;
+    margin: .5rem auto;
+
+
 }
 
-.main__container__title{
+.main__container__title {
     font-size: 1.5rem;
+    text-align: center;
 }
 
 
@@ -16,7 +21,7 @@
 
 
 
-.pedido__slide{
+.pedido__slide {
     display: flex;
     flex-direction: column;
     gap: .4rem;
@@ -25,43 +30,77 @@
     background-color: rgb(230, 230, 230);
     border: 1px solid black;
     max-width: 380px;
+    margin: auto;
 }
-.pedido__title{
+
+.pedido__title {
     display: flex;
-    justify-content: space-between;
 }
-.pedido__title span{
+
+.pedido__title:nth-child(2) {
+    border-bottom: 1px solid black;
+}
+
+.pedido__title span {
     flex: 1;
     font-size: 1.4rem;
-    border:1px solidk black;
-}
-.pedido__detail{
     text-align: center;
-    white-space: nowrap;
+}
+
+.pedido__title .CTE {
+    color: #088db9;
+}
+
+.pedido__title .sabana {
+    color: rgb(11, 157, 11);
+}
+
+.pedido_detail {
+    font-size: 1.2rem;
+}
+
+.pedido_detail.que_necesita {
+    background: #babae3;
+    border-radius: 0.3rem;
+    padding-left: 5px;
 }
 
 
 
-.slide__buttons_container{
+
+.slide__buttons_container {
     display: flex;
     gap: 1rem;
     padding: .5rem 1rem;
-}
-.slide__buttons_container *{
-    flex:1;
+    flex-wrap: wrap;
 }
 
+.slide__buttons_container .button__arrow {
+    flex: 1;
+}
+
+.button__CRM {
+    max-width: 380px;
+    width: 100%;
+    background-color: rgb(59, 195, 59);
+    border-radius: .5rem;
+    text-align: center;
+    padding: 6px 12px;
+    box-shadow: 1px 1px 2px  rgb(140, 140, 140);
+}
 
 
 
 
-.btn__container{
+
+.btn__container {
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
     gap: .3rem;
 }
-.btn__container .btn{
+
+.btn__container .btn {
     flex: 1;
     border: 1px solid black;
     border-radius: .5rem;
@@ -75,14 +114,29 @@
 
 
 /* FORMULARIOS */
-.unshow{
+.unshow {
     top: -100vh;
 }
-.bg__black{
+
+.bg__black {
     position: absolute;
     inset: 0;
     z-index: 100000;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0, 0, 0, .5);
 }
 
+.btn__vendi {
+    background-color: rgb(167 211 101);
+}
 
+.btn__reprogramar {
+    background-color: rgb(255, 186, 58);
+}
+
+.btn__cancelar {
+    background-color: rgb(255 144 144);
+}
+
+.btn__reasignar {
+    background-color: #75b4eb;
+}

@@ -13,7 +13,7 @@ const reprogramar__pedido__form = document.querySelector(".reprogramar__pedido__
 const reasignar__pedido__form = document.querySelector(".reasignar__pedido__form");
 
 function getPedidoActivo(){
-    return document.querySelector(".pedido__ID").innerHTML;
+    return document.querySelector(".pedido__slide:not(.hidden) .pedido__ID").innerHTML;
 }
 
 function ocultarFormularios(){
@@ -62,6 +62,34 @@ function setIdOnSubmit(e){
 }
 cancelar__pedido__form.addEventListener("submit", setIdOnSubmit);
 reprogramar__pedido__form.addEventListener("submit", setIdOnSubmit);
+
+
+
+
+
+//SLIDE
+
+var slideIndex = 1;
+function showSlide(slide_index_to_show) {
+    const pedidos_slide = [...document.getElementsByClassName("pedido__slide")];
+   
+    if (slide_index_to_show > pedidos_slide.length) { slideIndex = 1 }
+    if (slide_index_to_show < 1) { slideIndex = pedidos_slide.length }
+
+    pedidos_slide.forEach(pedido => {
+        pedido.classList.add(CLASS_HIDDEN);
+        pedido.classList.remove("pedido_vigente");
+    });
+    pedidos_slide[slideIndex - 1].classList.add("pedido_vigente")    
+    pedidos_slide[slideIndex - 1].classList.remove(CLASS_HIDDEN);
+
+}
+
+showSlide(slideIndex);
+
+function plusDivs(n) {
+    showSlide(slideIndex += n);
+}
 
 
 
