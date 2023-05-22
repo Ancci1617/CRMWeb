@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Cargar venta</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+ 
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% var today=new Date().toISOString().substring(0,10) %>
+  <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <title>Blanco Gusmar | Ventas</title>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="titles">
+      <div class="title">Cargar pedido</div>
+      <div>
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/pedidos/editar_pedido" method="POST"  id="form_editar_pedido">
+
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Cliente</span>
+            <input type="text" readonly value="<%= pedido.CTE %>" name="CTE" required/>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Apellido y nombre</span>
+            <input type="text" placeholder="APELLIDO Nombre" value="<%= pedido.NOMBRE %>" name="NOMBRE"
+            required>
+          </div>
+          
+          <div class="input-box">
+            <span class="details">Calle</span>
+            <input type="text" placeholder="Domicilio" value="<%= pedido.CALLE %>" name="CALLE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Zona</span>
+            <input type="text" placeholder="Zona" value="<%= pedido.ZONA %>" name="ZONA" required>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Cruce 1</span>
+            <input type="text" placeholder="Cruce 1" value="<%= pedido.CRUCES %>" name="CRUCES" >
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cruce 2</span>
+            <input type="text" placeholder="Cruce 2" value="<%= pedido.CRUCES2 %>" name="CRUCES2" >
+          </div>
+
+          <div class="input-box">
+            <span class="details">Telefono</span>
+            <input type="number" placeholder="Numero de telefono" value="<%= pedido.TELEFONO  %>"
+            name="TELEFONO" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Que necesita?</span>
+            <input type="text" placeholder="..."  value="<%= pedido.QUE_NECESITA  %>" name="QUE_NECESITA" required>
+          </div>
+
+
+        <div class="input-box">
+            <span class="details">Visita</span>
+            <input type="date" placeholder="" name="DIA_VISITA" value="<%= pedido.DIA_VISITA %>" required>
+        </div>
+
+        <div class="input-box">
+            <span class="details">Desde</span>
+            <input type="time" placeholder="" name="RANGO_HORARIO_DESDE" value="<%= pedido.DESDE  %>"/>
+        </div>
+
+        <div class="input-box">
+            <span class="details">Hasta</span>
+            <input type="time" placeholder="" name="RANGO_HORARIO_HASTA" value="<%= pedido.HASTA %>">
+        </div>
+
+        <div class="input-box">
+            <span class="details">Vendedor</span>
+            <select form="form_editar_pedido" name="VENDEDOR_DESIGNADO" required>              
+              <option value="Rodrigo">Rodrigo</option>
+                <% usuarios.forEach(usuario => {%>    
+                    <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+                <% }); %>
+            </select>
+        </div>
+
+          <!-- input hidden  Venta Aprobada/Desaprobada -->
+        <input type="hidden" form="form_editar_pedido" value="<%= pedido.ID %>" name="ID" required/>
+          
+          
+          <!-- BOTONES DE SUBMIT -->
+          <div class="button">
+            <input type="submit" value="Registrar pedido">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>

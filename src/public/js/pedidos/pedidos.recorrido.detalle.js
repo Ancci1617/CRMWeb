@@ -11,7 +11,12 @@ const CLASS_UNSHOW = "unshow";
 const cancelar__pedido__form = document.querySelector(".cancelar__pedido__form");
 const reprogramar__pedido__form = document.querySelector(".reprogramar__pedido__form");
 const reasignar__pedido__form = document.querySelector(".reasignar__pedido__form");
+const btn__CRM = document.querySelector(".button__CRM");
 
+
+function getCteActivo(){
+    return document.querySelectorAll(".pedido:not(.hidden) span.CTE")[0].innerHTML
+}
 function getPedidoActivo(){
     return document.querySelector(".pedido__slide:not(.hidden) .pedido__ID").innerHTML;
 }
@@ -25,7 +30,6 @@ function ocultarFormularios(){
 
 function mostrarFormularios(form){
     form.classList.remove(CLASS_UNSHOW);
-
     bg__black.classList.remove(CLASS_HIDDEN);
 }
 
@@ -50,6 +54,13 @@ btn__vendi.addEventListener("click", e => {
     link.href = `/pedidos/pedido_vendi/${ID}`;
     link.click();
 });
+
+btn__CRM.addEventListener("click", e => {
+    const link = document.createElement("a");
+    link.href = `/CRM?CTE=${getCteActivo()}`;
+    link.click();
+});
+
 
 
 //PRE SUBMIT

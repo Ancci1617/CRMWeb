@@ -2,26 +2,37 @@
     color: red;
     font-weight: 800;
 }
+
+
 .pedidos__main__container{
     margin: 1rem auto;
     width: 95vw;
     overflow: hidden;
     border: 1px solid black;
     border-radius: 1rem;
+
 }
 .pedidos__header{
     padding: .5em;
     background-color: aliceblue;
     font-size: 1.3rem;
     display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: center;
     justify-content: space-between;
 }
+.pedidos__header .btn-ver-detalle{
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
 .pedidos__header .btn-cargar-cambios{
     border: none;
-    background-color: transparent;
-    position: relative;
-    left: 3px;
-    top: 3px;
+    background-color: rgb(214, 214, 214);
+    padding: 6px;
+    border-radius: 1rem;    
     font-size: 1.1rem;
     border: 1px black solid;
 }
@@ -37,7 +48,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 6px;
-    width: 18rem;
+    flex: 1;
     font-size: 1.3rem;
     padding: .5em;
     position: relative;
@@ -73,6 +84,13 @@
 
 
 .pedidos__pendientes{
-    border-top: 1px rgb(116, 2, 2) dashed;
+    border-top: 2px rgb(116, 2, 2) dashed;
 }
 
+
+
+/* @media screen and (max-width:600px) {
+    .pedido{
+        width: 100%;
+    }
+} */

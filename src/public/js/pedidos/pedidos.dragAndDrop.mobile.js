@@ -22,8 +22,7 @@ pedidos.forEach(pedido => {
 
     pedido.addEventListener("touchstart", e => {
         e.preventDefault();
-        e.target.classList.add("dragging");
-        
+        pedido.classList.add("dragging");
 
         saveLocation(e)
 
@@ -32,19 +31,19 @@ pedidos.forEach(pedido => {
         coords.y0 = e.targetTouches[0].pageY - window.scrollY;
 
         //Dragging fantasma Y lo a;ade al body
-        const draggingCopy = e.target.cloneNode(true);
+        const draggingCopy = pedido.cloneNode(true);
         draggingCopy.classList.add(CLASS__PEDIDO__GHOST);
         draggingCopy.style.top = e.target.getBoundingClientRect().top + window.scrollY + "px";
         draggingCopy.style.left = e.target.getBoundingClientRect().left + window.scrollX + "px";
         document.body.appendChild(draggingCopy);
 
-    })
+    }  )
 })
 
 //touchmove + save coords
 pedidos.forEach(pedido => {
     pedido.addEventListener("touchmove", e => {
-        saveLocation(e)
+        saveLocation(e);
         const dragging = e.target;
 
         const draggingCopy = getGhostDragging();

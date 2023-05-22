@@ -25,8 +25,9 @@
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/stock">Stock</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/locales">Lista de locales</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/dnis">Imagenes de DNI</a></div><%}%> 
-                
-                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/pedidos/mis_pedidos">Mis pedidos</a></div><%}%> 
+                    
+                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/pedidos/">Mis pedidos</a></div><%}%> 
+                <% if(user.RANGO == "ADMIN"  ) {%><div class="dashboard-item"><a href="/pedidos/generales">Pedidos generales</a></div><%}%> 
             
             </div>
         </div>

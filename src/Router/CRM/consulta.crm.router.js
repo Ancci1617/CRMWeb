@@ -15,9 +15,10 @@ const path = require("path");
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 
 
-Router.get("/CRM", isLoggedIn, (req, res) => {    
-    res.render("CRM/CRM");
-})
+Router.get("/CRM", isLoggedIn, (req, res) => {
+    const CTE = req.query.CTE;
+    res.render("CRM/CRM.ejs", {CTE});
+});
 
 
 Router.post("/query_CRM", isLoggedIn, async (req, res) => {

@@ -2,6 +2,8 @@ const pedidos = document.querySelectorAll(".pedido");
 const pedidos__pendientes = document.querySelector(".pedidos__pendientes");
 const pedidos__activos = document.querySelector(".pedidos__activos");
 const form__submit = document.querySelector(".pedidos__main__container");
+const btn__ver__detalle = document.querySelector(".btn-ver-detalle");
+const btn__cargar__cambios  = document.querySelector(".btn-cargar-cambios");
 
 const CLASS_INACTIVO = "pedido__inactivo";
 const CLASS_PEDIDO = "pedido";
@@ -104,10 +106,6 @@ pedidos.forEach(pedido => {
     });
 })
 
-
-
-
-
 form__submit.addEventListener("submit", e => {
     //El input order de todos los pedidos activos = su orden
     //EL input ESTADO de todos los pedidos es igual a su clase ACTIVO O INACTIVO
@@ -135,3 +133,5 @@ form__submit.addEventListener("submit", e => {
 
 
 });
+
+

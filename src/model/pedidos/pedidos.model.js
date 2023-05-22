@@ -1,17 +1,17 @@
 const pool = require("../../model/connection-database");
 
 
-async function insertPedido(DIA, HORA, CTE, ZONA, NOMBRE, CALLE, CRUCES, CRUCES2, TELEFONO, QUE_NECESITA, DIA_VISITA, DESDE, HASTA, DESIGNADO, ESTADO, EVALUACION, EVALUACION_DETALLE) {
+async function insertPedido(DIA, HORA, CTE, ZONA, NOMBRE, CALLE, CRUCES, CRUCES2, TELEFONO, QUE_NECESITA, DIA_VISITA, DESDE, HASTA, DESIGNADO, ESTADO, EVALUACION, EVALUACION_DETALLE,USUARIO) {
     const [res] = await pool.query(
         "INSERT INTO `Pedidos` " +
         "( `DIA`, `HORA`, `CTE`, `ZONA`, `NOMBRE`, `CALLE`, " +
         "`CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, " +
-        "`DESDE`, `HASTA`, `DESIGNADO`, `ESTADO`, `EVALUACION`, `EVALUACION_DETALLE`) VALUES " +
-        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+        "`DESDE`, `HASTA`, `DESIGNADO`, `ESTADO`, `EVALUACION`, `EVALUACION_DETALLE`,`REDES`) VALUES " +
+        "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
         , [DIA, HORA, CTE, ZONA, NOMBRE, CALLE, CRUCES, CRUCES2, TELEFONO,
             QUE_NECESITA, DIA_VISITA, DESDE, HASTA, DESIGNADO, ESTADO,
-            EVALUACION, EVALUACION_DETALLE]
+            EVALUACION, EVALUACION_DETALLE,USUARIO]
 
     );
 
@@ -31,16 +31,15 @@ async function getPedidosByDesignado(DESIGNADO,ESTADO = "%") {
         "SELECT `ID`, `DIA`, `HORA`, `CTE`, `ZONA`, `NOMBRE`, `CALLE`, " +
         "`CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, " +
         "`DESDE`, `HASTA`, `DESIGNADO`, `ORDEN`, `ESTADO`, `EVALUACION`, " +
-        "`EVALUACION_DETALLE` FROM `Pedidos` WHERE `DESIGNADO` = ? and ESTADO LIKE ?"
+        "`EVALUACION_DETALLE` FROM `Pedidos` WHERE `DESIGNADO` = ? and ESTADO LIKE ? order by ORDEN"
         , [DESIGNADO,`${ESTADO}`]);
     
-    console.log("pedido",pedidos);
 
     if (pedidos.length > 0) {
         return pedidos;
     }
 
-    return null;
+    return [];
 
 }
 async function getPedidoByID(ID) {
@@ -105,6 +104,22 @@ async function updateOrdersAndEstadoById(ID_VALUES) {
 }
 
 
+async function updatePedidoByID({CTE,ZONA,NOMBRE,CALLE,CRUCES,CRUCES2,TELEFONO,QUE_NECESITA,DIA_VISITA,DESDE,HASTA,DESIGNADO,REDES},ID){
+
+    
+    const [update] = await pool.query(
+        "UPDATE `Pedidos` SET `CTE`=? , `ZONA`=? , `NOMBRE`=? , `CALLE`=?, " + 
+        "`CRUCES`=?,`CRUCES2`=?,`TELEFONO`=?,`QUE_NECESITA`=?,`DIA_VISITA`=?, "+
+        "`DESDE`=?,`HASTA`=?,`DESIGNADO`=?,`REDES`=? WHERE ID = ?"
+
+        ,[CTE,ZONA,NOMBRE,CALLE,CRUCES,CRUCES2,TELEFONO,QUE_NECESITA,DIA_VISITA,DESDE,HASTA,DESIGNADO,REDES,ID] );
+
+    return update;
+
+
+
+}
+
 
 async function updatePedidosCerrar(ESTADO,MOTIVO, ID) {
 
@@ -135,5 +150,19 @@ async function updatePedidosReprogramar({MOTIVO ,ESTADO ,ID ,FECHA,DESDE,HASTA }
 
 }
 
+async function getPedidosActivos() {
 
-module.exports = { insertPedido, getPedidosByDesignado, updateOrdersAndEstadoById, updatePedidosCerrar ,getPedidoByID,updatePedidosReprogramar}
+    const [pedidos] = await pool.query(
+        "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`, `REDES`, `ESTADO`, `MOTIVO`, `EVALUACION` FROM `Pedidos` WHERE ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO' order by DIA,DESIGNADO,ESTADO;"
+    );
+
+
+    if (pedidos.length > 0) {
+        return pedidos;
+    }
+
+    return [];
+
+}
+
+module.exports = { insertPedido, getPedidosByDesignado, updateOrdersAndEstadoById, updatePedidosCerrar ,getPedidoByID,updatePedidosReprogramar,getPedidosActivos,updatePedidoByID}

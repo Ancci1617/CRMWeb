@@ -133,9 +133,13 @@
       
     
     <main class="main__container">
-        <h2 class="main__container__title">Pedidos</h2>
-        
-        
+        <% if(pedidos.length > 0){ %>
+          <h2 class="main__container__title">Pedidos</h2>
+        <% } else {%>         
+          <h2 class="main__container__title zona">Sin pedidos activos</h2>        
+          <a class="main__container__title" href="/pedidos/mis_pedidos">Volver</a>
+        <% } %>
+
         <div class="slide__container">
             <% pedidos.forEach(pedido => {%>
             <div class="pedido pedido__slide">
@@ -145,8 +149,8 @@
                     <span class="hidden pedido__ID"><%= pedido.ID %></span>
                 </div>
                 <div class="pedido__title pedido__ofertas pedido_detail nw">
-                    <span class="sabana"><%= cte_data.Disponible[0].BGM  %></span>
-                    <span class="zona capital"><%= new Intl.NumberFormat('es-AR').format(cte_data.Disponible[0].CAPITAL) %></span>
+                    <span class="sabana"><%= cte_data.Disponibles.get(pedido).BGM  %></span>
+                    <span class="zona capital"><%= new Intl.NumberFormat('es-AR').format(cte_data.Disponibles.get(pedido).CAPITAL) %></span>
                 </div>
                 <div class="pedido_detail nw "><%= pedido.NOMBRE  %></div>
                 <div class="pedido_detail nw "><%= pedido.CALLE %></div>
