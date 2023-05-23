@@ -92,7 +92,6 @@
         <div class="input-box">
             <span class="details">Vendedor</span>
             <select form="form_editar_pedido" name="VENDEDOR_DESIGNADO" required>              
-              <option value="Rodrigo">Rodrigo</option>
                 <% usuarios.forEach(usuario => {%>    
                     <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
                 <% }); %>
