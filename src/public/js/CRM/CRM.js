@@ -10,6 +10,11 @@ const img_cte = document.querySelector(".img-cte");
 var btn_evaluar = document.querySelector(".btn-evaluar");
 var input_busqueda = document.querySelector(".inputtext-busqueda");
 
+img_cte.addEventListener("click",e =>{
+    img_cte.classList.toggle("img-zoom");
+    img_cte.classList.toggle("img-cte");
+});
+
 
 input_busqueda.addEventListener("keypress", e => {
     if (e.key == "Enter") evaluarCliente();

@@ -12,7 +12,8 @@ const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedi
 
 //MIS_PEDIDOS
 Router.get("/pedidos/", isAdminOrVendedor, (req, res) => {
-    const data = { title: "Pedidos", items: ["Mis pedidos", "Proximos", "Acumulados"], links: ["/pedidos/mis_pedidos", "/pedidos/proximos_pedidos", "/pedidos/mis_pedidos/acumulados"] };
+    // const data = { title: "Pedidos", items: ["Mis pedidos", "Proximos", "Acumulados"], links: ["/pedidos/mis_pedidos", "/pedidos/proximos_pedidos", "/pedidos/mis_pedidos/acumulados"] };
+    const data = { title: "Pedidos", items: ["Mis pedidos"], links: ["/pedidos/mis_pedidos"] };
     res.render("list-items.ejs", { data });
 });
 
