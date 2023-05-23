@@ -145,7 +145,7 @@ Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
 Router.get("/pedidos/editar_pedido/:ID", isAdmin, async (req, res) => {
 
     const pedido = await getPedidoByID(req.params.ID);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"], []); //Cambiar este Magic String
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"]); //Cambiar este Magic String
     
     res.render("pedidos/pedido.editar.ejs", { pedido, usuarios });
 

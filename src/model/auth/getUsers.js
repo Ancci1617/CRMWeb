@@ -11,7 +11,7 @@ async function getNombresDeUsuarios() {
     return { ID: -1 };
 
 }
-async function getNombresDeUsuariosByRango(RANGO,EXCEPTO = [null]) {
+async function getNombresDeUsuariosByRango(RANGO,EXCEPTO = [""]) {
 
     const [user] = await pool.query("SELECT Usuario FROM Usuarios where RANGO IN (?) and Usuario NOT IN (?)",[RANGO,EXCEPTO]);
 
