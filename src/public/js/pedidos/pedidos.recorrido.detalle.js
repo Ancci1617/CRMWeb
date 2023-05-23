@@ -69,6 +69,7 @@ btn__reasignar.addEventListener("click", () => {
 
 
 btn__vendi.addEventListener("click", e => {
+    if(!confirm("Estas por dar como finalizado este pedido, estas seguro?")) return ;
     const ID = getPedidoActivo();
     const link = document.createElement("a");
     link.href = `/pedidos/pedido_vendi/${ID}`;
