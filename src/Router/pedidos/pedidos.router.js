@@ -173,9 +173,10 @@ Router.post("/pedidos/editar_pedido", isAdmin, async (req, res) => {
 
 //CRM
 Router.get("/pedidos/cargar_pedido/:CTE", isAdminOrVendedor, async (req, res) => {
+
     const { CTE } = req.params;
     const cte_data = await getClientes(CTE);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"], [""]); //Cambiar este Magic String
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"], [""]); 
 
     res.render("pedidos/pedidos.cargar.ejs", { cte_data: cte_data[0], usuarios });
 
