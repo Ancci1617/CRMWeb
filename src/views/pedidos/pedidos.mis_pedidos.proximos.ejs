@@ -12,7 +12,7 @@
 
 
 </head>
-<title>Blanco Gusmar | Pedidos activos</title>
+<title>Blanco Gusmar | Proximos pedidos</title>
 
 <body>
     <%- include('../partials/navigation/navigation-bar.ejs')%>
@@ -31,10 +31,12 @@
                             <th>CRUCES</th>
                             <th>TELEFONO</th>
                             <th>QUE NECESITA</th>
+                            <th>DESIGNADO</th>
                             <th>VISITA</th>
-                            <th>ESTADO</th>
-                            <th>VENDEDOR</th>                            
-                            <th>EDITAR</th>
+                            <th>DESDE</th>
+                            <th>HASTA</th>
+                            <th>COMPLETADO</th>
+                            <th>MOTIVO</th>                            
                         </tr>
                     </thead>
                     <tbody>     
@@ -50,10 +52,13 @@
                             <td><%= pedido.CRUCES2 %></td>
                             <td><%= pedido.TELEFONO %></td>
                             <td><%= pedido.QUE_NECESITA %></td>
+                            <td><%= pedido.DESIGNADO %></td>
                             <td><%= pedido.DIA_VISITA %></td>
-                            <td><%= pedido.ESTADO %></td>
-                            <td><%= pedido.DESIGNADO %></td>                            
-                            <td><a href="/pedidos/editar_pedido/<%= pedido.ID %>">Editar</a></td>
+                            <td><%= pedido.DESDE %></td>
+                            <td><%= pedido.HASTA %></td>                            
+                            <td><%= pedido.VISITADO %></td>                            
+                            <td><%= pedido.MOTIVO %></td>                            
+
                         </tr>
                         <% }) %>
                     </tbody>

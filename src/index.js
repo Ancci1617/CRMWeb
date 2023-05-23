@@ -58,8 +58,8 @@ app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
 app.use(require("./Router/mercaderia/deposito.router.js"));
 app.use(require("./Router/ventas/contado/contado.router.js"));
 app.use(require("./Router/ventas/dnis/dnis.router.js"));
-app.use(require("./Router/pedidos/pedidos.router.js"));
-
+app.use(isLoggedIn, require("./Router/pedidos/pedidos.router.js"));
+// app.use((req,res) => {res.send("default")})
 
 
 
@@ -69,7 +69,7 @@ app.use(require("./Router/pedidos/pedidos.router.js"));
 //Ejecuta el servidor
 app.listen(app.get("PORT"), async (err) => {
     //Configura el lenguaje de la sesion en las fechas
-    await poolConfig();
+    // await poolConfig();
 
     if (err) console.log("ERR: " + err);
 

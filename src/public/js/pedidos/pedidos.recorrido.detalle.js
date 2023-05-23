@@ -32,6 +32,26 @@ function mostrarFormularios(form){
     form.classList.remove(CLASS_UNSHOW);
     bg__black.classList.remove(CLASS_HIDDEN);
 }
+//PRE SUBMIT
+function setIdOnSubmit(e){
+    e.preventDefault();
+    const ID = getPedidoActivo();
+    const input = e.target.querySelector("input[name='ID']");
+    input.value = ID;
+    e.target.submit();
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -61,18 +81,10 @@ btn__CRM.addEventListener("click", e => {
     link.click();
 });
 
-
-
-//PRE SUBMIT
-function setIdOnSubmit(e){
-    e.preventDefault();
-    const ID = getPedidoActivo();
-    const input = e.target.querySelector("input[name='ID']");
-    input.value  = ID;
-    e.target.submit();
-}
 cancelar__pedido__form.addEventListener("submit", setIdOnSubmit);
 reprogramar__pedido__form.addEventListener("submit", setIdOnSubmit);
+reasignar__pedido__form.addEventListener("submit", setIdOnSubmit);
+
 
 
 
@@ -110,33 +122,4 @@ function plusDivs(n) {
 
 
 
-
-
-
-
-
-
-
-// console.log("conectado");
-
-// var slideIndex = 1;
-// showDivs(slideIndex);
-
-// function plusDivs(n) {
-//     showDivs(slideIndex += n);
-// }
-
-// function showDivs(n) {
-//     var i;
-//     var my_slides = document.getElementsByClassName("pedido__slide");
-   
-//     if (n > my_slides.length) { slideIndex = 1 }
-//     if (n < 1) { slideIndex = my_slides.length }
-
-//     for (i = 0; i < my_slides.length; i++) {
-//         my_slides[i].style.display = "none";
-//     }
-
-//     my_slides[slideIndex - 1].style.display = "block";
-// }
 

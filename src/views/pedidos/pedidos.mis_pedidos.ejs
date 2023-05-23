@@ -14,14 +14,14 @@
 <body>
     <%- include("../partials/navigation/navigation-bar") %>
         
-        <form class="pedidos__main__container" method="POST" action="/pedidos/recorrido/cargar_orden">
+        <form class="pedidos__main__container" action="/pedidos/recorrido/cargar_orden" method="POST" >
             <div class="pedidos__header">
                 <a href="/pedidos/recorrido/detalle" class="btn-ver-detalle">Ver detalle</a>
                 <% if(activos.length == 0 && pendientes.length == 0){%>
                     <span class="zona">Sin pedidos..</span>
                 <% } else { %>
                     <span>Activos / Pendientes</span>
-                    <input type="submit" class="btn-cargar-cambios" value="Cargar cambios"></a>
+                    <input type="submit" class="btn-cargar-cambios" value="Cargar cambios" >
                 <% } %>
                     
             </div>
@@ -36,7 +36,6 @@
                             <div class="cte__cruces nw"><%= pedido.CRUCES %> - <%= pedido.CRUCES2 %></div>
                         </div> 
                         <span class="zona"><%= pedido.ZONA %></span>
-                        <!-- <a href="/pedidos/recorrido/detalle/<%=// pedido.ID %>">Ver detalle</a> -->
                         <input type="hidden" class="input__order" name="ORDEN" value="<%= pedido.ORDEN  %>">
                         <input type="hidden" name="ID" value="<%= pedido.ID %>">
                         <input type="hidden" name="ESTADO" class="input__estado" value="<%= pedido.ID %>">
