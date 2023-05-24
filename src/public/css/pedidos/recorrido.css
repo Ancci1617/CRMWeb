@@ -1,10 +1,13 @@
+body{
+background-color: #505050;
+}
 .main__container {
     padding: .3rem;
     max-width: 400px;
     border: 1px solid black;
     margin: .5rem auto;
     background: #c0bcbc;
-
+    border-radius: .3rem;
 }
 
 .main__container__title {
@@ -83,7 +86,8 @@
 .button__CRM {
     max-width: 380px;
     width: 100%;
-    background-color: rgb(59, 195, 59);
+    color: white;
+    background-color: rgb(60 ,141, 60);
     border-radius: .5rem;
     text-align: center;
     padding: 6px 12px;
@@ -98,7 +102,7 @@
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
-    gap: .3rem;
+    gap: .5rem;
 }
 
 .btn__container .btn {
@@ -127,17 +131,21 @@
 }
 
 .btn__vendi {
-    background-color: rgb(167 211 101);
+    background-color: rgb(60 141 60);
+    color: white;
 }
 
 .btn__reprogramar {
-    background-color: rgb(255, 186, 58);
+    background-color: rgb(241 172 44);
+    color: white;
 }
 
 .btn__cancelar {
-    background-color: rgb(255 144 144);
+    background-color: rgb(242 99 99);
+    color: white;
 }
 
 .btn__reasignar {
-    background-color: #75b4eb;
+    background-color: #2396fb;
+    color: white;
 }
