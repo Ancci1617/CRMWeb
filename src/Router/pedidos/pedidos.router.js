@@ -135,7 +135,6 @@ Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
     //(DESIGNADO, ESTADO = "%", FECHA_VISITA = "%")
 
     const pedidos = await getPedidosByFiltros(undefined, "HECHO");
-
     res.render("pedidos/pedidos.generales.acumulados.ejs", { pedidos });
 
 });

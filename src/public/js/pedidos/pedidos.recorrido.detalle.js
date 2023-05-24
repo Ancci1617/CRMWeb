@@ -15,10 +15,10 @@ const btn__CRM = document.querySelector(".button__CRM");
 
 
 function getCteActivo(){
-    return document.querySelectorAll(".pedido:not(.hidden) span.CTE")[0].innerHTML
+    return document.querySelectorAll(".pedido:not(.hidden) span.CTE")[0].innerText
 }
 function getPedidoActivo(){
-    return document.querySelector(".pedido__slide:not(.hidden) .pedido__ID").innerHTML;
+    return document.querySelector(".pedido__slide:not(.hidden) .pedido__ID").innerText;
 }
 
 function ocultarFormularios(){
