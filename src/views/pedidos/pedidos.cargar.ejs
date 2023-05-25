@@ -98,7 +98,7 @@
             <span class="details">Vendedor</span>
             <select form="form_cargar_pedido" name="VENDEDOR_DESIGNADO" required>
               
-              <option value="Rodrigo">Rodrigo</option>
+                    <option value="" selected disabled hidden>Elegir usuario</option>
                 <% usuarios.forEach(usuario => {%>    
                     <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
                 <% }); %>

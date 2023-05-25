@@ -91,7 +91,8 @@
 
         <div class="input-box">
             <span class="details">Vendedor</span>
-            <select form="form_editar_pedido" name="VENDEDOR_DESIGNADO" required>              
+            <select form="form_editar_pedido" name="VENDEDOR_DESIGNADO" required>     
+                <option value="" selected disabled hidden>Elegir usuario</option>
                 <% usuarios.forEach(usuario => {%>    
                     <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
                 <% }); %>
@@ -101,7 +102,7 @@
           <!-- input hidden  Venta Aprobada/Desaprobada -->
         <input type="hidden" form="form_editar_pedido" value="<%= pedido.ID %>" name="ID" required/>
           
-          
+        
           <!-- BOTONES DE SUBMIT -->
           <div class="button">
             <input type="submit" value="Registrar pedido">

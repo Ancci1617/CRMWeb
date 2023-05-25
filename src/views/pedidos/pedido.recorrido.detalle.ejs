@@ -113,6 +113,7 @@
               <div class="input-box">
                 <span class="details">Nuevo usuario</span>
                 <select class="options" name="USUARIO" form="reasignar__pedido__form" required>
+                    <option value="" selected disabled hidden>Elegir usuario</option>
                     <% usuarios.forEach(usuario => { %>
                         <option value="<%= usuario.Usuario %>"><%= usuario.Usuario %></option>
                     <% }) %>

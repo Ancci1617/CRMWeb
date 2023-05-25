@@ -44,12 +44,29 @@ function setIdOnSubmit(e) {
     e.target.submit();
 }
 
+function showSlide(slide_index_to_show) {
+    const pedidos_slide = [...document.getElementsByClassName("pedido__slide")];
+
+    if (slide_index_to_show > pedidos_slide.length) { slideIndex = 1 }
+    if (slide_index_to_show < 1) { slideIndex = pedidos_slide.length }
+
+    pedidos_slide.forEach(pedido => {
+        pedido.classList.add(CLASS_HIDDEN);
+        pedido.classList.remove("pedido_vigente");
+    });
+    pedidos_slide[slideIndex - 1].classList.add("pedido_vigente");
+    pedidos_slide[slideIndex - 1].classList.remove(CLASS_HIDDEN);
+
+}
 
 function showPedidoByID(ID) {
     if (!ID) {
         return showSlide(slideIndex);
     }
+    
+
     const pedido = document.querySelector(`.pedido:has(input.pedido__ID[value='${ID}'])`);
+
     showSlide(slideIndex = [...document.querySelectorAll(".slide__container .pedido")].indexOf(pedido) + 1);
 }
 
@@ -102,20 +119,7 @@ reasignar__pedido__form.addEventListener("submit", setIdOnSubmit);
 
 
 showPedidoByID(urlParams.get("ID"));
-function showSlide(slide_index_to_show) {
-    const pedidos_slide = [...document.getElementsByClassName("pedido__slide")];
 
-    if (slide_index_to_show > pedidos_slide.length) { slideIndex = 1 }
-    if (slide_index_to_show < 1) { slideIndex = pedidos_slide.length }
-
-    pedidos_slide.forEach(pedido => {
-        pedido.classList.add(CLASS_HIDDEN);
-        pedido.classList.remove("pedido_vigente");
-    });
-    pedidos_slide[slideIndex - 1].classList.add("pedido_vigente")
-    pedidos_slide[slideIndex - 1].classList.remove(CLASS_HIDDEN);
-
-}
 
 
 
