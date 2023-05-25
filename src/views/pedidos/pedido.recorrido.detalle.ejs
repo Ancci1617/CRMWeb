@@ -33,14 +33,14 @@
                 <span class="details">Motivo</span>
                 <input type="text" placeholder="-" value="<%=  %>" name="MOTIVO" required>
                 <input type="hidden" name="ID">
-            </div>
+              </div>
 
-    
-              
+                
               <!-- BOTONES DE SUBMIT -->
               <div class="button">
                 <input type="submit" value="Cancelar pedido">
               </div>
+
             </div>
     
           </form>
@@ -134,10 +134,12 @@
     
     <main class="main__container">
         <% if(pedidos.length > 0){ %>
-          <h2 class="main__container__title">Pedidos</h2>
-        <% } else {%>         
+          <div class="title__container">
+            <h2 class="main__container__title">Pedidos</h2>
+            <a href="/pedidos/mis_pedidos">Volver</a>
+          </div>
+          <% } else {%>         
           <h2 class="main__container__title zona">Sin pedidos activos</h2>        
-          <a class="main__container__title" href="/pedidos/mis_pedidos">Volver</a>
         <% } %>
 
         <div class="slide__container">
@@ -146,7 +148,7 @@
                 <div class="pedido__title pedido_detail nw">
                     <span class="CTE"><%= pedido.CTE %></span>
                     <span class="zona"><%= pedido.ZONA %></span>
-                    <span class="hidden pedido__ID"><%= pedido.ID %></span>
+                    <input type="hidden" class="pedido__ID" value="<%= pedido.ID %>">
                 </div>
                 <div class="pedido__title pedido__ofertas pedido_detail nw">
                     <span class="sabana"><%= cte_data.Disponibles.get(pedido).BGM  %></span>
@@ -155,7 +157,7 @@
                 <div class="pedido_detail nw "><%= pedido.NOMBRE  %></div>
                 <div class="pedido_detail nw "><%= pedido.CALLE %></div>
                 <div class="pedido_detail nw "><%= pedido.CRUCES  %> - <%= pedido.CRUCES2  %></div>
-                <div class="pedido_detail nw "><%= pedido.TELEFONO  %></div>
+                <a href="tel:<%= pedido.TELEFONO%>" class="pedido_detail nw phone"><%= pedido.TELEFONO  %></a>
                 <div class="pedido_detail nw "><%= pedido.DESDE  %> - <%= pedido.HASTA  %></div>
                 <div class="pedido_detail nw que_necesita"><%= pedido.QUE_NECESITA %></div>
             </div>

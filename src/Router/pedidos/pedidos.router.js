@@ -34,7 +34,7 @@ Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
 
 Router.post("/pedidos/recorrido/cargar_orden" ,isAdminOrVendedor, async (req, res) => {
     const { ORDEN = [], ID = [], ESTADO = [] } = req.body;
-
+    console.log("body",req.body);
     //Si no es array, que sea array
     const ORDEN_ARR = Array.isArray(ORDEN) ? ORDEN : [ORDEN];
     const ID_ARR = Array.isArray(ID) ? ID : [ID];
@@ -53,7 +53,7 @@ Router.post("/pedidos/recorrido/cargar_orden" ,isAdminOrVendedor, async (req, re
 
 
     }
-    res.redirect("/pedidos/mis_pedidos");
+    res.sendStatus(200);
 
 });
 

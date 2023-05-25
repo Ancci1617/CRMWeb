@@ -1,7 +1,6 @@
 "use strict"
 const coords = { x0: 0, y0: 0, x: 0, y: 0 };
 //pedidos
-var h;
 function saveLocation(e) {
     coords.x = e.targetTouches[0].pageX;
     coords.y = e.targetTouches[0].pageY;
@@ -11,20 +10,24 @@ function saveLocation(e) {
 //touchcancel, cancela al ghost y boraa la clase "dragging",
 pedidos.forEach(pedido => {
     pedido.addEventListener("touchcancel", e => {
-        getDragging().classList.remove("dragging");
         getGhostDragging().remove();
+        getDragging().classList.remove("dragging");
     });
 })
-
+var ev;
 //touchstart
 pedidos.forEach(pedido => {
 
 
     pedido.addEventListener("touchstart", e => {
         e.preventDefault();
+
+        saveLocation(e);
+        //Si hay un A en donde hizo click, ir a link
+
         pedido.classList.add("dragging");
 
-        saveLocation(e)
+        ev = e;
 
         //coordenadas absolutas de la pantalla
         coords.x0 = e.targetTouches[0].pageX - window.scrollX;
@@ -37,7 +40,7 @@ pedidos.forEach(pedido => {
         draggingCopy.style.left = e.target.getBoundingClientRect().left + window.scrollX + "px";
         document.body.appendChild(draggingCopy);
 
-    }  )
+    })
 })
 
 //touchmove + save coords
@@ -45,7 +48,7 @@ pedidos.forEach(pedido => {
     pedido.addEventListener("touchmove", e => {
         saveLocation(e);
         const dragging = e.target;
-
+        console.log("move");
         const draggingCopy = getGhostDragging();
         draggingCopy.style.left = dragging.getBoundingClientRect().left + coords.x - coords.x0 + "px"
         draggingCopy.style.top = dragging.getBoundingClientRect().top + coords.y - coords.y0 + "px"
@@ -53,19 +56,27 @@ pedidos.forEach(pedido => {
     })
 })
 
-//touchend + algoritmo de ordenamiento
+
+
 pedidos.forEach(pedido => {
     pedido.addEventListener("touchend", e => {
-        const dragging = getDragging();
-
-        dragging.classList.remove("dragging");
         getGhostDragging().remove();
+        const dragging = getDragging();
+        dragging.classList.remove("dragging");
+
+
+        //Si el click, fue hecho en el mismo lugar clickea el A que halla en ese punto 
+        var elements_from_point = [...document.elementsFromPoint(coords.x - window.scrollX, coords.y - window.scrollY)];
+        var a_from_point = elements_from_point.filter(element => element.tagName == "A");
+        console.log("a", a_from_point);
+        if (a_from_point.length > 0 && coords.x0 == coords.x && (coords.y - window.scrollY) == coords.y0) {
+            a_from_point[0].click();
+        }
+
 
 
 
         //toggle inactivo/activo
-        const elements_from_point = document.elementsFromPoint(coords.x - window.scrollX, coords.y - window.scrollY);
-
         if (elements_from_point.includes(pedidos__activos) && dragging.classList.contains(CLASS_INACTIVO)) {
 
             const orders = [...pedidos__activos.querySelectorAll(".pedido")].map(
@@ -102,7 +113,7 @@ pedidos.forEach(pedido => {
             if (orderItem > orderDragging && orderItem < orderTarget) (orderItem -= 10);
             pedido.style.order = orderItem;
 
-        })
+        });
 
 
         if (orderDragging > orderTarget) {

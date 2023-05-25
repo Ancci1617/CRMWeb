@@ -1,7 +1,7 @@
 const pedidos = document.querySelectorAll(".pedido");
 const pedidos__pendientes = document.querySelector(".pedidos__pendientes");
 const pedidos__activos = document.querySelector(".pedidos__activos");
-const form__submit = document.querySelector(".pedidos__main__container");
+const form__submit = document.querySelector(".form__submit");
 const btn__ver__detalle = document.querySelector(".btn-ver-detalle");
 const btn__cargar__cambios  = document.querySelector(".btn-cargar-cambios");
 
@@ -60,7 +60,7 @@ pedidos__pendientes.addEventListener("dragenter", e => {
         pedidos__pendientes.appendChild(dragging);
         dragging.classList.remove(CLASS_ACTIVO);
         dragging.classList.add(CLASS_INACTIVO);
-        changeOrder(dragging, null)
+        changeOrder(dragging, null);
     }
 });
 
@@ -106,32 +106,7 @@ pedidos.forEach(pedido => {
     });
 })
 
-form__submit.addEventListener("submit", e => {
-    //El input order de todos los pedidos activos = su orden
-    //EL input ESTADO de todos los pedidos es igual a su clase ACTIVO O INACTIVO
-    e.preventDefault();
 
-    pedidos.forEach(pedido => {
-
-        if (pedido.classList.contains(CLASS_ACTIVO)) {
-            
-            pedido.querySelector(".input__order").value = window.getComputedStyle(pedido).getPropertyValue("order");
-            pedido.querySelector(".input__estado").value = "ACTIVO";
-
-        } else if (pedido.classList.contains(CLASS_INACTIVO)) {
-        
-            pedido.querySelector(".input__order").value = null;
-            pedido.querySelector(".input__estado").value = "PENDIENTE";
-        
-        }
-
-    })
-
-
-    form__submit.submit();
-
-
-
-});
+// form__submit.addEventListener("submit", setDataOnInputs);
 
 

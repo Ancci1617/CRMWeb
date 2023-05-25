@@ -1,34 +1,20 @@
-.zona{
-    color: red;
-    font-weight: 800;
-}
-
 
 .pedidos__main__container{
+
     margin: 1rem auto;
     width: 95vw;
-    overflow: hidden;
-    border: 1px solid black;
-    border-radius: 1rem;
-
+    display: grid;
+    gap: 1rem;
 }
 .pedidos__header{
     padding: .5em;
     background-color: aliceblue;
     font-size: 1.3rem;
     display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 }
-.pedidos__header .btn-ver-detalle{
-    display: block;
-    width: 100%;
-    text-align: center;
-}
-
-.pedidos__header .btn-cargar-cambios{
+.btn-cargar-cambios{
     border: none;
     background-color: rgb(214, 214, 214);
     padding: 6px;
@@ -36,31 +22,38 @@
     font-size: 1.1rem;
     border: 1px black solid;
 }
+
 .pedidos__container{
-    overflow: hidden;
     padding: .8em;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    background: #959595;
 }
 .pedido{
-    user-select: none;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     border-radius: 6px;
     flex: 1;
     font-size: 1.3rem;
     padding: .5em;
+    gap: .3rem;
     position: relative;
     background-color: rgb(83, 70, 202);
     color: whitesmoke;
+    outline: 1px solid black;
 }
-.cte__details div{
-    margin-bottom: .8rem;
+.pedido div{
     text-overflow: ellipsis;
     overflow: hidden;
 }
-.cte__details .cte__nombre{
+.pedido a{
+    display: inline-block;
+    min-width: 8rem;
+    
+}
+.pedido .cte__nombre{
     max-width: 80%;
 }
 .pedido .zona{
@@ -76,21 +69,18 @@
     opacity: 0.5 ;
     margin: 0;
     padding: 0;
-    position: absolute ;
-    left: 0;
-    top: 0;
-
+    position: absolute;
 }
 
+.pedidos__activos__main{
+    border: 1px solid black;
+    border-radius: 1rem;
+    overflow: hidden;
+}
 
 .pedidos__pendientes{
-    border-top: 4px rgb(116, 2, 2) dashed;
+    border: 1px solid black;
+    border-radius: 1rem;
+    min-height: 10rem;
 }
 
-
-
-/* @media screen and (max-width:600px) {
-    .pedido{
-        width: 100%;
-    }
-} */

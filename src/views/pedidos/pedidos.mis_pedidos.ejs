@@ -14,64 +14,86 @@
 <body>
     <%- include("../partials/navigation/navigation-bar") %>
         
-        <form class="pedidos__main__container" action="/pedidos/recorrido/cargar_orden" method="POST" >
-            <div class="pedidos__header">
-                <a href="/pedidos/recorrido/detalle" class="btn-ver-detalle">Ver detalle</a>
-                <% if(activos.length == 0 && pendientes.length == 0){%>
-                    <span class="zona">Sin pedidos..</span>
-                <% } else { %>
-                    <span>Activos / Pendientes</span>
-                    <input type="submit" class="btn-cargar-cambios" value="Cargar cambios" >
-                <% } %>
+        <form  action="/pedidos/recorrido/cargar_orden"  method="POST" class="form__submit" onsubmit="submitDataOnInputs();return false"  >
+            <div class="pedidos__main__container">
+                <div class="pedidos__activos__main">
                     
-            </div>
-
-            <div class="pedidos__container pedidos__activos">
-               <% activos.forEach(pedido => { %>
-
-                    <div class="pedido pedido1 pedido__activo" style="order: <%= pedido.ORDEN %>"  draggable="true">
-                        <div class="cte__details">
-                            <div class="cte__nombre nw"><%= pedido.NOMBRE  %></div>    
-                            <div class="cte__calle nw"><%= pedido.CALLE  %></div>
-                            <div class="cte__cruces nw"><%= pedido.CRUCES %> - <%= pedido.CRUCES2 %></div>
-                        </div> 
-                        <span class="zona"><%= pedido.ZONA %></span>
-                        <input type="hidden" class="input__order" name="ORDEN" value="<%= pedido.ORDEN  %>">
-                        <input type="hidden" name="ID" value="<%= pedido.ID %>">
-                        <input type="hidden" name="ESTADO" class="input__estado" value="<%= pedido.ID %>">
+                    <div class="pedidos__header">
+                        <% if(activos.length == 0 && pendientes.length == 0){%>
+                            <span class="zona">Sin pedidos..</span>
+                        <% } else { %>
+                            <span>Activos / Pendientes</span>
+                            <input type="submit" class="btn-cargar-cambios" value="Cargar cambios" >
+                        <% } %>
+                            
                     </div>
-                    
-                <% }) %>
-            </div>
-            
+
+                    <div class="pedidos__container pedidos__activos">
+                    <% activos.forEach(pedido => { %>
+
+                            <div class="pedido pedido1 pedido__activo" style="order: <%= pedido.ORDEN %>"  draggable="true">
+                                <!-- <div class="cte__details"> -->
+                                <div class="cte__nombre nw"><%= pedido.NOMBRE  %></div>    
+                                <% if(pedido.DESDE || pedido.HASTA){%>
+                                    <div class="cte__horario nw"><%=pedido.DESDE + "-" + pedido.HASTA%></div>  
+                                <%}%>  
+                                <div class="cte__calle nw"><%= pedido.CALLE  %></div>
+                                <div class="cte__cruces nw"><%= pedido.CRUCES %> - <%= pedido.CRUCES2 %></div>
+                                <a href="/pedidos/recorrido/detalle?ID=<%= pedido.ID %>">detalle</a>
+                                <!-- </div>  -->
+                                <span class="zona"><%= pedido.ZONA %></span>
+                                <input type="hidden" class="input__order" name="ORDEN" value="<%= pedido.ORDEN  %>">
+                                <input type="hidden" name="ID" value="<%= pedido.ID %>">
+                                <input type="hidden" name="ESTADO" class="input__estado" value="<%= pedido.ESTADO %>">
+                            </div>
+
+                        <% }) %>
+                    </div>
+                </div>   
                 
-            <div class="pedidos__container pedidos__pendientes">
+                
 
-                <% pendientes.forEach(pedido => { %>
+                <div class="pedidos__container pedidos__pendientes">
 
-                    <div class="pedido pedido1 pedido__inactivo" draggable="true">
-                        <div class="cte__details">
+                    <% pendientes.forEach(pedido => { %>
+        
+                        <div class="pedido pedido1 pedido__inactivo" draggable="true">
+                            <!-- <div class="cte__details"> -->
                             <div class="cte__nombre nw"><%= pedido.NOMBRE  %></div>
+                            <% if(pedido.DESDE || pedido.HASTA){%>
+                                <div class="cte__horario nw"><%= pedido.DESDE + "-" + pedido.HASTA %></div>  
+                            <%}%>  
                             <div class="cte__calle nw"><%= pedido.CALLE  %></div>
                             <div class="cte__cruces nw"><%= pedido.CRUCES %> - <%= pedido.CRUCES2 %></div>
+                            <a href="/pedidos/recorrido/detalle?ID=<%= pedido.ID %>">detalle</a>
+                            <!-- </div> -->
+                            <span class="zona"><%= pedido.ZONA %></span>
+        
+                            <input type="hidden" class="input__order" name="ORDEN" value="<%= pedido.ORDEN  %>">
+                            <input type="hidden" name="ID" value="<%= pedido.ID %>">
+                            <input type="hidden" name="ESTADO" class="input__estado" value="<%= pedido.ESTADO %>">
                         </div>
-                        <span class="zona"><%= pedido.ZONA %></span>
+                        
+                    <% }) %>
+        
+                </div>
 
-                        <input type="hidden" class="input__order" name="ORDEN" value="<%= pedido.ORDEN  %>">
-                        <input type="hidden" name="ID" value="<%= pedido.ID %>">
-                        <input type="hidden" name="ESTADO" class="input__estado" value="<%= pedido.ID %>">
-                    </div>
-                    
-                <% }) %>
 
-            </div>
-        </form>
 
+            </div>    
+ 
+
+
+
+
+
+    </form>
         <div class="pedidos__proximos">
 
         </div>
 
     <%- include("../partials/links/nav.logic.ejs")  %>
+    <script src="/js/pedidos/pedidos.mis_pedidos.js"></script>
     <script src="/js/pedidos/pedidos.dragAndDrop.js"></script>
     <script src="/js/pedidos/pedidos.dragAndDrop.mobile.js"></script>
 </body>

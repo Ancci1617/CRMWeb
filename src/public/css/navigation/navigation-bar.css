@@ -80,6 +80,7 @@ ul.show {
     }
 
     ul li a {
+        color: white;
         display: block;
     }
 
