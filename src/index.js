@@ -15,7 +15,9 @@ const { isLoggedIn } = require('./lib/auth.js');
 //Set config
 app.set("views", path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use( express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 
 
@@ -35,7 +37,7 @@ app.use(session({
     cookie: { maxAge: (1000 * 60 * 60 * 10) },
     saveUninitialized: false
 }));
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(flash());
@@ -43,6 +45,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(userView);
 require("./lib/passport.lib");
+
+morgan.token('user', function (req, res) { return req.user? req.user.Usuario  : "WL"});
+app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
+// app.use(morgan('User\: :user Nombre again \: :user'))
 
 
 //Routes
@@ -59,6 +65,9 @@ app.use(require("./Router/mercaderia/deposito.router.js"));
 app.use(require("./Router/ventas/contado/contado.router.js"));
 app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(isLoggedIn, require("./Router/pedidos/pedidos.router.js"));
+
+// morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
+// app.use(morgan(()=> {return ':method :url :status :response-time ms - :res[content-length] - :user'}));
 // app.use((req,res) => {res.send("default")})
 
 
