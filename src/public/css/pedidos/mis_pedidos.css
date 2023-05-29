@@ -51,7 +51,8 @@
 .pedido a{
     display: inline-block;
     min-width: 8rem;
-    
+    text-decoration: none;
+    color: greenyellow;
 }
 .pedido .cte__nombre{
     max-width: 80%;

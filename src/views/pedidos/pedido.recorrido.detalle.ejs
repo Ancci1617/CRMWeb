@@ -9,6 +9,8 @@
     <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
     <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
     <link rel="stylesheet" href="/css/pedidos/recorrido.css">
+    <!-- <link rel="stylesheet" href="/css/carrusel.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 </head>
 
 
@@ -68,7 +70,7 @@
                 <input type="date" placeholder="Numero de cliente" value="<%=  %>" name="FECHA" required>
               </div>
 
-              <div class="input-box ">
+              <div class="input-box">
                 <span class="details">Desde</span>
                 <input type="time" placeholder="Numero de cliente" value="<%= %>" name="DESDE">
               </div>
@@ -133,7 +135,7 @@
       </div>
       
     
-    <main class="main__container">
+    <main class="main__container ">
         <% if(pedidos.length > 0){ %>
           <div class="title__container">
             <h2 class="main__container__title">Pedidos</h2>
@@ -143,9 +145,9 @@
           <h2 class="main__container__title zona">Sin pedidos activos</h2>        
         <% } %>
 
-        <div class="slide__container">
+        <div class="slide__container main-gallery">
             <% pedidos.forEach(pedido => {%>
-            <div class="pedido pedido__slide">
+            <div class="pedido pedido__slide gallery-cell">
                 <div class="pedido__title pedido_detail nw">
                     <span class="CTE"><%= pedido.CTE %></span>
                     <span class="zona"><%= pedido.ZONA %></span>
@@ -166,14 +168,9 @@
          
         </div>
 
-
-        <div class="slide__buttons_container">
-            <div class="slide__button button__CRM" >CRM</div>
-            <button class="slide__button button__arrow button__left" onclick="plusDivs(-1)">&#10094;</button>
-            <button class="slide__button button__arrow button__right" onclick="plusDivs(1)">&#10095;</button>
-        </div>
-        
+      
         <div class="btn__container">
+            <div class="btn slide__button button__CRM" >CRM</div>
             <div class="btn nw btn__vendi">Venta</div>
             <div class="btn nw btn__cancelar">No venta</div>
             <div class="btn nw btn__reprogramar">Reprogramar</div>
@@ -181,10 +178,10 @@
         </div>
 
 </main>
-    
-    <%- include("../partials/links/nav.logic.ejs")  %>
-    <script src="/js/pedidos/pedidos.recorrido.detalle.js"></script>
-
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<!-- <script src="/js/carrusel.js"></script> -->
+<%- include("../partials/links/nav.logic.ejs")  %>
+<script src="/js/pedidos/pedidos.recorrido.detalle.js"></script>
 </body>
 
 </html>

@@ -1,9 +1,11 @@
 body{
 background-color: #505050;
 }
+
 .main__container {
     padding: .3rem;
-    max-width: 400px;
+    width: 90%;
+    max-width: 800px;
     border: 1px solid black;
     margin: .5rem auto;
     background: #c0bcbc;
@@ -20,24 +22,28 @@ background-color: #505050;
 
 
 .slide__container {
-    overflow-x: auto;
-    position: relative;
     padding: .5rem 1rem;
+    margin-bottom: 2rem;
+    margin-inline: 1rem;
 }
 
 
 
 .pedido__slide {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     gap: .4rem;
     padding: 1rem;
     border-radius: 1rem;
     background-color: rgb(230, 230, 230);
     border: 1px solid black;
-    max-width: 380px;
-    margin: auto;
+    transform: translateX(0);
+    /* width: 380px; */
+    /* width: 500px; */
+    width: 100%;
+    /* margin: auto 1rem; */
 }
+
 
 .pedido__title {
     display: flex;
@@ -76,20 +82,11 @@ background-color: #505050;
 }
 
 
-.slide__buttons_container {
-    display: flex;
-    gap: 1rem;
-    padding: .5rem 1rem;
-    flex-wrap: wrap;
-}
 
-.slide__buttons_container .button__arrow {
-    flex: 1;
-}
+
 
 .button__CRM {
-    max-width: 380px;
-    width: 100%;
+    min-width: 100%;
     color: white;
     background-color: rgb(60 ,141, 60);
     border-radius: .5rem;
@@ -156,8 +153,8 @@ background-color: #505050;
 
 
 
-@media screen and (min-width:800px) {
-    .main__container, .pedido{
-        max-width: 800px;
-    }
+@media screen and (max-width:800px) {
+    /* .main__container{
+        max-width: 95%;
+    } */
 }

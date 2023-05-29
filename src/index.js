@@ -48,7 +48,6 @@ require("./lib/passport.lib");
 
 morgan.token('user', function (req, res) { return req.user? req.user.Usuario  : "WL"});
 app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
-// app.use(morgan('User\: :user Nombre again \: :user'))
 
 
 //Routes
@@ -65,7 +64,7 @@ app.use(require("./Router/mercaderia/deposito.router.js"));
 app.use(require("./Router/ventas/contado/contado.router.js"));
 app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(isLoggedIn, require("./Router/pedidos/pedidos.router.js"));
-
+app.get("/carrusel",(req,res)=>{res.render("carrusel.ejs")})
 // morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
 // app.use(morgan(()=> {return ':method :url :status :response-time ms - :res[content-length] - :user'}));
 // app.use((req,res) => {res.send("default")})

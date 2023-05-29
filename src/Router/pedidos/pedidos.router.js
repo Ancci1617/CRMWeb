@@ -74,7 +74,7 @@ Router.get("/pedidos/recorrido/detalle", isAdminOrVendedor, async (req, res) => 
         cte_data.Disponibles.set(pedidos[i], Disponible[0]);
     }
 
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"], ["RODRIGO", "PAULA", "NAHUEL", "LAUTARO1", "JULIAN", "TIAGO"]);
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"]);
 
     res.render("pedidos/pedido.recorrido.detalle.ejs", { cte_data, pedidos, usuarios });
 
