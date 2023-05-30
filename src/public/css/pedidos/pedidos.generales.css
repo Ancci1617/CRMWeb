@@ -1,0 +1,96 @@
+html,body{
+    background-color: #f3f3f3;
+}
+
+.page__container{
+    padding: .5rem;
+}
+.main__title{
+    margin-bottom: .5rem;
+}
+.buscador__container{
+    background: white;
+    padding: .2rem .2rem;
+    gap: .4rem;
+    margin-bottom: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+.buscador__container i::before{
+    font-size: 1.3rem;
+    margin-left: 5px;
+}
+.buscador__container input[type="text"]{
+    flex:1;
+    border-radius: .3rem;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    padding: .8em 8px;
+}
+
+.data__container{
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column; 
+    box-shadow: 3px 3px 4px 2px lightgrey;
+}
+
+.grupo{
+    margin-bottom: 1rem;
+}
+.grupo__title{
+    border-radius: 6px;
+    background-color: white;
+    font-weight: 700;
+    padding: .8rem;
+    margin-bottom: .5em;
+    border:1px solid #c3c3c3;
+    display: flex;
+    justify-content: space-between;
+}
+.grupo__data{
+    padding: .8rem;
+    background-color: white;
+    position: relative;
+    border-bottom:  1px solid lightgray;
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+.data__title{
+    font-size: 1.1rem;
+}
+.pedido__estado{
+    position: absolute;
+    right: .8rem;
+    bottom: .8rem;
+    font-weight: 800;
+}
+.pedido__detail{
+    color: gray;
+}
+.pedido__activo{
+    color: green;
+}
+.grupo__data .zona{
+    position: absolute;
+    right: .5rem;
+    top: .5rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

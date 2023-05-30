@@ -138,7 +138,8 @@ async function updatePedidosReprogramar({ MOTIVO, ESTADO, ID, FECHA, DESDE, HAST
 async function getPedidosActivos() {
 
     const [pedidos] = await pool.query(
-        "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`, `REDES`, `ESTADO`, `MOTIVO`, `EVALUACION` FROM `Pedidos` WHERE ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO' order by DIA,DESIGNADO,ESTADO;"
+        "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`,ORDEN, `REDES`, `ESTADO`,  " +
+        "`MOTIVO`, `EVALUACION` FROM `Pedidos` WHERE ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO' order by ORDEN;"
     );
 
 

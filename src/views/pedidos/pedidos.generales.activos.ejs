@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
-    <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
-    <link rel="stylesheet" href="/css/CRM/General.css">
-    <link rel="stylesheet" href="/css/cargar_venta/tabla.ventascargadas.css">
+        <!-- <link rel="stylesheet" href="/css/CRM/tabla.clientes.css"> -->
+        <!-- <link rel="stylesheet" href="/css/CRM/General.css"> -->
+        <!-- <link rel="stylesheet" href="/css/cargar_venta/tabla.ventascargadas.css"> -->
+        <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css">
 
 
 </head>
@@ -16,63 +17,69 @@
 
 <body>
     <%- include('../partials/navigation/navigation-bar.ejs')%>
-        <div class="page-container">
-            <div class="table-container">
-                <table class="tabla-ventascargadas tabla-clientes tabla-datos">
-                    <thead>
-                        <tr>
-                            <th>FECHA</th>
-                            <th>REDES</th>
-                            <th>CTE</th>
-                            <th>ZONA</th>
-                            <th>NOMBRE</th>
-                            <th>CALLE</th>
-                            <th>CRUCES</th>
-                            <th>CRUCES</th>
-                            <th>TELEFONO</th>
-                            <th>QUE NECESITA</th>
-                            <th>VISITA</th>
-                            <th>ESTADO</th>
-                            <th>VENDEDOR</th>                            
-                            <th>EDITAR</th>
-                        </tr>
-                    </thead>
-                    <tbody>     
-                        <% pedidos.forEach(pedido => { %>
-                        <tr>
-                            <td><%= pedido.DIA %></td>
-                            <td><%= pedido.REDES %></td>
-                            <td><%= pedido.CTE %></td>
-                            <td class="zona"><%= pedido.ZONA %></td>
-                            <td><%= pedido.NOMBRE %></td>
-                            <td><%= pedido.CALLE %></td>
-                            <td><%= pedido.CRUCES %></td>
-                            <td><%= pedido.CRUCES2 %></td>
-                            <td><%= pedido.TELEFONO %></td>
-                            <td><%= pedido.QUE_NECESITA %></td>
-                            <td><%= pedido.DIA_VISITA %></td>
-                            <td><%= pedido.ESTADO %></td>
-                            <td><%= pedido.DESIGNADO %></td>                            
-                            <td><a href="/pedidos/editar_pedido/<%= pedido.ID %>">Editar</a></td>
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
+
+
+        <div class="page__container">
+
+            <div class="main__title">
+                <h2>Vendedores</h2>
             </div>
+            <div class="buscador__container">
+                <i class="fa fa-search"></i>
+                <input type="text" class="buscador" name="buscador" value="Texto de prueba" placeholder="Buscar" />
+            </div>
+
+            <div class="grupos__container">
+                <% vendedores.forEach(vendedor => {  %>
+                    
+                <div class="grupo">
+
+                    <div class="grupo__title">
+                        <span class="titulo">> <%= vendedor %></span>
+                        <span class="detalle">Total: (<%= vendedores_pedidos.get(vendedor).length %>)</span>
+                    </div>
+                     
+
+
+                    <div class="data__container hidden">
+                        <%  vendedores_pedidos.get(vendedor).forEach(pedido => { %>
+
+                        <div class="grupo__data">
+                            <div class="data__title">
+                                <%= pedido.CTE %> - <%= pedido.NOMBRE  %>
+                            </div>
+                            <div class="data__body">
+                                <span class="calle"><%= pedido.CALLE %> </span>
+                                <span class="cruces"><%= pedido.CRUCES + " - " + pedido.CRUCES2 %></span>
+                            </div>
+                            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %></span>
+                            <span class="pedido__estado <%= pedido.ESTADO == "PENDIENTE" ? "pedido__detail" : "pedido__activo" %>">
+                                <%= pedido.ESTADO %>
+                            </span>
+                            <span class="zona"><%= pedido.ZONA %></span>
+                            <span class="data__details"></span>
+                        </div>
+
+                        <% }) %>
+
+                    </div>
+
+
+
+                </div>
+
+                <% }) %>
+
+
+
+
+            </div>
+
+
         </div>
 
-        <%- include("../partials/links/nav.logic.ejs")  %>
+    <script src="/js/pedidos/pedidos.generales.activos.js"></script>
+    <%- include("../partials/links/nav.logic.ejs") %>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-

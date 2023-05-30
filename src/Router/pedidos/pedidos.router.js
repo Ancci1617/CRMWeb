@@ -32,9 +32,9 @@ Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
 
 
 
-Router.post("/pedidos/recorrido/cargar_orden" ,isAdminOrVendedor, async (req, res) => {
+Router.post("/pedidos/recorrido/cargar_orden", isAdminOrVendedor, async (req, res) => {
     const { ORDEN = [], ID = [], ESTADO = [] } = req.body;
-    console.log("body",req.body);
+    console.log("body", req.body);
     //Si no es array, que sea array
     const ORDEN_ARR = Array.isArray(ORDEN) ? ORDEN : [ORDEN];
     const ID_ARR = Array.isArray(ID) ? ID : [ID];
@@ -126,9 +126,17 @@ Router.get("/pedidos/generales", isAdmin, async (req, res) => {
     res.render("list-items.ejs", { data });
 });
 Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
-
+    const vendedores_pedidos = new Map();
     const pedidos = await getPedidosActivos();
-    res.render("pedidos/pedidos.generales.activos.ejs", { pedidos });
+
+    
+    const vendedores = [...new Set(pedidos.map(pedido => pedido.DESIGNADO))];
+    vendedores.forEach(vendedor => {
+        vendedores_pedidos.set(vendedor, pedidos.filter(pedido => pedido.DESIGNADO == vendedor));
+    })
+
+
+    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores_pedidos ,vendedores});
 
 });
 Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
@@ -144,8 +152,8 @@ Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
 Router.get("/pedidos/editar_pedido/:ID", isAdmin, async (req, res) => {
 
     const pedido = await getPedidoByID(req.params.ID);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"]); //Cambiar este Magic String
-    
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"]); //Cambiar este Magic String
+
     res.render("pedidos/pedido.editar.ejs", { pedido, usuarios });
 
 });
@@ -177,7 +185,7 @@ Router.get("/pedidos/cargar_pedido/:CTE", isAdminOrVendedor, async (req, res) =>
 
     const { CTE } = req.params;
     const cte_data = await getClientes(CTE);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR","ADMIN"], [""]); 
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"], [""]);
 
     res.render("pedidos/pedidos.cargar.ejs", { cte_data: cte_data[0], usuarios });
 

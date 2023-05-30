@@ -81,13 +81,13 @@ reasignar__pedido__form.addEventListener("submit", setIdOnSubmit);
 
 showPedidoByID(urlParams.get("ID"));
 function showPedidoByID(ID) {
-    if (!ID) {
-        return flkty.select(1);
-    }
+
+    if (!ID) return flkty.select(1);
     const pedidoById = document.querySelector(`.pedido:has(input.pedido__ID[value='${ID}'])`);
     const pedidos = [...document.querySelectorAll(`.pedido`)];
-    const indice = pedidos.indexOf(pedidoById); 
+    const indice = pedidos.indexOf(pedidoById);
     flkty.select(indice);
+    
 }
 
 
