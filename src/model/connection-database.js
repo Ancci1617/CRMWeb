@@ -1,20 +1,13 @@
-const mysql = require("mysql2")
+const mysql = require("mysql2/promise.js")
 const objConnection = require("./connection-object.js")
 
-
-try {    
     
-    const pool = mysql.createPool(objConnection);
+const pool = mysql.createPool(objConnection);
     
-    module.exports = pool.promise();
+module.exports = pool;
 
 
-} catch (error) {
 
-    console.log("ERROR EN  MODEL/CONNECTION-DATABASE");
-    console.log(error);
-
-}
 
 // export async function connect(){
 
