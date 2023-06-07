@@ -1,5 +1,5 @@
 const connection_data = {
-    host: 'sql815.main-hosting.eu',
+    host: 'srv815.hstgr.io',
 	port: 3306,
 	user: 'u970133903_BGMAdmin',
 	password: 'RKfwnmPhW1!l',
