@@ -2,6 +2,8 @@ const pool = require("../connection-database");
 
 
 async function getUserByPassword(username, password) {
+
+        
     const [user] = await pool.query(
         "SELECT * FROM Usuarios where " +
         "Usuario = ? and Contrasenia = ? LIMIT 1"

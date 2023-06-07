@@ -1,11 +1,11 @@
-const mysql = require("mysql2/promise")
+const mysql = require("mysql2/promise.js")
 const objConnection = require("./connection-object.js")
 
 
 try {    
         
     const pool = mysql.createPool(objConnection);
-
+    
     module.exports = pool;
 
 
