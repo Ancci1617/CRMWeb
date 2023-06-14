@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const pool = require("../../model/connection-database");
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { getContactosImanes, getContactosCtes, getContactosY, getGruposByCode } = require("../../model/contactos/contactos.model.js");
+const { getContactosByGrupoAndTipo, getGruposByCode } = require("../../model/contactos/contactos.model.js");
 const { render } = require("ejs");
 
 
@@ -16,13 +16,20 @@ Router.get("/contactos", isLoggedIn, isAdmin, (req, res) => {
 
 Router.get("/contactos/:CODE", isAdmin, async (req, res) => {
     const { CODE } = req.params;
-    const eval = { Z: "IMANES", Y: "NUEVOS", CTE: "CTE" };
+    const { GRUPO } = req.query;
+    const eval = { Z: "Imanes", Y: "Y", CTE: "CTE" };
     if (!eval[CODE]) return res.send("CODIGO DE CONTACTO NO VALIDO");
 
     const render_object = {};
+    render_object.tipo = eval[CODE];
+    render_object.grupo_vigente = GRUPO;
     render_object.grupos = await getGruposByCode(CODE);
+    render_object.contactos = await getContactosByGrupoAndTipo(CODE, GRUPO);
 
-    res.render("contactos/contactos.ejs",  render_object );
+
+
+    
+    res.render("contactos/contactos.ejs", render_object);
 
 });
 

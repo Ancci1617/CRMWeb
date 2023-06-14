@@ -2,6 +2,18 @@ html,
 body {
     background-color: #f3f3f3;
 }
+table{
+    width: 100%;
+}
+table td{
+    padding: 0;
+}
+tr{
+    display: flex;
+}
+tr td{
+    flex: 1;
+}
 
 .aside__left {
     position: fixed;
@@ -23,6 +35,10 @@ body {
     margin-bottom: .8rem;
     text-align: center;
 }
+.aside__left a{
+    text-decoration: none;
+
+}
 
 .aside__left li:hover {
     cursor: pointer;
@@ -39,7 +55,7 @@ body {
     align-items: center;
     padding: 8px;
 }
-.header h2,.header h2 span{
+.header h2{
     font-size: 1.2rem;
 }
 
@@ -70,16 +86,17 @@ body {
 .lista .contacto {
     background-color: white;
     padding: .5em;
-    font-size: 1.1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: .8rem;
 }
+.contacto *{
+    font-size: 1.1rem;
+}
 
 .lista .contacto .CTE {
     color: rgb(57, 57, 57);
-    font-size: 1.1rem;
 }
 
 .lista .contacto:hover {
@@ -88,8 +105,8 @@ body {
 
 
 
-@media screen and (max-width:430px) {
+/* @media screen and (max-width:430px) {
     .contacto .NOMBRE {
         display: none;
     }
-}
+} */

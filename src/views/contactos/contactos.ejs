@@ -14,24 +14,32 @@
     <div class="aside__left">
         <ul>
             <% grupos.forEach(grupo => { %>    
-                <li><%= grupo.GRUPO_MENSAJE %></li>
+                <li>
+                    <a href="?GRUPO=<%= grupo.GRUPO_MENSAJE %>"><%= grupo.GRUPO_MENSAJE %></a>
+                </li>
             <%});%>
         </ul>
     </div>
 
     <div class="app">
         <div class="header">
-            <h2>CTE - Grupo:<span class="grupo__vigente">1</span></h2>
-            <button class="btn-copiar">Copiar</button>
+            <h2><%= tipo %> - Grupo:<%= grupo_vigente %></h2>
+            <h2>Total: <%= contactos.length %></h2>
         </div>
 
         <div class="lista">
 
+
+            <% contactos.forEach(contacto => { %>
             <div class="contacto">
-                <span class="CTE">8108</span>
-                <span class="NOMBRE">Lumbert Graciela</span>
-                <span class="TELEFONO">1124659963</span>
+                <table>
+                    <tr>
+                        <td><span class="NOMBRE"><%= contacto.NOMBRE %></span></td>
+                        <td><span class="TELEFONO"><%= contacto.TELEFONO %></span></td>
+                    </tr>
+                </table>
             </div>
+            <% }); %>
 
 
         </div>

@@ -25,12 +25,23 @@ async function getContactosCteByGrupo(GRUPO) {
         "`ID` FROM `BaseCTE` WHERE GRUPO_MENSAJE = ?", [GRUPO]);
 
     return contactos;
+}
+
+async function getContactosByGrupoAndTipo(TIPO,GRUPO = 1){
+
+    const eval = {
+        CTE: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseCTE` WHERE GRUPO_MENSAJE = ? order by GRUPO_MENSAJE",
+        Z: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseZ` where GRUPO_MENSAJE = ? order by GRUPO_MENSAJE",
+        Y: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseY` where GRUPO_MENSAJE = ? order by GRUPO_MENSAJE"
+    };
+
+    const [grupos] = await pool.query(eval[TIPO],[GRUPO]);
+    return grupos;
 
 }
 
 
 
-
-module.exports = { getContactosCteByGrupo, getGruposByCode };
+module.exports = { getContactosCteByGrupo, getGruposByCode ,getContactosByGrupoAndTipo};
 
 
