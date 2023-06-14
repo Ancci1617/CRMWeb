@@ -27,7 +27,9 @@
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/dnis">Imagenes de DNI</a></div><%}%> 
                     
                 <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/pedidos/">Mis pedidos</a></div><%}%> 
-                <% if(user.RANGO == "ADMIN"  ) {%><div class="dashboard-item"><a href="/pedidos/generales">Pedidos generales</a></div><%}%> 
+                <% if(user.RANGO == "ADMIN"  ) {%><div class="dashboard-item"><a href="/pedidos/generales">Pedidos generales</a></div><%}%>
+
+                <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/contactos/">Contactos</a></div><%}%> 
             
             </div>
         </div>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blanco Gusmar | Contactos</title>
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/contactos/contactos.main.css">
+</head>
+
+
+<body>
+    <%- include("../partials/navigation/navigation-bar") %>
+    <div class="aside__left">
+        <ul>
+            <% grupos.forEach(grupo => { %>    
+                <li><%= grupo.GRUPO_MENSAJE %></li>
+            <%});%>
+        </ul>
+    </div>
+
+    <div class="app">
+        <div class="header">
+            <h2>CTE - Grupo:<span class="grupo__vigente">1</span></h2>
+            <button class="btn-copiar">Copiar</button>
+        </div>
+
+        <div class="lista">
+
+            <div class="contacto">
+                <span class="CTE">8108</span>
+                <span class="NOMBRE">Lumbert Graciela</span>
+                <span class="TELEFONO">1124659963</span>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <%- include("../partials/links/nav.logic.ejs")  %>
+</body>
+
+
+</html>

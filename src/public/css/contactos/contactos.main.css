@@ -1,0 +1,95 @@
+html,
+body {
+    background-color: #f3f3f3;
+}
+
+.aside__left {
+    position: fixed;
+    height: calc(100vh - 3rem);
+    width: 64px;
+    box-shadow: 2px 2px 2px lightgray;
+    font-size: 1.5rem;
+    padding: .5em;
+    background-color: white;
+    overflow-y: auto;
+}
+
+
+.aside__left li {
+    padding: .2em ;
+    border-bottom: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    border-radius: 1.5rem;
+    margin-bottom: .8rem;
+    text-align: center;
+}
+
+.aside__left li:hover {
+    cursor: pointer;
+}
+
+.app {
+    margin-left: 64px;
+    padding: .5em .8em;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+}
+.header h2,.header h2 span{
+    font-size: 1.2rem;
+}
+
+.header * {
+    font-size: 1rem;
+}
+.header .btn-copiar{
+    background-color: #d5d3d1;
+    padding: .5rem;
+    border-radius: 1rem;
+}
+.header .btn-copiar:hover {
+    background-color: #d1d1d1;
+}
+
+
+
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    padding: .5em;
+    gap: .5rem;
+    max-width: 740px;
+    margin: auto;
+}
+
+.lista .contacto {
+    background-color: white;
+    padding: .5em;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: .8rem;
+}
+
+.lista .contacto .CTE {
+    color: rgb(57, 57, 57);
+    font-size: 1.1rem;
+}
+
+.lista .contacto:hover {
+    background-color: #d1d1d1;
+}
+
+
+
+@media screen and (max-width:430px) {
+    .contacto .NOMBRE {
+        display: none;
+    }
+}
