@@ -25,17 +25,13 @@ Router.get("/contactos/:CODE", isAdmin, async (req, res) => {
     render_object.grupo_vigente = GRUPO;
     render_object.grupos = await getGruposByCode(CODE);
     render_object.contactos = await getContactosByGrupoAndTipo(CODE, GRUPO);
-
-
-
-    
     res.render("contactos/contactos.ejs", render_object);
 
 });
 
 
-Router.post("/contactos/getContactos", isAdmin, async (req, res) => {
-
+Router.get("/contactos/generar_contacto/:CTE", isAdminOrVendedor, async (req, res) => {
+    res.render("contactos/contactos.cargar.ejs");
 })
 
 module.exports = Router;

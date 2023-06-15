@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Cargar venta</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+
+</head>
+
+<body>
+
+    <div class="container cancelar__pedido__form unshow">
+        <div class="titles">
+          <div class="title">Cancelar pedido</div>
+          <div class="btn__title__container">
+            <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+          </div>
+
+        </div>
+        <div class="content">
+          <form action="/pedidos/cancelar" method="POST" enctype="" >    
+            <div class="user-details">
+
+              <div class="input-box">
+                <span class="details">Motivo</span>
+                <input type="text" placeholder="-" value="<%=  %>" name="MOTIVO" required>
+                <input type="hidden" name="ID">
+              </div>
+
+                
+              <!-- BOTONES DE SUBMIT -->
+              <div class="button">
+                <input type="submit" value="Cancelar pedido">
+              </div>
+
+            </div>
+    
+          </form>
+        </div>
+      </div>
+
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/js/lib/file.weight.js"></script>
+  <script src="../js/ventas/cargar_venta.js"></script>
+
+</body>
+
+</html>

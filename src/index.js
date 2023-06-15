@@ -85,4 +85,15 @@ app.listen(app.get("PORT"), async (err) => {
 })
 
 
+//Ejecuta el servidor
+app.listen(80, async (err) => {
+    //Configura el lenguaje de la sesion en las fechas
+    // await poolConfig();
+
+    if (err) console.log("ERR: " + err);
+
+    console.log("Server running on port, " + 80);
+})
+
+
 

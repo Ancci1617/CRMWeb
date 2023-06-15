@@ -13,7 +13,7 @@ async function getGruposByCode(CODE) {
     };
 
     const grupos = await pool.query(eval[CODE]);
-    console.log("grupos",grupos);
+
     return grupos[0];
 }
 
