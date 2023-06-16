@@ -5,37 +5,58 @@
 <head>
   <meta charset="UTF-8">
   <!---<title> Responsive Registration Form | CodingLab </title>--->
-  <title>Blanco Gusmar | Cargar venta</title>
+  <title>Blanco Gusmar | Cargar contacto</title>
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
 
 </head>
 
 <body>
+    <span class="bg__black"></span>
 
-    <div class="container cancelar__pedido__form unshow">
+    <div class="container cancelar__pedido__form">
         <div class="titles">
-          <div class="title">Cancelar pedido</div>
+          <div class="title">Cargar Contacto</div>
           <div class="btn__title__container">
-            <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+            <a class="btn-green btn-crm" href="/CRM" type="button" value="volver">CRM</a>
           </div>
 
         </div>
         <div class="content">
-          <form action="/pedidos/cancelar" method="POST" enctype="" >    
+          <form action="/contactos/generar_contacto" method="POST" >    
             <div class="user-details">
 
               <div class="input-box">
-                <span class="details">Motivo</span>
-                <input type="text" placeholder="-" value="<%=  %>" name="MOTIVO" required>
-                <input type="hidden" name="ID">
+                <span class="details">CTE/Y/Z</span>
+                <input type="text" placeholder="-" value="<%= CTE %>" name="CTEYZ" readonly required>
               </div>
 
+              <div class="input-box">
+                <span class="details">ZONA</span>
+                <input type="text" class="value_uppercase" placeholder="-" maxlength="2" value="<%=  %>" name="ZONA">
+              </div>
+
+              <div class="input-box">
+                <span class="details">Telefono</span>
+                <input type="tel" placeholder="Telefono" name="TELEFONO" required>
+              </div>  
+
+              <div class="input-box">
+                <span class="details">Nombre</span>
+                <input type="text" placeholder="Apellido y nombre" name="NOMBRE">
+              </div>
+
+              <div class="input-box">
+                <span class="details">Calle</span>
+                <input type="text" placeholder="Domicilio" name="CALLE">
+              </div>
+
+              <input type="hidden" name="TIPO" value="<%= TIPO %>" required>
                 
               <!-- BOTONES DE SUBMIT -->
               <div class="button">
-                <input type="submit" value="Cancelar pedido">
+                <input type="submit" value="Cargar contacto">
               </div>
 
             </div>
@@ -43,10 +64,6 @@
           </form>
         </div>
       </div>
-
-  <script src="/js/lib/fetch.helper.js"></script>
-  <script src="/js/lib/file.weight.js"></script>
-  <script src="../js/ventas/cargar_venta.js"></script>
 
 </body>
 

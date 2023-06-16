@@ -1,5 +1,7 @@
 const pool = require("../../connection-database.js");
 
+
+//UNIFICAR ESTOS 2
 const getClientes = async (cte) => {
     
     const [rows] = await pool.query(

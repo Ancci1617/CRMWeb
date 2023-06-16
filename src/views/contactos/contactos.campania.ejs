@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blanco Gusmar | Contactos</title>
+    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+    <link rel="stylesheet" href="/css/contactos/contactos.main.css">
+    <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+</head>
+
+
+<body>
+    <%- include("../partials/navigation/navigation-bar") %>
+    <span class="bg__black hidden"></span>
+
+    <div class="container unshow">
+        <div class="titles">            
+            <div class="title">Terminado llamado</div>
+            <div class="btn__title__container">
+                <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+            </div>
+        </div>
+        <div class="content">
+            <form action="/contactos/campania/descartar" method="POST" >    
+                <div class="user-details">
+
+                    <!-- ACA UN SELECT -->
+                    <div class="input-box">
+                        <span class="details">Motivo</span>
+                        
+                        <select name="ESTADO" required>
+                            <option value="PEDIDO">PEDIDO</option>
+                            <option value="VENTA">VENTA</option>
+                            <option value="NO QUIZO">NO QUIZO</option>
+                        </select>
+                        
+                    </div>
+                    <input type="text" name="ID" hidden/>
+                    <input type="text" name="GRUPO" value="<%= grupo_vigente %>" hidden/>
+
+                    
+                    <!-- BOTONES DE SUBMIT -->
+                    <div class="button">
+                        <input type="submit" value="Terminado llamado">
+                    </div>
+
+                </div>
+    
+            </form>
+        </div>
+
+      </div>
+
+
+
+    <div class="aside__left">
+        <ul>
+            <% grupos.forEach(grupo => { %>    
+                <li>
+                    <a href="?GRUPO=<%= grupo.GRUPO_MENSAJE %>"><%= grupo.GRUPO_MENSAJE %></a>
+                </li>
+            <%});%>
+        </ul>
+    </div>
+
+    <div class="app">
+        <div class="header">
+            <h2><%= tipo %> - Grupo:<%= grupo_vigente %></h2>
+            <h2>Total: <%= contactos.length %></h2>
+        </div>
+
+        <div class="lista">
+
+
+            <% contactos.forEach(contacto => { %>
+            <div class="contacto">
+                <table>
+                    <tr>
+                        <td><a href="/CRM?CTE=<%= contacto.CTE %>"><%= contacto.CTE %></a></td>
+                        <td><span class="NOMBRE"><%= contacto.NOMBRE %></span></td>
+                        <td><span class="TELEFONO"><%= contacto.TELEFONO %></span></td>
+                        <td hidden><span class="ID" hidden><%= contacto.ID %></span></td>
+                    </tr>
+                </table>
+            </div>
+            <% }); %>
+
+
+        </div>
+    </div>
+    
+    
+    <script src="/js/contactos/campania.js"></script>
+    <%- include("../partials/links/nav.logic.ejs")  %>
+</body>
+
+
+</html>

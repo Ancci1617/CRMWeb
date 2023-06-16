@@ -120,16 +120,9 @@ background-color: #505050;
 
 
 /* FORMULARIOS */
-.unshow {
-    top: -100vh;
-}
 
-.bg__black {
-    position: fixed;
-    inset: 0;
-    z-index: 100000;
-    background-color: rgba(0, 0, 0, .5);
-}
+
+
 
 .btn__vendi {
     background-color: rgb(60 141 60);

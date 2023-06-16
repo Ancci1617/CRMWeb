@@ -7,6 +7,13 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.bg__black {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background-color: rgba(0, 0, 0, .5);
+}
+
 .body__form {
   height: 100vh;
   display: flex;
@@ -31,7 +38,7 @@
   left: 0;
   right: 0;
   top: 3rem;
-  margin: auto; 
+  margin: auto;
   transition: top .5s;
   z-index: 10000000000;
 }
@@ -43,9 +50,9 @@
   text-align: center;
 }
 
-.btn__title__container{
-    display: grid;
-    align-items: center;
+.btn__title__container {
+  display: grid;
+  align-items: center;
 }
 
 .btn-green {
@@ -82,13 +89,19 @@ form .user-details .input-box {
   width: calc(100% / 2 - 20px);
 }
 
+.value_uppercase {
+  text-transform: uppercase;
+}
+
 form .input-box span.details {
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
 }
 
-.user-details .input-box input,.user-details .input-box select,label {
+.user-details .input-box input,
+.user-details .input-box select,
+label {
   height: 45px;
   width: 100%;
   outline: none;
@@ -99,19 +112,23 @@ form .input-box span.details {
   border-bottom-width: 2px;
   transition: all 0.3s ease;
 }
-label{
+
+label {
   display: inline-block;
   position: relative;
 }
-.hidden{
+
+.hidden {
   display: none;
 }
-.user-details .input-box input:valid ,
-.user-details .input-box select:valid{
+
+.user-details .input-box input:valid,
+.user-details .input-box select:valid {
   border-color: #18ab29;
-} 
-.user-details .input-box input:invalid ,
-.user-details .input-box select:invalid{
+}
+
+.user-details .input-box input:invalid,
+.user-details .input-box select:invalid {
   border-color: rgb(247, 27, 27);
 }
 
@@ -133,13 +150,18 @@ label{
   background: linear-gradient(135deg, #303e47, #453f47);
 }
 
-.user-details .input-box .inputfile-for-label{
+.user-details .input-box .inputfile-for-label {
   position: absolute;
   height: 5px;
   width: 5px;
   border: transparent;
   bottom: 0;
 }
+
+.unshow {
+  top: -100vh;
+}
+
 
 @media(max-width: 584px) {
   .container {

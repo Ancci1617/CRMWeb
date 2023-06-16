@@ -15,9 +15,17 @@ function gotoLink(link){
 btn_pedido.addEventListener("click",()=> gotoLink(`pedidos/cargar_pedido/${getCteEvaluado()}`));
 btn_venta.addEventListener("click", () => {gotoLink(`/cargar_venta/${getCteEvaluado()}`)});
 btn_mercaderia.addEventListener("click",() => {gotoLink(`/entrega_retiro/${getCteEvaluado()}`)})
-btn_contacto.addEventListener("click",()=>{gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}`)})
+btn_contacto.addEventListener("click",()=>{
+
+    gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE" }`);
+})
 
 
 
 
+
+window.addEventListener("load",(e) =>{
+    const urlParams = new URLSearchParams(window.location.search);
+    if(urlParams.size > 0) evaluarCliente(); 
+});
 

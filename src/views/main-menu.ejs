@@ -30,6 +30,7 @@
                 <% if(user.RANGO == "ADMIN"  ) {%><div class="dashboard-item"><a href="/pedidos/generales">Pedidos generales</a></div><%}%>
 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/contactos/">Contactos</a></div><%}%> 
+                <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/contactos/campania">Campaña</a></div><%}%> 
             
             </div>
         </div>
