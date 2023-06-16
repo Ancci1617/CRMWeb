@@ -22,9 +22,9 @@ async function getGruposByCode(CODE) {
 async function getContactosByGrupoAndTipo(TIPO, GRUPO, PARALLAMADA) {
 
     const eval = {
-        CTE: "SELECT `NOMBRE`,`TELEFONO`,CTE,ID FROM `BaseCTE` WHERE GRUPO_MENSAJE = ? order by GRUPO_MENSAJE",
-        Z: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseZ` where GRUPO_MENSAJE = ? order by GRUPO_MENSAJE",
-        Y: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseY` where GRUPO_MENSAJE = ? order by GRUPO_MENSAJE"
+        CTE: "SELECT `NOMBRE`,`TELEFONO`,CTE,ID FROM `BaseCTE` WHERE GRUPO_MENSAJE = ? AND `VALIDACION` = 'VALIDO' order by GRUPO_MENSAJE",
+        Z: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseZ` where GRUPO_MENSAJE = ? AND `VALIDACION` = 'VALIDO' order by GRUPO_MENSAJE",
+        Y: "SELECT `NOMBRE`,`TELEFONO` FROM `BaseY` where GRUPO_MENSAJE = ? AND `VALIDACION` = 'VALIDO' order by GRUPO_MENSAJE"
     };
 
     const [grupos] = await pool.query(eval[TIPO], [GRUPO]);
