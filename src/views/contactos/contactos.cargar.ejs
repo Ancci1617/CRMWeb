@@ -34,7 +34,7 @@
 
               <div class="input-box">
                 <span class="details">ZONA</span>
-                <input type="text" class="value_uppercase" placeholder="-" maxlength="2" value="<%=  %>" name="ZONA">
+                <input type="text" class="value_uppercase" placeholder="-" maxlength="2" value="<%= cte_data ? cte_data.ZONA : "" %>" name="ZONA">
               </div>
 
               <div class="input-box">
@@ -44,12 +44,12 @@
 
               <div class="input-box">
                 <span class="details">Nombre</span>
-                <input type="text" placeholder="Apellido y nombre" name="NOMBRE">
+                <input type="text" value="<%= cte_data ? cte_data.NOMBRE : "" %>" placeholder="Apellido y nombre" name="NOMBRE">
               </div>
 
               <div class="input-box">
                 <span class="details">Calle</span>
-                <input type="text" placeholder="Domicilio" name="CALLE">
+                <input type="text" placeholder="Domicilio" value="<%= cte_data ? cte_data.CALLE : "" %>" name="CALLE">
               </div>
 
               <input type="hidden" name="TIPO" value="<%= TIPO %>" required>
