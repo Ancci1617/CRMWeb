@@ -150,6 +150,23 @@ async function getPedidosActivos() {
     return [];
 
 }
+async function getPedidosProximos(today) {
+
+    const [pedidos] = await pool.query(
+        "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, "+
+        "`QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`,ORDEN, `REDES`, `ESTADO`,`MOTIVO`, " +
+        "`EVALUACION` FROM `Pedidos` WHERE (DIA_VISITA > ?) AND (ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO') order by ORDEN;",
+        [today]
+    );
+
+
+    if (pedidos.length > 0) {
+        return pedidos;
+    }
+
+    return [];
+
+}
 
 async function getPedidosAcumulados() {
     const [pedidos] = await pool.query(
@@ -167,5 +184,5 @@ async function getPedidosAcumulados() {
 module.exports = {
     insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById,
     updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar, getPedidosActivos,
-    updatePedidoByID, getPedidosAcumulados
+    updatePedidoByID, getPedidosAcumulados,getPedidosProximos
 }

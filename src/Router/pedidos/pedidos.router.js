@@ -5,7 +5,7 @@ const { getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js")
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
 const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, getPedidosByUsuario, updatePedidosReprogramar,
-    getPedidosActivos, updatePedidoByID, getPedidosAcumulados } = require("../../model/pedidos/pedidos.model");
+    getPedidosActivos, updatePedidoByID, getPedidosAcumulados, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
 
 
 
@@ -29,6 +29,7 @@ Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
 
     res.render("pedidos/pedidos.mis_pedidos.ejs", { activos, pendientes });
 });
+
 
 
 
@@ -122,7 +123,7 @@ Router.get("/pedidos/mis_pedidos/proximos", isAdminOrVendedor, async (req, res) 
 
 //pedidos generales
 Router.get("/pedidos/generales", isAdmin, async (req, res) => {
-    const data = { title: "Pedidos", items: ["Activos", "Acumulados"], links: ["/pedidos/generales/activos", "/pedidos/generales/acumulados"] };
+    const data = { title: "Pedidos", items: ["Activos", "Acumulados","Proximos"], links: ["/pedidos/generales/activos", "/pedidos/generales/acumulados","/pedidos/generales/proximos"] };
     res.render("list-items.ejs", { data });
 });
 Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
@@ -139,6 +140,24 @@ Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
     res.render("pedidos/pedidos.generales.activos.ejs", { vendedores_pedidos ,vendedores});
 
 });
+Router.get("/pedidos/generales/proximos", isAdmin, async (req, res) => {
+
+    const vendedores_pedidos = new Map();
+    const pedidos = await getPedidosProximos();
+        
+    const vendedores = [...new Set(pedidos.map(pedido => pedido.DESIGNADO))];
+    vendedores.forEach(vendedor => {
+        vendedores_pedidos.set(vendedor, pedidos.filter(pedido => pedido.DESIGNADO == vendedor));
+    });
+
+    //GRUPOS = ["ARRAY"] DE STRINGS
+    //DATA HASHMAP Donde Clave = ES EL "STRING DEL ARRAY" , y el valor es un array de objetos 
+    res.render("partials/agrupacion.ejs", { data: vendedores_pedidos ,grupos : vendedores});
+
+});
+
+
+
 Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
     //(DESIGNADO, ESTADO = "%", FECHA_VISITA = "%")
 
@@ -146,6 +165,7 @@ Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
     res.render("pedidos/pedidos.generales.acumulados.ejs", { pedidos });
 
 });
+
 
 
 //Editar pedido

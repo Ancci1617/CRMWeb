@@ -10,7 +10,7 @@
 
 
 </head>
-<title>Blanco Gusmar | Pedidos activos</title>
+<title>Blanco Gusmar | var-Titulo</title>
 
 <body>
     <%- include('../partials/navigation/navigation-bar.ejs')%>
@@ -19,7 +19,7 @@
         <div class="page__container">
 
             <div class="main__title">
-                <h2>Activos</h2>
+                <h2>var-Titulo</h2>
             </div>
             <div class="buscador__container">
                 <i class="fa fa-search"></i>
@@ -27,19 +27,19 @@
             </div>
 
             <div class="grupos__container">
-                <% vendedores.forEach(vendedor => {  %>
-                    
+                <% grupos.forEach(grupo => {  %>
+
                 <div class="grupo">
 
                     <div class="grupo__title">
-                        <span class="titulo">> <%= vendedor %></span>
-                        <span class="detalle">Total: (<%= vendedores_pedidos.get(vendedor).length %>)</span>
+                        <span class="titulo">> <%= grupo %></span>
+                        <span class="detalle">Total: (<%= data.get(grupo).length %>)</span>
                     </div>
                      
 
 
                     <div class="data__container hidden">
-                        <%  vendedores_pedidos.get(vendedor).forEach(pedido => { %>
+                        <%  data.get(grupo).forEach(pedido => { %>
 
                         <div class="grupo__data">
                             <div class="data__title">
