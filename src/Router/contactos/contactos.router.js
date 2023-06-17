@@ -19,15 +19,12 @@ Router.get("/contactos", isLoggedIn, isAdmin, (req, res) => {
 Router.get("/contactos/generar_contacto/:CTE", isAdminOrVendedor, async (req, res) => {
     const { TIPO } = req.query;
     const { CTE } = req.params;
-    console.log("CTE",CTE);
+
     let cte_data;
     if (TIPO == "CTE") {
         cte_data = await getClientes(CTE);
         cte_data = cte_data[0];
     }
-
-    console.log("DATA",cte_data);
-    console.log("GENERARCONTACTO");
 
     res.render("contactos/contactos.cargar.ejs", { TIPO, CTE, cte_data });
 })

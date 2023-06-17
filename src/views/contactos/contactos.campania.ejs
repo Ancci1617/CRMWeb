@@ -79,7 +79,7 @@
                     <tr>
                         <td><a href="/CRM?CTE=<%= contacto.CTE %>"><%= contacto.CTE %></a></td>
                         <td><span class="NOMBRE"><%= contacto.NOMBRE %></span></td>
-                        <td><span class="TELEFONO"><%= contacto.TELEFONO %></span></td>
+                        <td><a href="tel:<%= contacto.TELEFONO %>" class="TELEFONO"><%= contacto.TELEFONO %></a></td>
                         <td hidden><span class="ID" hidden><%= contacto.ID %></span></td>
                     </tr>
                 </table>
