@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const { render } = require("ejs");
-const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { getContactosByGrupoAndTipo,getContactosParaCampania, getGruposByCode, updateContactoLlamado } = require("../../model/contactos/contactos.model.js");
+const { isLoggedIn} = require("../../lib/auth");
+const { getContactosParaCampania, getGruposByCode, updateContactoLlamado } = require("../../model/contactos/contactos.model.js");
 
 
 Router.get("/contactos/campania",isLoggedIn, async (req,res)=>{

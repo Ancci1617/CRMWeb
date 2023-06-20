@@ -79,7 +79,7 @@ async function getFechaDeVentas() {
 //SELECT MIN(CTE) AS CTE FROM `NCTE` where tomado = false;
 async function getNuevoNumeroDeCte() {
     const [CTE] = await pool.query(
-        "SELECT MIN(CTE) AS CTE FROM `NCTE` where tomado = false;"
+        "SELECT MIN(CTE) AS CTE FROM `NCTE` where tomado = false and TIPO = 'CTE';"
     );
 
     if (CTE.length > 0) {

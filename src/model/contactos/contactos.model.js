@@ -5,6 +5,38 @@ const pool = require("../../model/connection-database");
 //getContactosCtes,
 //getContactosY
 
+async function getNuevoY(){
+    const [Y] = await pool.query(
+        "SELECT CTE from NCTE WHERE TOMADO = 0 AND TIPO = 'Y' order by CTE LIMIT 1;;"
+    );
+
+    if (Y.length > 0) {
+        await pool.query("UPDATE `NCTE` SET `TOMADO`='1' WHERE CTE = ?", [Y[0].CTE]);
+        return Y[0].CTE;
+    }
+
+    return [];
+}
+async function getContactosByFecha(TIPO,FECHA){
+    const eval = {
+        CTE: "SELECT concat(ZONA,'-',CTE,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO from BaseCTE WHERE DIA = ?",
+        Z: "SELECT CONCAT(ZONA,'-',Z,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO FROM `BaseZ` where VALIDACION = 'VALIDO' AND DIA = ?",
+        Y: "SELECT CONCAT(ZONA,'-',Codigo,'-',Nombre,' ',Domicilio) AS CONTACTO,  TELEFONO FROM `BaseY` WHERE VALIDACION = 'VALIDO' and Dia  = ?;"
+    };
+    const [contactos] = await pool.query(eval[TIPO],FECHA);
+    return contactos;
+
+}
+async function getFechasContactosByTipo(TIPO){
+    const eval = {
+        CTE: "SELECT DISTINCT DIA AS FECHA FROM `BaseCTE` WHERE VALIDACION = 'VALIDO' and `LINEA` != 'BASE' order by FECHA DESC",
+        Z: "SELECT DISTINCT DIA AS FECHA FROM `BaseZ` WHERE VALIDACION = 'VALIDO' AND DIA != 'ANT' ORDER BY FECHA DESC",
+        Y: "SELECT DISTINCT DIA AS FECHA from BaseY where VALIDACION = 'VALIDO' and DIA != 'ANT' ORDER BY `FECHA` DESC"
+    };
+    const [fechas] = await pool.query(eval[TIPO]);
+    return fechas;
+}
+
 async function getGruposByCode(CODE) {
     const eval = {
         CTE: "SELECT DISTINCT GRUPO_MENSAJE FROM `BaseCTE` WHERE GRUPO_MENSAJE != '' and `VALIDACION` = 'VALIDO' order by GRUPO_MENSAJE",
@@ -99,6 +131,6 @@ async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, U
 }
 
 
-module.exports = {getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono, invalidarTelefono, insertContacto, updateContactoLlamado };
+module.exports = {getNuevoY,getContactosByFecha,getFechasContactosByTipo,getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono, invalidarTelefono, insertContacto, updateContactoLlamado };
 
 
