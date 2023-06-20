@@ -12,6 +12,7 @@ function actualizarTotales() {
 buscador.addEventListener("change", e => {
     const data = e.target.value.toUpperCase();
     const grupos_data = document.querySelectorAll(".grupo__data");
+    
     grupos_data.forEach(grupo__data => {
 
         if (!grupo__data.innerHTML.toUpperCase().includes(data))
@@ -26,6 +27,7 @@ buscador.addEventListener("change", e => {
 grupos.forEach(grupo => {
     grupo.querySelector(".grupo__title").addEventListener("click", e => {
         const data__container = grupo.querySelector(".data__container");
+        data__container.classList.toggle("appear");
         data__container.classList.toggle("hidden");
     });
 });

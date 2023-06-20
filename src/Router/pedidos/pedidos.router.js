@@ -5,8 +5,8 @@ const { getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js")
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
 const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, getPedidosByUsuario, updatePedidosReprogramar,
-    getPedidosActivos, updatePedidoByID, getPedidosAcumulados, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
-
+    getPedidosActivos, getPedidosTerminados,updatePedidoByID, getPedidosAcumulados, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
+const {today} = require("../../lib/dates");
 
 
 
@@ -123,47 +123,27 @@ Router.get("/pedidos/mis_pedidos/proximos", isAdminOrVendedor, async (req, res) 
 
 //pedidos generales
 Router.get("/pedidos/generales", isAdmin, async (req, res) => {
-    const data = { title: "Pedidos", items: ["Activos", "Acumulados","Proximos"], links: ["/pedidos/generales/activos", "/pedidos/generales/acumulados","/pedidos/generales/proximos"] };
+    const data = { title: "Pedidos", items: ["Activos", "Acumulados", "Proximos"], links: ["/pedidos/generales/activos", "/pedidos/generales/acumulados", "/pedidos/generales/proximos"] };
     res.render("list-items.ejs", { data });
 });
 Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
-    const vendedores_pedidos = new Map();
-    const pedidos = await getPedidosActivos();
-
-    
-    const vendedores = [...new Set(pedidos.map(pedido => pedido.DESIGNADO))];
-    vendedores.forEach(vendedor => {
-        vendedores_pedidos.set(vendedor, pedidos.filter(pedido => pedido.DESIGNADO == vendedor));
-    })
-
-
-    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores_pedidos ,vendedores});
+    const pedidos = await getPedidosActivos(today);
+    const vendedores = sortPedidosOjb(pedidos,"DESIGNADO");
+    //vendedores = {DIEGO : [{ID : 1,CTE:8108,Nombre:"Graciela"},{...},GABRIEL : [{...}]  }
+    res.render("pedidos/pedidos.generales.activos.ejs", {vendedores,title:"Activos"});
 
 });
 Router.get("/pedidos/generales/proximos", isAdmin, async (req, res) => {
-
-    const vendedores_pedidos = new Map();
-    const pedidos = await getPedidosProximos();
-        
-    const vendedores = [...new Set(pedidos.map(pedido => pedido.DESIGNADO))];
-    vendedores.forEach(vendedor => {
-        vendedores_pedidos.set(vendedor, pedidos.filter(pedido => pedido.DESIGNADO == vendedor));
-    });
-
-    //GRUPOS = ["ARRAY"] DE STRINGS
-    //DATA HASHMAP Donde Clave = ES EL "STRING DEL ARRAY" , y el valor es un array de objetos 
-    res.render("partials/agrupacion.ejs", { data: vendedores_pedidos ,grupos : vendedores});
+    const pedidos = await getPedidosProximos(today);
+    const vendedores = sortPedidosOjb(pedidos,"DESIGNADO");
+    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores,title:"Proximos" });
 
 });
 
-
-
 Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
-    //(DESIGNADO, ESTADO = "%", FECHA_VISITA = "%")
-
-    const pedidos = await getPedidosByFiltros(undefined, "HECHO");
-    res.render("pedidos/pedidos.generales.acumulados.ejs", { pedidos });
-
+    const pedidos = await getPedidosTerminados();
+    const vendedores = sortPedidosOjb(pedidos,"VISITADO");
+        res.render("pedidos/pedidos.generales.acumulados.ejs", { vendedores,title:"Acumulados"  });
 });
 
 
@@ -173,7 +153,6 @@ Router.get("/pedidos/editar_pedido/:ID", isAdmin, async (req, res) => {
 
     const pedido = await getPedidoByID(req.params.ID);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"]); //Cambiar este Magic String
-
     res.render("pedidos/pedido.editar.ejs", { pedido, usuarios });
 
 });
@@ -232,7 +211,14 @@ Router.post("/pedidos/cargar_pedido", isAdminOrVendedor, async (req, res) => {
 
 
 
-
+function sortPedidosOjb(pedidos,SORT){
+    const res_obj = {};
+    const vendedores = [...new Set(pedidos.map(pedido => pedido[SORT]))];
+    vendedores.forEach(vendedor => {
+        res_obj[vendedor] = pedidos.filter(pedido => pedido[SORT] == vendedor);
+    });
+    return res_obj;
+}
 
 
 //PASAR PEDIDOS DE ACTIVOS A HECHO

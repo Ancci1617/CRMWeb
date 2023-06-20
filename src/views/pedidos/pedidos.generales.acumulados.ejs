@@ -2,82 +2,81 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
-    <link rel="stylesheet" href="/css/CRM/tabla.clientes.css">
-    <link rel="stylesheet" href="/css/CRM/General.css">
-    <link rel="stylesheet" href="/css/cargar_venta/tabla.ventascargadas.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css">
 
 
 </head>
-<title>Blanco Gusmar | Pedidos acumulados</title>
+<title>Blanco Gusmar | Pedidos <%= title %></title>
 
 <body>
-    <%- include('../partials/navigation/navigation-bar.ejs')%>
-        <div class="page-container">
-            <div class="table-container">
-                <table class="tabla-ventascargadas tabla-clientes tabla-datos">
-                    <thead>
-                        <tr>
-                            <th>FECHA</th>
-                            <th>REDES</th>
-                            <th>CTE</th>
-                            <th>ZONA</th>
-                            <th>NOMBRE</th>
-                            <th>CALLE</th>
-                            <th>CRUCES</th>
-                            <th>CRUCES</th>
-                            <th>TELEFONO</th>
-                            <th>QUE NECESITA</th>
-                            <th>DESIGNADO</th>
-                            <th>VISITA</th>
-                            <th>DESDE</th>
-                            <th>HASTA</th>
-                            <th>COMPLETADO</th>
-                            <th>MOTIVO</th>                            
-                        </tr>
-                    </thead>
-                    <tbody>     
-                        <% pedidos.forEach(pedido => { %>
-                        <tr>
-                            <td><%= pedido.DIA %></td>
-                            <td><%= pedido.REDES %></td>
-                            <td><%= pedido.CTE %></td>
-                            <td class="zona"><%= pedido.ZONA %></td>
-                            <td><%= pedido.NOMBRE %></td>
-                            <td><%= pedido.CALLE %></td>
-                            <td><%= pedido.CRUCES %></td>
-                            <td><%= pedido.CRUCES2 %></td>
-                            <td><%= pedido.TELEFONO %></td>
-                            <td><%= pedido.QUE_NECESITA %></td>
-                            <td><%= pedido.DESIGNADO %></td>
-                            <td><%= pedido.DIA_VISITA %></td>
-                            <td><%= pedido.DESDE %></td>
-                            <td><%= pedido.HASTA %></td>                            
-                            <td><%= pedido.VISITADO %></td>                            
-                            <td><%= pedido.MOTIVO %></td>                            
+  <%- include('../partials/navigation/navigation-bar.ejs')%>
 
-                        </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
+
+  <div class="page__container">
+
+    <div class="main__title">
+      <h2><%= title %></h2>
+    </div>
+    <div class="buscador__container">
+      <i class="fa fa-search"></i>
+      <input type="text" class="buscador" name="buscador" value="" placeholder="Buscar" />
+    </div>
+
+    <div class="grupos__container">
+      <% Object.keys(vendedores).forEach(vendedor => {  %>
+
+
+      <div class="grupo">
+        <div class="grupo__title">
+          <span class="titulo">> <%= vendedor %></span>
+          <span class="detalle">Total: (<%= vendedores[vendedor].length %>)</span>
         </div>
 
-        <%- include("../partials/links/nav.logic.ejs")  %>
+        <div class="data__container hidden">
+
+          <% vendedores[vendedor].forEach(pedido => { %>
+
+          <div class="grupo__data">
+
+            <div class="data__title">
+              <%= pedido.CTE %> - <%= pedido.NOMBRE  %>
+            </div>
+            <div class="data__body">
+              <span class="calle"><%= pedido.CALLE %> </span>
+              <span class="cruces"><%= pedido.CRUCES + " - " + pedido.CRUCES2 %></span>
+            </div>
+            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %></span>
+            <span class="pedido__detail">Programado : <%= pedido.MOTIVO %></span>
+            <span class="pedido__estado pedido__detail">
+              <%= pedido.DESIGNADO %>
+            </span>
+            <span class="zona"><%= pedido.ZONA %></span>
+            <!-- <a href="/pedidos/editar_pedido/<%# pedido.ID %>">Editar</a> -->
+          </div>
+
+          <% }) %>
+
+        </div>
+
+
+      </div>
+      <% }) %>
+
+
+
+
+
+    </div>
+
+
+  </div>
+
+  <script src="/js/pedidos/pedidos.generales.activos.js"></script>
+  <%- include("../partials/links/nav.logic.ejs") %>
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-

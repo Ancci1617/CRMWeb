@@ -135,11 +135,11 @@ async function updatePedidosReprogramar({ MOTIVO, ESTADO, ID, FECHA, DESDE, HAST
 
 }
 
-async function getPedidosActivos() {
+async function getPedidosActivos(today) {
 
     const [pedidos] = await pool.query(
         "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, `QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`,ORDEN, `REDES`, `ESTADO`,  " +
-        "`MOTIVO`, `EVALUACION` FROM `Pedidos` WHERE ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO' order by ORDEN;"
+        "`MOTIVO`, `EVALUACION` FROM `Pedidos` WHERE (ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO') AND (`DIA_VISITA` <= ?) order by ORDEN;",[today]
     );
 
 
@@ -167,6 +167,23 @@ async function getPedidosProximos(today) {
     return [];
 
 }
+async function getPedidosTerminados() {
+
+    const [pedidos] = await pool.query(
+        "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, "+
+        "`QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`,ORDEN, `REDES`, `ESTADO`,`MOTIVO`,VISITADO, " +
+        "`EVALUACION` FROM `Pedidos` WHERE ESTADO = 'HECHO' order by DIA_VISITA DESC;",
+     
+    );
+
+
+    if (pedidos.length > 0) {
+        return pedidos;
+    }
+
+    return [];
+
+}
 
 async function getPedidosAcumulados() {
     const [pedidos] = await pool.query(
@@ -184,5 +201,5 @@ async function getPedidosAcumulados() {
 module.exports = {
     insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById,
     updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar, getPedidosActivos,
-    updatePedidoByID, getPedidosAcumulados,getPedidosProximos
+    updatePedidoByID, getPedidosAcumulados,getPedidosProximos,getPedidosTerminados
 }

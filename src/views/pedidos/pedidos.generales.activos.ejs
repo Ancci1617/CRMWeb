@@ -2,81 +2,80 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
-    <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css">
 
 
 </head>
-<title>Blanco Gusmar | Pedidos activos</title>
+<title>Blanco Gusmar | Pedidos <%= title %></title>
 
 <body>
-    <%- include('../partials/navigation/navigation-bar.ejs')%>
+  <%- include('../partials/navigation/navigation-bar.ejs')%>
 
 
-        <div class="page__container">
+  <div class="page__container">
 
-            <div class="main__title">
-                <h2>Activos</h2>
+    <div class="main__title">
+      <h2><%= title %></h2>
+    </div>
+    <div class="buscador__container">
+      <i class="fa fa-search"></i>
+      <input type="text" class="buscador" name="buscador" value="" placeholder="Buscar" />
+    </div>
+
+    <div class="grupos__container">
+      <% Object.keys(vendedores).forEach(vendedor => {  %>
+
+
+      <div class="grupo">
+        <div class="grupo__title">
+          <span class="titulo">> <%= vendedor %></span>
+          <span class="detalle">Total: (<%= vendedores[vendedor].length %>)</span>
+        </div>
+
+        <div class="data__container hidden">
+
+          <% vendedores[vendedor].forEach(pedido => { %>
+
+          <div class="grupo__data">
+
+            <div class="data__title">
+              <%= pedido.CTE %> - <%= pedido.NOMBRE  %>
             </div>
-            <div class="buscador__container">
-                <i class="fa fa-search"></i>
-                <input type="text" class="buscador" name="buscador" value="" placeholder="Buscar" />
+            <div class="data__body">
+              <span class="calle"><%= pedido.CALLE %> </span>
+              <span class="cruces"><%= pedido.CRUCES + " - " + pedido.CRUCES2 %></span>
             </div>
+            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %></span>
+            <span class="pedido__estado <%= pedido.ESTADO == "PENDIENTE" ? "pedido__detail" : "pedido__activo" %>">
+              <%= pedido.ESTADO %>
+            </span>
+            <span class="zona"><%= pedido.ZONA %></span>
+            <a href="/pedidos/editar_pedido/<%= pedido.ID %>">Editar</a>
+          </div>
 
-            <div class="grupos__container">
-                <% vendedores.forEach(vendedor => {  %>
-                    
-                <div class="grupo">
-
-                    <div class="grupo__title">
-                        <span class="titulo">> <%= vendedor %></span>
-                        <span class="detalle">Total: (<%= vendedores_pedidos.get(vendedor).length %>)</span>
-                    </div>
-                     
-
-
-                    <div class="data__container hidden">
-                        <%  vendedores_pedidos.get(vendedor).forEach(pedido => { %>
-
-                        <div class="grupo__data">
-                            <div class="data__title">
-                                <%= pedido.CTE %> - <%= pedido.NOMBRE  %>
-                            </div>
-                            <div class="data__body">
-                                <span class="calle"><%= pedido.CALLE %> </span>
-                                <span class="cruces"><%= pedido.CRUCES + " - " + pedido.CRUCES2 %></span>
-                            </div>
-                            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %></span>
-                            <span class="pedido__estado <%= pedido.ESTADO == "PENDIENTE" ? "pedido__detail" : "pedido__activo" %>">
-                                <%= pedido.ESTADO %>
-                            </span>
-                            <span class="zona"><%= pedido.ZONA %></span>
-                            <a href="/pedidos/editar_pedido/<%= pedido.ID %>">Editar</a>
-                        </div>
-
-                        <% }) %>
-
-                    </div>
-
-
-
-                </div>
-
-                <% }) %>
-
-
-
-
-            </div>
-
+          <% }) %>
 
         </div>
 
-    <script src="/js/pedidos/pedidos.generales.activos.js"></script>
-    <%- include("../partials/links/nav.logic.ejs") %>
+
+      </div>
+      <% }) %>
+
+
+
+
+
+    </div>
+
+
+  </div>
+
+  <script src="/js/pedidos/pedidos.generales.activos.js"></script>
+  <%- include("../partials/links/nav.logic.ejs") %>
 </body>
 
 </html>
