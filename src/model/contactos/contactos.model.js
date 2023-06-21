@@ -28,7 +28,7 @@ async function invalidarTelefonosDeCte(CTE) {
 }
 async function getContactosByFecha(TIPO, FECHA) {
     const eval = {
-        CTE: "SELECT concat(ZONA,'-',CTE,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO from BaseCTE WHERE DIA = ?",
+        CTE: "SELECT concat(ZONA,'-',CTE,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO from BaseCTE WHERE DIA = ? where VALIDACION = 'VALIDO'",
         Z: "SELECT CONCAT(ZONA,'-',Z,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO FROM `BaseZ` where VALIDACION = 'VALIDO' AND DIA = ?",
         Y: "SELECT CONCAT(ZONA,'-',Codigo,'-',Nombre,' ',Domicilio) AS CONTACTO,  TELEFONO FROM `BaseY` WHERE VALIDACION = 'VALIDO' and Dia  = ?;"
     };
