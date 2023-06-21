@@ -49,7 +49,7 @@
               <span class="calle"><%= pedido.CALLE %> </span>
               <span class="cruces"><%= pedido.CRUCES + " - " + pedido.CRUCES2 %></span>
             </div>
-            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %></span>
+            <span class="pedido__detail">Programado : <%= pedido.DIA_VISITA %> (<%= pedido.REDES %>)</span>
             <span class="pedido__estado <%= pedido.ESTADO == "PENDIENTE" ? "pedido__detail" : "pedido__activo" %>">
               <%= pedido.ESTADO %>
             </span>
