@@ -30,8 +30,7 @@
         <div class="user-details">
           <div class="input-box ">
             <span class="details">Cliente</span>
-            <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE? CTE : 0%>" name="CTE"
-              required>
+            <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE? CTE : 0%>" name="CTE" required>
           </div>
 
           <div class="input-box">
@@ -41,8 +40,7 @@
 
           <div class="input-box">
             <span class="details">Apellido y nombre</span>
-            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE"
-            required>
+            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE" required>
           </div>
 
           <div class="input-box">
@@ -67,8 +65,7 @@
 
           <div class="input-box">
             <span class="details">Telefono</span>
-            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>"
-            name="WHATSAPP">
+            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>" name="WHATSAPP">
           </div>
 
           <div class="input-box">
@@ -101,7 +98,7 @@
 
           <div class="input-box">
             <span class="details">Cuota</span>
-            <input type="text" placeholder="Valor de cuota" name="CUOTA" required> 
+            <input type="text" placeholder="Valor de cuota" name="CUOTA" required>
           </div>
 
           <div class="input-box">
@@ -133,8 +130,7 @@
 
           <div class="input-box">
             <span class="details">Primer pago</span>
-            <input type="date" placeholder="Primer fecha de pago" name="PRIMER_PAGO"
-              min="<%= today %>" required>
+            <input type="date" placeholder="Primer fecha de pago" name="PRIMER_PAGO" min="<%= today %>" required>
           </div>
 
           <div class="input-box">
@@ -156,11 +152,7 @@
           </div>
           <div class="input-box">
             <span class="details">Fecha de venta</span>
-            <input type="date" placeholder="" name="FECHA_VENTA"
-              value="<%= today %>"
-              min="<%= treeDaysAgo %>"
-              max="<%= today %>" 
-              required>
+            <input type="date" placeholder="" name="FECHA_VENTA" value="<%= today %>" min="<%= treeDaysAgo %>" max="<%= today %>" required>
           </div>
 
           <div class="input-box">
@@ -176,33 +168,30 @@
             <span class="details">DNI Frente</span>
             <label for="FRENTE">
               <span class="IMG-FRENTE">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE"
-              accept="image/*" required>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
             </label>
           </div>
           <div class="input-box">
             <span class="details">DNI Dorso</span>
             <label for="DORSO">
-               <span class="IMG-DORSO">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO"
-              accept="image/*" required>
+              <span class="IMG-DORSO">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
             </label>
           </div>
           <div class="input-box">
             <span class="details">ROSTRO</span>
             <label for="ROSTRO">
               <span class="IMG-ROSTRO">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO"
-              accept="image/*" required>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
             </label>
           </div>
-          
+
           <!-- input hidden  Venta Aprobada/Desaprobada -->
-          <div class="input-box hidden" >
-            <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required/>
+          <div class="input-box hidden">
+            <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
           </div>
-          
-          
+
+
           <!-- BOTONES DE SUBMIT -->
           <div class="button">
             <input type="submit" value="Registrar venta">

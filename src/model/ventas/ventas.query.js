@@ -1,5 +1,16 @@
 const pool = require("../../model/connection-database");
 
+async function getVentaById(ID) {
+    const [res] = await pool.query("SELECT * from `VentasCargadas` where INDICE = ?", [ID]);
+
+    if (res.length > 0) {
+        return res[0];
+    }
+    return [];
+}
+
+
+
 async function getVendedoresConVentas(dia) {
     const [vendedores] = await pool.query(
         "Select distinct `USUARIO` AS VENDEDOR from " +
@@ -147,6 +158,8 @@ module.exports = {
     getVentasVendedores, getVendedores,
     getFechaDeVentas, getVentasDelDiaGeneral,
     getVendedoresConVentas, getNuevoNumeroDeCte,
-    getVentasContado, getFechaDeVentasContado, deleteVentasContado
+    getVentasContado, getFechaDeVentasContado, deleteVentasContado,
+    getVentaById
+
 }
 

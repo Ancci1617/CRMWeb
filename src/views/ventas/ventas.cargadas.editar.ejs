@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Editar venta</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% var today=new Date().toISOString().substring(0,10) %>
+  <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="titles">
+      <div class="title">Editar venta</div>
+      <div>
+        <!-- <input class="btn-green btn-nuevo hidden" type="button" value="Cliente nuevo"> -->
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/ventas_cargadas/editar" method="POST" enctype="multipart/form-data" id="form_editar_venta">
+
+        <div class="user-details">
+          <div class="input-box ">
+            <span class="details">Cliente</span>
+            <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE %>" name="CTE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Ficha</span>
+            <input type="number" placeholder="Numero de ficha" value="<%= FICHA %>" name="FICHA" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Apellido y nombre</span>
+            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Zona</span>
+            <input type="text" placeholder="Zona" value="<%= ZONA   %>" name="ZONA" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Calle</span>
+            <input type="text" placeholder="Domicilio" value="<%= CALLE %>" name="CALLE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cruce 1</span>
+            <input type="text" placeholder="Cruce 1" value="<%= CRUCES %>" name="CRUCES" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cruce 2</span>
+            <input type="text" placeholder="Cruce 2" value="<%= CRUCES2 %>" name="CRUCES2" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Telefono</span>
+            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>" name="WHATSAPP">
+          </div>
+
+          <div class="input-box">
+            <span class="details">N° de documento</span>
+            <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuotas</span>
+            <select form="form_editar_venta" class="selector-cuotas" name="CUOTAS" required>
+              <option value="3" <%= CUOTAS == 3 ? "selected" : null %>>3</option>
+              <option value="6" <%= CUOTAS == 6 ? "selected" : null %>>6</option>
+              <option value="8"  <%= CUOTAS == 8 ? "selected" : null %>>8</option>
+              <option value="9"  <%= CUOTAS == 9 ? "selected" : null %>>9</option>
+              <option value="12"  <%= CUOTAS == 12 ? "selected" : null %>>12</option>
+              <option value="1"  <%= CUOTAS == 1 ? "selected" : null %>>1</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Articulos</span>
+            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS" value="<%= ARTICULOS %>" required>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Vta total</span>
+            <input type="number" placeholder="Suma de cuotas" name="TOTAL" value="<%= TOTAL %>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuota</span>
+            <input type="text" placeholder="Valor de cuota" name="CUOTA" value="<%= CUOTA %>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Anticipo</span>
+            <input type="text" placeholder="Anticipo cobrado" name="ANTICIPO" value="<% ANTICIPO %>">
+          </div>
+
+          <div class="input-box">
+            <span class="details">Tipo</span>
+            <select class="" form="form_editar_venta" name="TIPO" required>
+              <option value="Pedido" <%= TIPO == "Pedido" ? "selected" : null %>>Pedido</option>
+              <option value="Revisita" <%= TIPO == "Revisita" ? "selected" : null %>>Revisita</option>
+              <option value="Timbreo" <%= TIPO == "Timbreo" ? "selected" : null %>>Timbreo</option>
+              <option value="Local" <%= TIPO == "Local" ? "selected" : null %>>Local</option>
+            </select>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Estatus</span>
+            <select class="options-estatus" form="form_editar_venta" name="ESTATUS" required>
+              <option value="Entregado" <%= ESTATUS == "Entregado" ? "selected" : null %>>Entregado</option>
+              <option value="Con anticipo" <%= ESTATUS == "Con anticipo" ? "selected" : null %>>Con anticipo</option>
+              <option value="Para entregar" <%= ESTATUS == "Para entregar" ? "selected" : null %>>Para entregar</option>
+              <option value="Prepago" <%= ESTATUS == "Prepago" ? "selected" : null %>>Prepago</option>
+              <option value="Prepago entregado" <%= ESTATUS == "Prepago entregado" ? "selected" : null %>>Prepago entregado</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Primer pago</span>
+            <input type="date" placeholder="Primer fecha de pago" name="PRIMER_PAGO" value="<%= PRIMER_PAGO %>" min="<%= today %>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Dia de vencimiento</span>
+            <select class="" name="VENCIMIENTO" required form="form_editar_venta">
+              <option value="4" <%= VENCIMIENTO == "4" ? "selected" : null %>>4</option>
+              <option value="9" <%= VENCIMIENTO == "9" ? "selected" : null %>>9</option>
+              <option value="14" <%= VENCIMIENTO == "14" ? "selected" : null %>>14</option>
+              <option value="19" <%= VENCIMIENTO == "19" ? "selected" : null %>>19</option>
+              <option value="24" <%= VENCIMIENTO == "24" ? "selected" : null %>>24</option>
+              <option value="29" <%= VENCIMIENTO == "29" ? "selected" : null %>>29</option>
+            </select>
+          </div>
+
+
+          <div class="input-box cuotas_para_entrega hidden">
+            <span class="details">Cuota de entrega</span>
+            <input type="number" placeholder="Cuotas pagas para la entrega" name="CUOTAS_PARA_ENTREGA" value="<%= CUOTAS_PARA_ENTREGA %>">
+          </div>
+          <div class="input-box">
+            <span class="details">Fecha de venta</span>
+            <input type="date"  name="FECHA_VENTA" value="<%= FECHA_VENTA %>" min="<%= treeDaysAgo %>" max="<%= today %>" >
+          </div>
+
+          <div class="input-box">
+            <span class="details">Se hace responsable el vendedor?</span>
+            <select class="options" name="RESPONSABLE" form="form_editar_venta" required>
+              <option value="NO" <%= RESPONSABLE == "NO" ? "selected" : null %>>NO</option>
+              <option value="SI" <%= RESPONSABLE == "SI" ? "selected" : null %>>SI</option>
+            </select>
+          </div>
+
+          <!-- IMAGENES -->
+          <div class="input-box">
+            <span class="details">DNI Frente</span>
+            <label for="FRENTE">
+              <span class="IMG-FRENTE">Cargar foto...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*">
+            </label>
+          </div>
+
+          <div class="input-box">
+            <span class="details">DNI Dorso</span>
+            <label for="DORSO">
+              <span class="IMG-DORSO">Cargar foto...</span>
+              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*">
+            </label>
+          </div>
+
+          <div class="input-box">
+            <span class="details">ROSTRO</span>
+            <label for="ROSTRO">
+              <span class="IMG-ROSTRO">Cargar foto...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*">
+            </label>
+          </div>
+
+          <!-- input hidden  Venta Aprobada/Desaprobada -->
+          <div class="input-box hidden">
+            <input type="text" form="form_editar_venta" value="APROBADO" name="APROBADO" required />
+          </div>
+
+          <input type="hidden" name="ID" value="<%= INDICE %>">
+          <!-- BOTONES DE SUBMIT -->
+          <div class="button">
+            <input type="submit" value="Editar venta">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/js/lib/file.weight.js"></script>
+  <script src="/js/ventas/cargar_venta.js"></script>
+
+</body>
+
+</html>

@@ -37,6 +37,7 @@
                             <th>APROBADO</th>
                             <th>RESPONSABLE</th>
                             <th>ELIMINAR</th>
+                            <th>EDITAR</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,6 +63,7 @@
 
                             <td><%= ventas[i].RESPONSABLE%></td>
                             <td><a href="/eliminar_venta/<%= ventas[i].INDICE %>">Borrar</a></td>
+                            <td><a href="/ventas_cargadas/editar/<%= ventas[i].INDICE %>">Editar</a></td>
                         </tr>
                         <% } %>
                     </tbody>

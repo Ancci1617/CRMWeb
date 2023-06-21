@@ -73,7 +73,7 @@ Router.get("/contactos/VCF/:TIPO", isAdmin, async (req, res) => {
 
 });
 
-Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {
+Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {    
 
     const { TIPO, FECHA } = req.params;
     const contactos = await getContactosByFecha(TIPO, FECHA);
@@ -133,7 +133,7 @@ async function generarContactoCTE(CTE, Usuario, body) {
 
     const cte_data = await getClientes(CTE);
 
-    if (!cte_data[0].CTE) return "Cliente invalido"
+    if (!cte_data[0].CTE) return "Cliente invalido";
 
     await invalidarTelefono(TELEFONO);
     await invalidarTelefonosDeCte(CTE);

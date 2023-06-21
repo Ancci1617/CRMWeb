@@ -2,15 +2,16 @@ const Router = require("express").Router();
 const pool = require("../../model/connection-database");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { getPrepagoEntrega } = require("../../model/productos/prepagos");
-const { insertVenta } = require("../../model/ventas/insert.venta");
+const { insertVenta,updateVentaById } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
-const {saveFileFromEntry} = require("../../lib/files");
+const { getVentaById, getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const { saveFileFromEntry } = require("../../lib/files");
+//updateVentaById
 
+ 
 
-
-Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor , async (req, res) => {
+Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, async (req, res) => {
     const { cte } = req.params;
 
 
@@ -24,12 +25,14 @@ Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor , async (req, res
 });
 
 Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
+
+
     res.redirect("/cargar_venta/0");
 });
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     //Inicializa variables
-    console.log("body al cargar la venta",req.body);
+    console.log("body al cargar la venta", req.body);
 
     const { Usuario } = req.user;
     const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
@@ -44,9 +47,9 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
 
 
     //Cargar imagen de frente y dorso a servidor
-    if(req.files){
+    if (req.files) {
         const entries = Object.entries(req.files);
-        saveFileFromEntry(entries,CTE);
+        saveFileFromEntry(entries, CTE);
     }
 
     res.redirect("/");
@@ -66,7 +69,7 @@ Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
     const data = req.body;
     const query_result = { total: 0, cuota: 0 };
-    
+
     for (let i = 0; i < data.articulos.length; i++) {
 
         let respuesta = await getPrecio(data.articulos[i], data.cuotas);
@@ -97,8 +100,36 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
     const date = today.getFullYear() + "-" + (today.getMonth() + 1).toString().padStart(2, "0") + "-" + today.getDate().toString().padStart(2, "0");
     const ventas = await getVentasDelDia(date, req.user.Usuario);
 
-
     res.render("ventas/Ventas.cargadas.ejs", { ventas });
+});
+
+Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
+    const { ID } = req.params;
+    const venta = await getVentaById(ID);
+    console.log("venta", venta);
+    res.render("ventas/ventas.cargadas.editar.ejs", venta);
+
+});
+
+
+Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
+    console.log("body al editar la venta",req.body);
+
+    const {CTE} = req.body;
+
+    //Carga la venta
+    await updateVentaById(req.body);
+
+
+    //Cargar imagen de frente y dorso a servidor
+    if (req.files) {
+        const entries = Object.entries(req.files);
+        saveFileFromEntry(entries, CTE);
+    }
+        
+    res.redirect("/ventas_cargadas");
+
+
 });
 
 Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
@@ -147,7 +178,6 @@ Router.post("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res)
     res.json(ventas);
 
 })
-
 
 
 module.exports = Router;
