@@ -1,6 +1,6 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { getContactosByFecha, getFechasContactosByTipo, getContactosByGrupoAndTipo, getGruposByCode, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../../model/contactos/contactos.model.js");
+const { invalidarTelefonosDeCte,getContactosByFecha, getFechasContactosByTipo, getContactosByGrupoAndTipo, getGruposByCode, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../../model/contactos/contactos.model.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { today } = require("../../lib/dates");
 const fs = require("fs/promises");
@@ -136,6 +136,7 @@ async function generarContactoCTE(CTE, Usuario, body) {
     if (!cte_data[0].CTE) return "Cliente invalido"
 
     await invalidarTelefono(TELEFONO);
+    await invalidarTelefonosDeCte(CTE);
     return await insertContacto("CTE", TELEFONO, today, CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario);
 
 }

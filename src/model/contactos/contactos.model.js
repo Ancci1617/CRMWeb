@@ -5,7 +5,7 @@ const pool = require("../../model/connection-database");
 //getContactosCtes,
 //getContactosY
 
-async function getNuevoY(){
+async function getNuevoY() {
     const [Y] = await pool.query(
         "SELECT CTE from NCTE WHERE TOMADO = 0 AND TIPO = 'Y' order by CTE LIMIT 1;;"
     );
@@ -17,17 +17,26 @@ async function getNuevoY(){
 
     return [];
 }
-async function getContactosByFecha(TIPO,FECHA){
+
+async function invalidarTelefonosDeCte(CTE) {
+    const [res] = await pool.query(
+        "update BaseCTE set VALIDACION = 'INVALIDO' where CTE = ?", [CTE]
+    );
+
+    return res;
+
+}
+async function getContactosByFecha(TIPO, FECHA) {
     const eval = {
         CTE: "SELECT concat(ZONA,'-',CTE,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO from BaseCTE WHERE DIA = ?",
         Z: "SELECT CONCAT(ZONA,'-',Z,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO FROM `BaseZ` where VALIDACION = 'VALIDO' AND DIA = ?",
         Y: "SELECT CONCAT(ZONA,'-',Codigo,'-',Nombre,' ',Domicilio) AS CONTACTO,  TELEFONO FROM `BaseY` WHERE VALIDACION = 'VALIDO' and Dia  = ?;"
     };
-    const [contactos] = await pool.query(eval[TIPO],FECHA);
+    const [contactos] = await pool.query(eval[TIPO], FECHA);
     return contactos;
 
 }
-async function getFechasContactosByTipo(TIPO){
+async function getFechasContactosByTipo(TIPO) {
     const eval = {
         CTE: "SELECT DISTINCT DIA AS FECHA FROM `BaseCTE` WHERE VALIDACION = 'VALIDO' and `LINEA` != 'BASE' order by FECHA DESC",
         Z: "SELECT DISTINCT DIA AS FECHA FROM `BaseZ` WHERE VALIDACION = 'VALIDO' AND DIA != 'ANT' ORDER BY FECHA DESC",
@@ -63,21 +72,21 @@ async function getContactosByGrupoAndTipo(TIPO, GRUPO, PARALLAMADA) {
     return grupos;
 
 }
-async function getContactosParaCampania( GRUPO) {
+async function getContactosParaCampania(GRUPO) {
 
 
     const [grupos] = await pool.query(
         "SELECT `NOMBRE`,`TELEFONO`,CTE,ID FROM `BaseCTE` WHERE GRUPO_MENSAJE = ? and `LLAMADO` = 'POR LLAMAR' order by GRUPO_MENSAJE",
         [GRUPO]);
-    
+
     return grupos;
 
 }
 async function getContactoByTelefono(TELEFONO) {
     const [contacto] = await pool.query(
-        "SELECT BaseCTE.TELEFONO,'CTE' as TIPO FROM BaseCTE WHERE BaseCTE.TELEFONO = ? UNION " +
-        "SELECT BaseZ.TELEFONO,'Z' as TIPO from BaseZ where BaseZ.TELEFONO = ? UNION " +
-        "SELECT BaseY.Telefono,'Y' as TIPO FROM BaseY WHERE BaseY.Telefono = ?;"
+        "SELECT BaseCTE.TELEFONO,'CTE' as TIPO FROM BaseCTE WHERE BaseCTE.TELEFONO = ? and BaseCTE.VALIDACION = 'VALIDO' UNION " +
+        "SELECT BaseZ.TELEFONO,'Z' as TIPO from BaseZ where BaseZ.TELEFONO = ? and VALIDACION = 'VALIDO' UNION " +
+        "SELECT BaseY.Telefono,'Y' as TIPO FROM BaseY WHERE BaseY.Telefono = ? and VALIDACION = 'VALIDO';"
         , [TELEFONO, TELEFONO, TELEFONO]);
 
 
@@ -111,8 +120,7 @@ async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, U
 
 
     const eval = {
-        CTE:
-            "INSERT INTO `BaseCTE` (`TELEFONO`,`CTE`, `ZONA`, `NOMBRE`,`CALLE`,  `LINEA`, `DIA`, `VALIDACION`, `GRUPO_MENSAJE`) " +
+        CTE: "INSERT INTO `BaseCTE` (`TELEFONO`,`CTE`, `ZONA`, `NOMBRE`,`CALLE`,  `LINEA`, `DIA`, `VALIDACION`, `GRUPO_MENSAJE`) " +
             " VALUES ( ?,?,?,?,?,?,?,'VALIDO',13 ) ",
 
         Z: "INSERT INTO `BaseZ`(`TELEFONO`,`Z`,`ZONA`,`NOMBRE`, `CALLE` ,`LINEA`, `DIA` ,`VALIDACION`, `GRUPO_MENSAJE`) VALUES " +
@@ -131,6 +139,10 @@ async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, U
 }
 
 
-module.exports = {getNuevoY,getContactosByFecha,getFechasContactosByTipo,getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono, invalidarTelefono, insertContacto, updateContactoLlamado };
+module.exports = {
+    invalidarTelefonosDeCte, getNuevoY, getContactosByFecha, getFechasContactosByTipo,
+    getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono,
+    invalidarTelefono, insertContacto, updateContactoLlamado
+};
 
 
