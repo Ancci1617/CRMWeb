@@ -150,13 +150,13 @@ async function getPedidosActivos(today) {
     return [];
 
 }
-async function getPedidosProximos(today) {
+async function getPedidosProximos(today, usuario = "%") {
 
     const [pedidos] = await pool.query(
         "SELECT `ID`, `DIA`,  `CTE`, `ZONA`, `NOMBRE`, `CALLE`, `CRUCES`, `CRUCES2`, `TELEFONO`, "+
         "`QUE_NECESITA`, `DIA_VISITA`, `DESIGNADO`,ORDEN, `REDES`, `ESTADO`,`MOTIVO`, " +
-        "`EVALUACION` FROM `Pedidos` WHERE (DIA_VISITA > ?) AND (ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO') order by ORDEN;",
-        [today]
+        "`EVALUACION` FROM `Pedidos` WHERE (DIA_VISITA > ? and DESIGNADO LIKE ?) AND (ESTADO = 'PENDIENTE' or ESTADO = 'ACTIVO') order by ORDEN;",
+        [today,usuario]
     );
 
 

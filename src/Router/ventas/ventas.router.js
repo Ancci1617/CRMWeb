@@ -120,13 +120,12 @@ Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
     //Carga la venta
     await updateVentaById(req.body);
 
-
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {
         const entries = Object.entries(req.files);
         saveFileFromEntry(entries, CTE);
     }
-        
+
     res.redirect("/ventas_cargadas");
 
 

@@ -4,16 +4,16 @@ const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
 const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
-const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, getPedidosByUsuario, updatePedidosReprogramar,
-    getPedidosActivos, getPedidosTerminados,updatePedidoByID, getPedidosAcumulados, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
-const {today} = require("../../lib/dates");
+const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar,
+    getPedidosActivos, getPedidosTerminados, updatePedidoByID, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
+const { today } = require("../../lib/dates");
 
 
 
 //MIS_PEDIDOS
 Router.get("/pedidos/", isAdminOrVendedor, (req, res) => {
     // const data = { title: "Pedidos", items: ["Mis pedidos", "Proximos", "Acumulados"], links: ["/pedidos/mis_pedidos", "/pedidos/proximos_pedidos", "/pedidos/mis_pedidos/acumulados"] };
-    const data = { title: "Pedidos", items: ["Mis pedidos"], links: ["/pedidos/mis_pedidos"] };
+    const data = { title: "Pedidos", items: ["Mis pedidos","Proximos"], links: ["/pedidos/mis_pedidos","/pedidos/mis_pedidos/proximos"] };
     res.render("list-items.ejs", { data });
 });
 
@@ -28,6 +28,12 @@ Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
     const pendientes = pedidos_de_hoy.filter(pedido => pedido.ESTADO == "PENDIENTE");
 
     res.render("pedidos/pedidos.mis_pedidos.ejs", { activos, pendientes });
+});
+
+Router.get("/pedidos/mis_pedidos/proximos", isAdminOrVendedor, async (req, res) => {
+    const pedidos = await getPedidosProximos(today, req.user.Usuario);
+    const vendedores = sortPedidosOjb(pedidos, "DIA_VISITA");
+    res.render("pedidos/pedidos.generales.acumulados.ejs", { vendedores, title: "Proximos" });
 });
 
 
@@ -114,10 +120,6 @@ Router.post("/pedidos/reasignar", isAdminOrVendedor, async (req, res) => {
     res.redirect(`/pedidos/recorrido/detalle`);
 });
 
-Router.get("/pedidos/mis_pedidos/proximos", isAdminOrVendedor, async (req, res) => {
-
-    res.render("pedidos/pedidos.mis_pedidos.proximosejs");
-});
 
 
 
@@ -128,22 +130,22 @@ Router.get("/pedidos/generales", isAdmin, async (req, res) => {
 });
 Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
     const pedidos = await getPedidosActivos(today);
-    const vendedores = sortPedidosOjb(pedidos,"DESIGNADO");
+    const vendedores = sortPedidosOjb(pedidos, "DESIGNADO");
     //vendedores = {DIEGO : [{ID : 1,CTE:8108,Nombre:"Graciela"},{...},GABRIEL : [{...}]  }
-    res.render("pedidos/pedidos.generales.activos.ejs", {vendedores,title:"Activos"});
+    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores, title: "Activos" });
 
 });
 Router.get("/pedidos/generales/proximos", isAdmin, async (req, res) => {
     const pedidos = await getPedidosProximos(today);
-    const vendedores = sortPedidosOjb(pedidos,"DESIGNADO");
-    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores,title:"Proximos" });
+    const vendedores = sortPedidosOjb(pedidos, "DESIGNADO");
+    res.render("pedidos/pedidos.generales.activos.ejs", { vendedores, title: "Proximos" });
 
 });
 
 Router.get("/pedidos/generales/acumulados", isAdmin, async (req, res) => {
     const pedidos = await getPedidosTerminados();
-    const vendedores = sortPedidosOjb(pedidos,"VISITADO");
-        res.render("pedidos/pedidos.generales.acumulados.ejs", { vendedores,title:"Acumulados"  });
+    const vendedores = sortPedidosOjb(pedidos, "VISITADO");
+    res.render("pedidos/pedidos.generales.acumulados.ejs", { vendedores, title: "Acumulados" });
 });
 
 
@@ -211,7 +213,7 @@ Router.post("/pedidos/cargar_pedido", isAdminOrVendedor, async (req, res) => {
 
 
 
-function sortPedidosOjb(pedidos,SORT){
+function sortPedidosOjb(pedidos, SORT) {
     const res_obj = {};
     const vendedores = [...new Set(pedidos.map(pedido => pedido[SORT]))];
     vendedores.forEach(vendedor => {
