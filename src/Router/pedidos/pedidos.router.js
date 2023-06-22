@@ -6,7 +6,7 @@ const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../..
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
 const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar,
     getPedidosActivos, getPedidosTerminados, updatePedidoByID, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
-const { today } = require("../../lib/dates");
+const { getToday } = require("../../lib/dates");
 
 
 
@@ -20,10 +20,9 @@ Router.get("/pedidos/", isAdminOrVendedor, (req, res) => {
 Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
     //get mis pedidos
     const { Usuario } = req.user;
-    const today = new Date().toISOString().split("T")[0];
     const pedidos = await getPedidosByFiltros(Usuario, "%");
 
-    const pedidos_de_hoy = pedidos.filter(pedido => pedido.DIA_VISITA <= today);
+    const pedidos_de_hoy = pedidos.filter(pedido => pedido.DIA_VISITA <= getToday());
     const activos = pedidos_de_hoy.filter(pedido => pedido.ESTADO == "ACTIVO");
     const pendientes = pedidos_de_hoy.filter(pedido => pedido.ESTADO == "PENDIENTE");
 
@@ -31,7 +30,7 @@ Router.get("/pedidos/mis_pedidos", isAdminOrVendedor, async (req, res) => {
 });
 
 Router.get("/pedidos/mis_pedidos/proximos", isAdminOrVendedor, async (req, res) => {
-    const pedidos = await getPedidosProximos(today, req.user.Usuario);
+    const pedidos = await getPedidosProximos(getToday(), req.user.Usuario);
     const vendedores = sortPedidosOjb(pedidos, "DIA_VISITA");
     res.render("pedidos/pedidos.generales.acumulados.ejs", { vendedores, title: "Proximos" });
 });
@@ -89,8 +88,7 @@ Router.get("/pedidos/recorrido/detalle", isAdminOrVendedor, async (req, res) => 
 
 Router.get("/pedidos/pedido_vendi/:ID", isAdminOrVendedor, async (req, res) => {
     const { ID } = req.params;
-    const today = new Date().toISOString().split("T")[0];
-    await updatePedidosCerrar("HECHO", "VENDIDO", today, ID);
+    await updatePedidosCerrar("HECHO", "VENDIDO", getToday(), ID);
     res.redirect(`/pedidos/recorrido/detalle`);
 });
 
@@ -129,14 +127,14 @@ Router.get("/pedidos/generales", isAdmin, async (req, res) => {
     res.render("list-items.ejs", { data });
 });
 Router.get("/pedidos/generales/activos", isAdmin, async (req, res) => {
-    const pedidos = await getPedidosActivos(today);
+    const pedidos = await getPedidosActivos(getToday());
     const vendedores = sortPedidosOjb(pedidos, "DESIGNADO");
     //vendedores = {DIEGO : [{ID : 1,CTE:8108,Nombre:"Graciela"},{...},GABRIEL : [{...}]  }
     res.render("pedidos/pedidos.generales.activos.ejs", { vendedores, title: "Activos" });
 
 });
 Router.get("/pedidos/generales/proximos", isAdmin, async (req, res) => {
-    const pedidos = await getPedidosProximos(today);
+    const pedidos = await getPedidosProximos(getToday());
     const vendedores = sortPedidosOjb(pedidos, "DESIGNADO");
     res.render("pedidos/pedidos.generales.activos.ejs", { vendedores, title: "Proximos" });
 

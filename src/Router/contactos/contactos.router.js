@@ -2,7 +2,7 @@ const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { invalidarTelefonosDeCte,getContactosByFecha, getFechasContactosByTipo, getContactosByGrupoAndTipo, getGruposByCode, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../../model/contactos/contactos.model.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
-const { today } = require("../../lib/dates");
+const { getToday } = require("../../lib/dates");
 const fs = require("fs/promises");
 const vcard = require("vcard-generator");
 
@@ -137,7 +137,7 @@ async function generarContactoCTE(CTE, Usuario, body) {
 
     await invalidarTelefono(TELEFONO);
     await invalidarTelefonosDeCte(CTE);
-    return await insertContacto("CTE", TELEFONO, today, CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario);
+    return await insertContacto("CTE", TELEFONO, getToday() , CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario);
 
 }
 
@@ -159,7 +159,7 @@ async function generarContactoY(Y, Usuario, body) {
 
     const YCODE = await getNuevoY();
     await invalidarTelefono(TELEFONO);
-    return await insertContacto(TIPO, TELEFONO, today, YCODE, ZONA, NOMBRE, CALLE, Usuario);
+    return await insertContacto(TIPO, TELEFONO, getToday(), YCODE, ZONA, NOMBRE, CALLE, Usuario);
 
 }
 
@@ -175,7 +175,7 @@ async function generarContactoZ(Z, Usuario, body) {
     }
 
     await invalidarTelefono(TELEFONO);
-    return await insertContacto(TIPO, TELEFONO, today, 'YTEST', ZONA, NOMBRE, CALLE, Usuario);
+    return await insertContacto(TIPO, TELEFONO, getToday(), 'YTEST', ZONA, NOMBRE, CALLE, Usuario);
 
 }
 
