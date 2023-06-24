@@ -1,6 +1,6 @@
 const Router = require("express").Router();
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { invalidarTelefonosDeCte,getContactosByFecha, getFechasContactosByTipo, getContactosByGrupoAndTipo, getGruposByCode, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../../model/contactos/contactos.model.js");
+const { invalidarTelefonosDeCte, getContactosByFecha, getFechasContactosByTipo, getContactosByGrupoAndTipo, getGruposByCode, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../../model/contactos/contactos.model.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { getToday } = require("../../lib/dates");
 const fs = require("fs/promises");
@@ -73,7 +73,7 @@ Router.get("/contactos/VCF/:TIPO", isAdmin, async (req, res) => {
 
 });
 
-Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {    
+Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {
 
     const { TIPO, FECHA } = req.params;
     const contactos = await getContactosByFecha(TIPO, FECHA);
@@ -96,7 +96,7 @@ Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {
 
     await fs.writeFile(`../VCF/${FECHA}-${TIPO}.vcf`, vcard_result.join("\n"));
 
-  
+
     res.download(`../VCF/${FECHA}-${TIPO}.vcf`, (err) => {
         if (err) {
             console.log("error al generar contacto", err);
@@ -137,7 +137,7 @@ async function generarContactoCTE(CTE, Usuario, body) {
 
     await invalidarTelefono(TELEFONO);
     await invalidarTelefonosDeCte(CTE);
-    return await insertContacto("CTE", TELEFONO, getToday() , CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario);
+    return await insertContacto("CTE", TELEFONO, getToday(), CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario);
 
 }
 
@@ -146,12 +146,16 @@ async function generarContactoY(Y, Usuario, body) {
     if (!checkPhoneFormat(TELEFONO)) return
 
     const contactos = await getContactoByTelefono(TELEFONO);
-
+    console.log("ES CLIENTE CONTACTO", contactos);
     if (contactos.length > 0) {
         const tipos = contactos.map(contacto => contacto.TIPO);
-        if (tipos.includes("CTE")) return "El contacto, ya pertenece a un cliente, no se puede cargar como nuevo...";
+
+        if (tipos.includes("CTE")) {
+            const CTE_CONTACTO = contactos.filter(contacto => contacto.TIPO == "CTE")[0].CTE
+            return generarContactoCTE(CTE_CONTACTO,Usuario,body);
+        }
         if (tipos.includes("Z")) return "El contacto, ya pertenece a un IMAN, no se puede cargar como nuevo...";
-    } 
+    }
 
     ZONA = ZONA ? ZONA : "SZ";
     CALLE = CALLE ? CALLE : "SD";

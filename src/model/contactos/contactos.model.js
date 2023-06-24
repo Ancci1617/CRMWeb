@@ -84,9 +84,9 @@ async function getContactosParaCampania(GRUPO) {
 }
 async function getContactoByTelefono(TELEFONO) {
     const [contacto] = await pool.query(
-        "SELECT BaseCTE.TELEFONO,'CTE' as TIPO FROM BaseCTE WHERE BaseCTE.TELEFONO = ? and BaseCTE.VALIDACION = 'VALIDO' UNION " +
-        "SELECT BaseZ.TELEFONO,'Z' as TIPO from BaseZ where BaseZ.TELEFONO = ? and VALIDACION = 'VALIDO' UNION " +
-        "SELECT BaseY.Telefono,'Y' as TIPO FROM BaseY WHERE BaseY.Telefono = ? and VALIDACION = 'VALIDO';"
+        "SELECT BaseCTE.TELEFONO,'CTE' as TIPO,CTE FROM BaseCTE WHERE BaseCTE.TELEFONO = ? and BaseCTE.VALIDACION = 'VALIDO' UNION " +
+        "SELECT BaseZ.TELEFONO,'Z' as TIPO,Z from BaseZ where BaseZ.TELEFONO = ? and VALIDACION = 'VALIDO' UNION " +
+        "SELECT BaseY.Telefono,'Y' as TIPO,Codigo FROM BaseY WHERE BaseY.Telefono = ? and VALIDACION = 'VALIDO';"
         , [TELEFONO, TELEFONO, TELEFONO]);
 
 
