@@ -152,7 +152,7 @@ async function generarContactoY(Y, Usuario, body) {
 
         if (tipos.includes("CTE")) {
             const CTE_CONTACTO = contactos.filter(contacto => contacto.TIPO == "CTE")[0].CTE
-            return generarContactoCTE(CTE_CONTACTO,Usuario,body);
+            return await generarContactoCTE(CTE_CONTACTO,Usuario,body);
         }
         if (tipos.includes("Z")) return "El contacto, ya pertenece a un IMAN, no se puede cargar como nuevo...";
     }
