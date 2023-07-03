@@ -40,7 +40,7 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
     //Asigna numero de cte nuevo
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-    //Carga la venta    
+    //Carga la venta
     await insertVenta(CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         ARTICULOS, TOTAL, ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO,
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, "BGM");
@@ -68,6 +68,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
 Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
     const data = req.body;
+    console.log("BODY DEL PRECIO",req.body);
     const query_result = { total: 0, cuota: 0 };
 
     for (let i = 0; i < data.articulos.length; i++) {

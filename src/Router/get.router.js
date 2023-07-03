@@ -4,8 +4,9 @@ const { isLoggedIn } = require("../lib/auth");
 
 
 Router.post("/query_masterresumen", isLoggedIn, async (req, res) => {
+    console.log("MASTER RESUMEN , ",req.body);
+    const {CTE} = req.body;
 
-    const CTE = req.body.CTE;
     const resumen = await getMasterResumen(CTE);
     res.json(resumen[0]);
 

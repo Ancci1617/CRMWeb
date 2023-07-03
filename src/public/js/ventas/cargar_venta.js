@@ -6,9 +6,16 @@ const articulos = document.getElementsByName("ARTICULOS")[0];
 const cuotas = document.getElementsByName("CUOTAS")[0];
 const cuota = document.getElementsByName("CUOTA")[0];
 const estatus_options = document.querySelector(".options-estatus");
+const CTE = document.getElementsByName("CTE")[0].value;
+const evaluation_data = {sabana : 0 , master : 0};
 
 
 
+window.addEventListener("load",async e => {
+    evaluation_data.sabana = await fetchPost("/query_precio",{articulos : ["36"],cuotas : '6'});    
+    evaluation_data.master = await fetchPost("/query_masterresumen",{CTE});
+    console.log("EVALUATION DATA",evaluation_data);
+});
 
 async function autoCompletarPrecios() {
 
@@ -27,13 +34,12 @@ async function autoCompletarPrecios() {
     total.value = precios.total;
 
 }
+
 async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
-    const sabana_obj = await fetchPost("/query_precio",{articulos : ["36"],cuotas : '6'})
-    const sabana = sabana_obj.total;
+    const {sabana,master} = evaluation_data;
 
-    const master = await fetchPost("/query_masterresumen",{CTE});
     //Genera el disponible en funcion de su calificaicon O BIEN, si tiene disponible
     let disponible;
     if (master.BGM == "REVISAR" || master.BGM == "ATRASADO") {
@@ -51,8 +57,8 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     //Si es prepago solo hace evaluacion de la cuotas de entrega
     if (Estatus === 'Prepago') {
 
-        const cuotas = document.getElementsByName("CUOTAS")[0].value
-        const cuotas_entrega = await fetchPost("/query_prepago_entrega",{ calificacion: master.CALIF, cuotas })
+        const cuotas = document.getElementsByName("CUOTAS")[0].value;
+        const cuotas_entrega = await fetchPost("/query_prepago_entrega",{ calificacion: master.CALIF, cuotas });
         if (cuotas_para_entrega >= cuotas_entrega.Entrega) return true;
         return false;
 
@@ -63,7 +69,7 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     if (anticipo >= cuota.value || Estatus.includes("Con anticipo")) disponible += 1;
 
     //Chequea si le da el disponible
-    if (vendido / sabana <= disponible) return true;
+    if (vendido / sabana.total <= disponible) return true;
 
 
     //Si no se cumplen las condiciones desaprobada 
@@ -103,10 +109,7 @@ input_file_arr.forEach(input => {
 //EVALUACION DE LA VENTA
 form.addEventListener("submit", async e => {
     e.preventDefault();
-
-    console.log("SUBIENDO FORMULARIO...");
     
-    const CTE = document.getElementsByName("CTE")[0];
     const responsable = document.getElementsByName("RESPONSABLE")[0].value;
     const Estatus = document.getElementsByName("ESTATUS")[0].value;
     const cuotas_para_entrega = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0].value;
@@ -115,7 +118,7 @@ form.addEventListener("submit", async e => {
     const aprobado = document.getElementsByName("APROBADO")[0];
     
     aprobado.value = "APROBADO";
-    const isAprobado = await ventaAprobada(CTE.value, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
+    const isAprobado = await ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
     if(isAprobado)
         return e.target.submit();
     

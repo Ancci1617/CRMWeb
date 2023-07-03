@@ -151,7 +151,7 @@ async function generarContactoY(Y, Usuario, body) {
         const tipos = contactos.map(contacto => contacto.TIPO);
         if (tipos.includes("CTE")) return "El contacto, ya pertenece a un cliente, no se puede cargar como nuevo...";
         if (tipos.includes("Z")) return "El contacto, ya pertenece a un IMAN, no se puede cargar como nuevo...";
-    } 
+    }
 
     ZONA = ZONA ? ZONA : "SZ";
     CALLE = CALLE ? CALLE : "SD";
