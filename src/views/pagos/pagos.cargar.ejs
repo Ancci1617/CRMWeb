@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco gusmar | Cargar pago</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/css/pagos/pagos.cargar.css">
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar") %>
+
+  <div class="main__container">
+
+    <div class="header">
+      <div class="cte_resumen">8108 - LJUMBERT Graciela - Vta. florida 290</div>
+      <div class="cobrado">Total cobrado : <span class="total">20.000</span></div>
+
+      <button>Cargar cobranza</button>
+    </div>
+
+
+    <div class="credito">
+      <div class="title space">
+
+        <span class="ficha">F: 9120</span>
+        <span class="zona">B1</span>
+
+      </div>
+      <div class="fechas space">
+        <span class="fecha_venta">24 Sep 22</span>
+        <span class="vencimiento">19-Jun</span>
+      </div>
+
+      <div class="pago_cuota">
+        <span class="">Cuota: 20.000</span><input type="number" placeholder="Cuota cobrada">
+      </div>
+      <div class="pago_cuota">
+        <span class="">Serv: 20.000</span><input type="number" placeholder="Servicio cobrado">
+      </div>
+      <div class="pago_cuota">
+        <span class="">Mora: 20.000</span><input type="number" placeholder="Mora cobrada">
+      </div>
+      <div class="pago_total">Total : 60.000</div>
+      <div class="table">
+        <table>
+          <thead>
+            <th>MES</th>
+            <th>Cobrado</th>
+            <th>Saldo</th>
+            <th>Cobrador</th>
+            <th>Control</th>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>ABR</td>
+              <td>2000</td>
+              <td>3000</td>
+              <td>1000</td>
+              <td>Rodrigo</td>
+            </tr>
+            <tr>
+              <td>JUN</td>
+              <td>2000</td>
+              <td>3000</td>
+              <td>1000</td>
+              <td>Rodrigo</td>
+            </tr>
+            <tr>
+              <td>MAY</td>
+              <td>2000</td>
+              <td>3000</td>
+              <td>1000</td>
+              <td>Rodrigo</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+  <%- include("../partials/links/nav.logic.ejs") %>
+</body>
+
+</html>
