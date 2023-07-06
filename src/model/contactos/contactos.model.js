@@ -116,12 +116,12 @@ async function invalidarTelefono(TELEFONO) {
 
 
 }
-async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO) {
+async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO,VENTA_ID) {
 
 
     const eval = {
-        CTE: "INSERT INTO `BaseCTE` (`TELEFONO`,`CTE`, `ZONA`, `NOMBRE`,`CALLE`,  `LINEA`, `DIA`, `VALIDACION`, `GRUPO_MENSAJE`) " +
-            " VALUES ( ?,?,?,?,?,?,?,'VALIDO',13 ) ",
+        CTE: "INSERT INTO `BaseCTE` (`TELEFONO`,`CTE`, `ZONA`, `NOMBRE`,`CALLE`,  `LINEA`, `DIA`, `VALIDACION`, `GRUPO_MENSAJE`,`VENTA_ID`) " +
+            " VALUES ( ?,?,?,?,?,?,?,'VALIDO',13,?) ",
 
         Z: "INSERT INTO `BaseZ`(`TELEFONO`,`Z`,`ZONA`,`NOMBRE`, `CALLE` ,`LINEA`, `DIA` ,`VALIDACION`, `GRUPO_MENSAJE`) VALUES " +
             "(?,?,?,?,?,?,?,'VALIDO',53) ",
@@ -131,18 +131,41 @@ async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, U
             "(?,?,?,?,?,?,?,'VALIDO',1,1)"
     };
 
-    const [res] = await pool.query(eval[TIPO], [TELEFONO, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO, DIA]);
+    const [res] = await pool.query(eval[TIPO], [TELEFONO, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO, DIA,VENTA_ID]);
     return res;
 
 
 
+}
+async function validarUltimoTelefonoByCte({ CTE }) {
+
+    const [update_result] = await pool.query(
+        "update BaseCTE set VALIDACION = 'VALIDO' where ID in (SELECT MAX(ID) as ID FROM `BaseCTE` WHERE CTE = ?);",
+        [CTE]);
+        
+        return update_result;
+}
+
+async function borrarTelefonoByVentaId({ID}){
+    console.log("POR BORRAR ", ID);
+    const [delete_result] = await pool.query(
+        "DELETE FROM BaseCTE WHERE VENTA_ID = ?;",[ID]);
+
+    return delete_result;
+}
+
+async function updateContactoDeVenta(ID,TELEFONO){
+    const [update_result] = await pool.query(
+        "UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;",[TELEFONO,ID]);
+
+    return update_result;
 }
 
 
 module.exports = {
     invalidarTelefonosDeCte, getNuevoY, getContactosByFecha, getFechasContactosByTipo,
     getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono,
-    invalidarTelefono, insertContacto, updateContactoLlamado
+    invalidarTelefono, insertContacto, updateContactoLlamado,validarUltimoTelefonoByCte,borrarTelefonoByVentaId,updateContactoDeVenta
 };
 
 

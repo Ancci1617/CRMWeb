@@ -33,6 +33,22 @@ body {
     /* text-align:center; */
 }
 
+.cte_resumen{
+    background-color: rgb(253, 244, 244);
+    border: 1px solid rgb(251, 168, 168);
+    border-radius: .5rem;
+    padding: .4rem;
+    text-align: center;
+}
+
+.btn-cargar_cobranza{
+    background-color: #d6ddd6;
+    border:none;
+    border-radius: 5px;
+    padding: .2em;
+}
+
+
 .credito {
     display: flex;
     flex-direction: column;
@@ -53,7 +69,7 @@ body {
     font-weight: 600;
 }
 
-.credito .space {
+.space {
     display: flex;
     justify-content: space-between;
 }

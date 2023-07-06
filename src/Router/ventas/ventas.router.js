@@ -2,14 +2,14 @@ const Router = require("express").Router();
 const pool = require("../../model/connection-database");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
 const { getPrepagoEntrega } = require("../../model/productos/prepagos");
-const { insertVenta,updateVentaById } = require("../../model/ventas/insert.venta");
+const { insertVenta, updateVentaById } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
-const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
+const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getVentaById, getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const { saveFileFromEntry } = require("../../lib/files");
-//updateVentaById
+const { generarContactoCTE } = require("../../lib/contactos");
+const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId,updateContactoDeVenta } = require("../../model/contactos/contactos.model");
 
- 
 
 Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, async (req, res) => {
     const { cte } = req.params;
@@ -32,16 +32,17 @@ Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
 
 Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     //Inicializa variables
-    console.log("body al cargar la venta", req.body);
 
     const { Usuario } = req.user;
     const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO,
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
+
     //Asigna numero de cte nuevo
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
+
     //Carga la venta
-    await insertVenta(CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
+    const insert_response = await insertVenta(CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         ARTICULOS, TOTAL, ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO,
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, "BGM");
 
@@ -52,7 +53,9 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
         saveFileFromEntry(entries, CTE);
     }
 
-    res.redirect("/");
+    await generarContactoCTE(CTE, Usuario, { TELEFONO: WHATSAPP }, insert_response.insertId);
+
+    res.redirect("/CRM");
 });
 
 Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
@@ -68,7 +71,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
 Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
     const data = req.body;
-    console.log("BODY DEL PRECIO",req.body);
+    console.log("BODY DEL PRECIO", req.body);
     const query_result = { total: 0, cuota: 0 };
 
     for (let i = 0; i < data.articulos.length; i++) {
@@ -114,12 +117,12 @@ Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
 
 
 Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
-    console.log("body al editar la venta",req.body);
-
-    const {CTE} = req.body;
+    const { CTE,ID,WHATSAPP } = req.body;
 
     //Carga la venta
     await updateVentaById(req.body);
+    await updateContactoDeVenta(ID,WHATSAPP);
+
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files) {
@@ -135,7 +138,10 @@ Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
 Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
 
     const { indice } = req.params;
-    const result = await borrarVentasDelDia(indice, req.user.Usuario);
+    const venta = await getVentaById(indice);
+    await borrarTelefonoByVentaId({ ID: indice });
+    await borrarVentasDelDia(indice, req.user.Usuario);
+    await validarUltimoTelefonoByCte({ CTE: venta.CTE });
     res.redirect("/ventas_cargadas");
 
 });
