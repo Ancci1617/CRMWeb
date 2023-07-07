@@ -25,8 +25,6 @@ Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, async (req, res)
 });
 
 Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
-
-
     res.redirect("/cargar_venta/0");
 });
 
@@ -62,7 +60,6 @@ Router.post("/query_prepago_entrega", isLoggedIn, async (req, res) => {
 
     const { calificacion, cuotas } = req.body;
 
-    console.log(calificacion.trim(), cuotas);
     const cuotas_para_entregar = await getPrepagoEntrega(calificacion.trim(), cuotas);
     res.json(cuotas_para_entregar[0]);
 
@@ -110,7 +107,6 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
 Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
     const { ID } = req.params;
     const venta = await getVentaById(ID);
-    console.log("venta", venta);
     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 
 });

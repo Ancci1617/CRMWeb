@@ -63,9 +63,6 @@ function checkPhoneFormat() {
     return true;
 }
 
-async function retrotraerContactoCte(CTE,FICHA){
 
-
-}
 
 module.exports = {checkPhoneFormat,generarContactoZ,generarContactoY,generarContactoCTE}
