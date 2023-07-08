@@ -66,7 +66,7 @@ app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(isLoggedIn, require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
-app.use("/pagos/",require("./Router/pagos/pagos.routes.js"));
+app.use("/pagos/",require("./pagos/Router/pagos.routes.js"));
 
 // morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
 // app.use(morgan(()=> {return ':method :url :status :response-time ms - :res[content-length] - :user'}));
