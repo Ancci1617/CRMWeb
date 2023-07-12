@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco gusmar | Pagos</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/css/pagos/pagos.cte.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <main class="main__container">
+
+    <header class="creditos__header">
+      <h1 class="CTE_NOMBRE"><%= cte_data.NOMBRE %></h1>
+      <div class="CTE_CALLE">
+        <span class="CTE"><%= cte_data.CTE %></span>
+        <span class="CALLE"><%= cte_data.CALLE %></span>
+        <span class="zona"><%= cte_data.ZONA %></span>
+      </div>
+
+      <div class="COBRANZA_RESUMEN">
+        <div class="detail">
+          <span class="detail__title">Cuota:</span>
+          <span class="detail__data valor__cuota"><%= totales.cuota %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Serv:</span>
+          <span class="detail__data valor__servicio"><%= totales.serv %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Mora:</span>
+          <span class="detail__data valor__mora"><%= totales.mora %></span>
+        </div>
+
+      </div>
+    </header>
+
+
+
+    <% fichas.forEach(ficha => { %>
+
+    <form class="credito" method="POST" action="cargar_pago">
+      <div class="credito__header"><i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= ficha.data.FICHA %></div>
+      <div class="details">
+
+        <div class="detail">
+          <span class="detail__title">Cuota:</span>
+          <span class="detail__data"><%= ficha.deuda.cuota %></span>
+        </div>
+
+        <div class="detail">
+          <span class="detail__title">Serv:</span>
+          <span class="detail__data"><%= ficha.deuda.servicio %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Mora:</span>
+          <span class="detail__data"><%= ficha.deuda.mora %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Atrasos:</span>
+          <span class="detail__data"><%= ficha.deuda.atraso %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Pagas:</span>
+          <span class="detail__data"><%= ficha.deuda.pagas %></span>
+        </div>
+
+
+        <input type="number" name="COBRADO" class="registrar__pago" placeholder="Monto cobrado" required>
+        <input type="date" name="FECHA_COB" min="<%= getToday() %>" class="registrar__pago" required>
+        <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
+        <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
+      </div>
+
+      <div class="btn__container">
+        <input type="submit" class="btn btn-cargar-pago"  value="Cobrar" formaction="cargar_pago"></input> 
+        <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambio_de_fecha"></input>
+        <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo" ></input>
+      </div>
+      <!-- <div class="deep_details">
+            </div> -->
+
+    </form>
+
+    <% }); %>
+
+
+  </main>
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/pagos/js/form_validation.js"></script>
+</body>
+
+</html>
