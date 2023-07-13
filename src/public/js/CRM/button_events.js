@@ -20,7 +20,7 @@ btn_contacto.addEventListener("click",()=>{
     gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE" }`);
 })
 
-btn_pago.addEventListener("click",()=> {gotoLink(`pagos/cargar_pago/?TIPO=CTE&DATA=${getCteEvaluado()}`)});
+btn_pago.addEventListener("click",()=> {gotoLink(`pagos/deuda_cte?CTE=${getCteEvaluado()}`)});
 
 
 

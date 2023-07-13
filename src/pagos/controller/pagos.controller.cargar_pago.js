@@ -2,6 +2,7 @@ const { pagosModel } = require("../model/pagos.model.js");
 const { getToday } = require("../../lib/dates.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
+const { getRandomCode } = require("../../lib/random_code.js");
 
 async function deudaCte(req, res) {
     //Voy a buscar cuanto debe esta ficha..
@@ -10,13 +11,18 @@ async function deudaCte(req, res) {
     const cte_data = await getClientes(CTE);
     const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }));
 
+    for (let i = 0; i < fichas.length; i++) {
+        fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
+    }
     //Los totales, para renderizar
     const totales = {
         cuota: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.cuota, 0),
         serv: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.servicio, 0),
         mora: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.mora, 0),
     }
+    console.log("FICHAS",fichas);
 
+    console.log("fichas",fichas.length);
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales });
 }
 
@@ -43,8 +49,7 @@ async function cargarPago(req, res) {
     const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data) };
     const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
     const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
-    const cobrado_cuota_aux = Math.min(COBRADO - MORA - SERV, ficha_data_deuda.deuda.servicio);
-    const CUOTA = cobrado_cuota_aux + COBRADO - (MORA + SERV + cobrado_cuota_aux);
+    const CUOTA = COBRADO - MORA - SERV;
     const CODIGO = getRandomCode(5);
     const pago_obj = {
         CTE, FICHA, CUOTA,
@@ -57,15 +62,17 @@ async function cargarPago(req, res) {
     await pagosModel.cargarPago(pago_obj);
 
 
-    res.redirect(`/codigo_pago?CODIGO=${CODIGO}`);
+    res.redirect(`/pagos/codigo_pago?CODIGO=${CODIGO}`);
 
 }
 
 async function codigoDePago(req, res) {
     const { CODIGO } = req.query;
-    
 
-    res.send("ok");
+    const pago = await pagosModel.getPagoByCodigo(CODIGO);
+    const cte_data = await getClientes(pago.CTE);
+    res.render("pagos/pagos.codigo_generado.ejs", { pago, cte_data: cte_data[0] });
+
 }
 
 module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago };

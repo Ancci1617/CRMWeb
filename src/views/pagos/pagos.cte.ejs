@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blanco gusmar | Pagos</title>
   <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
-  <link rel="stylesheet" href="/css/pagos/pagos.cte.css">
+  <link rel="stylesheet" href="/pagos/css/pagos.cte.css">
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
+<% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
 
 <body>
   <%- include("../partials/navigation/navigation-bar.ejs")  %>
@@ -69,6 +70,10 @@
           <span class="detail__title">Pagas:</span>
           <span class="detail__data"><%= ficha.deuda.pagas %></span>
         </div>
+        <div class="detail">
+          <span class="detail__title">Vencidas:</span>
+          <span class="detail__data"><%= ficha.deuda.vencidas %></span>
+        </div>
 
 
         <input type="number" name="COBRADO" class="registrar__pago" placeholder="Monto cobrado" required>
@@ -78,21 +83,76 @@
       </div>
 
       <div class="btn__container">
-        <input type="submit" class="btn btn-cargar-pago"  value="Cobrar" formaction="cargar_pago"></input> 
+        <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
         <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambio_de_fecha"></input>
-        <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo" ></input>
+        <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo"></input>
       </div>
-      <!-- <div class="deep_details">
-            </div> -->
+
+      <div class="deep_details show">
+        <div class="header">
+          <h3>Credito : <%= ficha.data.FICHA %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
+        </div>
+        <div class="details">
+
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Fecha de venta", data : ficha.data.FECHA_VENTA}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Vencimiento", data : ficha.data.VENCIMIENTO}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Servicio", data : ficha.deuda.servicio}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Atraso", data : ficha.deuda.atraso}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Articulos", data : ficha.data.ARTICULOS}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cant cuotas", data : ficha.data.CUOTAS}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.data.CUOTA}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Total", data : ficha.data.TOTAL}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "ServicioUnitario", data : ficha.data.SERV_UNIT}) %>
+
+
+          <!-- TABLA DE MESES -->
+          <div class="table">
+            <table>
+              <thead>
+                <th>Mes</th>
+                <th>Cuota</th>
+                <th>Cobrador</th>
+                <th>Detalles</th>
+              </thead>
+              <tbody>
+                <% for(let i = 0;i< ficha.acumulado.length;i++) {%>
+                <tr>
+
+                  <td><%= meses[ficha.acumulado[i].MES] %></td>
+                  <td><%= ficha.acumulado[i].CUOTA %></td>
+                  <td><%= ficha.acumulado[i].MORA + ficha.acumulado[i].SERV %></td>
+                  <td><a href="/">Detalle</a></td>
+
+                </tr>
+
+                <% } %>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- QUERY AGRUPADA POR MESES -->
+
+        </div>
+
+
+
+      </div>
 
     </form>
 
     <% }); %>
 
 
+
+
+
   </main>
   <%- include("../partials/links/nav.logic.ejs") %>
   <script src="/pagos/js/form_validation.js"></script>
+  <script src="/pagos/js/button_events.js"></script>
 </body>
 
 </html>

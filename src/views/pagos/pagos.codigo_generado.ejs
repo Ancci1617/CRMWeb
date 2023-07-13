@@ -16,19 +16,19 @@
   <main class="main__container">
 
     <h1 class="main__title">COBRADO</h1>
-    <h3 class="second__title">F<%= FICHA %></h3>
+    <h3 class="second__title">F<%= pago.FICHA %></h3>
     <div class="datos_cte">
-      <div class="cte_nombre">Ljumbert graciela</div>
-      <div class="cte_calle">Vta Florida 280</div>
+      <div class="cte_nombre"><%= cte_data.NOMBRE %></div>
+      <div class="cte_calle"><%= cte_data.CALLE %></div>
     </div>
     <div class="distribucion">
-      <span>Cuota : 500</span>
-      <span>Servicio : 2500</span>
-      <span>Mora : 3000</span>
-      <span>Proxima : 2023-07-11</span>
+      <span>Cuota : <%= pago.VALOR %></span>
+      <span>Servicio : <%= pago.SERV %></span>
+      <span>Mora : <%= pago.MORA %></span>
+      <span>Proxima : <%= pago.PROXIMO %></span>
     </div>
     <div class="codigo">CODIGO:<%= pago.CODIGO %></div>
-    <a href="<%= origin %>" class="volver">Volver</a>
+    <a href="<%= "/" %>" class="volver">Volver</a>
 
   </main>
   <%- include("../partials/links/nav.logic.ejs") %>

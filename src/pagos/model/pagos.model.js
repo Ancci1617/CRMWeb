@@ -3,6 +3,17 @@ const pool = require("../../model/connection-database")
 
 class PagosModel {
 
+    async getPagoByCodigo(CODIGO) {
+        const [ficha_data] = await pool.query(
+            "SELECT * FROM `PagosSV` WHERE CODIGO = ?;"
+            , [CODIGO]);
+
+        if (ficha_data.length > 0) {
+            return ficha_data[0];
+        }
+        return [];
+    }
+
     async getFicha(FICHA) {
 
         const [ficha_data] = await pool.query(
@@ -36,8 +47,8 @@ class PagosModel {
 
     async getFichasByCte(CTE) {
         const [fichas] = await pool.query(
-            "SELECT Fichas.CTE,Fichas.FICHA,Fichas.VENCIMIENTO,Fichas.TOTAL,Fichas.SERVICIO_ANT," +
-            "CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,CUOTA,CUOTA_ANT," +
+            "SELECT Fichas.FECHA AS FECHA_VENTA,Fichas.CTE,Fichas.FICHA,Fichas.VENCIMIENTO,Fichas.TOTAL,Fichas.SERVICIO_ANT," +
+            "Fichas.ARTICULOS ,CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,CUOTA,CUOTA_ANT," +
             "Fichas.CUOTA_ANT - CONVERT(IFNULL(sum(PagosSV.VALOR),0),INTEGER) as SALDO, CONVERT(Fichas.TOTAL / Fichas.CUOTA,INTEGER) as CUOTAS, " +
             "CONVERT(IFNULL(SUM(PagosSV.VALOR),0),INTEGER) as CUOTA_PAGO,Fichas.MORA_ANT, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA_PAGO FROM `Fichas` " +
             "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.CTE = ? GROUP BY Fichas.FICHA;"
@@ -59,6 +70,23 @@ class PagosModel {
 
         return response;
     }
+    async getAcumuladoByCteFicha({ CTE, FICHA }) {
+
+        const [pago_data] = await pool.query(
+            "SELECT IFNULL(MONTH(PagosSVAcumulado.FECHA),0) as MES,sum(VALOR) as CUOTA, "+
+            "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV " +
+            "from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(?,'-',?) group by MES;"
+            , [CTE, FICHA])
+
+        if (pago_data.length > 0) {
+            return pago_data;
+        }
+
+        return [];
+
+    }
+
+
 
 }
 

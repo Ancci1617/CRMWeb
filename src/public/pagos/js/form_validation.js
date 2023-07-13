@@ -1,5 +1,6 @@
 const btn_cambiar_fecha = document.querySelector(".btn-cambiar-fecha");
 const btn_submit = document.querySelectorAll("input[type='submit']");
+
 const actions = {
     CARGAR_PAGO: "cargar_pago",
     CAMBIO_DE_FECHA: "cambio_de_fecha"
@@ -15,4 +16,6 @@ btn_submit.forEach(btn => {
     });
 
 });
+
+
 
