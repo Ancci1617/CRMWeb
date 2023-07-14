@@ -8,7 +8,7 @@ function getVencidas(vencimiento, today, maximo = 6) {
     for (var i = 1; fecha_evaluacion < today; i++) {
         fecha_evaluacion = sumarMeses(vencimiento, i);
     }
-    return Math.max(i - 1, 0);
+    return Math.min(i - 1, maximo);
 }
 
 

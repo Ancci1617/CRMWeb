@@ -63,7 +63,7 @@ app.use(require("./Router/mercaderia/camionetas/camionetas.router.js"));
 app.use(require("./Router/mercaderia/deposito.router.js"));
 app.use(require("./Router/ventas/contado/contado.router.js"));
 app.use(require("./Router/ventas/dnis/dnis.router.js"));
-app.use(isLoggedIn, require("./Router/pedidos/pedidos.router.js"));
+app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
 app.use("/pagos/",require("./pagos/Router/pagos.routes.js"));

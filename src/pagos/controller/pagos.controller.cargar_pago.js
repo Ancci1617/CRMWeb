@@ -3,6 +3,18 @@ const { getToday } = require("../../lib/dates.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
+async function deudaCteTest(req, res) {
+
+    //Voy a buscar cuanto debe esta ficha..
+    const { CTE, FICHA } = req.query;
+    const fichas_data = await pagosModel.getFichasByCte(CTE);
+    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }));
+
+    //Los totales, para renderizar
+    let ficha_buscada = fichas.filter(ficha => ficha.data.FICHA == FICHA);
+    res.send(`${ficha_buscada[0].deuda.cuota},${ficha_buscada[0].deuda.servicio},${ficha_buscada[0].deuda.mora}`);
+    
+}
 
 async function deudaCte(req, res) {
     //Voy a buscar cuanto debe esta ficha..
@@ -18,13 +30,11 @@ async function deudaCte(req, res) {
     const totales = {
         cuota: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.cuota, 0),
         serv: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.servicio, 0),
-        mora: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.mora, 0),
+        mora: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.mora, 0)
     }
-    console.log("FICHAS",fichas);
 
-    console.log("fichas",fichas.length);
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales });
-}
+}   
 
 
 
@@ -75,7 +85,7 @@ async function codigoDePago(req, res) {
 
 }
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago };
+module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, deudaCteTest };
 
 
 
