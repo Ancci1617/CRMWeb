@@ -8,8 +8,8 @@ const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getVentaById, getVentasDelDia, getNuevoNumeroDeCte, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const { saveFileFromEntry } = require("../../lib/files");
 const { generarContactoCTE } = require("../../lib/contactos");
-const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId,updateContactoDeVenta } = require("../../model/contactos/contactos.model");
-
+const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId, updateContactoDeVenta } = require("../../model/contactos/contactos.model");
+const fs = require("fs");
 
 Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, async (req, res) => {
     const { cte } = req.params;
@@ -20,13 +20,19 @@ Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, async (req, res)
     let cte_data = await getClientes(cte);
     cte_data[0].username = req.user.Usuario;
 
-    res.render("ventas/Ventas.cargar.ejs", cte_data[0]);
+
+    //Buscar si ya tenemos las imagenes
+    const required_images = { frente: true, dorso: true, rostro: true };
+    if (fs.existsSync(`../ImagenesDeClientes/${cte}`)) {
+        required_images.frente = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-FRENTE.jpg`);
+        required_images.dorso = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-DORSO.jpg`);
+        required_images.rostro = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-ROSTRO.jpg`);   
+    }
+    res.render("ventas/Ventas.cargar.ejs", {cte_data : cte_data[0],required_images});
 
 });
 
 Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
-
-
     res.redirect("/cargar_venta/0");
 });
 
@@ -117,11 +123,11 @@ Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
 
 
 Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
-    const { CTE,ID,WHATSAPP } = req.body;
+    const { CTE, ID, WHATSAPP } = req.body;
 
     //Carga la venta
     await updateVentaById(req.body);
-    await updateContactoDeVenta(ID,WHATSAPP);
+    await updateContactoDeVenta(ID, WHATSAPP);
 
 
     //Cargar imagen de frente y dorso a servidor

@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
-
+  <% const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI,WHATSAPP} = cte_data %>
 </head>
 
 <body>
@@ -164,6 +164,7 @@
           </div>
 
           <!-- IMAGENES -->
+          <% if(required_images.frente){ %>
           <div class="input-box">
             <span class="details">DNI Frente</span>
             <label for="FRENTE">
@@ -171,6 +172,9 @@
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
             </label>
           </div>
+          <% } %>
+
+          <% if(required_images.dorso){ %>
           <div class="input-box">
             <span class="details">DNI Dorso</span>
             <label for="DORSO">
@@ -178,6 +182,9 @@
               <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
             </label>
           </div>
+          <% } %>
+
+          <% if(required_images.rostro){ %>
           <div class="input-box">
             <span class="details">ROSTRO</span>
             <label for="ROSTRO">
@@ -185,7 +192,8 @@
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
             </label>
           </div>
-
+          <% } %>
+          
           <!-- input hidden  Venta Aprobada/Desaprobada -->
           <div class="input-box hidden">
             <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
