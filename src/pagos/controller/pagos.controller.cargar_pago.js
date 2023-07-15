@@ -85,6 +85,7 @@ async function codigoDePago(req, res) {
 
 }
 
+
 module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, deudaCteTest };
 
 

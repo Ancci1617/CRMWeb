@@ -19,29 +19,33 @@
         <%const container = {id : "form__container"}; 
         const form = 
         {title : "Redistribuir pago",
-        action : "/pagos/redistribuir",
+        action : "/pagos/redistribuir_pago",
         method : "POST",
         id : "form_redistribuir_pago" } %>
         <% const inputs = 
         [{
            type : "number",
+           details : "Cuota",
            classList : ["input-cuota"],
            name : "CUOTA",
            placeholder : "Cuota cobrada"
         },{
            type : "number",
+           details : "Mora",
            classList : ["input-mora"],
            name : "MORA",
            placeholder : "Mora cobrada"
         },{
            type : "number",
+           details : "Servicio",
            classList : ["input-servicio"],
-           name : "SERVICIO",
+           name : "SERV",
            placeholder : "Servicio cobrado"
         },{
            type : "date",
-           classList : ["input-proxima"],
-           name : "PROXIMA"
+           details : "Proximo pago",
+           classList : ["input-proximo"],
+           name : "PROXIMO"
         },{
            type : "hidden",
            classList : ["input-codigo"],

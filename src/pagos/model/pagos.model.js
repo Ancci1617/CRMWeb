@@ -103,17 +103,26 @@ class PagosModel {
     }
 
     async getPagosByFechaYCob({ COB, FECHA }) {
-        console.log("cob",COB);
-        console.log("FECGA",FECHA);
+
         const [PAGOS] = await pool.query(
             "SELECT PagosSV.`CTE`, PagosSV.`FICHA`, `VALOR` AS CUOTA, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, " +
             "PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, `ID`, Fichas.CUOTA_ANT - SUM(PagosSV.VALOR) as SALDO, " +
             "PagosSV.SERV + PagosSV.MORA as CUOTA_SERV FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA " +
             "where PagosSV.FECHA = ? and PagosSV.COBRADOR = ? group by FICHA;", [FECHA, COB]);
-        
+
 
         if (PAGOS.length > 0) {
             return PAGOS;
+        }
+        return [];
+    }
+
+    async updateServicioByCodigo({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) {
+        const [update_result] = await pool.query(
+            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+
+        if (update_result.length > 0) {
+            return update_result;
         }
         return [];
     }

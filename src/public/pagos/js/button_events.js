@@ -25,15 +25,16 @@ pagos.forEach(pago => {
         mostrarFormulario(form__container);
         form_redistribuir.CUOTA.value = parseInt(pago.querySelector(".cuota").innerText);
         form_redistribuir.MORA.value = parseInt(pago.querySelector(".mora").innerText);
-        form_redistribuir.SERVICIO.value = parseInt(pago.querySelector(".servicio").innerText);
-        form_redistribuir.CODIGO.value = parseInt(pago.querySelector(".codigo").innerText);
-
-
+        form_redistribuir.SERV.value = parseInt(pago.querySelector(".servicio").innerText);
+        form_redistribuir.CODIGO.value = pago.querySelector(".codigo").innerText;
         const pago_fecha = pago.querySelector(".proxima").innerText.split("-");
-        
-        console.log(pago_fecha);
-        
-        form_redistribuir.PROXIMA.value = new Date(pago_fecha[0], pago_fecha[1], pago_fecha[2]).toISOString().split("T")[0];
+
+
+        try {
+            form_redistribuir.PROXIMO.value = new Date(pago_fecha[0], pago_fecha[1], pago_fecha[2]).toISOString().split("T")[0];
+        } catch (error) {
+            form_redistribuir.PROXIMO.value = null;
+        }
 
 
 

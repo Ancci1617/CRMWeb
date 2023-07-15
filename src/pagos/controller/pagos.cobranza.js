@@ -13,19 +13,18 @@ async function cargarCobranza(req, res) {
     });
 
     const pagos = await pagosModel.getPagosByFechaYCob({COB, FECHA});
-
-    console.log("PAGOS",pagos);
-
-
     res.render("pagos/pagos.cargar_cobranzas.ejs",{aside: render_links,pagos});
 }
 
 async function redistribuirPago(req,res){
+    const {SERV,CUOTA,MORA,PROXIMO,CODIGO} = req.body;
+    const update_result = await pagosModel.updateServicioByCodigo({PROXIMO,CUOTA,CODIGO,SERV,MORA});
     
+    res.redirect(req.headers.referer);
 }
 
 
 
 
 
-module.exports = { cargarCobranza };
+module.exports = { cargarCobranza ,redistribuirPago};
