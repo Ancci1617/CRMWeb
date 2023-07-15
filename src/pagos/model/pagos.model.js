@@ -73,7 +73,7 @@ class PagosModel {
     async getAcumuladoByCteFicha({ CTE, FICHA }) {
 
         const [pago_data] = await pool.query(
-            "SELECT IFNULL(MONTH(PagosSVAcumulado.FECHA),0) as MES,sum(VALOR) as CUOTA, "+
+            "SELECT IFNULL(MONTH(PagosSVAcumulado.FECHA),0) as MES,sum(VALOR) as CUOTA, " +
             "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV " +
             "from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(?,'-',?) group by MES;"
             , [CTE, FICHA])
@@ -87,6 +87,36 @@ class PagosModel {
     }
 
 
+
+    async getFechasDePagosYCobradores() {
+
+        const [FECHAS] = await pool.query(
+            "SELECT DISTINCT COBRADOR,FECHA FROM `PagosSV` ORDER BY `PagosSV`.`FECHA` DESC;");
+
+
+        if (FECHAS.length > 0) {
+            return FECHAS;
+        }
+
+        return [];
+
+    }
+
+    async getPagosByFechaYCob({ COB, FECHA }) {
+        console.log("cob",COB);
+        console.log("FECGA",FECHA);
+        const [PAGOS] = await pool.query(
+            "SELECT PagosSV.`CTE`, PagosSV.`FICHA`, `VALOR` AS CUOTA, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, " +
+            "PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, `ID`, Fichas.CUOTA_ANT - SUM(PagosSV.VALOR) as SALDO, " +
+            "PagosSV.SERV + PagosSV.MORA as CUOTA_SERV FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA " +
+            "where PagosSV.FECHA = ? and PagosSV.COBRADOR = ? group by FICHA;", [FECHA, COB]);
+        
+
+        if (PAGOS.length > 0) {
+            return PAGOS;
+        }
+        return [];
+    }
 
 }
 

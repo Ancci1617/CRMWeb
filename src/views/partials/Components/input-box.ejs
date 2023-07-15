@@ -1,0 +1,22 @@
+<!-- Recibe por parametro:  -->
+
+<!-- 
+    obj = {}
+    obj.details = "TEXTO DEL LABEL"
+    obj.type = "TIPO DEL INPUT"
+    obj.placeholder
+    obj.name
+    obj.defaultValue
+ -->
+
+
+ 
+ <div class="input-box">
+    <span class="details"><%= input.details %></span>
+    <input class="<%= input.classList.join(" ") %>" type="<%= input.type %>" placeholder="<%= input.placeholder %>" value="<%= input.defaultValue  %>" name="<%= input.name %>">
+  </div>
+
+
+
+
+

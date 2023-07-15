@@ -1,0 +1,97 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Blanco Gusmar | Cobranza</title>
+      <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+      <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
+      <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+      <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+      <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+      <main class="main__container">
+
+        <%const container = {id : "form__container"}; 
+        const form = 
+        {title : "Redistribuir pago",
+        action : "/pagos/redistribuir",
+        method : "POST",
+        id : "form_redistribuir_pago" } %>
+        <% const inputs = 
+        [{
+           type : "number",
+           classList : ["input-cuota"],
+           name : "CUOTA",
+           placeholder : "Cuota cobrada"
+        },{
+           type : "number",
+           classList : ["input-mora"],
+           name : "MORA",
+           placeholder : "Mora cobrada"
+        },{
+           type : "number",
+           classList : ["input-servicio"],
+           name : "SERVICIO",
+           placeholder : "Servicio cobrado"
+        },{
+           type : "date",
+           classList : ["input-proxima"],
+           name : "PROXIMA"
+        },{
+           type : "hidden",
+           classList : ["input-codigo"],
+           name : "CODIGO"
+        }]%>
+
+
+        <%- include("../partials/Components/absolute.form.ejs",{form ,inputs,container}  ) %>
+
+
+        <aside class="aside">
+          <div class="aside__header">Cobranzas</div>
+          <ul class="ul__fechas">
+            <% aside.forEach(link => { %>
+            <li class="li__fecha">
+              <span><%= link.FECHA %></span>
+              <ul class="ul__cobradores">
+                <% link.COBRADORES.forEach(cobrador =>{ %>
+                <li><a href="?COB=<%=cobrador%>&FECHA=<%=link.FECHA%>"><%= cobrador %></a></li>
+                <% })%>
+              </ul>
+            </li>
+            <%}) %>
+          </ul>
+        </aside>
+
+    
+        <section class="cobranzas">
+          <header>
+            <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
+            <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
+          </header>
+
+          <div class="lista_de_pagos">
+            <% pagos.forEach(pago => { %>
+            <%- include("../partials/Components/pago.ejs", {pago}) %>
+            <%})%>
+
+
+          </div>
+        </section>
+
+      </main>
+
+
+
+      <%- include("../partials/links/nav.logic.ejs") %>
+      <script src="/js/lib/form.hide.js"></script>
+      <script src="/pagos/js/button_events.js"></script>
+
+    </body>
+
+    </html>
