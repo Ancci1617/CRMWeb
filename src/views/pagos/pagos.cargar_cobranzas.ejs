@@ -17,8 +17,7 @@
       <main class="main__container">
 
         <%const container = {id : "form__container"}; 
-        const form = 
-        {title : "Redistribuir pago",
+        const form = {title : "Redistribuir pago",
         action : "/pagos/redistribuir_pago",
         method : "POST",
         id : "form_redistribuir_pago" } %>
@@ -72,8 +71,9 @@
           </ul>
         </aside>
 
-    
+
         <section class="cobranzas">
+          <% if(pagos.length > 0) {%>
           <header>
             <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
             <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
@@ -84,8 +84,13 @@
             <%- include("../partials/Components/pago.ejs", {pago}) %>
             <%})%>
 
-
           </div>
+          <% }else{ %>
+          <header>
+            <span class="cobrador_nombre">Sin evaluar</span>
+            <span class="cobranza_fecha">- - - -</span>
+          </header>
+          <%  } %>
         </section>
 
       </main>

@@ -77,7 +77,7 @@
 
 
         <input type="number" name="COBRADO" class="registrar__pago" placeholder="Monto cobrado" required>
-        <input type="date" name="FECHA_COB" min="<%= getToday() %>" class="registrar__pago" required>
+        <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<% //new Date(getToday()).getTime()+ 1000*60*60*24*60)%>" class="registrar__pago" required>
         <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
         <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
       </div>

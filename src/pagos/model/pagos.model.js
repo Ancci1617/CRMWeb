@@ -117,9 +117,18 @@ class PagosModel {
         return [];
     }
 
-    async updateServicioByCodigo({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) {
+    async updateDistribucionByCodigo({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) {
         const [update_result] = await pool.query(
             "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+
+        if (update_result.length > 0) {
+            return update_result;
+        }
+        return [];
+    }
+    async updateEstadoPagoByCodigo({ CODIGO ,ESTADO }) {
+        const [update_result] = await pool.query(
+            "UPDATE PagosSV SET CONFIRMACION = ? WHERE CODIGO = ? ", [ESTADO,CODIGO]);
 
         if (update_result.length > 0) {
             return update_result;

@@ -13,7 +13,7 @@ async function deudaCteTest(req, res) {
     //Los totales, para renderizar
     let ficha_buscada = fichas.filter(ficha => ficha.data.FICHA == FICHA);
     res.send(`${ficha_buscada[0].deuda.cuota},${ficha_buscada[0].deuda.servicio},${ficha_buscada[0].deuda.mora}`);
-    
+
 }
 
 async function deudaCte(req, res) {
@@ -34,7 +34,7 @@ async function deudaCte(req, res) {
     }
 
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales });
-}   
+}
 
 
 
@@ -77,16 +77,24 @@ async function cargarPago(req, res) {
 }
 
 async function codigoDePago(req, res) {
-    const { CODIGO } = req.query;
 
+    const { CODIGO } = req.query;
     const pago = await pagosModel.getPagoByCodigo(CODIGO);
     const cte_data = await getClientes(pago.CTE);
     res.render("pagos/pagos.codigo_generado.ejs", { pago, cte_data: cte_data[0] });
 
 }
 
+async function confirmarPago(req, res) {
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, deudaCteTest };
+    const { CODIGO } = req.query;
+    const pago = await pagosModel.getPagoByCodigo(CODIGO);
+    await pagosModel.updateEstadoPagoByCodigo({CODIGO, ESTADO :"CONFIRMADO"});
+    res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}`);
+    
+}
+
+module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, deudaCteTest ,confirmarPago};
 
 
 

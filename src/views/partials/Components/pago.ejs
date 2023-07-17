@@ -1,5 +1,5 @@
-<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO} = pago; %>
-<div class="pago">
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION} = pago; %>
+<div class="pago <%= CONFIRMACION %> ">
 
   <span class="ficha"><%= FICHA %></span>
   <div class="data_container">
@@ -16,13 +16,15 @@
   </div>
 
   <div class="btn_container data_container">
+    <% if(CONFIRMACION !== "CONFIRMADO"){ %>
     <div class="confirmar_pago">
-      <i class="fas fa-check"></i>
+      <a href="confirmar_pago?CODIGO=<%= CODIGO %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
     </div>
 
     <div class="editar_pago">
       <i class="fas fa-edit btn_editar_pago"></i>
     </div>
+    <% } %>
   </div>
 
 </div>

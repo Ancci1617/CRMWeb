@@ -1,6 +1,6 @@
 "use strict";
 const Router = require("express").Router();
-const { deudaCte, cargarPago, cambiarFecha,codigoDePago,deudaCteTest} = require("../controller/pagos.controller.cargar_pago.js");
+const { deudaCte, cargarPago, cambiarFecha,codigoDePago,deudaCteTest,confirmarPago} = require("../controller/pagos.controller.cargar_pago.js");
 const {cargarCobranza,redistribuirPago} = require("../controller/pagos.cobranza.js");
 
 
@@ -12,6 +12,7 @@ Router.post("/cambio_de_fecha", cambiarFecha);
 Router.get("/deuda_cte_test",deudaCteTest);
 Router.get("/pasar_cobranza",cargarCobranza);
 Router.post("/redistribuir_pago",redistribuirPago);
+Router.get("/confirmar_pago",confirmarPago);
 
 
 

@@ -20,7 +20,7 @@ const monthMap = {
 
 pagos.forEach(pago => {
     const button = pago.querySelector(".btn_editar_pago");
-
+    if(!button) return;    
     button.addEventListener("click", e => {
         mostrarFormulario(form__container);
         form_redistribuir.CUOTA.value = parseInt(pago.querySelector(".cuota").innerText);
@@ -36,11 +36,14 @@ pagos.forEach(pago => {
             form_redistribuir.PROXIMO.value = null;
         }
 
-
-
+    
     });
 
-
+    const confirmar_pago = pago.querySelector(".confirmar_pago");
+    confirmar_pago.addEventListener("click", e => {
+        if (!confirm("Estás a punto de confirmar un pago. Esta acción no se puede deshacer. ¿Confirmar?"))
+            e.preventDefault();
+    })
 })
 
 

@@ -4,7 +4,7 @@ const { pagosModel } = require("../model/pagos.model.js");
 async function cargarCobranza(req, res) {
     const { FECHA, COB } = req.query;
     const data = await pagosModel.getFechasDePagosYCobradores();
-    const FECHAS = [...new Set(data.map(obj => obj.FECHA))];    
+    const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
     const render_links = FECHAS.map(fecha_evaluada => {
         return {
             FECHA : fecha_evaluada,
@@ -18,9 +18,8 @@ async function cargarCobranza(req, res) {
 
 async function redistribuirPago(req,res){
     const {SERV,CUOTA,MORA,PROXIMO,CODIGO} = req.body;
-    const update_result = await pagosModel.updateServicioByCodigo({PROXIMO,CUOTA,CODIGO,SERV,MORA});
-    
-    res.redirect(req.headers.referer);
+    const update_result = await pagosModel.updateDistribucionByCodigo({PROXIMO,CUOTA,CODIGO,SERV,MORA});
+    res.redirect(req.headers.referer|| "/");
 }
 
 
