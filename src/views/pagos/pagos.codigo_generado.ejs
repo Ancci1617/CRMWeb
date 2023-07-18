@@ -28,7 +28,7 @@
       <span>Proxima : <%= pago.PROXIMO %></span>
     </div>
     <div class="codigo">CODIGO:<%= pago.CODIGO %></div>
-    <a href="<%= "/" %>" class="volver">Volver</a>
+    <a href="<%= `/pagos/deuda_cte?CTE=${pago.CTE}` %>" class="volver">Volver al cliente</a>
 
   </main>
   <%- include("../partials/links/nav.logic.ejs") %>

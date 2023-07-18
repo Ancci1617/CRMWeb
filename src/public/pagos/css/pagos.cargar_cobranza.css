@@ -82,12 +82,15 @@ ul .li__fecha:hover>.ul__cobradores {
     gap: .8rem;
 }
 
+
+
 .lista_de_pagos .pago {
-    padding: .5rem;
+    padding: .3rem .3rem .1rem .3rem;
     border: 1px solid var(--light_gray);
     border-radius: 4px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .pago:hover{
     background-color: rgb(237, 246, 243);
@@ -103,6 +106,16 @@ ul .li__fecha:hover>.ul__cobradores {
     display: flex;
     gap: 1.2rem;
     align-items: center;
+}
+.pago .details_container{
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pago .obs{
+    font-size: .8rem;
+    color: var(--dark_gray);
 }
 .ficha{
     font-size: 1.2rem;

@@ -1,4 +1,5 @@
-<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION} = pago; %>
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z} = pago; %>
+
 <div class="pago <%= CONFIRMACION %> ">
 
   <span class="ficha"><%= FICHA %></span>
@@ -12,9 +13,8 @@
     <span class="servicio hidden"><%= SERV %></span>
     <span class="mora hidden"><%= MORA %></span>
     <span class="codigo hidden"><%= CODIGO %></span>
-
   </div>
-
+  
   <div class="btn_container data_container">
     <% if(CONFIRMACION !== "CONFIRMADO"){ %>
     <div class="confirmar_pago">
@@ -26,5 +26,11 @@
     </div>
     <% } %>
   </div>
+
+  <div class="details_container">
+    <span class="obs"><%= OBS %></span>
+    <span class="zona"><%= Z %></span>
+  </div>
+
 
 </div>

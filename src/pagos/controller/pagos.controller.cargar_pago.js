@@ -3,25 +3,13 @@ const { getToday } = require("../../lib/dates.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
-async function deudaCteTest(req, res) {
-
-    //Voy a buscar cuanto debe esta ficha..
-    const { CTE, FICHA } = req.query;
-    const fichas_data = await pagosModel.getFichasByCte(CTE);
-    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }));
-
-    //Los totales, para renderizar
-    let ficha_buscada = fichas.filter(ficha => ficha.data.FICHA == FICHA);
-    res.send(`${ficha_buscada[0].deuda.cuota},${ficha_buscada[0].deuda.servicio},${ficha_buscada[0].deuda.mora}`);
-
-}
 
 async function deudaCte(req, res) {
     //Voy a buscar cuanto debe esta ficha..
     const { CTE } = req.query;
     const fichas_data = await pagosModel.getFichasByCte(CTE);
     const cte_data = await getClientes(CTE);
-    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }));
+    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }))      
 
     for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
@@ -49,7 +37,7 @@ async function cambiarFecha(req, res) {
 }
 async function cargarPago(req, res) {
 
-    const { CTE, FICHA, MP, FECHA_COB } = req.body;
+    const { CTE, FICHA, MP, FECHA_COB,OBS } = req.body;
     const COBRADO = parseInt(req.body.COBRADO);
 
     //Busco la ficha
@@ -60,12 +48,12 @@ async function cargarPago(req, res) {
     const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
     const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
     const CUOTA = COBRADO - MORA - SERV;
-    const CODIGO = getRandomCode(5);
+    const CODIGO = getRandomCode(6);
     const pago_obj = {
         CTE, FICHA, CUOTA,
         MORA, SERV, PROXIMO: FECHA_COB,
         CODIGO, USUARIO: req.user.Usuario,
-        FECHA: getToday()
+        FECHA: getToday(),OBS
     };
 
     //ESTO TENDRIA QUE LLEVAR AL CODIGO DEL PAGO;
@@ -94,7 +82,7 @@ async function confirmarPago(req, res) {
     
 }
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, deudaCteTest ,confirmarPago};
+module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago ,confirmarPago};
 
 
 
