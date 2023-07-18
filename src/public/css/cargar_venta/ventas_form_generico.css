@@ -165,7 +165,8 @@ label {
 
 @media(max-width: 584px) {
   .container {
-    max-width: 90%;
+    /* max-width: 90%; */
+    width: 100;
   }
 
   form .user-details .input-box {

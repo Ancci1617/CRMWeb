@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* font-family: 'Roboto', sans-serif; */
+:root {
+    --light_white: rgb(247, 247, 247);
+    --medium_white: #EBE3D8;
+    --ocre-pink: #DDD1C2;
+    --light_gray: #727272;
+    --light_brown: #f6f6f6;
+    --normal_brown: #886F63;
+    --dark_gray: #313236;
+    --click_green : rgb(100,170,100);
+    --check-green : rgb(214, 255, 153);
+}
+
+ul {
+    list-style: none;
+}
+
+html,
+body {
+    /* background-color: var(--light_white); */
+    background-color: white;
+}
+
+.aside {
+    position: fixed;
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    gap: .4rem;
+    width: 170px;
+    height: calc(100vh - 3rem);
+    box-shadow: 1px 0 1px gray;
+    padding: .5em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.aside__header {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.aside .ul__fechas {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
+    padding: 7px;
+}
+
+.ul__cobradores {
+    display: none;
+}
+
+ul .ul__cobradores li {
+    margin-bottom: .4rem;
+}
+
+ul .li__fecha:hover>.ul__cobradores {
+    display: block;
+}
+
+
+
+
+
+
+
+.cobranzas {
+    padding: .5rem .5rem .8rem calc(170px + 1rem);
+}
+
+.cobranzas header {
+    font-size: 1.5rem;
+    margin-bottom: .7em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cobranzas .lista_de_pagos {
+    display: grid;
+    gap: .8rem;
+}
+
+
+
+.lista_de_pagos .pago {
+    padding: .3rem .3rem .1rem .3rem;
+    border: 1px solid var(--light_gray);
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.pago:hover{
+    background-color: rgb(237, 246, 243);
+}   
+.pago i:hover{
+    color: var(--click_green);
+    cursor: pointer;
+}
+.pago.CONFIRMADO{
+    background-color: var(--check-green);
+}
+.data_container{
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+.pago .details_container{
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pago .obs{
+    font-size: .8rem;
+    color: var(--dark_gray);
+}
+.ficha{
+    font-size: 1.2rem;
+}
+.cuota{
+    color: rgb(26, 147, 26);
+}
+.cobrador{
+    color: rgb(208, 4, 4);
+}
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+
+
+<div class="container reprogramar__pedido__form unshow" id="<%= container.id %>">
+  <div class="titles">
+    <div class="title"><%= form.title %></div>
+    <div class="btn__title__container">
+      <a class="btn-green btn-crm" type="button" value="volver" onclick="ocultarFormularios()">Volver</a>
+    </div>
+
+  </div>
+  <div class="content">
+    <form action="<%= form.action %>" method="<%= form.method %>" id="<%= form.id %>">
+
+      <div class="user-details">
+
+        <% inputs.forEach(input => { %>
+
+        <%- include("./input-box.ejs", { input } ) %>
+
+        <% }) %>
+
+        <!-- BOTONES DE SUBMIT -->
+        <div class="button">
+          <input type="submit" value="<%= form.title %>">
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

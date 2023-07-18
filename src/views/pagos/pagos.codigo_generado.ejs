@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco gusmar | Pagos</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/pagos/css/pagos.codigo.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <main class="main__container">
+
+    <h1 class="main__title">COBRADO</h1>
+    <h3 class="second__title">F<%= pago.FICHA %></h3>
+    <div class="datos_cte">
+      <div class="cte_nombre"><%= cte_data.NOMBRE %></div>
+      <div class="cte_calle"><%= cte_data.CALLE %></div>
+    </div>
+    <div class="distribucion">
+      <span>Cuota : <%= pago.VALOR %></span>
+      <span>Servicio : <%= pago.SERV %></span>
+      <span>Mora : <%= pago.MORA %></span>
+      <span>Proxima : <%= pago.PROXIMO %></span>
+    </div>
+    <div class="codigo">CODIGO:<%= pago.CODIGO %></div>
+    <a href="<%= `/pagos/deuda_cte?CTE=${pago.CTE}` %>" class="volver">Volver al cliente</a>
+
+  </main>
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/pagos/js/form_validation.js"></script>
+</body>
+
+</html>

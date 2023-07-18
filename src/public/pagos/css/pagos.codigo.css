@@ -1,0 +1,55 @@
+:root {
+    --light_white: #EBE3D8;
+    --normal_white: #DDD1C2;
+    --light_gray: #727272;
+    --light_brown: #AA8A6D;
+    --normal_brown: #886F63;
+    --dark_gray: #313236;
+}
+
+html,
+body {
+    background-color: rgb(247, 247, 247);
+    display: grid;
+    align-items: center;
+}
+
+.main__container {
+    display: grid;
+    background-color: white;
+    box-shadow: 2px 2px 2px #727272;
+    grid-template-columns: 1fr;
+    padding: .5em;
+    min-height: 80vh;
+    width: min(400px,90vw);
+    border-radius: .8rem;
+    margin: 1em auto;
+    gap: .8rem;
+    overflow: auto;
+}
+.main__container > *{
+    font-size: 1.5rem;
+    padding-left: 16px;
+}
+
+.main__title {
+    color: #313236;
+    font-size: 1.9rem;
+    display: grid;
+    align-items: center;
+}
+
+.datos_cte {
+    color: var(--light_gray);
+}
+
+.distribucion {
+    display: grid;
+    width: min-content;
+    white-space: nowrap;
+}
+
+.codigo {
+    font-size: 1.2rem;
+    color: var(--dark_gray);
+}

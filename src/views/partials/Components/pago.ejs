@@ -1,0 +1,36 @@
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z} = pago; %>
+
+<div class="pago <%= CONFIRMACION %> ">
+
+  <span class="ficha"><%= FICHA %></span>
+  <div class="data_container">
+
+    <span class="proxima"><%= PROXIMO %></span>
+    <span class="cuota"><%= CUOTA %></span>
+    <span class="saldo"><%= SALDO %></span>
+    <span class="cobrador"><%= CUOTA_SERV %></span>
+
+    <span class="servicio hidden"><%= SERV %></span>
+    <span class="mora hidden"><%= MORA %></span>
+    <span class="codigo hidden"><%= CODIGO %></span>
+  </div>
+  
+  <div class="btn_container data_container">
+    <% if(CONFIRMACION !== "CONFIRMADO"){ %>
+    <div class="confirmar_pago">
+      <a href="confirmar_pago?CODIGO=<%= CODIGO %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
+    </div>
+
+    <div class="editar_pago">
+      <i class="fas fa-edit btn_editar_pago"></i>
+    </div>
+    <% } %>
+  </div>
+
+  <div class="details_container">
+    <span class="obs"><%= OBS %></span>
+    <span class="zona"><%= Z %></span>
+  </div>
+
+
+</div>
