@@ -115,7 +115,7 @@ class PagosModel {
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV "+
             "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV "+
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA where PagosSV.FECHA "+
-            "like '2023-07-18' and PagosSV.COBRADOR like 'Rodrigo' group by ID order by CONFIRMACION,Z,PagosSV.FICHA;", [FECHA, COB]);
+            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION,Z,PagosSV.FICHA;", [FECHA, COB]);
 
         if (PAGOS.length > 0) {
             return PAGOS;
