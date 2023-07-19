@@ -3,11 +3,15 @@ function getToday(){
 }
 
 function getVencidas(vencimiento, today, maximo = 6) {
-
+    console.log("VENCIMIENTO",vencimiento );
+    console.log("TODAY",today );
     let fecha_evaluacion = vencimiento;
     for (var i = 1; fecha_evaluacion < today; i++) {
+        console.log("condicion :",fecha_evaluacion,"<",today);
+        console.log("condicion res:",fecha_evaluacion < today);
         fecha_evaluacion = sumarMeses(vencimiento, i);
     }
+
     return Math.min(i - 1, maximo);
 }
 

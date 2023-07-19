@@ -1,11 +1,11 @@
-const { getVencidas } = require("../lib/dates");
+const { getVencidas, getToday } = require("../lib/dates");
 
 function getDoubt({ VENCIMIENTO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO }) {
     //AGREGAR ALGORITMO PARA COBRADOR
 
 
-    const vencidas = getVencidas(new Date(VENCIMIENTO), new Date(), CUOTAS);
+    const vencidas = getVencidas(new Date(VENCIMIENTO), new Date(getToday()) , CUOTAS);
     const deudaCuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
     const pagas =
         Math.max(
