@@ -110,12 +110,13 @@ class PagosModel {
     async getPagosByFechaYCob({ COB = "%", FECHA = "%" }) {
 
         const [PAGOS] = await pool.query(
-            "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Fichas.Z, `VALOR` AS CUOTA, `PROXIMO`, "+
-            "`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, "+
-            "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV "+
-            "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV "+
-            "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA where PagosSV.FECHA "+
-            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION,Z,PagosSV.FICHA;", [FECHA, COB]);
+            "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Fichas.Z, `VALOR` AS CUOTA, `PROXIMO`, " +
+            "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, " +
+            "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
+            "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
+            "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
+            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION,Z,PagosSV.FICHA; "
+            , [FECHA, COB]);
 
         if (PAGOS.length > 0) {
             return PAGOS;

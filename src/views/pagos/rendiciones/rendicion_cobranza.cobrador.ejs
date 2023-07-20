@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Cobranza</title>
+  <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+  <!-- <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css"> -->
+  <link rel="stylesheet" href="/pagos/css/pagos.codigo.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+  <link rel="stylesheet" href="/pagos/css/pagos.rendicion.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <%- include("../../partials/navigation/navigation-bar.ejs")  %>
+
+
+  <main class="main__container">
+
+
+    <header>
+      <span class="cobrador">Tiago</span>
+      <span class="fecha">2023-07-20</span>
+    </header>
+
+
+    <div>Total cobrado : 20.000</div>
+    <div class="cobrado-efectivo">Efectivo : </div>
+    <div class="cobrado-efectivo">MP : 20.000</div>
+
+    <div class="gastos_empresa">
+      <span class="entrega">Adelanto : 2000</span>
+    </div>
+    <div class="gastos_adelanto">
+      <span class="gasto">Adelanto : 2000</span>
+    </div>
+    <div class="diferencia">
+      <span>Sobra : 2000</span>
+    </div>
+    <div class="recepcion">Recepcion : Rodrigo</div>
+
+    <div class="btn__container">
+      <input type="number" name="EFECTIVO" value="" />
+      <input type="submit" value="Cerrar planilla" class="btn-cerrar_planilla" />
+    </div>
+
+
+
+
+  </main>
+
+  <%- include("../../partials/links/nav.logic.ejs") %>
+
+</body>
+
+</html>

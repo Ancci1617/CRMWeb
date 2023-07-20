@@ -88,9 +88,9 @@ ul .li__fecha:hover>.ul__cobradores {
     padding: .3rem .3rem .1rem .3rem;
     border: 1px solid var(--light_gray);
     border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 }
 .pago:hover{
     background-color: rgb(237, 246, 243);
@@ -106,7 +106,13 @@ ul .li__fecha:hover>.ul__cobradores {
     display: flex;
     gap: 1.2rem;
     align-items: center;
+    justify-content: space-between;
 }
+.data_container > * {
+    display: flex;
+    gap: 1.1rem;
+}
+
 .pago .details_container{
     min-width: 100%;
     display: flex;
@@ -117,8 +123,14 @@ ul .li__fecha:hover>.ul__cobradores {
     font-size: .8rem;
     color: var(--dark_gray);
 }
-.ficha{
+.ficha a{
     font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--dark_gray);
+}
+.ficha{ 
+    display: flex;
+    justify-content: space-between;
 }
 .cuota{
     color: rgb(26, 147, 26);

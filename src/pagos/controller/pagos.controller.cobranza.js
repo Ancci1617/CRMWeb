@@ -15,7 +15,10 @@ async function cargarCobranza(req, res) {
   });
 
   const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA });
-  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos });
+  console.log("pagos",pagos);
+  const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA , 0);
+
+  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos ,total_cobrado});
 }
 
 async function redistribuirPago(req, res) {
@@ -39,6 +42,14 @@ async function generarSaldoAnteriorServicio(req, res) {
   res.json(NUMEROS_DE_FICHAS);
 }
 
+async function rendicionController(req,res){
+  const cobranza = await pagosModel.getPagosByFechaYCob({COB : "COBRADOR",FECHA : "2023-07-19"});
+
+  
+
+
+  res.json({rendicion : 1})
+}
 
 
 
@@ -49,6 +60,5 @@ async function generarSaldoAnteriorServicio(req, res) {
 
 
 
-
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio,rendicionController };
 
