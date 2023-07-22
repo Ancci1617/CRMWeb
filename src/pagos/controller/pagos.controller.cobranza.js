@@ -29,16 +29,16 @@ async function redistribuirPago(req, res) {
 
 async function generarSaldoAnteriorServicio(req, res) {
   const FICHAS = await pagosModel.getFichasByCte();
-  const deudas = FICHAS.map(ficha => { return { data: ficha, deuda: getDoubt(ficha) } });
+  const deudas = FICHAS.map(ficha => {
+    return { data: ficha, deuda: getDoubt(ficha) }
+  });
   const al_dia = deudas.filter(ficha => (ficha.deuda.atraso_evaluado === 0 && ficha.data.SERV_PAGO > 0));
 
-  console.log("al dia con servicio abonado en el mes:", al_dia.length);
 
   const NUMEROS_DE_FICHAS = al_dia.map(ficha => ficha.data.FICHA)
   const resultado = await pagosModel.updateSaldosAnterioresYServicios(NUMEROS_DE_FICHAS);
-  console.log("REDISTRIBUCION DE FICHAS SERVICIO", resultado);
 
-  res.json(NUMEROS_DE_FICHAS);
+  res.json(resultado);
 }
 
 async function rendicionController(req, res) {

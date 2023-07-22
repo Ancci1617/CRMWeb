@@ -19,7 +19,12 @@ function getDoubt({ VENCIMIENTO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SA
     const deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
 
     const deuda_mora = MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1;
+    
+    console.log("VENCIMIENTO",VENCIMIENTO);
+    
+    console.log("SUMARMESES",sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)));
 
+    
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
     return {

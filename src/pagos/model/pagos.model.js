@@ -51,7 +51,7 @@ class PagosModel {
             "Fichas.ARTICULOS ,CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,CUOTA,CUOTA_ANT," +
             "Fichas.CUOTA_ANT - CONVERT(IFNULL(sum(PagosSV.VALOR),0),INTEGER) as SALDO, CONVERT(Fichas.TOTAL / Fichas.CUOTA,INTEGER) as CUOTAS, " +
             "CONVERT(IFNULL(SUM(PagosSV.VALOR),0),INTEGER) as CUOTA_PAGO,Fichas.MORA_ANT, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA_PAGO FROM `Fichas` " +
-            "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.CTE like ? GROUP BY Fichas.FICHA;"
+            "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.CTE like ? GROUP BY Fichas.FICHA HAVING SALDO > 0;"
             , [CTE]);
 
         if (fichas.length > 0) {
