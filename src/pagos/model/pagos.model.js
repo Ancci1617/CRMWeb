@@ -32,14 +32,14 @@ class PagosModel {
         return [];
 
     }
-    async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, MP = "EFECTIVO", SERV = 0, MORA = 0,
-        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO ,OBS}) {
+    async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
+        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO ,OBS,MP_PORCENTAJE = 0,N_OPERACION,MP_TITULAR}) {
 
         const [ficha_data] = await pool.query(
             "INSERT INTO `PagosSV` " +
-            "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
-            , [CTE, FICHA, CUOTA, PROXIMO, MP, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO,OBS]);
+            "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`) " +
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO,OBS,N_OPERACION,MP_TITULAR]);
 
         return ficha_data;
 

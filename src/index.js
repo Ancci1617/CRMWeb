@@ -19,11 +19,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-
-
-
 //Set Variables;
 app.set("PORT", process.env.PORT || 3000);
+
+
 
 
 

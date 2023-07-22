@@ -62,7 +62,16 @@ body {
 .credito__header {
     background-color: transparent;
     font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+}
 
+.credito__header .vencimiento_atrasado {
+    color: lightcoral;
+}
+
+.credito__header .vencimiento_al-dia {
+    color: rgb(89, 130, 27);
 }
 
 .credito .details {
@@ -87,12 +96,21 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.registrar__pago {
+
+.input__container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .7rem;
+}
+.input__container > * {
     outline: none;
     border: none;
     font-size: 1.2rem;
     padding: 1px 9px;
+    border: 1px solid var(--light_white);
+    border-radius: .5rem;
 }
+
 
 .btn__container {
     display: grid;
@@ -101,7 +119,7 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    /* padding: .5em; */
+
 }
 
 .btn-cargar-pago {
@@ -113,7 +131,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .btn-detalles::before {
     color: rgb(172, 170, 170);
-    
+
 }
 
 .btn-detalles:hover:before {
@@ -159,7 +177,8 @@ input[type="number"]::-webkit-outer-spin-button {
     white-space: nowrap;
     transition: top .3s;
 }
-.deep_details .header{
+
+.deep_details .header {
     display: flex;
     justify-content: space-between;
     position: sticky;
@@ -167,25 +186,30 @@ input[type="number"]::-webkit-outer-spin-button {
     /* top: 0; */
     /* background: white; */
 }
-.deep_details .header i{
+
+.deep_details .header i {
     font-size: 1.4em;
     color: var(--normal_brown);
 }
-.deep_details .header i:hover{
+
+.deep_details .header i:hover {
     color: var(--dark_gray);
     cursor: pointer;
 }
 
-table,td,thead,tr,th{
+table,
+td,
+thead,
+tr,
+th {
     padding: 8px;
     overflow: hidden;
     /* margin: auto; */
 }
-.table{
+
+.table {
     overflow-x: auto;
     text-align: center;
     display: grid;
     align-items: center;
 }
-
-

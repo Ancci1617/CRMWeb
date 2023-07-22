@@ -4,7 +4,7 @@ const { pagosModel } = require("../model/pagos.model.js");
 
 
 async function cargarCobranza(req, res) {
-  const { FECHA, COB } = req.query;
+  const { FECHA = "", COB = "" } = req.query;
   const data = await pagosModel.getFechasDePagosYCobradores();
   const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
   const render_links = FECHAS.map(fecha_evaluada => {
@@ -15,10 +15,9 @@ async function cargarCobranza(req, res) {
   });
 
   const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA });
-  console.log("pagos",pagos);
-  const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA , 0);
+  const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA, 0);
 
-  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos ,total_cobrado});
+  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado });
 }
 
 async function redistribuirPago(req, res) {
@@ -42,13 +41,13 @@ async function generarSaldoAnteriorServicio(req, res) {
   res.json(NUMEROS_DE_FICHAS);
 }
 
-async function rendicionController(req,res){
-  const cobranza = await pagosModel.getPagosByFechaYCob({COB : "COBRADOR",FECHA : "2023-07-19"});
-
-  
+async function rendicionController(req, res) {
+  const cobranza = await pagosModel.getPagosByFechaYCob({ COB: "COBRADOR", FECHA: "2023-07-19" });
 
 
-  res.json({rendicion : 1})
+
+
+  res.json({ rendicion: 1 })
 }
 
 
@@ -60,5 +59,5 @@ async function rendicionController(req,res){
 
 
 
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio,rendicionController };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController };
 

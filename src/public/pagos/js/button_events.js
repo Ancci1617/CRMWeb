@@ -48,6 +48,7 @@ pagos.forEach(pago => {
 
 
 creditos.forEach(credito => {
+
     const btn_mostrar_detalle = credito.querySelector(".btn-detalles");
     const btn_ocultar_detalle = credito.querySelector(".btn-cerrar-detalle");
     const deep_details = credito.querySelector(".deep_details");
@@ -59,6 +60,20 @@ creditos.forEach(credito => {
         deep_details.classList.toggle("show");
     }, false);
 
+    const check_mp = credito.querySelector(".check_mp");
+    check_mp.addEventListener("change",e => {
+        const N_OPERACION = credito.querySelector("input[name='N_OPERACION']");
+        const MP_PORCENTAJE = credito.querySelector("input[name='MP_PORCENTAJE']");
+        const MP_TITULAR = credito.querySelector("select[name='MP_TITULAR']");
+        N_OPERACION.required = e.target.checked;
+        N_OPERACION.hidden = !e.target.checked;
+        
+        MP_TITULAR.required = e.target.checked;
+        MP_TITULAR.hidden = !e.target.checked;
+
+        MP_PORCENTAJE.required = e.target.checked;
+        MP_PORCENTAJE.hidden = !e.target.checked;
+    });
 
 });
 

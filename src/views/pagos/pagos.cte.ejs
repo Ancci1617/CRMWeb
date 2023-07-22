@@ -44,43 +44,51 @@
 
 
     <% fichas.forEach(ficha => { %>
-
+    <% const {vencimiento_vigente} = ficha.deuda %>
     <form class="credito" method="POST" action="cargar_pago">
-      <div class="credito__header"><i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= ficha.data.FICHA %></div>
+      <div class="credito__header">
+        <span>
+          <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= ficha.data.FICHA %>
+        </span>
+        <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
+      </div>
       <div class="details">
 
-        <div class="detail">
-          <span class="detail__title">Cuota:</span>
-          <span class="detail__data"><%= ficha.deuda.cuota %></span>
-        </div>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Serv", data : ficha.deuda.servicio}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Atrasos", data : ficha.deuda.atraso}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Vencidas", data : ficha.deuda.vencidas}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Valor cuota", data : ficha.data.CUOTA}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Saldo", data : ficha.data.SALDO}) %>
 
-        <div class="detail">
-          <span class="detail__title">Serv:</span>
-          <span class="detail__data"><%= ficha.deuda.servicio %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Mora:</span>
-          <span class="detail__data"><%= ficha.deuda.mora %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Atrasos:</span>
-          <span class="detail__data"><%= ficha.deuda.atraso %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Pagas:</span>
-          <span class="detail__data"><%= ficha.deuda.pagas %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Vencidas:</span>
-          <span class="detail__data"><%= ficha.deuda.vencidas %></span>
-        </div>
+        <div class="input__container">
+          <input type="number" name="COBRADO" class="" placeholder="Monto cobrado" required />
+          <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="" required>
+          <input type="text" name="OBS" class="" placeholder="Observacion" />
+
+          <div class="input__mp">
+            <input type="checkbox" name="ISMP" class="check_mp" />
+            <label for="MPCHECK">MP</label>
+            <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
+          </div>
+
+          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" class="" minlength="6" hidden />
 
 
-        <input type="number" name="COBRADO" class="registrar__pago" placeholder="Monto cobrado" required />
-        <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="registrar__pago" required>
-        <input type="text" name="OBS" class="registrar__pago" placeholder="Observacion" />
-        <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
-        <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
+          <select name="MP_TITULAR" hidden>
+            <option value="" selected>Titular de la cuenta</option>
+            <% usuarios.forEach(usuario => {%>
+              <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+              <% }); %>
+            </select>
+            
+
+          <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
+          <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
+        </div>
+
       </div>
 
       <div class="btn__container">
