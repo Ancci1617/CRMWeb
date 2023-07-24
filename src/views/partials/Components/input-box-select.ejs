@@ -1,0 +1,15 @@
+
+ <div class="input-box">
+   <span class="details"><%= input.details %></span>
+   <select class="<%= input.classList.join(" ") %>" name="<%= input.name %>" required>
+     <% input.options.forEach(option => { %>
+     <option value="<%= option %>"><%= option %></option>
+     <% }) %>
+   </select>
+ </div>
+
+
+
+
+
+ 

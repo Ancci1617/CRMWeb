@@ -1,5 +1,3 @@
-
-
 <div class="container reprogramar__pedido__form unshow" id="<%= container.id %>">
   <div class="titles">
     <div class="title"><%= form.title %></div>
@@ -14,9 +12,11 @@
       <div class="user-details">
 
         <% inputs.forEach(input => { %>
-
+        <% if(input.type != "select"){ %>
         <%- include("./input-box.ejs", { input } ) %>
-
+        <% }else { %>
+        <%- include("./input-box-select.ejs", { input } ) %>
+        <% } %>
         <% }) %>
 
         <!-- BOTONES DE SUBMIT -->

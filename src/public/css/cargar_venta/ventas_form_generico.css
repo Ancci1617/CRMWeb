@@ -87,6 +87,7 @@
 form .user-details .input-box {
   margin-bottom: 15px;
   width: calc(100% / 2 - 20px);
+  /* width: 100%; */
 }
 
 .value_uppercase {
@@ -164,19 +165,23 @@ label {
 
 
 @media(max-width: 584px) {
+  .user-details{
+    flex-direction: column;
+  }
   .container {
-    /* max-width: 90%; */
-    width: 100;
+    max-width: 90%;
+    /* width: 100; */
   }
 
   form .user-details .input-box {
     margin-bottom: 15px;
-    width: 100%;
+    width: 100% ;
   }
 
   .content form .user-details {
     max-height: 300px;
   }
+
 
   .user-details::-webkit-scrollbar {
     width: 5px;
