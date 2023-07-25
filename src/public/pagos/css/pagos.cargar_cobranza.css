@@ -11,6 +11,7 @@
     --dark_gray: #313236;
     --click_green : rgb(100,170,100);
     --check-green : rgb(214, 255, 153);
+    --aside-left : 170px;
 }
 
 ul {
@@ -29,16 +30,26 @@ body {
     overflow-y: scroll;
     flex-direction: column;
     gap: .4rem;
-    width: 170px;
+    left: 0;
+    width: var(--aside-left);
     height: calc(100vh - 3rem);
     box-shadow: 1px 0 1px gray;
     padding: .5em;
     font-family: 'Roboto', sans-serif;
+    background-color: white;
+    transition: left .1s;
 }
 
 .aside__header {
     font-size: 1.3rem;
     text-align: center;
+}
+.aside__header i{
+    cursor: pointer;
+    display: none;
+}
+.aside__header i:hover{
+    color: var(--dark_gray);
 }
 
 .aside .ul__fechas {
@@ -68,10 +79,12 @@ ul .li__fecha:hover>.ul__cobradores {
 
 .cobranzas {
     padding: .5rem .5rem .8rem calc(170px + 1rem);
+    overflow: auto;
 }
 
 .cobranzas header {
     font-size: 1.5rem;
+    gap: .1rem;
     margin-bottom: .7em;
     display: flex;
     justify-content: space-between;
@@ -82,6 +95,9 @@ ul .li__fecha:hover>.ul__cobradores {
     gap: .8rem;
 }
 
+.orden__container {
+    margin-bottom: .6rem;
+}
 
 
 .lista_de_pagos .pago {
@@ -91,7 +107,9 @@ ul .li__fecha:hover>.ul__cobradores {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    
 }
+
 .pago:hover{
     background-color: rgb(237, 246, 243);
 }   
@@ -135,12 +153,41 @@ ul .li__fecha:hover>.ul__cobradores {
 .cuota{
     color: rgb(26, 147, 26);
 }
-.cobrador{
+.cobrador{  
     color: rgb(208, 4, 4);
 }
 
 
-
+@media screen and (max-width:580px) {
+    .lista_de_pagos .pago{
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+    }
+    .cobranzas header, .cobranzas header *{
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+    .pago * {
+        gap: .5em;
+        flex-wrap: wrap;
+    }
+    .cobranzas{
+        padding: .5rem 1rem;
+    }
+    .aside{
+        left: -170px;
+    }
+    .show_aside{
+        left: 0;
+    }
+    .cobranza_fecha{
+        cursor: pointer;
+        }
+    .aside__header i{
+        display: inline-block;
+    }
+}
 
 
 

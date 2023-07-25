@@ -56,7 +56,7 @@
 
 
         <aside class="aside">
-          <div class="aside__header">Cobranzas</div>
+          <div class="aside__header"><i class="fas fa-arrow-left"></i> Cobranzas</div>
           <ul class="ul__fechas">
             <% aside.forEach(link => { %>
             <li class="li__fecha">
@@ -74,11 +74,23 @@
 
         <section class="cobranzas">
           <% if(pagos.length > 0) {%>
-          <header>
+          <header>  
             <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
             <span class="cobrador_total">Total : <%= total_cobrado %></span>
             <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
           </header>
+          <form class="orden__container" method="GET" action="/pagos/pasar_cobranza">
+              <span class="details">
+                Ordenar por:
+              </span>
+              <select name="ORDEN" class="section_ordenar">
+                <option value="Z" <%=ORDEN == "Z" ? "selected" : "" %> >Zona</option>
+                <option value="ID" <%=ORDEN == "ID" ? "selected" : "" %>>Cobrado</option>
+              </select>
+              <input type="hidden" name="COB" value="<%= pagos[0].COBRADOR %>">
+              <input type="hidden" name="FECHA" value="<%=  pagos[0].FECHA  %>">
+
+          </form>
 
           <div class="lista_de_pagos">
             <% pagos.forEach(pago => { %>

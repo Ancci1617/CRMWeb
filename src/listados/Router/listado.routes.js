@@ -3,7 +3,7 @@ const Router = require("express").Router();
 const {getListadoZonas,getListadoZona,resolucionRevisita} = require("../controller/listado.controller.js");
 const {hasPermission} = require("../../middlewares/permission.middleware.js");
 const {LISTADO} = require("../../constants/permisos.js");
-// const {isAdmin} = require("../../lib/auth.js");
+
 
 
 Router.get("/", hasPermission(LISTADO),getListadoZonas);

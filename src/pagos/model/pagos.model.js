@@ -107,7 +107,7 @@ class PagosModel {
 
     }
 
-    async getPagosByFechaYCob({ COB = "%", FECHA = "%" }) {
+    async getPagosByFechaYCob({ COB = "%", FECHA = "%" ,ORDEN}) {
 
         const [PAGOS] = await pool.query(
             "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Fichas.Z, `VALOR` AS CUOTA, `PROXIMO`, " +
@@ -115,8 +115,8 @@ class PagosModel {
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
             "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
-            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION,Z,PagosSV.FICHA; "
-            , [FECHA, COB]);
+            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION, ?? ,PagosSV.FICHA; "
+            , [FECHA, COB,ORDEN]);
 
         if (PAGOS.length > 0) {
             return PAGOS;

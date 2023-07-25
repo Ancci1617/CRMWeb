@@ -4,7 +4,7 @@ const { pagosModel } = require("../model/pagos.model.js");
 
 
 async function cargarCobranza(req, res) {
-  const { FECHA = "", COB = "" } = req.query;
+  const { FECHA = "", COB = "",ORDEN = "Z" } = req.query;
   const data = await pagosModel.getFechasDePagosYCobradores();
   const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
   const render_links = FECHAS.map(fecha_evaluada => {
@@ -14,10 +14,10 @@ async function cargarCobranza(req, res) {
     }
   });
 
-  const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA });
+  const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA,ORDEN });
   const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA, 0);
 
-  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado });
+  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado,ORDEN });
 }
 
 async function redistribuirPago(req, res) {

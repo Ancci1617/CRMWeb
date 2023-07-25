@@ -1,5 +1,6 @@
 module.exports = {
     PLANILLA_DE_CARGA : "PLANILLA_DE_CARGA",
-    LISTADO : "LISTADO"
-
+    LISTADO : "LISTADO",
+    PAGOS_ADMIN : "PAGOS_ADMIN",
+    PAGOS_USER : "PAGOS_USER"
 }

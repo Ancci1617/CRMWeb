@@ -28,10 +28,10 @@ body {
 .zonas_disponibles{
     display: flex;
     gap: 10px;
-    /* justify-content: left; */
     padding: 1em;
     flex-wrap: wrap;
 }
+
 
 .listado_card{
     background-color: white;
@@ -77,3 +77,11 @@ body {
     font-size: 1.3rem;
 }
 
+@media screen and (max-width:500px) {
+    .zonas_disponibles > * {
+        flex:1;
+        text-align: center;
+    }
+
+
+}

@@ -2,7 +2,18 @@ const creditos = document.querySelectorAll(".credito");
 const form_redistribuir = document.getElementById("form_redistribuir_pago");
 const form__container = document.getElementById("form__container");
 const pagos = document.querySelectorAll(".pago");
+const span_fecha = document.querySelector(".cobranza_fecha");
+const aside = document.querySelector("aside");
+const aside_i = document.querySelector(".aside__header i");
+const section_ordenar = document.querySelector(".section_ordenar");
 
+
+section_ordenar.addEventListener("change",e => {
+    section_ordenar.form.submit();
+})
+
+
+const CLASS_SHOW_ASIDE = "show_aside";
 const monthMap = {
     "ene": 0,
     "feb": 1,
@@ -17,6 +28,13 @@ const monthMap = {
     "nov": 10,
     "dic": 11
 };
+aside_i.addEventListener("click",e => {
+    aside.classList.toggle(CLASS_SHOW_ASIDE);
+})
+span_fecha.addEventListener("click",e => {
+    aside.classList.toggle(CLASS_SHOW_ASIDE);
+})
+
 
 pagos.forEach(pago => {
     const button = pago.querySelector(".btn_editar_pago");

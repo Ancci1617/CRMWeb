@@ -31,9 +31,7 @@
   padding: 25px 30px;
   border-radius: 10px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-
   overflow-y: auto;
-
   position: fixed;
   left: 0;
   right: 0;
@@ -165,12 +163,9 @@ label {
 
 
 @media(max-width: 584px) {
-  .user-details{
-    flex-direction: column;
-  }
+
   .container {
     max-width: 90%;
-    /* width: 100; */
   }
 
   form .user-details .input-box {
@@ -180,6 +175,10 @@ label {
 
   .content form .user-details {
     max-height: 300px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    
+    overflow: auto;
   }
 
 
