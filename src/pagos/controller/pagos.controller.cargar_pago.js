@@ -79,11 +79,11 @@ async function codigoDePago(req, res) {
 
 async function confirmarPago(req, res) {
 
-    const { CODIGO } = req.query;
+    const { CODIGO ,ORDEN} = req.query;
     const pago = await pagosModel.getPagoByCodigo(CODIGO);
     await pagosModel.updateEstadoPagoByCodigo({CODIGO, ESTADO :"CONFIRMADO"});
-    res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}`);
-    
+    res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
+
 }
 
 module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago ,confirmarPago};
