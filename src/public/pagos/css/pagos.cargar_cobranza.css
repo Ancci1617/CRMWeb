@@ -9,9 +9,9 @@
     --light_brown: #f6f6f6;
     --normal_brown: #886F63;
     --dark_gray: #313236;
-    --click_green : rgb(100,170,100);
-    --check-green : rgb(214, 255, 153);
-    --aside-left : 170px;
+    --click_green: rgb(100, 170, 100);
+    --check-green: rgb(214, 255, 153);
+    --aside-left: 170px;
 }
 
 ul {
@@ -44,11 +44,13 @@ body {
     font-size: 1.3rem;
     text-align: center;
 }
-.aside__header i{
+
+.aside__header i {
     cursor: pointer;
     display: none;
 }
-.aside__header i:hover{
+
+.aside__header i:hover {
     color: var(--dark_gray);
 }
 
@@ -107,87 +109,108 @@ ul .li__fecha:hover>.ul__cobradores {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    
+
 }
 
-.pago:hover{
+.pago:hover {
     background-color: rgb(237, 246, 243);
-}   
-.pago i:hover{
+}
+
+.pago i:hover {
     color: var(--click_green);
     cursor: pointer;
 }
-.pago.CONFIRMADO{
+
+.pago.CONFIRMADO {
     background-color: var(--check-green);
 }
-.data_container{
+
+.data_container {
     display: flex;
     gap: 1.2rem;
     align-items: center;
     justify-content: space-between;
 }
-.data_container > * {
+
+.data_container>* {
     display: flex;
     gap: 1.1rem;
 }
 
-.pago .details_container{
+.pago .details_container {
     min-width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.pago .obs{
+
+.pago .obs {
     font-size: .8rem;
     color: var(--dark_gray);
 }
-.ficha a{
+
+.ficha a {
     font-size: 1.2rem;
     text-decoration: none;
     color: var(--dark_gray);
 }
-.ficha{ 
+
+.ficha {
     display: flex;
     justify-content: space-between;
 }
-.cuota{
+
+.cuota {
     color: rgb(26, 147, 26);
 }
-.cobrador{  
+
+.cobrador {
     color: rgb(208, 4, 4);
 }
 
 
 @media screen and (max-width:580px) {
-    .lista_de_pagos .pago{
+    .lista_de_pagos .pago {
         display: flex;
         flex-direction: column;
         max-width: 100%;
     }
-    .cobranzas header, .cobranzas header *{
+
+    .cobranzas header,
+    .cobranzas header * {
         flex-wrap: wrap;
         white-space: nowrap;
     }
+
     .pago * {
         gap: .5em;
         flex-wrap: wrap;
     }
-    .cobranzas{
+
+    .cobranzas {
         padding: .5rem 1rem;
     }
-    .aside{
+
+    .aside {
         left: -170px;
     }
-    .show_aside{
+
+    .show_aside {
         left: 0;
     }
-    .cobranza_fecha{
+
+    .cobranza_fecha {
         cursor: pointer;
-        }
-    .aside__header i{
+        border-radius: 16px;
+        padding: 1px 4px;
+        box-shadow: 1px 1px 2px lightgray;
+        background: linear-gradient(transparent 70%,lightgray);
+    }
+    .cobranza_fecha:hover{
+        background: linear-gradient(transparent 40%,lightgray);
+
+    }
+    .aside__header i {
         display: inline-block;
     }
 }
-
-
-
