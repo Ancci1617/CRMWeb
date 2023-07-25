@@ -7,10 +7,11 @@ const aside = document.querySelector("aside");
 const aside_i = document.querySelector(".aside__header i");
 const section_ordenar = document.querySelector(".section_ordenar");
 
-
-section_ordenar.addEventListener("change",e => {
-    section_ordenar.form.submit();
-})
+if (section_ordenar) {
+    section_ordenar.addEventListener("change", e => {
+        section_ordenar.form.submit();
+    })
+}
 
 
 const CLASS_SHOW_ASIDE = "show_aside";
@@ -28,17 +29,21 @@ const monthMap = {
     "nov": 10,
     "dic": 11
 };
-aside_i.addEventListener("click",e => {
-    aside.classList.toggle(CLASS_SHOW_ASIDE);
-})
-span_fecha.addEventListener("click",e => {
-    aside.classList.toggle(CLASS_SHOW_ASIDE);
-})
+if (aside_i) {
+    aside_i.addEventListener("click", e => {
+        aside.classList.toggle(CLASS_SHOW_ASIDE);
+    })
+}
+if (span_fecha) {
+    span_fecha.addEventListener("click", e => {
+        aside.classList.toggle(CLASS_SHOW_ASIDE);
+    })
+}
 
 
 pagos.forEach(pago => {
     const button = pago.querySelector(".btn_editar_pago");
-    if(!button) return;    
+    if (!button) return;
     button.addEventListener("click", e => {
         mostrarFormulario(form__container);
         form_redistribuir.CUOTA.value = parseInt(pago.querySelector(".cuota").innerText);
@@ -54,7 +59,7 @@ pagos.forEach(pago => {
             form_redistribuir.PROXIMO.value = null;
         }
 
-    
+
     });
 
     const confirmar_pago = pago.querySelector(".confirmar_pago");
@@ -79,13 +84,13 @@ creditos.forEach(credito => {
     }, false);
 
     const check_mp = credito.querySelector(".check_mp");
-    check_mp.addEventListener("change",e => {
+    check_mp.addEventListener("change", e => {
         const N_OPERACION = credito.querySelector("input[name='N_OPERACION']");
         const MP_PORCENTAJE = credito.querySelector("input[name='MP_PORCENTAJE']");
         const MP_TITULAR = credito.querySelector("select[name='MP_TITULAR']");
         N_OPERACION.required = e.target.checked;
         N_OPERACION.hidden = !e.target.checked;
-        
+
         MP_TITULAR.required = e.target.checked;
         MP_TITULAR.hidden = !e.target.checked;
 
