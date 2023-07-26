@@ -97,12 +97,13 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 
-.input__container{
+.input__container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .7rem;
 }
-.input__container > * {
+
+.input__container>* {
     outline: none;
     border: none;
     font-size: 1.2rem;
@@ -212,4 +213,15 @@ th {
     text-align: center;
     display: grid;
     align-items: center;
+}
+
+
+@media screen and (max-width:500px) {
+    /* header{
+        text-align: center;
+    }
+    .main__container{
+        overflow: auto;
+        max-width: 100vw;
+    } */
 }
