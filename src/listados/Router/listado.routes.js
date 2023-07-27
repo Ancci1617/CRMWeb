@@ -2,13 +2,14 @@
 const Router = require("express").Router();
 const {getListadoZonas,getListadoZona,resolucionRevisita} = require("../controller/listado.controller.js");
 const {hasPermission} = require("../../middlewares/permission.middleware.js");
-const {LISTADO} = require("../../constants/permisos.js");
+const {USER_LISTADO} = require("../../constants/permisos.js");
 
 
 
-Router.get("/", hasPermission(LISTADO),getListadoZonas);
-Router.get("/:ZONA", hasPermission(LISTADO),getListadoZona);
-Router.post("/finalizar_revisita",hasPermission(LISTADO),resolucionRevisita);
+Router.get("/", hasPermission(USER_LISTADO),getListadoZonas);
+Router.get("/:ZONA", hasPermission(USER_LISTADO),getListadoZona);
+Router.post("/finalizar_revisita",hasPermission(USER_LISTADO),resolucionRevisita);
+
 
 // Router.get("/deuda_cte_test",deudaCteTest);
 
