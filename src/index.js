@@ -9,7 +9,7 @@ const { poolConfig } = require("./model/connection-config.js");
 const { userView } = require("./middlewares/user.middlewares.js");
 const fileUpload = require('express-fileupload');
 const { isLoggedIn } = require('./lib/auth.js');
-
+const {deudaFicha} = require("./pagos/controller/pagos.controller.cargar_pago.js")
 
 
 //Set config
@@ -50,6 +50,7 @@ app.use(morgan(":method :url :status :response-time ms - :res[content-length] - 
 
 
 //Routes
+app.get("/deuda_ficha",deudaFicha);
 app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
@@ -74,6 +75,7 @@ app.use("/listado/",isLoggedIn,require("./listados/Router/listado.routes.js"));
 
 //
 
+//Auxiliares para excel
 
 
 
