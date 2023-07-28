@@ -19,7 +19,6 @@ Router.post("/cambio_de_fecha", hasPermission(PAGOS_USER),cambiarFecha);
 Router.post("/redistribuir_pago",hasPermission(PAGOS_ADMIN) ,redistribuirPago);
 Router.get("/confirmar_pago", hasPermission(PAGOS_ADMIN),confirmarPago);
 
-// Router.get("/deuda_cte_test",deudaCteTest);
 
 
 
