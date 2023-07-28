@@ -3,16 +3,16 @@ const { getToday } = require("../../lib/dates.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
-const {getNombresDeUsuariosByRango} = require("../../model/auth/getUsers.js");
+const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
 
 async function deudaCte(req, res) {
     //Voy a buscar cuanto debe esta ficha..
     const { CTE } = req.query;
     const fichas_data = await pagosModel.getFichasByCte(CTE);
     const cte_data = await getClientes(CTE);
-    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN","COBRADOR"], [""]);
-    
-    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }))      
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
+
+    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha) }))
 
     for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
@@ -24,10 +24,20 @@ async function deudaCte(req, res) {
         mora: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.mora, 0)
     }
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales ,usuarios});
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales, usuarios });
 }
 
+async function deudaFicha(req, res) {
+    const { CTE, FICHA } = req.query;
+    const fichas_data = await pagosModel.getFichasByCte(CTE);
 
+    const fichas = fichas_data.filter(ficha_data => ficha_data.FICHA == FICHA);
+    console.log("fichas filtradas",fichas);
+    if(fichas.length == 0) return res.send("No encontrado");
+    const deuda = getDoubt(fichas[0]);
+    res.send(`${deuda.atraso_evaluado}`);
+
+}
 
 async function cambiarFecha(req, res) {
     const { CTE, FICHA, FECHA_COB } = req.body;
@@ -40,9 +50,9 @@ async function cambiarFecha(req, res) {
 }
 async function cargarPago(req, res) {
 
-    const { CTE, FICHA, MP_PORCENTAJE,N_OPERACION,MP_TITULAR,FECHA_COB,OBS } = req.body;
+    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS } = req.body;
     const COBRADO = parseInt(req.body.COBRADO);
-    console.log("body cargar pago",req.body);
+    console.log("body cargar pago", req.body);
 
     //Busco la ficha
     const ficha_data = await pagosModel.getFicha(FICHA);
@@ -57,7 +67,7 @@ async function cargarPago(req, res) {
         CTE, FICHA, CUOTA,
         MORA, SERV, PROXIMO: FECHA_COB,
         CODIGO, USUARIO: req.user.Usuario,
-        FECHA: getToday(),OBS,MP_PORCENTAJE,N_OPERACION,MP_TITULAR
+        FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR
     };
 
     //ESTO TENDRIA QUE LLEVAR AL CODIGO DEL PAGO;
@@ -79,14 +89,14 @@ async function codigoDePago(req, res) {
 
 async function confirmarPago(req, res) {
 
-    const { CODIGO ,ORDEN} = req.query;
+    const { CODIGO, ORDEN } = req.query;
     const pago = await pagosModel.getPagoByCodigo(CODIGO);
-    await pagosModel.updateEstadoPagoByCodigo({CODIGO, ESTADO :"CONFIRMADO"});
+    await pagosModel.updateEstadoPagoByCodigo({ CODIGO, ESTADO: "CONFIRMADO" });
     res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
 
 }
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago ,confirmarPago};
+module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, confirmarPago ,deudaFicha};
 
 
 
