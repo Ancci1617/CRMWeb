@@ -171,7 +171,7 @@ class PagosModel {
         try {
             const [update_result] = await pool.query(
                 "UPDATE Fichas JOIN ( " +
-                "SELECT PagosSV.FICHA as ficha_sub_consulta,SUM(PagosSV.SERV) AS suma_valores " +
+                "SELECT PagosSV.FICHA as ficha_sub_consulta,IFNULL(SUM(PagosSV.SERV),0) AS suma_valores " +
                 "FROM PagosSV GROUP BY PagosSV.FICHA " +
                 ") AS subconsulta ON Fichas.FICHA = subconsulta.ficha_sub_consulta " +
                 "SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?);",[FICHAS]);
