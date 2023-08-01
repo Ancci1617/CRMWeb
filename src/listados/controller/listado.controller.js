@@ -1,6 +1,6 @@
 const pool = require("../../model/connection-database");
-const fs = require("fs");
 const path = require("path");
+const {getToday} = require("../../lib/dates.js");
 async function getListadoZonas(req, res) {
 
     try {
@@ -22,25 +22,7 @@ async function getListadoZona(req, res) {
     if (!ZONA) return res.send("Zona no seleccionada");
     if (!FILTRO) return res.render("listado/listado.zona.ejs", { domicilios: [], ZONA });
 
-    try {
-        // //Aca deberia filtrar la resolucion de las zonas
-        // const [domicilios] = await pool.query(
-        //     "SELECT DISTINCT L.`CTE`, L.`ZONA`, L.`NOMBRE`, L.`CALLE`, " +
-        //     "MasterResumen.`BGM DISPONIBLE` as BGM, MasterResumen.CALIF as CALIF, " +
-        //     "L.`CRUCES`, L.`CRUCES2`, L.`OBS`, L.`RESOLUCION`, L.`USUARIO`, L.`ID`, " +
-        //     "(SELECT BC.TELEFONO FROM BaseCTE BC where BC.CTE = L.CTE and BC.VALIDACION = 'VALIDO'  " +
-        //     "order by BC.ID DESC LIMIT 1) AS TELEFONO from Listado L " +
-        //     "left join BaseCTE BC on BC.CTE = L.CTE left join MasterResumen on MasterResumen.Cliente = L.CTE  " +
-        //     "where L.RESOLUCION = 'ACTIVO' AND L.ZONA = ? AND L.CALLE like ? ORDER BY L.CALLE ASC LIMIT 20"
-        //     , [ZONA, `%${FILTRO}%`]);
-
-        // const [domicilios] = await pool.query(
-        //     "SELECT `ZONA`, `Z` as CTE, `NOMBRE`, CONCAT(CALLE,' ',ALTURA) as CALLE, '1' as BGM ,'IMAN' as CALIF ,"+
-        //     "'' as CRUCES,'' as CRUCES2,`ALTURA`, `TELEFONO`, `LINEA`, `DIA`, `VALIDACION`, `GRUPO_MENSAJE`, `ID` "+
-        //     "FROM `BaseZ` where ZONA = ? and CALLE like ? order by ALTURA",[ZONA, `%${FILTRO}%`]);  
-
-        // (SELECT BC.TELEFONO FROM BaseCTE BC where BC.CTE = L.CTE and BC.VALIDACION = 'VALIDO'  order by BC.ID DESC LIMIT 1)
-        //     
+    try { 
         
         const [domicilios] = await pool.query(
         "SELECT DISTINCT Listado.CTE,C.ZONA,C.`APELLIDO Y NOMBRE` as NOMBRE,  " + 
@@ -59,7 +41,6 @@ async function getListadoZona(req, res) {
         "AND BaseZ.ZONA = ? AND BaseZ.CALLE like ? ORDER BY CALLE limit 20" 
          , [ZONA,`%${FILTRO}%`,ZONA,`%${FILTRO}%`])
 
-        console.log("domicilios",domicilios);
 
         res.render("listado/listado.zona.ejs", { domicilios, ZONA });
     } catch (error) {
@@ -71,9 +52,11 @@ async function getListadoZona(req, res) {
 
 async function resolucionRevisita(req, res) {
     const { ID, OBS = "", RESOLUCION } = req.body;
+    const FECHA = getToday();
+    
     if (!RESOLUCION || !ID) return res.send(`ERROR, CREDENCIALES NULAS ${JSON.stringify(req.body)}`);
     try {
-        const [finalizar_revisita] = await pool.query("update Listado set ? where ?", [{ OBS, RESOLUCION, USUARIO: req.user.Usuario }, { ID }]);
+        const [finalizar_revisita] = await pool.query("update Listado set ? where ?", [{ OBS, RESOLUCION, USUARIO: req.user.Usuario,FECHA }, { ID }]);
         console.log("Revisita terminada: ", req.body);
     } catch (error) {
         console.error(error);
