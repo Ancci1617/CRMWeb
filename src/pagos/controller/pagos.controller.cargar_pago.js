@@ -75,7 +75,7 @@ async function cargarPago(req, res) {
         const resultado_final = { mora: 0, servicios: 0, cuota: 0 };
 
         if (DEUDA_CUO - (cuota_paga_2 + cuota_paga_1) <= 0) {
-            console.log("set1",DEUDA_CUO - (cuota_paga_2 + cuota_paga_1));
+
             if (MORA - (mora_paga_1 + mora_paga_2) > 0) {
 
                 resultado_final.mora = (mora_paga_1 + mora_paga_2) + Math.min(MORA - (mora_paga_1 + mora_paga_2), 100);
