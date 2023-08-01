@@ -64,8 +64,7 @@ async function cargarPago(req, res) {
         const prestamo_arr = await pagosModel.getPrestamosByCte(CTE);
         const prestamo = prestamo_arr.find(prestamo => prestamo.Prestamo == FICHA);
         
-
-        let { SERVICIOS, MORA, DEUDA_CUO } = prestamo;//deudas
+        let { SERVICIOS, MORA, DEUDA_CUO } = prestamo;
         let cuota_paga_1 = Math.min(COBRADO * 0.5, DEUDA_CUO);
         let mora_paga_1 = Math.min((COBRADO - cuota_paga_1) * 0.5, MORA);
         let serv_paga_1 = Math.min((COBRADO - cuota_paga_1) * 0.5, SERVICIOS);
@@ -76,7 +75,7 @@ async function cargarPago(req, res) {
         const resultado_final = { mora: 0, servicios: 0, cuota: 0 };
 
         if (DEUDA_CUO - (cuota_paga_2 + cuota_paga_1) <= 0) {
-
+            console.log("set1",DEUDA_CUO - (cuota_paga_2 + cuota_paga_1));
             if (MORA - (mora_paga_1 + mora_paga_2) > 0) {
 
                 resultado_final.mora = (mora_paga_1 + mora_paga_2) + Math.min(MORA - (mora_paga_1 + mora_paga_2), 100);
@@ -90,7 +89,9 @@ async function cargarPago(req, res) {
                 resultado_final.mora = mora_paga_1 + mora_paga_2;
 
             } else {
-                console.log("ELSE?, LA LOGICA NO DEBERIA LLEGAR ACA NUNCA");
+                resultado_final.mora = mora_paga_1 + mora_paga_2;
+                resultado_final.cuota = cuota_paga_1 + cuota_paga_2;
+                resultado_final.servicios = serv_paga_1 + serv_paga_2;    
             }
 
         } else {
