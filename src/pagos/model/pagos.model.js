@@ -33,13 +33,13 @@ class PagosModel {
 
     }
     async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
-        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO ,OBS,MP_PORCENTAJE = 0,N_OPERACION,MP_TITULAR}) {
+        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR }) {
 
         const [ficha_data] = await pool.query(
             "INSERT INTO `PagosSV` " +
             "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`) " +
             "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO,OBS,N_OPERACION,MP_TITULAR]);
+            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR]);
 
         return ficha_data;
 
@@ -61,6 +61,15 @@ class PagosModel {
 
         return [];
     }
+    async getPrestamosByCte(CTE) {
+        const query = "SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Estatus`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`, `SERVICIOS PAGO`, CONVERT(`SERVICIOS`,INTEGER) AS `SERVICIOS`, CONVERT(`MORA`,INTEGER) AS `MORA`, `MORA UNIT`, `Vencidas`, CONVERT(`Deuda Cuo`,INTEGER) AS `DEUDA_CUO` FROM `CobranzasEC` WHERE CTE = ?  UNION SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Entregado`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`,`SERVICIOS PAGO`,`SERVICIOS`,  `MORA`, `MORA UNIT`, `Vencidas`, `Deuda Cuo` FROM `VentasEC` WHERE CTE = ?;" 
+
+        const [prestamos] = await pool.query(
+            query, [CTE, CTE]
+        );
+
+        return prestamos
+    }
 
     async insertCambioDeFecha({ CTE, FICHA, FECHA_COB, COBRADOR, FECHA }) {
         const [response] = await pool.query(
@@ -73,15 +82,15 @@ class PagosModel {
     async getAcumuladoByCteFicha({ CTE, FICHA }) {
         //SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(9218,'-',6889) group by MES UNION SELECT MONTH(CURRENT_DATE) as MES, sum(PagosSV.VALOR) as CUOTA, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(PagosSV.SERV),0),INTEGER) as SERV from PagosSV where CONCAT(PagosSV.CTE,'-',PagosSV.FICHA) = CONCAT(9218,'-',6889) group by MES;
         const [pago_data] = await pool.query(
-            "SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, "+
-            "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV "+
-            "from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(?,'-',?) group by MES " + 
-            "UNION " + 
-            "SELECT MONTH(CURRENT_DATE) as MES, sum(PagosSV.VALOR) as CUOTA, "+
+            "SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, " +
+            "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV " +
+            "from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(?,'-',?) group by MES " +
+            "UNION " +
+            "SELECT MONTH(CURRENT_DATE) as MES, sum(PagosSV.VALOR) as CUOTA, " +
             "CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA, " +
             "CONVERT(IFNULL(sum(PagosSV.SERV),0),INTEGER) as SERV " +
             "from PagosSV where CONCAT(PagosSV.CTE,'-',PagosSV.FICHA) = CONCAT(?,'-',?) group by MES;"
-            , [CTE, FICHA,CTE,FICHA])
+            , [CTE, FICHA, CTE, FICHA])
 
         if (pago_data.length > 0) {
             return pago_data;
@@ -107,16 +116,16 @@ class PagosModel {
 
     }
 
-    async getPagosByFechaYCob({ COB = "%", FECHA = "%" ,ORDEN}) {
+    async getPagosByFechaYCob({ COB = "%", FECHA = "%", ORDEN }) {
 
         const [PAGOS] = await pool.query(
-            "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Fichas.Z, `VALOR` AS CUOTA, `PROXIMO`, " +
+            "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Clientes.ZONA as Z, `VALOR` AS CUOTA, `PROXIMO`, " +
             "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, " +
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
             "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
             "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION, ?? ,PagosSV.FICHA; "
-            , [FECHA, COB,ORDEN]);
+            , [FECHA, COB, ORDEN]);
 
         if (PAGOS.length > 0) {
             return PAGOS;
@@ -170,11 +179,11 @@ class PagosModel {
     async updateSaldosAnterioresYServicios(FICHAS) {
         try {
             const [update_result] = await pool.query(
-                "UPDATE Fichas JOIN ( " +
-                "SELECT PagosSV.FICHA as ficha_sub_consulta,SUM(PagosSV.SERV) AS suma_valores " +
+                "UPDATE Fichas LEFT JOIN ( " +
+                "SELECT PagosSV.FICHA as ficha_sub_consulta,IFNULL(SUM(PagosSV.SERV),0) AS suma_valores " +
                 "FROM PagosSV GROUP BY PagosSV.FICHA " +
                 ") AS subconsulta ON Fichas.FICHA = subconsulta.ficha_sub_consulta " +
-                "SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?);",[FICHAS]);
+                "SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?);", [FICHAS]);
             return update_result;
 
         } catch (err) {

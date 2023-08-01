@@ -50,11 +50,9 @@ pagos.forEach(pago => {
         form_redistribuir.MORA.value = parseInt(pago.querySelector(".mora").innerText);
         form_redistribuir.SERV.value = parseInt(pago.querySelector(".servicio").innerText);
         form_redistribuir.CODIGO.value = pago.querySelector(".codigo").innerText;
-        const pago_fecha = pago.querySelector(".proxima").innerText.split("-");
-
 
         try {
-            form_redistribuir.PROXIMO.value = new Date(pago_fecha[0], pago_fecha[1], pago_fecha[2]).toISOString().split("T")[0];
+            form_redistribuir.PROXIMO.value = pago.querySelector(".proxima").innerText;
         } catch (error) {
             form_redistribuir.PROXIMO.value = null;
         }
@@ -84,18 +82,16 @@ creditos.forEach(credito => {
     }, false);
 
     const check_mp = credito.querySelector(".check_mp");
+    
     check_mp.addEventListener("change", e => {
-        const N_OPERACION = credito.querySelector("input[name='N_OPERACION']");
-        const MP_PORCENTAJE = credito.querySelector("input[name='MP_PORCENTAJE']");
-        const MP_TITULAR = credito.querySelector("select[name='MP_TITULAR']");
-        N_OPERACION.required = e.target.checked;
-        N_OPERACION.hidden = !e.target.checked;
+        const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
+        MP_INPUTS.forEach(input => {
+            input.required = e.target.checked;
+            input.hidden = !e.target.checked;
+            input.value = "";            
+        })
+    
 
-        MP_TITULAR.required = e.target.checked;
-        MP_TITULAR.hidden = !e.target.checked;
-
-        MP_PORCENTAJE.required = e.target.checked;
-        MP_PORCENTAJE.hidden = !e.target.checked;
     });
 
 });

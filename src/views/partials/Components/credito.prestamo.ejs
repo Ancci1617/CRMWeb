@@ -1,0 +1,92 @@
+<form class="credito prestamo" method="POST" action="cargar_pago">
+  <div class="credito__header">
+    <span>
+      <i class="fas fa-exclamation-circle btn-detalles"></i> Prestamo: <%= prestamo.Prestamo %>
+    </span>
+    <span class="<%= prestamo['Fecha cobro'] < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= prestamo['Fecha cobro'] %></span>
+  </div>
+  <div class="details">
+
+    <%- include("../pagos/detail_row.ejs",{title : "Cuota", data : prestamo.DEUDA_CUO}) %>
+    <%- include("../pagos/detail_row.ejs",{title : "Serv", data : prestamo.SERVICIOS}) %>
+    <%- include("../pagos/detail_row.ejs",{title : "Mora", data : prestamo.MORA}) %>
+    <%- include("../pagos/detail_row.ejs",{title : "Vencidas", data : prestamo.Vencidas}) %>
+    <%- include("../pagos/detail_row.ejs",{title : "Valor cuota", data : prestamo.CUOTA}) %>
+    <%- include("../pagos/detail_row.ejs",{title : "Saldo", data : prestamo['Saldo Act']}) %>
+
+    <div class="input__container">
+      <input type="number" name="COBRADO" placeholder="Monto cobrado" required />
+      <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0] %>" required>
+      <input type="text" name="OBS" placeholder="Observacion" />
+
+      <div class="input__mp">
+        <input type="checkbox" name="ISMP" class="check_mp" />
+        <label for="MPCHECK">MP</label>
+        <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
+      </div>
+
+      <input type="number" placeholder="Numero de operacion" name="N_OPERACION" minlength="6" hidden />
+
+
+      <select name="MP_TITULAR" hidden>
+        <option value="" selected>Titular de la cuenta</option>
+        <% usuarios.forEach(usuario => {%>
+        <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+        <% }); %>
+      </select>
+
+
+      <input type="hidden" name="CTE" value="<%= prestamo.CTE %>">
+      <input type="hidden" name="FICHA" value="<%= prestamo.Prestamo %>">
+    </div>
+
+  </div>
+
+  <div class="btn__container">
+    <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
+    <!-- <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambio_de_fecha"></input> -->
+    <!-- <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo"></input> -->
+  </div>
+
+  <div class="deep_details show">
+    <div class="header">
+      <h3>Prestamo : <%= prestamo.Prestamo %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
+    </div>
+    <div class="details">
+        
+      <%- include("../pagos/detail_row.ejs",{title : "Fecha de venta", data : prestamo.FECHA})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Capital", data : prestamo.Capital})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Valor total", data : prestamo.Valor})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Estatus", data : prestamo.Estatus})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Vendedor", data : prestamo.V})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Cambio de fecha", data : prestamo['C De Fecha']})  %>
+      <%- include("../pagos/detail_row.ejs",{title : "Mora unit", data : prestamo['MORA UNIT']})  %>
+
+
+
+      <!-- TABLA DE MESES -->
+      <div class="table">
+        <table>
+          <thead>
+            <th>Mes</th>
+            <th>Cuota</th>
+            <th>Cobrador</th>
+          </thead>
+          <tbody>
+            <%// for(let i = 0;i< ficha.acumulado.length;i++) {%>
+            <tr>
+              <td><%=// meses[ficha.acumulado[i].MES] %></td>
+              <td><%=// ficha.acumulado[i].CUOTA %></td>
+              <td><%=// ficha.acumulado[i].MORA + ficha.acumulado[i].SERV %></td>
+            </tr>
+            <% //} %>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+</form>
