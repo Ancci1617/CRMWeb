@@ -43,7 +43,7 @@ Router.post("/cargar_venta", isLoggedIn, async (req, res) => {
     const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
         CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO,
         VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
-
+    console.log("cargando venta, body:",req.body);
     //Asigna numero de cte nuevo
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
 

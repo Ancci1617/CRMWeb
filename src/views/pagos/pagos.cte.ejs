@@ -41,7 +41,9 @@
       </div>
     </header>
 
-
+    <% prestamos.forEach(prestamo => { %>
+    <%- include("../partials/Components/credito.prestamo.ejs",{prestamo}) %>
+    <% }) %>
 
     <% fichas.forEach(ficha => { %>
     <% const {vencimiento_vigente} = ficha.deuda %>
@@ -80,10 +82,10 @@
           <select name="MP_TITULAR" hidden>
             <option value="" selected>Titular de la cuenta</option>
             <% usuarios.forEach(usuario => {%>
-              <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
-              <% }); %>
-            </select>
-            
+            <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+            <% }); %>
+          </select>
+
 
           <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
           <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">

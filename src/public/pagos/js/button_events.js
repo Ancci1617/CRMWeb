@@ -50,11 +50,9 @@ pagos.forEach(pago => {
         form_redistribuir.MORA.value = parseInt(pago.querySelector(".mora").innerText);
         form_redistribuir.SERV.value = parseInt(pago.querySelector(".servicio").innerText);
         form_redistribuir.CODIGO.value = pago.querySelector(".codigo").innerText;
-        const pago_fecha = pago.querySelector(".proxima").innerText.split("-");
-
 
         try {
-            form_redistribuir.PROXIMO.value = new Date(pago_fecha[0], pago_fecha[1], pago_fecha[2]).toISOString().split("T")[0];
+            form_redistribuir.PROXIMO.value = pago.querySelector(".proxima").innerText;
         } catch (error) {
             form_redistribuir.PROXIMO.value = null;
         }

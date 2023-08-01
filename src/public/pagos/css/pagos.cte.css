@@ -59,6 +59,10 @@ body {
     padding: 9px;
 }
 
+.prestamo {
+    background-color: #f2feff;
+}
+
 .credito__header {
     background-color: transparent;
     font-size: 1.3rem;
@@ -100,7 +104,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .input__container {
     display: grid;
-    grid-template-columns: repeat( 2 , calc(50% - .7rem));
+    grid-template-columns: repeat(2, calc(50% - .7rem));
     gap: .7rem;
 }
 
@@ -217,7 +221,7 @@ th {
 }
 
 @media screen and (max-width:420px) {
-    .input__container{
+    .input__container {
         grid-template-columns: 1fr;
     }
 }

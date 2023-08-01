@@ -1,6 +1,6 @@
 "use strict";
 const Router = require("express").Router();
-const { deudaCte, deudaFicha,cargarPago, cambiarFecha, codigoDePago, confirmarPago } = require("../controller/pagos.controller.cargar_pago.js");
+const { deudaCte,cargarPago,cambiarFecha, codigoDePago, confirmarPago } = require("../controller/pagos.controller.cargar_pago.js");
 const { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio } = require("../controller/pagos.controller.cobranza.js");
 const { getRendicionCobranza } = require("../controller/pagos.controller.rendicion.js");
 const {hasPermission} = require("../../middlewares/permission.middleware.js");
