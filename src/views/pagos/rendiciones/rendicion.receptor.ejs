@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Rendicion</title>
+  <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
+  <link rel="stylesheet" href="/pagos/css/rendicion.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <%- include("../../partials/navigation/navigation-bar.ejs")  %>
+
+  <main class="main__container">
+
+    <aside class="aside">
+      <div class="aside__header"><i class="fas fa-arrow-left"></i> Cobranzas</div>
+      <ul class="ul__fechas">
+        <% aside.forEach(link => { %>
+        <li class="li__fecha">
+          <span><%= link.FECHA %></span>
+          <ul class="ul__cobradores">
+            <% link.COBRADORES.forEach(cobrador =>{ %>
+            <li><a href="?COB=<%=cobrador%>&FECHA=<%=link.FECHA%>"><%= cobrador %></a></li>
+            <% })%>
+          </ul>
+        </li>
+        <%}) %>
+      </ul>
+    </aside>
+
+
+    <section class="cobranzas">
+      <% if(rendicion.ID != null) {%>
+
+      <form class="rendicion__container" method="post">
+        <header>
+          <span class="cobrador_nombre"><%= rendicion.COB %></span>
+          <span class="cobrador_total">Total : <%= rendicion.TOTAL_COBRADO %></span>
+          <span class="cobranza_fecha"><%= rendicion.FECHA %></span>
+        </header>
+        <div class="rendicion_details">
+
+          <div class="cobrado_mp">Cobrado MP : <%= rendicion.MP %></div>
+          <div class="gastos">Total gastos : <%= rendicion.TOTAL_GASTOS %></div>
+          <div class="gastos-detalle">
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Gasto</th>
+                  <th>Monto</th>
+                  <th>Detalle</th>
+                  <th>...</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% gastos.forEach(gasto => { %>
+                <tr>
+                  <td><%= gasto.GASTO %></td>
+                  <td><%= gasto.MONTO %></td>
+                  <td><%= gasto.OBS %></td>
+                  <td><a href="borrar_gasto">Borrar</a></td>
+                </tr>
+                <% }) %>
+                <tr>
+                  <td>
+                    <select name="GASTO">
+                      <option value="Adelanto">Adelanto</option>
+                      <option value="Otro">Otro</option>
+                    </select>
+                  </td>
+                  <td><input type="number" name="MONTO" /></td>
+                  <td><input type="text" name="OBS" /></td>
+                  <td><a href="cargar_gasto/" <%= rendicion.ID %>>Cargar</a></td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+          
+          <div class="efectivo">Efectivo : <%= rendicion.EFECTIVO %></div>
+          <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA > 0 ? `Sobra : ${rendicion.DIFERENCIA * -1}` : `Faltan : ${rendicion.DIFERENCIA}`%></div>
+
+        </div>
+        <div class="input__container">
+          <% if(user.Usuario !== rendicion.COB) {%>
+          <input type="number" name="EFECTIVO" />
+          <input type="hidden" name="ID" value="<%= rendicion.ID %>" />
+          <input type="hidden" name="COB" value="<%= rendicion.COB %>" />
+          <input type="hidden" name="FECHA" value="<%= rendicion.FECHA %>" />
+          <input type="hidden" name="EDITABLE" value="<%= rendicion.EDITABLE %>" />
+          <input type="submit" class="btn-rendicion" value="Cargar efectivo" formaction="/rendicion/cargar_efectivo" />
+
+          <input type="submit" class="btn-rendicion" value="Cerrar rendicion" onclick="document.querySelector(`input[name='EDITABLE']`).value = 0" formaction="/rendicion/cambiar_editable" />
+          <input type="submit" class="btn-rendicion" value="Re-abrir cobranza" onclick="document.querySelector(`input[name='EDITABLE']`).value = 1" formaction="/rendicion/cambiar_editable" />
+
+          <% } else {%>
+
+          <input type="submit" class="btn-rendicion" value="Cargar gasto" formaction="/rendicion/cargar_gasto" />
+
+          <% } %>
+        </div>
+
+      </form>
+
+      <% }else{ %>
+      <header>
+        <span class="cobrador_nombre">Sin rendicion: </span>
+        <span class="cobranza_fecha"><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}`%>>Generar</a></span>
+      </header>
+      <%  } %>
+    </section>
+
+  </main>
+
+
+
+  <%- include("../../partials/links/nav.logic.ejs") %>
+  <script src="/js/lib/form.hide.js"></script>
+  <script src="/pagos/js/button_events.js"></script>
+
+</body>
+
+</html>
