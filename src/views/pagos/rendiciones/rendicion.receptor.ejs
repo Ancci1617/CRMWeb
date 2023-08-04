@@ -116,11 +116,13 @@
 
       <% }else{ %>
       <header>
+        <% if(FECHA && COB) {%>
         <span class="cobrador_nombre">Sin rendicion: </span>
-        <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}`%>>Generar</a></span>
+        <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}` %>>Generar</a></span>
         <span class="cobranza_fecha"><%= FECHA %></span>
+        <%  }
+      }%>
       </header>
-      <%  } %>
     </section>
 
   </main>
