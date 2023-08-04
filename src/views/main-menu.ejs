@@ -31,7 +31,7 @@
 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/contactos/">Contactos</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/contactos/campania">Campaña</a></div><%}%> 
-                <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago") {%><div class="dashboard-item"><a href="/pagos/pasar_cobranza">Cobranza</a></div><%}%> 
+                <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.RANGO == "COBRADOR") {%><div class="dashboard-item"><a href="/pagos/pasar_cobranza">Cobranza</a></div><%}%> 
                 <% if(hasPermission(permisos.USER_LISTADO) ) {%><div class="dashboard-item"><a href="/listado">Listado</a></div><%}%> 
             
             </div>
