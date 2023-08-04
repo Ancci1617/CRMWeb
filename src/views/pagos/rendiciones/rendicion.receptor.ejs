@@ -92,7 +92,7 @@
           <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA < 0 ? `Sobra ${rendicion.DIFERENCIA * -1}` : `Faltan ${rendicion.DIFERENCIA}`%></div>
 
         </div>
-        <% if(user.Usuario !== rendicion.COB) {%>
+        <% if(user.Usuario !== rendicion.COB && hasPermission(permisos.PAGOS_ADMIN) ) {%>
         <form class="input__container" method="post">
           <input type="hidden" name="ID" value="<%= rendicion.ID %>" />
           <input type="hidden" name="COB" value="<%= rendicion.COB %>" />
@@ -117,7 +117,8 @@
       <% }else{ %>
       <header>
         <span class="cobrador_nombre">Sin rendicion: </span>
-        <span class="cobranza_fecha"><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}`%>>Generar</a></span>
+        <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}`%>>Generar</a></span>
+        <span class="cobranza_fecha"><%= FECHA %></span>
       </header>
       <%  } %>
     </section>
