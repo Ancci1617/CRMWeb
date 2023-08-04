@@ -49,7 +49,7 @@ morgan.token('user', function (req, res) { return req.user? req.user.Usuario  : 
 app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
 
 
-//Routes
+// Routes
 app.get("/deuda_ficha",deudaFicha);
 app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/main.router"));
@@ -68,6 +68,8 @@ app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
 app.use("/pagos/",isLoggedIn,require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/",isLoggedIn,require("./listados/Router/listado.routes.js"));
+app.use("/rendicion/",require("./pagos/Router/rendiciones.routes.js"))
+// app.use("/rendiciones/",require("./pagos/Router/rendiciones.routes.js"));
 
 // morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
 // app.use(morgan(()=> {return ':method :url :status :response-time ms - :res[content-length] - :user'}));
