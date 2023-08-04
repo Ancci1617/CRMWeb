@@ -37,7 +37,7 @@
     <section class="cobranzas">
       <% if(rendicion.ID != null) {%>
 
-      <form class="rendicion__container" method="post">
+      <div class="rendicion__container">
         <header>
           <span class="cobrador_nombre"><%= rendicion.COB %></span>
           <span class="cobrador_total">Total : <%= rendicion.TOTAL_COBRADO %></span>
@@ -47,15 +47,14 @@
 
           <div class="cobrado_mp">Cobrado MP : <%= rendicion.MP %></div>
           <div class="gastos">Total gastos : <%= rendicion.TOTAL_GASTOS %></div>
-          <div class="gastos-detalle">
 
+          <form action="/rendicion/cargar_gasto" method="post" id="form_cargar_gasto" class="gastos-detalle">
             <table>
               <thead>
                 <tr>
                   <th>Gasto</th>
                   <th>Monto</th>
                   <th>Detalle</th>
-                  <th>...</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,9 +63,13 @@
                   <td><%= gasto.GASTO %></td>
                   <td><%= gasto.MONTO %></td>
                   <td><%= gasto.OBS %></td>
-                  <td><a href="borrar_gasto">Borrar</a></td>
+                  <% if(rendicion.EDITABLE) {%>
+                  <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
+                  <% } %>
                 </tr>
                 <% }) %>
+
+                <% if(rendicion.EDITABLE && user.Usuario == rendicion.COB) { %>
                 <tr>
                   <td>
                     <select name="GASTO">
@@ -76,38 +79,40 @@
                   </td>
                   <td><input type="number" name="MONTO" /></td>
                   <td><input type="text" name="OBS" /></td>
-                  <td><a href="cargar_gasto/" <%= rendicion.ID %>>Cargar</a></td>
+                  <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
                 </tr>
+                <input type="hidden" name="ID_RENDICION" value="<%= rendicion.ID %> ">
+                <% } %>
 
               </tbody>
             </table>
+          </form>
 
-          </div>
-          
           <div class="efectivo">Efectivo : <%= rendicion.EFECTIVO %></div>
-          <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA > 0 ? `Sobra : ${rendicion.DIFERENCIA * -1}` : `Faltan : ${rendicion.DIFERENCIA}`%></div>
+          <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA < 0 ? `Sobra ${rendicion.DIFERENCIA * -1}` : `Faltan ${rendicion.DIFERENCIA}`%></div>
 
         </div>
-        <div class="input__container">
-          <% if(user.Usuario !== rendicion.COB) {%>
-          <input type="number" name="EFECTIVO" />
+        <% if(user.Usuario !== rendicion.COB) {%>
+        <form class="input__container" method="post">
           <input type="hidden" name="ID" value="<%= rendicion.ID %>" />
           <input type="hidden" name="COB" value="<%= rendicion.COB %>" />
           <input type="hidden" name="FECHA" value="<%= rendicion.FECHA %>" />
           <input type="hidden" name="EDITABLE" value="<%= rendicion.EDITABLE %>" />
+
+
+          <% if(rendicion.EDITABLE) {%>
+          <input type="number" name="EFECTIVO" />
           <input type="submit" class="btn-rendicion" value="Cargar efectivo" formaction="/rendicion/cargar_efectivo" />
-
           <input type="submit" class="btn-rendicion" value="Cerrar rendicion" onclick="document.querySelector(`input[name='EDITABLE']`).value = 0" formaction="/rendicion/cambiar_editable" />
-          <input type="submit" class="btn-rendicion" value="Re-abrir cobranza" onclick="document.querySelector(`input[name='EDITABLE']`).value = 1" formaction="/rendicion/cambiar_editable" />
-
-          <% } else {%>
-
-          <input type="submit" class="btn-rendicion" value="Cargar gasto" formaction="/rendicion/cargar_gasto" />
-
+          <% }else{ %>
+          <input type="submit" class="btn-rendicion" value="Re-abrir rendicion" onclick="document.querySelector(`input[name='EDITABLE']`).value = 1" formaction="/rendicion/cambiar_editable" />
           <% } %>
-        </div>
+        </form>
 
-      </form>
+        <% } %>
+
+
+      </div>
 
       <% }else{ %>
       <header>
