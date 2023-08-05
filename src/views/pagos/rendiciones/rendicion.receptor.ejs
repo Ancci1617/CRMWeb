@@ -87,7 +87,7 @@
                 <td><%= gasto.GASTO %></td>
                 <td><%= gasto.MONTO %></td>
                 <td><%= gasto.OBS %></td>
-                <% if(rendicion.EDITABLE) {%>
+                <% if(rendicion.EDITABLE && (user.Usuario == rendicion.COB || hasPermission(permisos.PAGOS_ADMIN))) { %>
                 <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
                 <% } %>
               </tr>
