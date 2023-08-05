@@ -6,11 +6,12 @@ table{
     border: 1px solid lightgray;
     border-radius: 1rem;
     overflow: hidden;
-    /* margin: auto; */
+    margin: auto;
     width: 100%;
+    background: white;
 }
 table td input{
-    /* max-width: 50px; */
+    max-width: 70px;
 }
 
 .rendicion__container{
@@ -18,13 +19,16 @@ table td input{
     border: 1px solid var(--light_gray);
     min-height: 200px;
     border-radius: .8rem;
+    box-shadow: 1px 1px 5px gray;
+    max-width: 530px;
+    margin: .6rem auto;
+    background: var(--light_white);
 }
 .gastos-detalle{
-    display: inline-block;
     border:1px solid gray;
     border-radius: .8rem;
     overflow: auto;
-    /* width: fit-content; */
+    margin-top: .8rem;
 }
 .rendicion_details{
     display: flex;
@@ -43,9 +47,12 @@ table td input{
     font-size: 1rem;
 }
 .input__container input[type="number"]{
-    padding: 5px;
+    padding: 5px 12px;
     min-width: 100%;
     outline: none;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-bottom: 5px;
 }
 
 .btn-rendicion{

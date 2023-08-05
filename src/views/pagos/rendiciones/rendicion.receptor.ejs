@@ -35,7 +35,7 @@
 
 
     <section class="cobranzas">
-      <% if(rendicion.ID != null) {%>
+      <% if(rendicion.ID != null) { %>
 
       <div class="rendicion__container">
         <header>
@@ -48,46 +48,6 @@
           <div class="cobrado_mp">Cobrado MP : <%= rendicion.MP %></div>
           <div class="gastos">Total gastos : <%= rendicion.TOTAL_GASTOS %></div>
 
-          <form action="/rendicion/cargar_gasto" method="post" id="form_cargar_gasto" class="gastos-detalle">
-            <table>
-              <thead>
-                <tr>
-                  <th>Gasto</th>
-                  <th>Monto</th>
-                  <th>Detalle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% gastos.forEach(gasto => { %>
-                <tr>
-                  <td><%= gasto.GASTO %></td>
-                  <td><%= gasto.MONTO %></td>
-                  <td><%= gasto.OBS %></td>
-                  <% if(rendicion.EDITABLE) {%>
-                  <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
-                  <% } %>
-                </tr>
-                <% }) %>
-
-                <% if(rendicion.EDITABLE && user.Usuario == rendicion.COB) { %>
-                <tr>
-                  <td>
-                    <select name="GASTO">
-                      <option value="Adelanto">Adelanto</option>
-                      <option value="Nafta">Nafta</option>
-                      <option value="Otro">Otro</option>
-                    </select>
-                  </td>
-                  <td><input type="number" name="MONTO" /></td>
-                  <td><input type="text" name="OBS" /></td>
-                  <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
-                </tr>
-                <input type="hidden" name="ID_RENDICION" value="<%= rendicion.ID %> ">
-                <% } %>
-
-              </tbody>
-            </table>
-          </form>
 
           <div class="efectivo">Efectivo : <%= rendicion.EFECTIVO %></div>
           <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA < 0 ? `Sobra ${rendicion.DIFERENCIA * -1}` : `Faltan ${rendicion.DIFERENCIA}`%></div>
@@ -112,18 +72,63 @@
 
         <% } %>
 
+        <form action="/rendicion/cargar_gasto" method="post" id="form_cargar_gasto" class="gastos-detalle">
+          <table>
+            <thead>
+              <tr>
+                <th>Gasto</th>
+                <th>Monto</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% gastos.forEach(gasto => { %>
+              <tr>
+                <td><%= gasto.GASTO %></td>
+                <td><%= gasto.MONTO %></td>
+                <td><%= gasto.OBS %></td>
+                <% if(rendicion.EDITABLE) {%>
+                <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
+                <% } %>
+              </tr>
+              <% }) %>
+
+              <% if(rendicion.EDITABLE && user.Usuario == rendicion.COB) { %>
+              <tr>
+                <td>
+                  <select name="GASTO">
+                    <option value="Adelanto">Adelanto</option>
+                    <option value="Nafta">Nafta</option>
+                    <option value="Otro">Otro</option>
+                    <option value="AFavor">A Favor</option>
+                    <option value="Entrega">Entrega</option>
+                  </select>
+                </td>
+                <td><input type="number" name="MONTO" required/></td>
+                <td><input type="text" name="OBS" /></td>
+                <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
+              </tr>
+              <input type="hidden" name="ID_RENDICION" value="<%= rendicion.ID %> ">
+              <% } %>
+
+            </tbody>
+          </table>
+        </form>
 
       </div>
 
       <% }else{ %>
       <header>
-        <% if(FECHA && COB) {%>
         <span class="cobrador_nombre">Sin rendicion: </span>
+        <% if(FECHA && COB ) {%>
         <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}` %>>Generar</a></span>
         <span class="cobranza_fecha"><%= FECHA %></span>
-        <%  }
-      }%>
+        <%} else {%>
+        <span class="cobranza_fecha">. . . .</span>
+        <%}%>
       </header>
+      <%}%>
+
     </section>
 
   </main>
