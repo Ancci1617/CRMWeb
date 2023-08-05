@@ -167,7 +167,10 @@ ul .li__fecha:hover>.ul__cobradores {
 .cobrador {
     color: rgb(208, 4, 4);
 }
-
+.MP{
+    color:rgb(60, 85, 94);
+    font-weight: 600;
+}
 
 @media screen and (max-width:580px) {
     .lista_de_pagos .pago {
