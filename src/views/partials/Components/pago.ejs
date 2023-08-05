@@ -1,4 +1,4 @@
-<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z,NOMBRE,CALLE} = pago; %>
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z,NOMBRE,CALLE,MP_TITULAR} = pago; %>
 
 <div class="pago <%= CONFIRMACION %> ">
 
@@ -36,6 +36,7 @@
 
   <div class="details_container">
     <span class="obs"><%= NOMBRE %> - <%= CALLE %></span>
+    <span class="MP"><%= MP_TITULAR ? `MP ${MP_TITULAR}` : "" %></span>
   </div>
  
   <% if(OBS) {%>

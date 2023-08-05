@@ -120,7 +120,7 @@ class PagosModel {
 
         const [PAGOS] = await pool.query(
             "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Clientes.ZONA as Z, `VALOR` AS CUOTA, `PROXIMO`, " +
-            "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`, `CONFIRMACION`, `CODIGO`, " +
+            "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`,PagosSV.`MP_TITULAR`, `CONFIRMACION`, `CODIGO`, " +
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
             "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +

@@ -16,7 +16,7 @@ async function cargarCobranza(req, res) {
 
   const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA,ORDEN });
   const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA, 0);
-
+  console.log("pagos",pagos);
   res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado,ORDEN });
 }
 
