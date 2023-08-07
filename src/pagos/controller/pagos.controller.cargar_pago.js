@@ -35,6 +35,8 @@ async function deudaFicha(req, res) {
 
     const fichas = fichas_data.filter(ficha_data => ficha_data.FICHA == FICHA);
     if (fichas.length == 0) return res.send("No encontrado");
+    
+
     const deuda = getDoubt(fichas[0]);
     res.send(`${deuda.atraso_evaluado}`);
 

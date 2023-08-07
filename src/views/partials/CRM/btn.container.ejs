@@ -5,7 +5,7 @@
   <input type="button" class="btn btn-mercaderia btn-text" value="Entrega/Retiro"></input>
   <input type="button" class="btn btn-pedido btn-text" value="Pedido"></input>
   <input type="button" class="btn btn-contacto btn-text" value="Contacto"></input>
-  <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago"){ %>
+  <% if(hasPermission(permisos.PAGOS_USER)){ %>
   <input type="button" class="btn btn-mercaderia btn-pago btn-text" value="Procesar pago"></input>
   <% } %>
 </div>
