@@ -60,16 +60,15 @@ async function rendicionReceptor(req, res) {
     });
 
     const [rendicion] = await pool.query(
-        "SELECT Pl.ID,`COB`, Pl.`FECHA`, `EFECTIVO`, `RECEPCION`, `EDITABLE`, SUM(Pa.VALOR + Pa.MORA + Pa.SERV) AS TOTAL_COBRADO, SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) as MP, IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) AS TOTAL_GASTOS , SUM(Pa.VALOR + Pa.MORA + Pa.SERV) - SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) - IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) - EFECTIVO as DIFERENCIA FROM `PlanillasDeCobranza` Pl Left join PagosSV Pa on Pa.FECHA = Pl.FECHA AND Pa.COBRADOR = Pl.COB WHERE Pl.FECHA = ? and Pl.COB = ?;  ;", [FECHA, COB]);
+        "SELECT Pl.ID,`COB`, Pl.`FECHA`, `EFECTIVO`, `RECEPCION`, `EDITABLE`, SUM(Pa.VALOR + Pa.MORA + Pa.SERV) AS TOTAL_COBRADO, SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) as MP, IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) AS TOTAL_GASTOS , SUM(Pa.VALOR + Pa.MORA + Pa.SERV) - SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) - IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) - EFECTIVO as DIFERENCIA FROM `PlanillasDeCobranza` Pl Left join PagosSV Pa on Pa.FECHA = Pl.FECHA AND Pa.COBRADOR = Pl.COB WHERE Pl.FECHA = ? and Pl.COB = ?;", [FECHA, COB]);
 
     console.log("rendicion", rendicion);
     // const gastos = [{ GASTO: "ADELANTO", MONTO: 200, OBS: "obs" }];
     const [gastos] = await pool.query(
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB])
 
+
     res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside: render_links, rendicion: rendicion[0], gastos, FECHA, COB });
-
-
 }
 
 async function generarRendicion(req, res) {
