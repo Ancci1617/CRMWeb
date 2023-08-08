@@ -14,7 +14,7 @@ async function deudaCte(req, res) {
     const cte_data = await getClientes(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
 
-    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha,req.user.RANGO == "COBRADOR") }))
+    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha,req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }))
 
     for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
@@ -115,7 +115,7 @@ async function cargarPago(req, res) {
         
     } else {
         const ficha_data = await pagosModel.getFicha(FICHA);
-        const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data,req.user.RANGO == "COBRADOR") };
+        const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data,req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
         const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
         const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
         const CUOTA = COBRADO - MORA - SERV;
