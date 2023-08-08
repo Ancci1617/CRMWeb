@@ -1,4 +1,4 @@
-<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z,NOMBRE,CALLE,MP_TITULAR} = pago; %>
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z,NOMBRE,CALLE,MP_TITULAR,COBRADOR} = pago; %>
 
 <div class="pago <%= CONFIRMACION %> ">
 
@@ -11,9 +11,11 @@
 
     <div class="data_container__cobranza">
       <span class="proxima"><%= PROXIMO %></span>
+      <% if(user.RANGO == "ADMIN" || user.Usuario == COBRADOR ){ %>
       <span class="cuota"><%= CUOTA %></span>
       <span class="saldo"><%= SALDO %></span>
       <span class="cobrador"><%= CUOTA_SERV %></span>
+      <% } %>
     </div>
 
     <div class="data_container__btn">
@@ -38,7 +40,7 @@
     <span class="obs"><%= NOMBRE %> - <%= CALLE %></span>
     <span class="MP"><%= MP_TITULAR ? `MP ${MP_TITULAR}` : "" %></span>
   </div>
- 
+
   <% if(OBS) {%>
   <div class="details_container">
     <span class="obs"><%= OBS %></span>
