@@ -47,7 +47,7 @@
 
           <div class="cobrado_mp">Cobrado MP : <%= rendicion.MP %></div>
           <div class="gastos">Total gastos : <%= rendicion.TOTAL_GASTOS %></div>
-
+          <% if(rendicion.CONTADO) {%> <div class="contado">Contado : <%= rendicion.CONTADO %></div> <% } %>
 
           <div class="efectivo">Efectivo : <%= rendicion.EFECTIVO %></div>
           <div class="diferencia">Diferencia : <%= rendicion.DIFERENCIA < 0 ? `Sobra ${rendicion.DIFERENCIA * -1}` : `Faltan ${rendicion.DIFERENCIA}`%></div>
@@ -104,7 +104,7 @@
                     <option value="Entrega">Entrega</option>
                   </select>
                 </td>
-                <td><input type="number" name="MONTO" required/></td>
+                <td><input type="number" name="MONTO" required /></td>
                 <td><input type="text" name="OBS" /></td>
                 <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
               </tr>
