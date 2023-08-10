@@ -9,7 +9,9 @@ const { poolConfig } = require("./model/connection-config.js");
 const { userView } = require("./middlewares/user.middlewares.js");
 const fileUpload = require('express-fileupload');
 const { isLoggedIn } = require('./lib/auth.js');
-const {deudaFicha} = require("./pagos/controller/pagos.controller.cargar_pago.js")
+const { deudaFicha } = require("./pagos/controller/pagos.controller.cargar_pago.js")
+const fs = require("fs");
+const https = require('https');
 
 
 //Set config
@@ -45,12 +47,12 @@ app.use(passport.session());
 app.use(userView);
 require("./lib/passport.lib");
 
-morgan.token('user', function (req, res) { return req.user? req.user.Usuario  : "WL"});
+morgan.token('user', function (req, res) { return req.user ? req.user.Usuario : "WL" });
 app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
 
 
 // Routes
-app.get("/deuda_ficha",deudaFicha);
+app.get("/deuda_ficha", deudaFicha);
 app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
@@ -66,41 +68,30 @@ app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
-app.use("/pagos/",isLoggedIn,require("./pagos/Router/pagos.routes.js"));
-app.use("/listado/",isLoggedIn,require("./listados/Router/listado.routes.js"));
-app.use("/rendicion/",require("./pagos/Router/rendiciones.routes.js"))
+app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
+app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));
+app.use("/rendicion/", require("./pagos/Router/rendiciones.routes.js"))
 // app.use("/rendiciones/",require("./pagos/Router/rendiciones.routes.js"));
 
 // morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
 // app.use(morgan(()=> {return ':method :url :status :response-time ms - :res[content-length] - :user'}));
 // app.use((req,res) => {res.send("default")})
 
-//
-
-//Auxiliares para excel
 
 
 
-//Ejecuta el servidor
-app.listen(app.get("PORT"), async (err) => {
-    //Configura el lenguaje de la sesion en las fechas
-    // await poolConfig();
-
-    if (err) console.log("ERR: " + err);
-
-    console.log("Server running on port, " + app.get("PORT"));
-})
+const privateKey = fs.readFileSync(path.join(__dirname, "..", "cert", 'private-key.pem'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, "..", "cert", 'certificate.pem'), 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 
 
-//Ejecuta el servidor
-app.listen(80, async (err) => {
-    //Configura el lenguaje de la sesion en las fechas
-    // await poolConfig();
+// Configurar rutas y middleware de Express aquí
 
-    if (err) console.log("ERR: " + err);
+const httpsServer = https.createServer(credentials, app);
 
-    console.log("Server running on port, " + 80);
-})
+httpsServer.listen(3000, () => {
+    console.log('Server running on port, 3000');
+});
 
 
 
