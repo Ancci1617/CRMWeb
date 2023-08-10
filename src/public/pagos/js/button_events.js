@@ -6,6 +6,20 @@ const span_fecha = document.querySelector(".cobranza_fecha");
 const aside = document.querySelector("aside");
 const aside_i = document.querySelector(".aside__header i");
 const section_ordenar = document.querySelector(".section_ordenar");
+const borrar_gasto = document.querySelectorAll(".gastos-detalle .borrar_gasto");
+const cargar_gasto = document.querySelectorAll(".gastos-detalle .cargar_gasto");
+
+cargar_gasto.forEach(btn_cargar_gasto => {
+    btn_cargar_gasto.addEventListener("click", e => {
+        if (!confirm("Estas seguro de cargar este gasto?")) return e.preventDefault();
+    })
+})
+
+borrar_gasto.forEach(btn_borrar_gasto => {
+    btn_borrar_gasto.addEventListener("click", e => {
+        if (!confirm("Estas seguro de borrar este gasto?")) return e.preventDefault();
+    });
+})
 
 if (section_ordenar) {
     section_ordenar.addEventListener("change", e => {
@@ -82,15 +96,15 @@ creditos.forEach(credito => {
     }, false);
 
     const check_mp = credito.querySelector(".check_mp");
-    
+
     check_mp.addEventListener("change", e => {
         const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
         MP_INPUTS.forEach(input => {
             input.required = e.target.checked;
             input.hidden = !e.target.checked;
-            input.value = "";            
+            input.value = "";
         })
-    
+
 
     });
 

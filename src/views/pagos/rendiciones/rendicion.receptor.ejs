@@ -88,7 +88,7 @@
                 <td><%= gasto.MONTO %></td>
                 <td><%= gasto.OBS %></td>
                 <% if(rendicion.EDITABLE && (user.Usuario == rendicion.COB || hasPermission(permisos.PAGOS_ADMIN))) { %>
-                <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
+                <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%> class="borrar_gasto">Borrar</a></td>
                 <% } %>
               </tr>
               <% }) %>
@@ -106,7 +106,7 @@
                 </td>
                 <td><input type="number" name="MONTO" required /></td>
                 <td><input type="text" name="OBS" /></td>
-                <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
+                <td><input type="submit" class="cargar_gasto" value="Cargar" form="form_cargar_gasto" /></td>
               </tr>
               <input type="hidden" name="ID_RENDICION" value="<%= rendicion.ID %> ">
               <% } %>
