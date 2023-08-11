@@ -1,18 +1,18 @@
 const { getVencidas, getToday, sumarMeses } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
 
-function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
+function getDoubt({ VENCIMIENTO, PRIMER_PAGO = '01-01-2023', CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FECHA_VENTA }, COBRADOR = false) {
     const HOY = new Date();
 
-    let EsPrimerPago = false;
-    if (Math.max(HOY - DAY, new Date(VENCIMIENTO), new Date(PRIMER_PAGO)) == HOY.getTime() - DAY) {
-        VENCIMIENTO_EVALUA = VENCIMIENTO;
-    } else {
-        EsPrimerPago = true;
-        VENCIMIENTO_EVALUA = PRIMER_PAGO;
-    }
-
+    // let EsPrimerPago = false;
+    // if (Math.max(HOY - DAY, new Date(VENCIMIENTO), new Date(PRIMER_PAGO)) == HOY.getTime() - DAY) {
+    //     VENCIMIENTO_EVALUA = VENCIMIENTO;
+    // } else {
+    //     EsPrimerPago = true;
+    //     VENCIMIENTO_EVALUA = PRIMER_PAGO;
+    // }
+    VENCIMIENTO_EVALUA = VENCIMIENTO
 
 
     //AGREGAR ALGORITMO PARA COBRADOR
