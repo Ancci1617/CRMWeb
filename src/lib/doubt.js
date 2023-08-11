@@ -5,7 +5,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO = '01-01-2023', CUOTAS, CUOTA, TOTA
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FECHA_VENTA }, COBRADOR = false) {
     const HOY = new Date();
 
-    // let EsPrimerPago = false;
+    let EsPrimerPago = false;
     // if (Math.max(HOY - DAY, new Date(VENCIMIENTO), new Date(PRIMER_PAGO)) == HOY.getTime() - DAY) {
     //     VENCIMIENTO_EVALUA = VENCIMIENTO;
     // } else {
