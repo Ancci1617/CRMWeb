@@ -6,7 +6,9 @@ function ocultarFormularios() {
     document.querySelectorAll(".container").forEach(container => {
         container.classList.add(CLASS_UNSHOW);
     });
-    bg__black?.classList.add(CLASS_HIDDEN);
+    // if (bg__black) {
+    //     bg__black.classList.add(CLASS_HIDDEN);
+    // }
 }
 
 
