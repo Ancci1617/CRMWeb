@@ -54,7 +54,7 @@ if (span_fecha) {
     })
 }
 
-
+var dinero_recibido_por_pago = 0;
 pagos.forEach(pago => {
     const button = pago.querySelector(".btn_editar_pago");
     if (!button) return;
@@ -64,10 +64,13 @@ pagos.forEach(pago => {
         form_redistribuir.MORA.value = parseInt(pago.querySelector(".mora").innerText);
         form_redistribuir.SERV.value = parseInt(pago.querySelector(".servicio").innerText);
         form_redistribuir.CODIGO.value = pago.querySelector(".codigo").innerText;
+        dinero_recibido_por_pago = form_redistribuir.CUOTA.value + form_redistribuir.MORA.value + form_redistribuir.SERV.value;
+        console.log("dinero recibido por pago", dinero_recibido_por_pago);
 
         try {
             form_redistribuir.PROXIMO.value = pago.querySelector(".proxima").innerText;
         } catch (error) {
+            console.log("error al generar formulario ", error);
             form_redistribuir.PROXIMO.value = null;
         }
 
@@ -81,6 +84,16 @@ pagos.forEach(pago => {
     })
 })
 
+form_redistribuir.addEventListener("submit", e => {
+    e.preventDefault();
+    const [CUOTA, MORA, SERV] = [...form_redistribuir].map(inp => inp.value);
+    if (dinero_recibido_por_pago !== CUOTA + MORA + SERV) {
+        if (!confirm("El valor del dinero ingresado es distinto, esto afecta a las rendiciones..")) {
+            return
+        }
+    }
+    form_redistribuir.submit();
+})
 
 creditos.forEach(credito => {
 
