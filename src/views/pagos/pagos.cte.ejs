@@ -55,9 +55,9 @@
         <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
       </div>
       <div class="details">
-        <% //if(ficha.deuda.EsPrimerPago) {%>
-        <%- //include("../partials/pagos/detail_row.ejs",{title : "Primer Ven", data : ficha.data.PRIMER_PAGO || "primer pago"}) %>
-        <%// } %>
+        <% if(ficha.deuda.EsPrimerPago) {%>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Primer Ven", data : ficha.data.PRIMER_PAGO || "primer pago"}) %>
+        <% } %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Serv", data : ficha.deuda.servicio}) %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
