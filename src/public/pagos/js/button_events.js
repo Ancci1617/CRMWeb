@@ -86,7 +86,7 @@ pagos.forEach(pago => {
     })
 })
 
-form_redistribuir.addEventListener("submit", e => {
+form_redistribuir?.addEventListener("submit", e => {
     e.preventDefault();
     const [CUOTA, MORA, SERV] = [...form_redistribuir].map(inp => parseInt(inp.value));
     console.log(CUOTA, MORA, SERV)
