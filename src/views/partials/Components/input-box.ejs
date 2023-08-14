@@ -1,12 +1,4 @@
- 
- <div class="input-box <%= input.type == "hidden"? "hidden" : "" %>" >
-    <span class="details"><%= input.details %></span>
-    <input class="<%= input.classList.join(" ") %>" type="<%= input.type %>" placeholder="<%= input.placeholder %>" value="<%= input.defaultValue  %>" name="<%= input.name %>">
-  </div>
-
-
-  
-
-
-
-
+ <div class="input-box <%= input.type == "hidden"? "hidden" : "" %>">
+   <span class="details"><%= input.details %></span>
+   <input class="<%= input.classList.join(" ") %>" <%= `${input.required ? "required" : ''}` %> type="<%= input.type %>" placeholder="<%= input.placeholder %>" value="<%= input.defaultValue  %>" name="<%= input.name %>">
+ </div>
