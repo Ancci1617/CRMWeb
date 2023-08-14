@@ -38,7 +38,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
     if (vencidas < CUOTAS && COBRADOR &&
-        getToday() < `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
+        getToday() < `${VENCIMIENTO.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO.split("-")[2]}`
         && !zonas_sin_servicio_cobranza.includes(Z)
     ) {
         atraso_eval = atraso_eval + 1;
