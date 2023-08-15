@@ -76,13 +76,20 @@ async function rendicionReceptor(req, res) {
 async function generarRendicion(req, res) {
     const { FECHA, COB } = req.query;
     try {
-        const [create_result] = await pool.query("INSERT INTO `PlanillasDeCobranza` set ?", [{ FECHA, COB, EDITABLE: 1, EFECTIVO: 0, RECEPCION: req.user.Usuario }]);
-        console.log(create_result);
+        const [create_result] = await pool.query(
+
+            "INSERT INTO `PlanillasDeCobranza`" +
+            "(`FECHA`,`COB`, `EDITABLE`,`EFECTIVO`, `RECEPCION`) SELECT " +
+            "? where not EXISTS (SELECT true from PlanillasDeCobranza where FECHA = ? and COB = ?);"
+            , [[FECHA, COB, 1, 0, req.user.Usuario], FECHA, COB]);
+
     } catch (error) {
         console.error("error al generar rendicion", error);
     }
 
     res.redirect(`/rendicion/rendicion_receptor?FECHA=${FECHA}&COB=${COB}`);
+
+
 
 }
 
