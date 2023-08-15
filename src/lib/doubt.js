@@ -6,13 +6,14 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const HOY = new Date(getToday());
 
     let EsPrimerPago = false;
+    let VENCIMIENTO_EVALUA;
     if (Math.max(HOY - DAY, new Date(VENCIMIENTO), new Date(PRIMER_PAGO)) == HOY.getTime() - DAY) {
         VENCIMIENTO_EVALUA = VENCIMIENTO;
     } else {
         EsPrimerPago = true;
         VENCIMIENTO_EVALUA = PRIMER_PAGO;
     }
-
+    
     //AGREGAR ALGORITMO PARA COBRADOR
     const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
 

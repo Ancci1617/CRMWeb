@@ -13,7 +13,6 @@ async function deudaCte(req, res) {
 
     const cte_data = await getClientes(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
-
     const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }))
 
     for (let i = 0; i < fichas.length; i++) {
@@ -57,7 +56,6 @@ async function cargarPago(req, res) {
 
     const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS } = req.body;
     const COBRADO = parseInt(req.body.COBRADO);
-    console.log("body cargar pago", req.body);
     const CODIGO = getRandomCode(6);
 
 
