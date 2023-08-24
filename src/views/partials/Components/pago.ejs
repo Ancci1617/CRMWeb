@@ -20,13 +20,16 @@
 
     <div class="data_container__btn">
       <% if(CONFIRMACION !== "CONFIRMADO"){ %>
-      <div class="confirmar_pago">
-        <a href="confirmar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
-      </div>
+      <!-- <div class="confirmar_pago"> -->
+      <a href="confirmar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
+      <!-- </div> -->
 
-      <div class="editar_pago">
-        <i class="fas fa-edit btn_editar_pago"></i>
-      </div>
+      <!-- <div class="editar_pago"> -->
+      <i class="fas fa-edit btn_editar_pago"></i>
+      <!-- </div> -->
+      <% if(rendicion.EDITABLE == 1) {%>
+      <a href="invalidar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>&FECHA=<%= FECHA %>&COB=<%= COB %>" class="invalidar_pago"> <i class="fas fa-times"></i></a>
+      <% } %>
       <% } %>
     </div>
 

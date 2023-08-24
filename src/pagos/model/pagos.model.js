@@ -33,39 +33,80 @@ class PagosModel {
 
     }
     async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
-        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR }) {
+        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO }) {
 
         const [ficha_data] = await pool.query(
             "INSERT INTO `PagosSV` " +
-            "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR]);
+            "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`,`DECLARADO_COB`,`DECLARADO_CUO`) " +
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO]);
 
         return ficha_data;
 
     }
 
-    async getFichasByCte(CTE = "%") {
+    async getFichasByCte(CTE = "%", MODO = "CTE") {
         const [fichas] = await pool.query(
-            "SELECT Fichas.FECHA AS FECHA_VENTA,Fichas.CTE,Fichas.PRIMER_PAGO,Fichas.FICHA,Fichas.Z,Fichas.VENCIMIENTO,Fichas.TOTAL,Fichas.SERVICIO_ANT," +
-            "Fichas.ARTICULOS ,CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,CUOTA,CUOTA_ANT," +
-            "Fichas.CUOTA_ANT - CONVERT(IFNULL(sum(PagosSV.VALOR),0),INTEGER) as SALDO, CONVERT(Fichas.TOTAL / Fichas.CUOTA,INTEGER) as CUOTAS, " +
-            "CONVERT(IFNULL(SUM(PagosSV.VALOR),0),INTEGER) as CUOTA_PAGO,Fichas.MORA_ANT, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA_PAGO FROM `Fichas` " +
-            "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.CTE like ? GROUP BY Fichas.FICHA HAVING SALDO > 0;"
-            , [CTE]);
+        `SELECT
+           Fichas.FECHA AS FECHA_VENTA,
+           Fichas.CTE,
+           Fichas.PRIMER_PAGO,
+           Fichas.FICHA,
+           Fichas.Z,
+           Fichas.VENCIMIENTO,
+           Fichas.TOTAL,
+           Fichas.SERVICIO_ANT,
+           Fichas.ARTICULOS,
+           CONVERT(
+               IFNULL(SUM(PagosSV.SERV),
+               0),
+               INTEGER
+           ) AS SERV_PAGO,
+           SERV_UNIT,
+           CUOTA,
+           CUOTA_ANT,
+           Fichas.CUOTA_ANT - CONVERT(
+               IFNULL(SUM(PagosSV.VALOR),
+               0),
+               INTEGER
+           ) AS SALDO,
+           CONVERT(
+               Fichas.TOTAL / Fichas.CUOTA,
+               INTEGER
+           ) AS CUOTAS,
+           CONVERT(
+               IFNULL(SUM(PagosSV.VALOR),
+               0),
+               INTEGER
+           ) AS CUOTA_PAGO,
+           Fichas.MORA_ANT,
+           CONVERT(
+               IFNULL(SUM(PagosSV.MORA),
+               0),
+               INTEGER
+           ) AS MORA_PAGO
+        FROM
+            Fichas
+        LEFT JOIN PagosSV ON PagosSV.FICHA = Fichas.FICHA
+        WHERE
+            Fichas.?? LIKE ? AND (PagosSV.CONFIRMACION != 'INVALIDO' or PagosSV.CONFIRMACION IS NULL)
+        GROUP BY
+            Fichas.FICHA`  
+        // HAVING
+        //     SALDO > 0;
+            , [MODO, CTE]);
 
         if (fichas.length > 0) {
-
             return fichas;
-        }
+        }   
 
         return [];
     }
-    async getPrestamosByCte(CTE) {
-        const query = "SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Estatus`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`, `SERVICIOS PAGO`, CONVERT(`SERVICIOS`,INTEGER) AS `SERVICIOS`, CONVERT(`MORA`,INTEGER) AS `MORA`, `MORA UNIT`, `Vencidas`, CONVERT(`Deuda Cuo`,INTEGER) AS `DEUDA_CUO` FROM `CobranzasEC` WHERE CTE = ?  UNION SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Entregado`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`,`SERVICIOS PAGO`,`SERVICIOS`,  `MORA`, `MORA UNIT`, `Vencidas`, `Deuda Cuo` FROM `VentasEC` WHERE CTE = ?;" 
+    async getPrestamosByCte(CTE, MODO = "CTE") {
+        const query = "SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Estatus`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`, `SERVICIOS PAGO`, CONVERT(`SERVICIOS`,INTEGER) AS `SERVICIOS`, CONVERT(`MORA`,INTEGER) AS `MORA`, `MORA UNIT`, `Vencidas`, CONVERT(`Deuda Cuo`,INTEGER) AS `DEUDA_CUO` FROM `CobranzasEC` WHERE ?? = ?  UNION SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Entregado`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`,`SERVICIOS PAGO`,`SERVICIOS`,  `MORA`, `MORA UNIT`, `Vencidas`, `Deuda Cuo` FROM `VentasEC` WHERE ?? = ?;"
 
         const [prestamos] = await pool.query(
-            query, [CTE, CTE]
+            query, [MODO, CTE, MODO, CTE]
         );
 
         return prestamos
@@ -80,7 +121,7 @@ class PagosModel {
         return response;
     }
     async getAcumuladoByCteFicha({ CTE, FICHA }) {
-        //SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(9218,'-',6889) group by MES UNION SELECT MONTH(CURRENT_DATE) as MES, sum(PagosSV.VALOR) as CUOTA, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(PagosSV.SERV),0),INTEGER) as SERV from PagosSV where CONCAT(PagosSV.CTE,'-',PagosSV.FICHA) = CONCAT(9218,'-',6889) group by MES;
+
         const [pago_data] = await pool.query(
             "SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, " +
             "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV " +
@@ -122,9 +163,9 @@ class PagosModel {
             "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Clientes.ZONA as Z, `VALOR` AS CUOTA, `PROXIMO`, " +
             "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`,PagosSV.`MP_TITULAR`, `CONFIRMACION`, `CODIGO`, " +
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
-            "Where PagosSV.FICHA = Fichas.FICHA) as SALDO, PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
+            "Where PagosSV.FICHA = Fichas.FICHA) as SALDO,PagosSV.DECLARADO_CUO,PagosSV.DECLARADO_COB , PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
-            "like ? and PagosSV.COBRADOR like ? group by ID order by CONFIRMACION, ?? ,PagosSV.FICHA; "
+            "like ? and PagosSV.COBRADOR like ? AND PagosSV.CONFIRMACION != 'INVALIDO' group by ID order by CONFIRMACION, ?? ,PagosSV.FICHA; "
             , [FECHA, COB, ORDEN]);
 
         if (PAGOS.length > 0) {
@@ -181,7 +222,7 @@ class PagosModel {
             const [update_result] = await pool.query(
                 "UPDATE Fichas LEFT JOIN ( " +
                 "SELECT PagosSV.FICHA as ficha_sub_consulta,IFNULL(SUM(PagosSV.SERV),0) AS suma_valores " +
-                "FROM PagosSV GROUP BY PagosSV.FICHA " +
+                "FROM PagosSV WHERE PagosSV.CONFIRMACION != 'INVALIDO' GROUP BY PagosSV.FICHA " +
                 ") AS subconsulta ON Fichas.FICHA = subconsulta.ficha_sub_consulta " +
                 "SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?);", [FICHAS]);
             return update_result;

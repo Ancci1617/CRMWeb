@@ -1,4 +1,44 @@
 const pool = require("../../connection-database.js");
+const getClienteEnFichas = async (ficha) => {
+    try {
+
+        const [rows] = await pool.query(
+    `SELECT
+        C.CTE,
+        C.ZONA,
+        C.\`APELLIDO Y NOMBRE\` AS NOMBRE,
+        C.CALLE,
+        C.CRUCES,
+        C.CRUCES2,
+        C.\`WHATS APP\` AS WHATSAPP,
+        C.DNI,
+        C.Master,
+        C.OBS
+    FROM
+        Clientes C
+    LEFT JOIN Fichas F ON
+        C.CTE = F.CTE
+    LEFT JOIN CobranzasEC CEC ON
+        CEC.CTE = C.CTE
+    LEFT JOIN VentasEC VEC ON
+        VEC.CTE = C.CTE
+    WHERE
+         F.Ficha = ? OR CEC.Prestamo = ? OR VEC.Prestamo = ?  
+    LIMIT 1;`,
+            [ficha,ficha,ficha]);
+        if (rows.length > 0) {
+            return rows[0];
+        }
+        return {
+            CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
+        };
+
+
+    } catch (error) {
+        console.error("Error al consultar los datos del cliente by Ficha");
+    }
+
+}
 
 const getCteDni = async (dni) => {
 
@@ -8,7 +48,7 @@ const getCteDni = async (dni) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
+    return { CTE: -1 };
 
 }
 const getCteFicha = async (ficha) => {
@@ -18,7 +58,7 @@ const getCteFicha = async (ficha) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
+    return { CTE: -1 };
 }
 const getCteTel = async (tel) => {
     const [rows] = await pool.query(
@@ -27,7 +67,7 @@ const getCteTel = async (tel) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
+    return { CTE: -1 };
 }
 const getCteCalle = async (calle) => {
     const [rows] = await pool.query(
@@ -36,7 +76,7 @@ const getCteCalle = async (calle) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
+    return { CTE: -1 };
 }
 const getCteNombre = async (nombre) => {
     const [rows] = await pool.query(
@@ -45,7 +85,7 @@ const getCteNombre = async (nombre) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
+    return { CTE: -1 };
 }
 const getCteCte = async (cte) => {
     const [rows] = await pool.query(
@@ -54,9 +94,9 @@ const getCteCte = async (cte) => {
     if (rows.length > 0) {
         return rows[0];
     }
-    return {CTE : -1};
-        }
+    return { CTE: -1 };
+}
 
 
-module.exports = { getCteDni, getCteCalle, getCteFicha, getCteNombre, getCteTel,getCteCte }
+module.exports = { getCteDni, getCteCalle, getCteFicha, getCteNombre, getCteTel, getCteCte, getClienteEnFichas }
 
