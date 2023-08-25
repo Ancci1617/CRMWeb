@@ -7,67 +7,69 @@ module.exports = {
 
             const [rendicion] = await pool.query(
             `SELECT
-                Pl.ID,
-                COB,
-                Pl.FECHA,
-                EFECTIVO,
-                RECEPCION,
-                EDITABLE,
-                IFNULL(SUM(Pa.VALOR + Pa.MORA + Pa.SERV),0) AS TOTAL_COBRADO,
+            Pl.ID,
+            COB,
+            Pl.FECHA,
+            EFECTIVO,
+            RECEPCION,
+            EDITABLE,
+            IFNULL(calc_pagos.TOTAL_COBRADO, 0) AS TOTAL_COBRADO,
+            IFNULL(calc_pagos.MP, 0) AS MP,
+            IFNULL(calc_ventas.CONTADO, 0) AS CONTADO,
+            IFNULL(calc_gastos.TOTAL_GASTOS, 0) AS TOTAL_GASTOS,
+            IFNULL(calc_pagos.TOTAL_COBRADO, 0) - IFNULL(calc_pagos.MP, 0) - IFNULL(calc_gastos.TOTAL_GASTOS, 0) + IFNULL(calc_ventas.CONTADO, 0) - EFECTIVO AS DIFERENCIA
+        FROM
+            PlanillasDeCobranza Pl
+        LEFT JOIN(
+            SELECT
+                SUM(Pa.VALOR + Pa.MORA + Pa.SERV) AS TOTAL_COBRADO,
                 SUM(
-                    CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0
-                END
-            ) AS MP,
-            (
-                SELECT
-                    SUM(VentasCargadas.TOTAL)
-                FROM
-                    VentasCargadas
-                WHERE
-                    VentasCargadas.USUARIO = Pl.COB AND FECHA_VENTA = Pl.FECHA AND MODO = 'CONTADO' AND VISIBLE = 1 AND TIPO = 'EFECTIVO'
-            ) AS CONTADO,
-            IFNULL(
-                (
-                SELECT
-                    SUM(MONTO)
-                FROM
-                    Gastos
-                WHERE
-                    ID_RENDICION = Pl.ID
-            ),
-            0
-            ) AS TOTAL_GASTOS,
-            SUM(Pa.VALOR + Pa.MORA + Pa.SERV) - SUM(
-                CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0
-            END
-            ) - IFNULL(
-                (
-                SELECT
-                    SUM(MONTO)
-                FROM
-                    Gastos
-                WHERE
-                    ID_RENDICION = Pl.ID
-            ),
-            0
-            ) + IFNULL(
-                (
-                SELECT
-                    SUM(VentasCargadas.TOTAL)
-                FROM
-                    VentasCargadas
-                WHERE
-                    VentasCargadas.USUARIO = Pl.COB AND FECHA_VENTA = Pl.FECHA AND MODO = 'CONTADO' AND VISIBLE = 1 AND TIPO = 'EFECTIVO'
-            ),
-            0
-            ) - EFECTIVO AS DIFERENCIA
+                    IF(
+                        Pa.MP_OPERACION IS NOT NULL AND Pa.MP_OPERACION > 0 AND Pa.MP_OPERACION != '',
+                        Pa.SERV + Pa.MORA + Pa.VALOR,
+                        0
+                    )
+                ) AS MP,
+                Pa.FECHA,
+                Pa.COBRADOR
             FROM
-                PlanillasDeCobranza Pl
-            LEFT JOIN PagosSV Pa ON
-                Pa.FECHA = Pl.FECHA AND Pa.COBRADOR = Pl.COB
+                PagosSV Pa
             WHERE
-                Pa.CONFIRMACION != 'INVALIDO' AND 
-                Pl.FECHA = ? AND Pl.COB = ?;`, [FECHA, COB]);
+                Pa.CONFIRMACION != 'INVALIDO' 
+            GROUP BY
+                Pa.FECHA,
+                Pa.COBRADOR
+        ) AS calc_pagos
+        ON
+            calc_pagos.FECHA = Pl.FECHA AND calc_pagos.COBRADOR = Pl.COB
+        LEFT JOIN(
+            SELECT
+                SUM(Vc.TOTAL) AS CONTADO,
+                Vc.USUARIO,
+                Vc.FECHA_VENTA
+            FROM
+                VentasCargadas Vc
+            WHERE
+                Vc.MODO = 'CONTADO' AND Vc.VISIBLE = 1 AND Vc.TIPO = 'EFECTIVO'
+            GROUP BY
+                Vc.USUARIO,
+                Vc.FECHA_VENTA
+        ) AS calc_ventas
+        ON
+            calc_ventas.FECHA_VENTA = Pl.FECHA AND calc_ventas.USUARIO = Pl.COB
+        LEFT JOIN(
+            SELECT
+                SUM(G.MONTO) AS TOTAL_GASTOS,
+                G.ID_RENDICION
+            FROM
+                Gastos G
+            GROUP BY
+                G.ID_RENDICION
+        ) AS calc_gastos
+        ON
+            calc_gastos.ID_RENDICION = Pl.ID
+        WHERE
+            Pl.FECHA = ? AND Pl.COB = ?;`, [FECHA, COB]);
             return rendicion[0];
 
         } catch (error) {
