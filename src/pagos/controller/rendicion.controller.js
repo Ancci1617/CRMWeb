@@ -2,7 +2,7 @@
 const { hasPermission } = require("../../middlewares/permission.middleware.js");
 const pool = require("../../model/connection-database.js");
 const { pagosModel } = require("../model/pagos.model.js");
-const {getRendicion} = require("../model/rendicion.model.js");
+const { getRendicion } = require("../model/rendicion.model.js");
 
 
 async function cargarEfectivo(req, res) {
@@ -66,13 +66,13 @@ async function rendicionReceptor(req, res) {
         return res.send("No tenes permiso para acceder a esta funcionalidad.");
     }
 
-    const rendicion = await getRendicion({FECHA,COB});
-    
+    const rendicion = await getRendicion({ FECHA, COB });
+    console.log("rEND",rendicion);
 
     const [gastos] = await pool.query(
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB]);
 
-    const pagos = await pagosModel.getPagosByFechaYCob({FECHA,COB,ORDEN : "ID"});
+    const pagos = await pagosModel.getPagosByFechaYCob({ FECHA, COB, ORDEN: "ID" });
     res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside: render_links, rendicion, gastos, FECHA, COB, pagos });
 }
 
@@ -97,10 +97,22 @@ async function generarRendicion(req, res) {
 
 async function borrarGasto(req, res) {
     const { ID, FECHA, COB } = req.query;
-    console.log(req.headers);
 
     try {
-        const [gasto_eliminado] = await pool.query("DELETE FROM Gastos where ID = ?", [ID]);
+        const [gasto_eliminado] = await pool.query(
+            `DELETE
+            FROM
+                Gastos
+            WHERE
+                ID = ? AND EXISTS(
+                SELECT
+                    TRUE
+                FROM
+                    PlanillasDeCobranza
+                WHERE
+                    COB = ? AND FECHA = ? AND EDITABLE = 1
+            )`
+            , [ID,COB,FECHA]);
         console.log("gasto eliminado", gasto_eliminado);
     } catch (error) {
         console.error(error);

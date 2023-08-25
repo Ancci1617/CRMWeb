@@ -163,9 +163,9 @@ class PagosModel {
             "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Clientes.ZONA as Z, `VALOR` AS CUOTA, `PROXIMO`, " +
             "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`,PagosSV.`MP_TITULAR`, `CONFIRMACION`, `CODIGO`, " +
             "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
-            "Where PagosSV.FICHA = Fichas.FICHA) as SALDO,PagosSV.DECLARADO_CUO,PagosSV.DECLARADO_COB , PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
+            "Where PagosSV.FICHA = Fichas.FICHA and PagosSV.CONFIRMACION != 'INVALIDO') as SALDO,PagosSV.DECLARADO_CUO,PagosSV.DECLARADO_COB , PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
             "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
-            "like ? and PagosSV.COBRADOR like ? AND PagosSV.CONFIRMACION != 'INVALIDO' group by ID order by CONFIRMACION, ?? ,PagosSV.FICHA; "
+            "like ? and PagosSV.COBRADOR like ? AND PagosSV.CONFIRMACION != 'INVALIDO' group by CODIGO order by CONFIRMACION, ?? ,PagosSV.FICHA; "
             , [FECHA, COB, ORDEN]);
 
         if (PAGOS.length > 0) {

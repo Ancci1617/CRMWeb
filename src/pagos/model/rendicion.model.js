@@ -13,7 +13,7 @@ module.exports = {
                 EFECTIVO,
                 RECEPCION,
                 EDITABLE,
-                SUM(Pa.VALOR + Pa.MORA + Pa.SERV) AS TOTAL_COBRADO,
+                IFNULL(SUM(Pa.VALOR + Pa.MORA + Pa.SERV),0) AS TOTAL_COBRADO,
                 SUM(
                     CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0
                 END
