@@ -1,5 +1,5 @@
 const pool = require("../model/connection-database.js");
-const { getCteCalle,getCteDni,getCteFicha,getCteNombre,getCteTel,getCteCte } = require("../model/CRM/tipos/get_data_por_tipo")
+const { getCteCalle,getCteDni,getCteFicha,getCteNombre,getCteTel,getCteCte,getClienteEnFichas } = require("../model/CRM/tipos/get_data_por_tipo")
 
 
 const getCliente = async (request_data) => {
@@ -12,6 +12,8 @@ const getCliente = async (request_data) => {
             return getCteDni(data);
         case "Ficha":
             return getCteFicha(data);
+        case "Fichas":
+            return getClienteEnFichas(data);
         case "Telefono":
             return getCteTel(data);
         case "Nombre":

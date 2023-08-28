@@ -97,7 +97,7 @@
 
           <div class="lista_de_pagos">
             <% pagos.forEach(pago => { %>
-            <%- include("../partials/Components/pago.ejs", {pago}) %>
+            <%- include("../partials/Components/pago.ejs", {pago,COB : pagos[0].COBRADOR,FECHA : pagos[0].FECHA,rendicion}) %>
             <%})%>
 
           </div>
@@ -115,6 +115,7 @@
 
       <%- include("../partials/links/nav.logic.ejs") %>
       <script src="/js/lib/form.hide.js"></script>
+      <script src="/pagos/js/aside.js"></script>
       <script src="/pagos/js/button_events.js"></script>
 
     </body>

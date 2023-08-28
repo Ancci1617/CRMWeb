@@ -35,7 +35,7 @@
 
 
     <section class="cobranzas">
-      <% if(rendicion.ID != null) { %>
+      <% if(rendicion != null) { %>
 
       <div class="rendicion__container">
         <header>
@@ -117,15 +117,13 @@
 
       </div>
 
+
+      <%- include("../../partials/pagos/rendicion.detalle.ejs",pagos) %>
+
       <% }else{ %>
       <header>
         <span class="cobrador_nombre">Sin rendicion: </span>
-        <% if(FECHA && COB ) {%>
-        <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}` %>>Generar</a></span>
-        <span class="cobranza_fecha"><%= FECHA %></span>
-        <%} else {%>
         <span class="cobranza_fecha">. . . .</span>
-        <%}%>
       </header>
       <%}%>
 

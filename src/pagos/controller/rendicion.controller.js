@@ -2,6 +2,8 @@
 const { hasPermission } = require("../../middlewares/permission.middleware.js");
 const pool = require("../../model/connection-database.js");
 const { pagosModel } = require("../model/pagos.model.js");
+const { getRendicion } = require("../model/rendicion.model.js");
+
 
 async function cargarEfectivo(req, res) {
     const { ID, EFECTIVO = 0 } = req.body;
@@ -64,13 +66,14 @@ async function rendicionReceptor(req, res) {
         return res.send("No tenes permiso para acceder a esta funcionalidad.");
     }
 
-    const [rendicion] = await pool.query(
-        "SELECT Pl.ID,`COB`, Pl.`FECHA`, `EFECTIVO`, `RECEPCION`, `EDITABLE`, SUM(Pa.VALOR + Pa.MORA + Pa.SERV) AS TOTAL_COBRADO, SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) as MP,(SELECT SUM(VentasCargadas.TOTAL) from VentasCargadas WHERE VentasCargadas.USUARIO = Pl.COB and FECHA_VENTA = Pl.FECHA and MODO = 'CONTADO' and VISIBLE = 1 and TIPO = 'EFECTIVO') as CONTADO, IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) AS TOTAL_GASTOS , SUM(Pa.VALOR + Pa.MORA + Pa.SERV) - SUM(CASE WHEN Pa.MP_OPERACION IS NOT NULL > 0 AND Pa.MP_OPERACION != '' THEN Pa.SERV + Pa.MORA + Pa.VALOR ELSE 0 END) - IFNULL((SELECT SUM(MONTO) from Gastos where ID_RENDICION = Pl.ID),0) + IFNULL((SELECT SUM(VentasCargadas.TOTAL) from VentasCargadas WHERE VentasCargadas.USUARIO = Pl.COB and FECHA_VENTA = Pl.FECHA and MODO = 'CONTADO' and VISIBLE = 1 and TIPO = 'EFECTIVO'),0) - EFECTIVO as DIFERENCIA FROM `PlanillasDeCobranza` Pl Left join PagosSV Pa on Pa.FECHA = Pl.FECHA AND Pa.COBRADOR = Pl.COB WHERE Pl.FECHA = ? and Pl.COB = ?;", [FECHA, COB]);
+    const rendicion = await getRendicion({ FECHA, COB });
+    console.log("rEND", rendicion);
 
     const [gastos] = await pool.query(
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB]);
 
-    res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside: render_links, rendicion: rendicion[0], gastos, FECHA, COB });
+    const pagos = await pagosModel.getPagosByFechaYCob({ FECHA, COB, ORDEN: "ID" });
+    res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside: render_links, rendicion, gastos, FECHA, COB, pagos });
 }
 
 async function generarRendicion(req, res) {
@@ -82,7 +85,6 @@ async function generarRendicion(req, res) {
             "(`FECHA`,`COB`, `EDITABLE`,`EFECTIVO`, `RECEPCION`) SELECT " +
             "? where not EXISTS (SELECT true from PlanillasDeCobranza where FECHA = ? and COB = ?);"
             , [[FECHA, COB, 1, 0, req.user.Usuario], FECHA, COB]);
-
     } catch (error) {
         console.error("error al generar rendicion", error);
     }
@@ -95,10 +97,22 @@ async function generarRendicion(req, res) {
 
 async function borrarGasto(req, res) {
     const { ID, FECHA, COB } = req.query;
-    console.log(req.headers);
 
     try {
-        const [gasto_eliminado] = await pool.query("DELETE FROM Gastos where ID = ?", [ID]);
+        const [gasto_eliminado] = await pool.query(
+            `DELETE
+            FROM
+                Gastos
+            WHERE
+                ID = ? AND EXISTS(
+                SELECT
+                    TRUE
+                FROM
+                    PlanillasDeCobranza
+                WHERE
+                    COB = ? AND FECHA = ? AND EDITABLE = 1
+            )`
+            , [ID, COB, FECHA]);
         console.log("gasto eliminado", gasto_eliminado);
     } catch (error) {
         console.error(error);
