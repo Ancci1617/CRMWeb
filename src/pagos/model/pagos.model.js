@@ -164,7 +164,7 @@ class PagosModel {
     async getFechasDePagosYCobradores() {
 
         const [FECHAS] = await pool.query(
-            "SELECT DISTINCT COBRADOR,FECHA FROM `PagosSV` ORDER BY `PagosSV`.`FECHA` DESC;");
+            "SELECT DISTINCT COBRADOR,FECHA FROM `PagosSV` WHERE CONFIRMACION != 'INVALIDO' ORDER BY `PagosSV`.`FECHA` DESC;");
 
 
         if (FECHAS.length > 0) {
