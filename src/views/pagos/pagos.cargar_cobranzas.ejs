@@ -97,7 +97,7 @@
 
           <div class="lista_de_pagos">
             <% pagos.forEach(pago => { %>
-            <%- include("../partials/Components/pago.ejs", {pago,COB : pagos[0].COBRADOR,FECHA : pagos[0].FECHA}) %>
+            <%- include("../partials/Components/pago.ejs", {pago,COB : pagos[0].COBRADOR,FECHA : pagos[0].FECHA,rendicion}) %>
             <%})%>
 
           </div>

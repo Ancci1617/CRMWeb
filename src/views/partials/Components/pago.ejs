@@ -27,7 +27,7 @@
       <!-- <div class="editar_pago"> -->
       <i class="fas fa-edit btn_editar_pago"></i>
       <!-- </div> -->
-      <% if(rendicion.EDITABLE == 1) {%>
+      <% if(   !rendicion || rendicion.EDITABLE == 1 ) {%>
       <a href="invalidar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>&FECHA=<%= FECHA %>&COB=<%= COB %>" class="invalidar_pago"> <i class="fas fa-times"></i></a>
       <% } %>
       <% } %>

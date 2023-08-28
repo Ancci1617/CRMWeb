@@ -19,7 +19,7 @@ async function deudaCredito(req, res) {
     const { CREDITO } = req.query;
 
     render_obj.cte_data = await getClienteEnFichas(CREDITO);
-    console.log("render cte:data", render_obj);
+
     if (!render_obj.cte_data.CTE)
         return res.send(`La ficha o prestamo ${CREDITO} no existe`);
 
@@ -29,7 +29,6 @@ async function deudaCredito(req, res) {
     } else {
 
         fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
-
 
         render_obj.fichas =
             fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
@@ -213,7 +212,6 @@ async function invalidarPago(req, res) {
         return res.send("Sin permisos.");
     }
 
-    console.log("rendicion", rendicion);
 
     await pagosModel.updateEstadoPagoByCodigo({ CODIGO, ESTADO: "INVALIDO" });
     res.redirect(`pasar_cobranza?COB=${COB}&FECHA=${FECHA}&ORDEN=${ORDEN}`);

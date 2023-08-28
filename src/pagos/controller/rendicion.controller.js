@@ -67,7 +67,7 @@ async function rendicionReceptor(req, res) {
     }
 
     const rendicion = await getRendicion({ FECHA, COB });
-    console.log("rEND",rendicion);
+    console.log("rEND", rendicion);
 
     const [gastos] = await pool.query(
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB]);
@@ -112,7 +112,7 @@ async function borrarGasto(req, res) {
                 WHERE
                     COB = ? AND FECHA = ? AND EDITABLE = 1
             )`
-            , [ID,COB,FECHA]);
+            , [ID, COB, FECHA]);
         console.log("gasto eliminado", gasto_eliminado);
     } catch (error) {
         console.error(error);

@@ -34,20 +34,40 @@ class PagosModel {
     }
     async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
         CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO }) {
+        const connection = await pool.getConnection();
 
-        const [ficha_data] = await pool.query(
-            "INSERT INTO `PagosSV` " +
-            "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`,`DECLARADO_COB`,`DECLARADO_CUO`) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-            , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO]);
+        try {
+            await connection.beginTransaction();
+            const [ficha_data] = await connection.query(
+                "INSERT INTO `PagosSV` " +
+                "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`,`DECLARADO_COB`,`DECLARADO_CUO`) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO]);
 
-        return ficha_data;
+            const [create_result] = await connection.query(
+                `INSERT INTO PlanillasDeCobranza 
+                (FECHA,COB, EDITABLE,EFECTIVO, RECEPCION) SELECT 
+                ? where not EXISTS (SELECT true from PlanillasDeCobranza where FECHA = ? and COB = ?);`
+                , [[FECHA, USUARIO, 1, 0, null], FECHA, USUARIO]);
+
+            await connection.commit();
+            console.log("CREACION DE PLANILLA DE COBRANZA RESULTADO", create_result);
+            console.log("Pago cargado correctamente");
+            return ficha_data;
+
+        } catch (error) {
+            await connection.rollback();
+            console.error(error);
+        } finally{
+            connection.release();
+        }
+        return [];
 
     }
 
     async getFichasByCte(CTE = "%", MODO = "CTE") {
         const [fichas] = await pool.query(
-        `SELECT
+            `SELECT
            Fichas.FECHA AS FECHA_VENTA,
            Fichas.CTE,
            Fichas.PRIMER_PAGO,
@@ -91,14 +111,14 @@ class PagosModel {
         WHERE
             Fichas.?? LIKE ? AND (PagosSV.CONFIRMACION != 'INVALIDO' or PagosSV.CONFIRMACION IS NULL)
         GROUP BY
-            Fichas.FICHA`  
-        // HAVING
-        //     SALDO > 0;
+            Fichas.FICHA`
+            // HAVING
+            //     SALDO > 0;
             , [MODO, CTE]);
 
         if (fichas.length > 0) {
             return fichas;
-        }   
+        }
 
         return [];
     }
