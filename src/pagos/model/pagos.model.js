@@ -51,8 +51,6 @@ class PagosModel {
                 , [[FECHA, USUARIO, 1, 0, null], FECHA, USUARIO]);
 
             await connection.commit();
-            console.log("CREACION DE PLANILLA DE COBRANZA RESULTADO", create_result);
-            console.log("Pago cargado correctamente");
             return ficha_data;
 
         } catch (error) {

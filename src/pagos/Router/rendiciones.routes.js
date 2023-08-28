@@ -6,16 +6,17 @@ const { hasPermission } = require("../../middlewares/permission.middleware.js");
 const { PAGOS_ADMIN, PAGOS_USER } = require("../../constants/permisos.js");
 const permisos = require("../../constants/permisos.js");
 
-function generarRendicionValidation(req, res, next) {
-    if (res.locals.hasPermission(permisos.PAGOS_ADMIN) || req.user.Usuario == req.body.COB)
-        next();
+// function generarRendicionValidation(req, res, next) {
+//     if (res.locals.hasPermission(permisos.PAGOS_ADMIN) || req.user.Usuario == req.body.COB)
+//         next();
 
-    return res.send("No tiene permisos para ejecutar esta funcionalidad");
-}
+//     return res.send("No tiene permisos para ejecutar esta funcionalidad");
+// }
+
+
+// Router.get("/generar_rendicion", generarRendicionValidation, generarRendicion);
 
 Router.get("/rendicion_receptor", hasPermission(PAGOS_USER), rendicionReceptor);
-Router.get("/generar_rendicion", generarRendicionValidation, generarRendicion);
-
 Router.get("/borrar_gasto", hasPermission(PAGOS_USER), borrarGasto)
 Router.post("/cargar_efectivo", hasPermission(PAGOS_ADMIN), cargarEfectivo);
 Router.post("/cambiar_editable", hasPermission(PAGOS_ADMIN), updateEditable);
