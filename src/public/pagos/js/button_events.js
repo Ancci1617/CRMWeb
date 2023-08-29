@@ -80,12 +80,12 @@ pagos.forEach(pago => {
     });
 
     const confirmar_pago = pago.querySelector(".confirmar_pago");
-    confirmar_pago.addEventListener("click", e => {
+    confirmar_pago?.addEventListener("click", e => {
         if (!confirm("Estás a punto de confirmar un pago. Esta acción no se puede deshacer. ¿Confirmar?"))
             e.preventDefault();
     })
     const eliminar_pago = pago.querySelector(".invalidar_pago");
-    eliminar_pago.addEventListener("click", e => {
+    eliminar_pago?.addEventListener("click", e => {
         if (!confirm("Estas seguro que queres eliminar este pago? Esta acción no se puede deshacer."))
             e.preventDefault();
     })
