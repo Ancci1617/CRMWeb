@@ -38,6 +38,7 @@ body{
     color: red;
     font-weight: 800;
 }
+/* CLASES GENERICAS */
 .hidden{
     display: none !important;
 }
@@ -50,4 +51,7 @@ body{
 .flex-space_between{
     display: flex;
     justify-content: space-between;
+}
+.link{
+    text-decoration: none;
 }

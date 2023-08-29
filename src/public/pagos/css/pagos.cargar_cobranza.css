@@ -95,6 +95,10 @@ ul .ul__cobradores li {
     margin-bottom: .7em;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.cobranzas header .link{
+    font-size: 1rem;
 }
 
 .cobranzas .lista_de_pagos {
