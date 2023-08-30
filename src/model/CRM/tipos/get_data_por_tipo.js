@@ -3,35 +3,36 @@ const getClienteEnFichas = async (ficha) => {
     try {
 
         const [rows] = await pool.query(
-    `SELECT
-        C.CTE,
-        C.ZONA,
-        C.\`APELLIDO Y NOMBRE\` AS NOMBRE,
-        C.CALLE,
-        C.CRUCES,
-        C.CRUCES2,
-        C.\`WHATS APP\` AS WHATSAPP,
-        C.DNI,
-        C.Master,
-        C.OBS
-    FROM
-        Clientes C
-    LEFT JOIN Fichas F ON
-        C.CTE = F.CTE
-    LEFT JOIN CobranzasEC CEC ON
-        CEC.CTE = C.CTE
-    LEFT JOIN VentasEC VEC ON
-        VEC.CTE = C.CTE
-    WHERE
-         F.Ficha = ? OR CEC.Prestamo = ? OR VEC.Prestamo = ?  
-    LIMIT 1;`,
-            [ficha,ficha,ficha]);
+            `SELECT
+    CTE,
+    FICHA
+FROM
+    Fichas
+WHERE
+    Fichas.FICHA = ?
+UNION
+SELECT
+    CobranzasEC.CTE,
+    CobranzasEC.Prestamo
+FROM
+    CobranzasEC
+WHERE
+    Prestamo = ?
+UNION
+SELECT
+    VentasEC.CTE,
+    VentasEC.Prestamo
+FROM
+    VentasEC
+WHERE
+    Prestamo = ? LIMIT 1;`,
+            [ficha, ficha, ficha]);
         if (rows.length > 0) {
-            return rows[0];
+            return rows[0].CTE;
         }
-        return {
+        return [{
             CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
-        };
+        }];
 
 
     } catch (error) {
