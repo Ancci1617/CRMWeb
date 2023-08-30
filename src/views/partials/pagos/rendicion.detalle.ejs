@@ -1,5 +1,8 @@
 <div class="rendicion__container">
-  <header>Declarado</header>
+  <header class="flex-space_between">
+    <span>Declarado</span>
+    <a href="<%=`/pagos/pasar_cobranza?COB=${rendicion.COB}&FECHA=${rendicion.FECHA}`%>" class="link">Ir a cobranza</a>
+  </header>
   <table>
     <thead>
       <tr>

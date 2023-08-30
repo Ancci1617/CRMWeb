@@ -77,22 +77,25 @@
 
         <section class="cobranzas">
           <% if(pagos.length > 0) {%>
-          <header>  
+          <header>
             <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
             <span class="cobrador_total"><%= user.RANGO == "ADMIN" ? `Total : ${total_cobrado}` : "" %></span>
             <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
           </header>
-          <form class="orden__container" method="GET" action="/pagos/pasar_cobranza">
+          <form class="orden__container flex-space_between" method="GET" action="/pagos/pasar_cobranza">
+            <div>
               <span class="details">
                 Ordenar por:
               </span>
               <select name="ORDEN" class="section_ordenar">
-                <option value="Z" <%=ORDEN == "Z" ? "selected" : "" %> >Zona</option>
+                <option value="Z" <%=ORDEN == "Z" ? "selected" : "" %>>Zona</option>
                 <option value="ID" <%=ORDEN == "ID" ? "selected" : "" %>>Cobrado</option>
               </select>
-              <input type="hidden" name="COB" value="<%= pagos[0].COBRADOR %>">
-              <input type="hidden" name="FECHA" value="<%=  pagos[0].FECHA  %>">
+            </div>
+            <a href="<%=`/rendicion/rendicion_receptor?COB=${pagos[0].COBRADOR}&FECHA=${pagos[0].FECHA}`%>" class="link">Ir a rendicion</a>
 
+            <input type="hidden" name="COB" value="<%= pagos[0].COBRADOR %>">
+            <input type="hidden" name="FECHA" value="<%=  pagos[0].FECHA  %>">
           </form>
 
           <div class="lista_de_pagos">
