@@ -32,7 +32,7 @@ async function deudaCredito(req, res) {
     } else {
 
         fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
-
+        console.log("fichas_data",fichas_data);
         render_obj.fichas =
             fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
 
