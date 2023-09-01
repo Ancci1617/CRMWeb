@@ -56,7 +56,7 @@ class PagosModel {
         } catch (error) {
             await connection.rollback();
             console.error(error);
-        } finally{
+        } finally {
             connection.release();
         }
         return [];
@@ -141,14 +141,48 @@ class PagosModel {
     async getAcumuladoByCteFicha({ CTE, FICHA }) {
 
         const [pago_data] = await pool.query(
-            "SELECT MONTH(PagosSVAcumulado.FECHA) as MES,sum(VALOR) as CUOTA, " +
-            "CONVERT(IFNULL(sum(MORA),0),INTEGER) as MORA, CONVERT(IFNULL(sum(SERV),0),INTEGER) as SERV " +
-            "from PagosSVAcumulado where CONCAT(CTE,'-',FICHA) = CONCAT(?,'-',?) group by MES " +
-            "UNION " +
-            "SELECT MONTH(CURRENT_DATE) as MES, sum(PagosSV.VALOR) as CUOTA, " +
-            "CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA, " +
-            "CONVERT(IFNULL(sum(PagosSV.SERV),0),INTEGER) as SERV " +
-            "from PagosSV where CONCAT(PagosSV.CTE,'-',PagosSV.FICHA) = CONCAT(?,'-',?) group by MES;"
+            `SELECT
+        MES,CONVERT(SUM(CUOTA),INTEGER) as CUOTA,CONVERT(SUM(t.MORA),INTEGER) AS MORA,CONVERT(sum(t.SERV),INTEGER) AS SERV
+    FROM
+        (
+        SELECT
+            MONTH(PagosSVAcumulado.FECHA) AS MES,
+            SUM(VALOR) AS CUOTA,
+            CONVERT(IFNULL(SUM(MORA),
+            0),
+            INTEGER) AS MORA,
+            CONVERT(IFNULL(SUM(SERV),
+            0),
+            INTEGER) AS SERV
+        FROM
+            PagosSVAcumulado
+        WHERE
+            CONCAT(CTE, '-', FICHA) = CONCAT(?, '-', ?) AND PagosSVAcumulado.CONFIRMACION != 'INVALIDO'
+        GROUP BY
+            MES
+        UNION
+    SELECT
+        MONTH(CURRENT_DATE) AS MES,
+        SUM(PagosSV.VALOR) AS CUOTA,
+        CONVERT(
+            IFNULL(SUM(PagosSV.MORA),
+            0),
+            INTEGER
+        ) AS MORA,
+        CONVERT(
+            IFNULL(SUM(PagosSV.SERV),
+            0),
+            INTEGER
+        ) AS SERV
+    FROM
+        PagosSV
+    WHERE
+        CONCAT(PagosSV.CTE, '-', PagosSV.FICHA) = CONCAT(?, '-', ?) AND PagosSV.CONFIRMACION != 'INVALIDO'
+    GROUP BY
+        MES
+    ) t
+    GROUP BY
+        t.MES;`
             , [CTE, FICHA, CTE, FICHA])
 
         if (pago_data.length > 0) {

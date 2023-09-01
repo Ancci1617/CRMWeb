@@ -18,9 +18,7 @@ async function deudaCredito(req, res) {
     const render_obj = { totales: { cuota: 0, serv: 0, mora: 0 }, prestamos: [], fichas: [] };
     const { CREDITO } = req.query;
 
-    console.log("0");
     const CTE = await getClienteEnFichas(CREDITO);
-    console.log("1");
 
     [render_obj.cte_data] = await getClientes(CTE);
 
@@ -32,10 +30,8 @@ async function deudaCredito(req, res) {
     if (CREDITO > 50000) {
         render_obj.prestamos = await pagosModel.getPrestamosByCte(CREDITO, "Prestamo");
     } else {
-        console.log("2");
 
         fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
-        console.log("3");
 
         render_obj.fichas =
             fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));

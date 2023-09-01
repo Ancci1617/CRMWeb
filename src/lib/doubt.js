@@ -46,16 +46,17 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     }
 
 
-
+    console.log("ant",SERVICIO_ANT);
+    console.log("PAGO",SERV_PAGO);
     const deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
-    console.log("VENCIMIENTO",VENCIMIENTO);
-    const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
+    const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
+    console.log("atraso eval",atraso_eval);
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
         vencidas,
-        mora: deuda_mora,
+        mora: 0,
         atraso,
         atraso_evaluado: atraso_eval,
         pagas, vencimiento_vigente, EsPrimerPago
