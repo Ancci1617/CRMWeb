@@ -157,7 +157,7 @@ class PagosModel {
         FROM
             PagosSVAcumulado
         WHERE
-            CONCAT(CTE, '-', FICHA) = CONCAT(17271, '-', 6864) AND PagosSVAcumulado.CONFIRMACION != 'INVALIDO'
+            CONCAT(CTE, '-', FICHA) = CONCAT(?, '-', ?) AND PagosSVAcumulado.CONFIRMACION != 'INVALIDO'
         GROUP BY
             MES
         UNION
@@ -177,7 +177,7 @@ class PagosModel {
     FROM
         PagosSV
     WHERE
-        CONCAT(PagosSV.CTE, '-', PagosSV.FICHA) = CONCAT(17271, '-', 6864) AND PagosSV.CONFIRMACION != 'INVALIDO'
+        CONCAT(PagosSV.CTE, '-', PagosSV.FICHA) = CONCAT(?, '-', ?) AND PagosSV.CONFIRMACION != 'INVALIDO'
     GROUP BY
         MES
     ) t
