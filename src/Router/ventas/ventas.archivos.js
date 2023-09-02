@@ -1,11 +1,6 @@
 const Router = require("express").Router();
-const pool = require("../../model/connection-database");
-const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
-const { getPrepagoEntrega } = require("../../model/productos/prepagos");
-const { insertVenta } = require("../../model/ventas/insert.venta");
-const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isNotLoggedIn, isAdmin } = require("../../lib/auth");
-const { getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const { getVendedores, getFechaDeVentas } = require("../../model/ventas/ventas.query");
 const {getArchivoDeEntregaVentas,getArchivoDeEntregaAccess} = require("../../model/ventas/archivo_de_entrega");
 
 

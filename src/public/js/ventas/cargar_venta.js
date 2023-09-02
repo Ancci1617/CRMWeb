@@ -59,7 +59,8 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
 
         const cuotas = document.getElementsByName("CUOTAS")[0].value;
         const cuotas_entrega = await fetchPost("/query_prepago_entrega",{ calificacion: master.CALIF, cuotas });
-        if (cuotas_para_entrega >= cuotas_entrega.Entrega) return true;
+        console.log("cuotas_para_entrega por claificaicon",cuotas_entrega)
+        if (cuotas_para_entrega >= cuotas_entrega.ENTREGA) return true;
         return false;
 
     }
