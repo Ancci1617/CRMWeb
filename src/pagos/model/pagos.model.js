@@ -66,50 +66,50 @@ class PagosModel {
     async getFichasByCte(CTE = "%", MODO = "CTE") {
         const [fichas] = await pool.query(
             `SELECT
-           Fichas.FECHA AS FECHA_VENTA,
-           Fichas.CTE,
-           Fichas.PRIMER_PAGO,
-           Fichas.FICHA,
-           Fichas.Z,
-           Fichas.VENCIMIENTO,
-           Fichas.TOTAL,
-           Fichas.SERVICIO_ANT,
-           Fichas.ARTICULOS,
-           CONVERT(
-               IFNULL(SUM(PagosSV.SERV),
-               0),
-               INTEGER
-           ) AS SERV_PAGO,
-           SERV_UNIT,
-           CUOTA,
-           CUOTA_ANT,
-           Fichas.CUOTA_ANT - CONVERT(
-               IFNULL(SUM(PagosSV.VALOR),
-               0),
-               INTEGER
-           ) AS SALDO,
-           CONVERT(
-               Fichas.TOTAL / Fichas.CUOTA,
-               INTEGER
-           ) AS CUOTAS,
-           CONVERT(
-               IFNULL(SUM(PagosSV.VALOR),
-               0),
-               INTEGER
-           ) AS CUOTA_PAGO,
-           Fichas.MORA_ANT,
-           CONVERT(
-               IFNULL(SUM(PagosSV.MORA),
-               0),
-               INTEGER
-           ) AS MORA_PAGO
+            Fichas.FECHA AS FECHA_VENTA,
+            Fichas.CTE,
+            Fichas.PRIMER_PAGO,
+            Fichas.FICHA,
+            Fichas.Z,
+            Fichas.VENCIMIENTO,
+            Fichas.TOTAL,
+            Fichas.SERVICIO_ANT,
+            Fichas.ARTICULOS,
+            CONVERT(
+                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.SERV,0)),
+                0),
+                INTEGER
+            ) AS SERV_PAGO,
+            SERV_UNIT,
+            CUOTA,
+            CUOTA_ANT,
+            Fichas.CUOTA_ANT - CONVERT(
+                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
+                0),
+                INTEGER
+            ) AS SALDO,
+            CONVERT(
+                Fichas.TOTAL / Fichas.CUOTA,
+                INTEGER
+            ) AS CUOTAS,
+            CONVERT(
+                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
+                0),
+                INTEGER
+            ) AS CUOTA_PAGO,
+            Fichas.MORA_ANT,
+            CONVERT(
+                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.MORA,0)),
+                0),
+                INTEGER
+            ) AS MORA_PAGO
         FROM
             Fichas
         LEFT JOIN PagosSV ON PagosSV.FICHA = Fichas.FICHA
         WHERE
-            Fichas.?? LIKE ? AND (PagosSV.CONFIRMACION != 'INVALIDO' or PagosSV.CONFIRMACION IS NULL)
+            Fichas.?? LIKE ? 
         GROUP BY
-            Fichas.FICHA`
+            Fichas.FICHA;`
             // HAVING
             //     SALDO > 0;
             , [MODO, CTE]);
