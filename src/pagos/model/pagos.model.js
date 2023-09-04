@@ -273,11 +273,11 @@ class PagosModel {
     async updateSaldosAnterioresYServicios(FICHAS) {
         try {
             const [update_result] = await pool.query(
-                "UPDATE Fichas LEFT JOIN ( " +
-                "SELECT PagosSV.FICHA as ficha_sub_consulta,IFNULL(SUM(PagosSV.SERV),0) AS suma_valores " +
-                "FROM PagosSV WHERE PagosSV.CONFIRMACION != 'INVALIDO' GROUP BY PagosSV.FICHA " +
-                ") AS subconsulta ON Fichas.FICHA = subconsulta.ficha_sub_consulta " +
-                "SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?);", [FICHAS]);
+                `UPDATE Fichas LEFT JOIN (  
+                SELECT PagosSV.FICHA as ficha_sub_consulta,IFNULL(SUM(PagosSV.SERV),0) AS suma_valores  
+                FROM PagosSV WHERE PagosSV.CONFIRMACION != 'INVALIDO' GROUP BY PagosSV.FICHA  
+                ) AS subconsulta ON Fichas.FICHA = subconsulta.ficha_sub_consulta  
+                SET Fichas.SERVICIO_ANT = subconsulta.suma_valores where Fichas.FICHA in (?)`, [FICHAS]);
             return update_result;
 
         } catch (err) {
