@@ -13,7 +13,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
         EsPrimerPago = true;
         VENCIMIENTO_EVALUA = PRIMER_PAGO;
     }
-    
+
     //AGREGAR ALGORITMO PARA COBRADOR
     const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
 
@@ -31,27 +31,34 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     const deuda_mora = FECHA_VENTA < '2022-12-01' ? 0 : MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1;
 
-    //opcion 1, si esta al dia, agregale el servicio de este mes, SINO, DEJAR COMO ESTA (
-    //En caso que pase esto, revisar el caso: (Esta atrasada, paga el serv del mes pasado, la cuota del mes pasado y la cuota de este mes, se le cobra el serv de este mes?)
-    //)
 
-    //opcion 2(vigente), siempre agregar el servicio de este mes 
+
 
     //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
+    let deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
     if (vencidas < CUOTAS && COBRADOR &&
-        getToday() < `${VENCIMIENTO.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO.split("-")[2]}`
-        && !zonas_sin_servicio_cobranza.includes(Z)
+        getToday() < `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
+        && !zonas_sin_servicio_cobranza.includes(Z) && !deuda_serv > 0
     ) {
         atraso_eval = atraso_eval + 1;
+        deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
+
     }
 
 
-    console.log("ant",SERVICIO_ANT);
-    console.log("PAGO",SERV_PAGO);
-    const deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
+
+
+    //Si el cliente esta atrasado, el servicio ADICIONAL, Existe Si solo si la cuota de este mes no paga servicio
+
+
+
+
+
+    console.log("ant", SERVICIO_ANT);
+    console.log("PAGO", SERV_PAGO);
 
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
-    console.log("atraso eval",atraso_eval);
+    console.log("atraso eval", atraso_eval);
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,

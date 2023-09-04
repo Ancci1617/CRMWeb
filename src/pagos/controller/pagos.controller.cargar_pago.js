@@ -32,7 +32,7 @@ async function deudaCredito(req, res) {
     } else {
 
         fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
-        console.log("fichas_data",fichas_data);
+        console.log("fichas_data", fichas_data);
         render_obj.fichas =
             fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
 
@@ -42,7 +42,7 @@ async function deudaCredito(req, res) {
 
     render_obj.usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
 
-    
+
     res.render("pagos/pagos.cte.ejs", render_obj);
 
 
@@ -216,7 +216,7 @@ async function invalidarPago(req, res) {
     }
 
 
-    await pagosModel.updateEstadoPagoByCodigo({ CODIGO, ESTADO: "INVALIDO" });
+    await pagosModel.updateEstadoPagoByCodigo({ newState: { CONFIRMACION: "INVALIDO" }, filter: { CODIGO } });
     res.redirect(`pasar_cobranza?COB=${COB}&FECHA=${FECHA}&ORDEN=${ORDEN}`);
 
 }

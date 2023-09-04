@@ -1,11 +1,8 @@
 const Router = require("express").Router();
 const pool = require("../../model/connection-database");
-const { updateVentaById } = require("../../model/ventas/insert.venta");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
-const { getVentaById, getVentasDelDia, borrarVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
-const { saveFileFromEntry } = require("../../lib/files");
-const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId, updateContactoDeVenta } = require("../../model/contactos/contactos.model");
+const { getVentaById, getVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const ventasController = require("../../controller/ventas.controller.js");
 
 Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, ventasController.formCargarVenta);
@@ -62,41 +59,14 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
 Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
     const { ID } = req.params;
     const venta = await getVentaById(ID);
-    console.log("venta", venta);
     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 
 });
 
 
-Router.post("/ventas_cargadas/editar", isLoggedIn, async (req, res) => {
-    const { CTE, ID, WHATSAPP } = req.body;
+Router.post("/ventas_cargadas/editar", isLoggedIn, ventasController.updateVenta);
 
-    //Carga la venta
-    await updateVentaById(req.body);
-    await updateContactoDeVenta(ID, WHATSAPP);
-
-
-    //Cargar imagen de frente y dorso a servidor
-    if (req.files) {
-        const entries = Object.entries(req.files);
-        saveFileFromEntry(entries, CTE);
-    }
-
-    res.redirect("/ventas_cargadas");
-
-
-});
-
-Router.get("/eliminar_venta/:indice", isLoggedIn, async (req, res) => {
-
-    const { indice } = req.params;
-    const venta = await getVentaById(indice);
-    await borrarTelefonoByVentaId({ ID: indice });
-    await borrarVentasDelDia(indice, req.user.Usuario);
-    await validarUltimoTelefonoByCte({ CTE: venta.CTE });
-    res.redirect("/ventas_cargadas");
-
-});
+Router.get("/eliminar_venta/:indice", isLoggedIn, ventasController.eliminarVenta);
 
 Router.get("/ventas_cargadas_vendedores", isLoggedIn, isAdmin, async (req, res) => {
 

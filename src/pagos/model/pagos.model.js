@@ -33,18 +33,18 @@ class PagosModel {
 
     }
     async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
-        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO }) {
+        CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR, DECLARADO_COB = 0, DECLARADO_CUO = 0, ID_VENTA = null }) {
         const connection = await pool.getConnection();
 
         try {
             await connection.beginTransaction();
-            const [ficha_data] = await connection.query(
-                "INSERT INTO `PagosSV` " +
-                "(`CTE`, `FICHA`, `VALOR`, `PROXIMO`, `MP`, `SERV`, `MORA`, `COBRADOR`, `FECHA`, `CONFIRMACION`,`CODIGO`,`OBS`,`MP_OPERACION`,`MP_TITULAR`,`DECLARADO_COB`,`DECLARADO_CUO`) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO]);
 
-            const [create_result] = await connection.query(
+            const [ficha_data] = await connection.query(
+                `INSERT INTO PagosSV (CTE, FICHA, VALOR, PROXIMO, MP, SERV, MORA, COBRADOR, FECHA, CONFIRMACION,CODIGO,OBS,MP_OPERACION,MP_TITULAR,DECLARADO_COB,DECLARADO_CUO,ID_VENTA) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? where not EXISTS (SELECT true from PagosSV where ID_VENTA = ?)`
+                , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO, ID_VENTA, ID_VENTA]);
+
+
+            await connection.query(
                 `INSERT INTO PlanillasDeCobranza 
                 (FECHA,COB, EDITABLE,EFECTIVO, RECEPCION) SELECT 
                 ? where not EXISTS (SELECT true from PlanillasDeCobranza where FECHA = ? and COB = ?);`
@@ -54,8 +54,8 @@ class PagosModel {
             return ficha_data;
 
         } catch (error) {
-            await connection.rollback();
             console.error(error);
+            await connection.rollback();
         } finally {
             connection.release();
         }
@@ -235,15 +235,16 @@ class PagosModel {
         }
         return [];
     }
-    async updateEstadoPagoByCodigo({ CODIGO, ESTADO }) {
-        const [update_result] = await pool.query(
-            "UPDATE PagosSV SET CONFIRMACION = ? WHERE CODIGO = ? ", [ESTADO, CODIGO]);
+    async updateEstadoPagoByCodigo({ newState, filter }) {
+        const [update_result] = await pool.query
+            (`UPDATE PagosSV SET ? WHERE ? `, [newState, filter]);
 
         if (update_result.length > 0) {
             return update_result;
         }
         return [];
     }
+
 
     async getFichas() {
         const [FICHAS] = await pool.query(
