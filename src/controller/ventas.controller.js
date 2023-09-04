@@ -1,9 +1,12 @@
 const fs = require("fs");
 const { getClientes } = require("../model/CRM/get_tablas/get_clientes");
-const {insertVenta} = require("../model/ventas/insert.venta.js")
-const {getNuevoNumeroDeCte} = require("../model/ventas/ventas.query.js")
+const { insertVenta, updateVentaById, eliminarVentaById } = require("../model/ventas/insert.venta.js")
+const { getNuevoNumeroDeCte, getVentaById, borrarVentasDelDia } = require("../model/ventas/ventas.query.js")
 const { saveFileFromEntry } = require("../lib/files.js");
-const {generarContactoCTE} = require("../lib/contactos.js")
+const { generarContactoCTE } = require("../lib/contactos.js")
+const { pagosModel } = require("../pagos/model/pagos.model.js");
+const { getRandomCode } = require("../lib/random_code.js");
+const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId } = require("../model/contactos/contactos.model");
 
 const formCargarVenta = async (req, res) => {
     const { cte } = req.params;
@@ -21,29 +24,24 @@ const formCargarVenta = async (req, res) => {
 
 }
 const postCargarVenta = async (req, res) => {
-    //Inicializa variables
-
-    const { Usuario } = req.user;
-    const { FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
-        CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, TIPO, ESTATUS, PRIMER_PAGO,
-        VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO } = req.body;
-
-    //Asigna numero de cte nuevo
+    const USUARIO = req.user.Usuario;
+    //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-
-    //Carga la venta
-    const insert_response = await insertVenta(CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
-        ARTICULOS, TOTAL, ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO,
-        VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, "BGM");
-
+    const submit_venta_obj = Object.assign(req.body, { CTE, USUARIO, MODO: "BGM" });
+    const { insertId } = await insertVenta({ Venta: submit_venta_obj });
 
     //Cargar imagen de frente y dorso a servidor
-    if (req.files) {
-        const entries = Object.entries(req.files);
-        saveFileFromEntry(entries, CTE);
-    }
+    if (req.files)
+        saveFileFromEntry(Object.entries(req.files), CTE);
 
-    await generarContactoCTE(CTE, Usuario, { TELEFONO: WHATSAPP }, insert_response.insertId);
+    //Si tiene anticipo que el cargue el pago
+    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO } = req.body;
+    if (ANTICIPO > 0)
+        await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: insertId });
+
+    //Al final genera el contacto
+    await generarContactoCTE(CTE, req.user.Usuario, { TELEFONO }, insertId);
+
 
     res.redirect("/CRM");
 }
@@ -60,4 +58,69 @@ const getEntregaDePrepago = (req, res) => {
 }
 
 
-module.exports = { formCargarVenta, postCargarVenta, getEntregaDePrepago }
+const updateVenta = async (req, res) => {
+    const { CTE, ANTICIPO = 0, FECHA_VENTA, ID, FICHA, PRIMER_PAGO } = req.body;
+    const USUARIO = req.user.Usuario;
+    const venta_prev = await getVentaById(ID);
+
+    console.log("prev", venta_prev)
+    console.log("body", req.body)
+    console.log("prev", JSON.stringify(venta_prev))
+    console.log("body", JSON.stringify(req.body))
+
+    //Corregir
+    if (JSON.stringify(req.body) != JSON.stringify(venta_prev)) {
+
+        //Si antes no tenia anticipo y ahora si, que le genere el pago
+        if (!venta_prev.ANTICIPO && ANTICIPO) {
+            console.log("intenta cargar pago");
+            await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
+        }
+
+
+
+        //Edita la venta
+        console.log("actualiza la venta");
+        await updateVentaById(req.body, venta_prev.ANTICIPO);
+
+    } else {
+        console.log("no actualiza la venta, datos identicos");
+    }
+    //Cargar imagen de frente y dorso a servidor
+    if (req.files)
+        saveFileFromEntry(entries, req.body.CTE);
+
+    res.redirect("/ventas_cargadas");
+
+
+}
+
+const eliminarVenta = async (req, res) => {
+
+    const { indice } = req.params;
+    try {
+        const CTE = await eliminarVentaById(indice);
+        await validarUltimoTelefonoByCte({ CTE });
+    } catch (error) {
+        return res.send("Hubo un error al eliminar la venta.")
+    }
+    res.redirect("/ventas_cargadas");
+
+}
+
+
+module.exports = { formCargarVenta, postCargarVenta, getEntregaDePrepago, updateVenta, eliminarVenta }
+
+
+function estaIncluido(a, b) {
+    const propiedades = Object.keys(b);
+
+    for (let propiedad of propiedades) {
+        if (a[propiedad] != b[propiedad]) {
+            return false;
+        }
+
+    }
+    return true;
+}
+
