@@ -1,15 +1,9 @@
+<div class="input-box <%= input.classListContainer.join(" ") %>" <%= input.hidden ? "hidden" : "" %>>
 
- <div class="input-box">
-   <span class="details"><%= input.details %></span>
-   <select class="<%= input.classList.join(" ") %>" name="<%= input.name %>" required>
-     <% input.options.forEach(option => { %>
-     <option value="<%= option %>"><%= option %></option>
-     <% }) %>
-   </select>
- </div>
-
-
-
-
-
- 
+  <span class="details"><%= input.details %></span>
+  <select class="<%= input.classList.join(" ") %>" name="<%= input.name %>" <%= input.required? "required" : ""%>>
+    <% input.options.forEach(option => { %>
+    <option value="<%= option %>"><%= option %></option>
+    <% }) %>
+  </select>
+</div>
