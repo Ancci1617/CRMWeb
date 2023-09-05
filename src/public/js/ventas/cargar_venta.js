@@ -7,7 +7,7 @@ const cuotas = document.getElementsByName("CUOTAS")[0];
 const cuota = document.getElementsByName("CUOTA")[0];
 const estatus_options = document.querySelector(".options-estatus");
 const CTE = document.getElementsByName("CTE")[0].value;
-const evaluation_data = { sabana: 0, master: 0 };
+const evaluation_data = { sabana: 0, master: 0, prepagos: { 9: "", 12: "" } };
 const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
 const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
 const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
@@ -28,8 +28,12 @@ ANTICIPO.addEventListener("change", e => {
 
 
 window.addEventListener("load", async e => {
+
     evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
+    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 9 });
+    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 12 });
+
     console.log("EVALUATION DATA", evaluation_data);
 });
 
@@ -51,7 +55,7 @@ async function autoCompletarPrecios() {
 
 }
 
-async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
+function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
     const { sabana, master } = evaluation_data;
@@ -74,9 +78,8 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     if (Estatus === 'Prepago') {
 
         const cuotas = document.getElementsByName("CUOTAS")[0].value;
-        const cuotas_entrega = await fetchPost("/query_prepago_entrega", { calificacion: master.CALIF, cuotas });
-        console.log("cuotas_para_entrega por claificaicon", cuotas_entrega)
-        if (cuotas_para_entrega >= cuotas_entrega.ENTREGA) return true;
+        const cuotas_entrega = evaluation_data.prepagos[cuotas];
+        if (cuotas_para_entrega >= cuotas_entrega?.ENTREGA) return true;
         return false;
 
     }
