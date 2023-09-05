@@ -27,7 +27,6 @@ function sumarMeses(fecha, meses) {
     } else {
         nuevaFecha.mes += meses;
     };
-    console.log("POR RETORNAR",`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
     return new Date(`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
 
 }
