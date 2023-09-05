@@ -27,16 +27,24 @@ const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-    const submit_venta_obj = Object.assign(req.body, { CTE, USUARIO, MODO: "BGM" });
-    const { insertId } = await insertVenta({ Venta: submit_venta_obj });
+
+    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO"];
+
+    const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
+        obj[propiedad] = req.body[propiedad];
+        return obj;
+    }, {});
+    const { insertId } = await insertVenta({ Venta: Object.assign(objeto_venta, { CTE, USUARIO, MODO: "BGM" }) });
+
+
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files)
         saveFileFromEntry(Object.entries(req.files), CTE);
 
     //Si tiene anticipo que el cargue el pago
-    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO } = req.body;
-    if (ANTICIPO > 0)
+    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP } = req.body;
+    if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: insertId });
 
     //Al final genera el contacto
@@ -59,33 +67,21 @@ const getEntregaDePrepago = (req, res) => {
 
 
 const updateVenta = async (req, res) => {
-    const { CTE, ANTICIPO = 0, FECHA_VENTA, ID, FICHA, PRIMER_PAGO } = req.body;
+    const { CTE, ANTICIPO = 0, FECHA_VENTA, ID, FICHA, PRIMER_PAGO, ANTICIPO_MP } = req.body;
     const USUARIO = req.user.Usuario;
     const venta_prev = await getVentaById(ID);
 
-    console.log("prev", venta_prev)
-    console.log("body", req.body)
-    console.log("prev", JSON.stringify(venta_prev))
-    console.log("body", JSON.stringify(req.body))
 
-    //Corregir
-    if (JSON.stringify(req.body) != JSON.stringify(venta_prev)) {
-
-        //Si antes no tenia anticipo y ahora si, que le genere el pago
-        if (!venta_prev.ANTICIPO && ANTICIPO) {
-            console.log("intenta cargar pago");
-            await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
-        }
-
-
-
-        //Edita la venta
-        console.log("actualiza la venta");
-        await updateVentaById(req.body, venta_prev.ANTICIPO);
-
-    } else {
-        console.log("no actualiza la venta, datos identicos");
+    //Si antes no tenia anticipo y ahora si, que le genere el pago
+    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO") {
+        console.log("intenta cargar pago");
+        await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
     }
+
+    //Edita la venta
+    await updateVentaById(req.body, venta_prev.ANTICIPO);
+
+
     //Cargar imagen de frente y dorso a servidor
     if (req.files)
         saveFileFromEntry(entries, req.body.CTE);

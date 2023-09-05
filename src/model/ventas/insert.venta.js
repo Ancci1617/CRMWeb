@@ -19,7 +19,7 @@ const insertVenta = async ({ Venta }) => {
 }
 
 const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
-    const { FICHA, ID } = Venta;
+    const { FICHA, ID,ANTICIPO_MP  } = Venta;
     console.log("venta", Venta);
     const connection = await pool.getConnection();
     try {
@@ -27,7 +27,7 @@ const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
         const ANTICIPO = parseInt(Venta.ANTICIPO || 0);
         const ventaSinId = { ...Venta };
         delete ventaSinId.ID;
-
+        delete ventaSinId.ANTICIPO_MP;
         //Actualiza la venta
         await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [ventaSinId, ID]);
 
@@ -35,11 +35,7 @@ const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
         await connection.query(`UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;`, [Venta.WHATSAPP, ID])
 
         //Si antes el pago existia y ahora no existe, ademas de editarlo lo INVALIDA
-        const nueva_confirmacion = !ANTICIPO ? "INVALIDO" : "PENDIENTE";
-        
-        console.log("🚀 ~ file: insert.venta.js:39 ~ updateVentaById ~ ANTICIPO_PREVIO:", ANTICIPO_PREVIO)
-        console.log("🚀 ~ file: insert.venta.js:39 ~ updateVentaById ~ ANTICIPO:", ANTICIPO)
-        console.log("🚀 ~ file: insert.venta.js:38 ~ updateVentaById ~ nueva_confirmacion:", nueva_confirmacion)
+        const nueva_confirmacion = !ANTICIPO || ANTICIPO_MP == "SI" ? "INVALIDO" : "PENDIENTE";
         
         //Actualiza el pago
         await connection.query(`UPDATE PagosSV SET VALOR = ?,FICHA = ?, DECLARADO_CUO = VALOR, CONFIRMACION = ? WHERE ID_VENTA = ?;`, [ANTICIPO, FICHA, nueva_confirmacion, ID]);
