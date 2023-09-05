@@ -36,7 +36,6 @@ const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
 
         //Si antes el pago existia y ahora no existe, ademas de editarlo lo INVALIDA
         const nueva_confirmacion = !ANTICIPO || ANTICIPO_MP == "SI" ? "INVALIDO" : "PENDIENTE";
-
         
         //Actualiza el pago
         await connection.query(`UPDATE PagosSV SET VALOR = ?,FICHA = ?, DECLARADO_CUO = VALOR, CONFIRMACION = ? WHERE ID_VENTA = ?;`, [ANTICIPO, FICHA, nueva_confirmacion, ID]);

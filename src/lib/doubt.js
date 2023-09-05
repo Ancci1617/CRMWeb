@@ -51,15 +51,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     //Si el cliente esta atrasado, el servicio ADICIONAL, Existe Si solo si la cuota de este mes no paga servicio
 
 
-
-
-
-    console.log("ant", SERVICIO_ANT);
-    console.log("PAGO", SERV_PAGO);
-    console.log("vencimiento",VENCIMIENTO);
-    console.log("pagas",pagas);
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
-    console.log("atraso eval", atraso_eval);
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
