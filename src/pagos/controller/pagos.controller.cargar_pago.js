@@ -196,9 +196,16 @@ async function codigoDePago(req, res) {
 async function confirmarPago(req, res) {
 
     const { CODIGO, ORDEN } = req.query;
-    const pago = await pagosModel.getPagoByCodigo(CODIGO);
-    await pagosModel.updateEstadoPagoByCodigo({ CODIGO, ESTADO: "CONFIRMADO" });
-    res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
+    try {
+        const pago = await pagosModel.getPagoByCodigo(CODIGO);
+        await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
+        
+        res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
+
+    } catch (error) {
+        console.error(error);
+        res.send("Error al confirmar pago.");
+    }
 
 }
 
