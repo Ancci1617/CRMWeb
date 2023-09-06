@@ -13,25 +13,25 @@ class PagosModel {
         }
         return [];
     }
+    // deprecated
+    // async getFicha(FICHA) {
 
-    async getFicha(FICHA) {
+    //     const [ficha_data] = await pool.query(
+    //         "SELECT Fichas.CTE,Fichas.FICHA,Fichas.PRIMER_PAGO,Fichas.VENCIMIENTO,Fichas.TOTAL,Fichas.SERVICIO_ANT," +
+    //         "CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,OBS,CUOTA,CUOTA_ANT," +
+    //         "Fichas.CUOTA_ANT - CONVERT(IFNULL(sum(PagosSV.VALOR),0),INTEGER) as SALDO, CONVERT(Fichas.TOTAL / Fichas.CUOTA,INTEGER) as CUOTAS, " +
+    //         "CONVERT(IFNULL(SUM(PagosSV.VALOR),0),INTEGER) as CUOTA_PAGO,Fichas.MORA_ANT, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA_PAGO FROM `Fichas` " +
+    //         "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.FICHA = ? ;"
+    //         , [FICHA]);
 
-        const [ficha_data] = await pool.query(
-            "SELECT Fichas.CTE,Fichas.FICHA,Fichas.PRIMER_PAGO,Fichas.VENCIMIENTO,Fichas.TOTAL,Fichas.SERVICIO_ANT," +
-            "CONVERT(IFNULL(SUM(PagosSV.SERV),0),INTEGER) as SERV_PAGO, SERV_UNIT,OBS,CUOTA,CUOTA_ANT," +
-            "Fichas.CUOTA_ANT - CONVERT(IFNULL(sum(PagosSV.VALOR),0),INTEGER) as SALDO, CONVERT(Fichas.TOTAL / Fichas.CUOTA,INTEGER) as CUOTAS, " +
-            "CONVERT(IFNULL(SUM(PagosSV.VALOR),0),INTEGER) as CUOTA_PAGO,Fichas.MORA_ANT, CONVERT(IFNULL(sum(PagosSV.MORA),0),INTEGER) as MORA_PAGO FROM `Fichas` " +
-            "left join PagosSV on PagosSV.FICHA = Fichas.FICHA where Fichas.FICHA = ? ;"
-            , [FICHA]);
+    //     if (ficha_data.length > 0) {
 
-        if (ficha_data.length > 0) {
+    //         return ficha_data[0];
+    //     }
 
-            return ficha_data[0];
-        }
+    //     return [];
 
-        return [];
-
-    }
+    // }
     async cargarPago({ CTE, FICHA, CUOTA, PROXIMO, SERV = 0, MORA = 0,
         CONFIRMACION = "PENDIENTE", USUARIO, FECHA, CODIGO, OBS, MP_PORCENTAJE = 0, N_OPERACION, MP_TITULAR, DECLARADO_COB = 0, DECLARADO_CUO = 0, ID_VENTA = null }) {
         const connection = await pool.getConnection();

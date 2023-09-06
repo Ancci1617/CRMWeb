@@ -32,7 +32,6 @@ async function deudaCredito(req, res) {
     } else {
 
         fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
-        console.log("fichas_data", fichas_data);
         render_obj.fichas =
             fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
 
@@ -161,8 +160,12 @@ async function cargarPago(req, res) {
 
 
     } else {
-        const ficha_data = await pagosModel.getFicha(FICHA);
+        // const ficha_data = await pagosModel.getFicha(FICHA);
+        const [ficha_data] = await pagosModel.getFichasByCte(FICHA, "FICHA");
+
         const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
+       
+       
         const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
         const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
         const CUOTA = COBRADO - MORA - SERV;
