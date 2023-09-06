@@ -103,8 +103,10 @@
 
           <div class="input-box">
             <span class="details">Anticipo</span>
-            <input type="text" placeholder="Anticipo cobrado" name="ANTICIPO">
+            <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO">
           </div>
+
+          <%- include("../partials/Components/input-box-select.ejs",{input: {classListContainer : ["select_anticipo_container"],hidden : true,required : false,name : "ANTICIPO_MP",details: "Anticipo por MP?" , classList : ["select_anticipo"],options:[null,"NO","SI"]}}) %>
 
           <div class="input-box">
             <span class="details">Tipo</span>
@@ -193,7 +195,7 @@
             </label>
           </div>
           <% } %>
-          
+
           <!-- input hidden  Venta Aprobada/Desaprobada -->
           <div class="input-box hidden">
             <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />

@@ -1,7 +1,7 @@
 const pool = require("../../model/connection-database");
 
 async function getVentaById(ID) {
-    const [res] = await pool.query("SELECT * from `VentasCargadas` where INDICE = ?", [ID]);
+    const [res] = await pool.query(`SELECT CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CONVERT(ANTICIPO,INTEGER) as ANTICIPO, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, USUARIO, MODO, VISIBLE,INDICE,INDICE AS ID from VentasCargadas where INDICE = ?`, [ID]);
 
     if (res.length > 0) {
         return res[0];

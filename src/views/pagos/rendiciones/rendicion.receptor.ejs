@@ -35,7 +35,7 @@
 
 
     <section class="cobranzas">
-      <% if(rendicion.ID != null) { %>
+      <% if(rendicion != null) { %>
 
       <div class="rendicion__container">
         <header>
@@ -88,7 +88,7 @@
                 <td><%= gasto.MONTO %></td>
                 <td><%= gasto.OBS %></td>
                 <% if(rendicion.EDITABLE && (user.Usuario == rendicion.COB || hasPermission(permisos.PAGOS_ADMIN))) { %>
-                <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%>>Borrar</a></td>
+                <td><a href=<%=`borrar_gasto?ID=${gasto.ID}&FECHA=${rendicion.FECHA}&COB=${rendicion.COB}`%> class="borrar_gasto">Borrar</a></td>
                 <% } %>
               </tr>
               <% }) %>
@@ -106,7 +106,7 @@
                 </td>
                 <td><input type="number" name="MONTO" required /></td>
                 <td><input type="text" name="OBS" /></td>
-                <td><input type="submit" value="Cargar" form="form_cargar_gasto" /></td>
+                <td><input type="submit" class="cargar_gasto" value="Cargar" form="form_cargar_gasto" /></td>
               </tr>
               <input type="hidden" name="ID_RENDICION" value="<%= rendicion.ID %> ">
               <% } %>
@@ -117,15 +117,13 @@
 
       </div>
 
+
+      <%- include("../../partials/pagos/rendicion.detalle.ejs",pagos) %>
+
       <% }else{ %>
       <header>
         <span class="cobrador_nombre">Sin rendicion: </span>
-        <% if(FECHA && COB ) {%>
-        <span class=""><a href=<%= `generar_rendicion?FECHA=${FECHA}&COB=${COB}` %>>Generar</a></span>
-        <span class="cobranza_fecha"><%= FECHA %></span>
-        <%} else {%>
         <span class="cobranza_fecha">. . . .</span>
-        <%}%>
       </header>
       <%}%>
 
@@ -138,6 +136,7 @@
   <%- include("../../partials/links/nav.logic.ejs") %>
   <script src="/js/lib/form.hide.js"></script>
   <script src="/pagos/js/button_events.js"></script>
+  <script src="/pagos/js/aside.js"></script>
 
 </body>
 

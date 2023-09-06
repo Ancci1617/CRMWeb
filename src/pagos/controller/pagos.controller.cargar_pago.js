@@ -4,21 +4,63 @@ const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
+const pool = require("../../model/connection-database.js");
+const { getRendicion } = require("../model/rendicion.model.js");
+const permisos = require("../../constants/permisos.js");
+const { getCliente } = require("../../lib/get_cliente.js");
+const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
+
+
+
+
+async function deudaCredito(req, res) {
+
+    const render_obj = { totales: { cuota: 0, serv: 0, mora: 0 }, prestamos: [], fichas: [] };
+    const { CREDITO } = req.query;
+
+    const CTE = await getClienteEnFichas(CREDITO);
+
+    [render_obj.cte_data] = await getClientes(CTE);
+
+
+    if (!render_obj.cte_data.CTE)
+        return res.send(`La ficha o prestamo ${CREDITO} no existe`);
+
+
+    if (CREDITO > 50000) {
+        render_obj.prestamos = await pagosModel.getPrestamosByCte(CREDITO, "Prestamo");
+    } else {
+
+        fichas_data = await pagosModel.getFichasByCte(CREDITO, "FICHA");
+        render_obj.fichas =
+            fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
+
+        render_obj.fichas[0].acumulado =
+            await pagosModel.getAcumuladoByCteFicha({ CTE: render_obj.fichas[0].data.CTE, FICHA: render_obj.fichas[0].data.FICHA });
+    }
+
+    render_obj.usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
+
+
+    res.render("pagos/pagos.cte.ejs", render_obj);
+
+
+}
 
 async function deudaCte(req, res) {
-    //Voy a buscar cuanto debe esta ficha..
     const { CTE } = req.query;
     const fichas_data = await pagosModel.getFichasByCte(CTE);
     const prestamos = await pagosModel.getPrestamosByCte(CTE);
 
-    const cte_data = await getClientes(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
-
     const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }))
 
+    //*Que sea 1 sola consulta usando "in"
     for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
     }
+    const cte_data = await getClientes(CTE);
+
 
     //Los totales, para renderizar
     const totales = {
@@ -55,9 +97,10 @@ async function cambiarFecha(req, res) {
 
 async function cargarPago(req, res) {
 
-    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS } = req.body;
-    const COBRADO = parseInt(req.body.COBRADO);
-    console.log("body cargar pago", req.body);
+    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS, DECLARADO_CUO = 0, DECLARADO_COB = 0 } = req.body;
+
+    const COBRADO = parseInt(req.body.COBRADO) || parseInt(DECLARADO_COB) + parseInt(DECLARADO_CUO);
+
     const CODIGO = getRandomCode(6);
 
 
@@ -110,13 +153,19 @@ async function cargarPago(req, res) {
             MORA: resultado_final.mora, SERV: resultado_final.servicios,
             PROXIMO: FECHA_COB,
             CODIGO, USUARIO: req.user.Usuario,
-            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR
+            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
+            DECLARADO_COB: DECLARADO_COB || resultado_final.mora + resultado_final.servicios,
+            DECLARADO_CUO: DECLARADO_CUO || resultado_final.cuota
         };
 
 
     } else {
-        const ficha_data = await pagosModel.getFicha(FICHA);
+        // const ficha_data = await pagosModel.getFicha(FICHA);
+        const [ficha_data] = await pagosModel.getFichasByCte(FICHA, "FICHA");
+
         const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
+       
+       
         const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
         const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
         const CUOTA = COBRADO - MORA - SERV;
@@ -125,10 +174,11 @@ async function cargarPago(req, res) {
             CTE, FICHA, CUOTA,
             MORA, SERV, PROXIMO: FECHA_COB,
             CODIGO, USUARIO: req.user.Usuario,
-            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR
+            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
+            DECLARADO_COB: DECLARADO_COB || MORA + SERV,
+            DECLARADO_CUO: DECLARADO_CUO || CUOTA
         };
     }
-
     //ESTO TENDRIA QUE LLEVAR AL CODIGO DEL PAGO;
     await pagosModel.cargarPago(pago_obj);
 
@@ -149,13 +199,43 @@ async function codigoDePago(req, res) {
 async function confirmarPago(req, res) {
 
     const { CODIGO, ORDEN } = req.query;
-    const pago = await pagosModel.getPagoByCodigo(CODIGO);
-    await pagosModel.updateEstadoPagoByCodigo({ CODIGO, ESTADO: "CONFIRMADO" });
-    res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
+    try {
+        const pago = await pagosModel.getPagoByCodigo(CODIGO);
+        await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
+        
+        res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
+
+    } catch (error) {
+        console.error(error);
+        res.send("Error al confirmar pago.");
+    }
 
 }
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, confirmarPago, deudaFicha };
+async function invalidarPago(req, res) {
+
+    const { CODIGO, FECHA, COB, ORDEN } = req.query;
+    const rendicion = await getRendicion({ FECHA, COB });
+
+    //Si la rendicion esta cerrada no se puede editar
+    if (!rendicion.EDITABLE) {
+        return res.send("La rendicion esta cerrada, no se puede editar");
+        //Si el usuario no es el cobrado O no tiene el permiso de borrar el pago.
+    } else if (!(res.locals.hasPermission(permisos.PAGOS_GERENCIA) || req.user.Usuario == COB)) {
+        return res.send("Sin permisos.");
+    }
+
+
+    await pagosModel.updateEstadoPagoByCodigo({ newState: { CONFIRMACION: "INVALIDO" }, filter: { CODIGO } });
+    res.redirect(`pasar_cobranza?COB=${COB}&FECHA=${FECHA}&ORDEN=${ORDEN}`);
+
+}
+
+
+
+
+
+module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, confirmarPago, deudaFicha, invalidarPago, deudaCredito };
 
 
 

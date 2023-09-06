@@ -19,7 +19,7 @@ body {
 .main__container {
     margin: auto;
     display: grid;
-    gap: 1rem;
+    /* gap: 1rem; */
     max-width: 620px;
     background-color: white;
 }

@@ -7,14 +7,34 @@ const cuotas = document.getElementsByName("CUOTAS")[0];
 const cuota = document.getElementsByName("CUOTA")[0];
 const estatus_options = document.querySelector(".options-estatus");
 const CTE = document.getElementsByName("CTE")[0].value;
-const evaluation_data = {sabana : 0 , master : 0};
+const evaluation_data = { sabana: 0, master: 0, prepagos: { 9: "", 12: "" } };
+const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
+const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
+const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
+
+ANTICIPO.addEventListener("change", e => {
+
+    if (e.target.value > 0) {
+        ANTICIPO_MP.required = true;
+        ANTICIPO_MP_CONTAINER.hidden = false;
+        return;
+    }
+    ANTICIPO_MP.required = false;
+    ANTICIPO_MP.selectedIndex = 0;
+    ANTICIPO_MP_CONTAINER.hidden = true;
+
+})
 
 
 
-window.addEventListener("load",async e => {
-    evaluation_data.sabana = await fetchPost("/query_precio",{articulos : ["36"],cuotas : '6'});    
-    evaluation_data.master = await fetchPost("/query_masterresumen",{CTE});
-    console.log("EVALUATION DATA",evaluation_data);
+window.addEventListener("load", async e => {
+
+    evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
+    evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
+    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 9 });
+    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 12 });
+
+    console.log("EVALUATION DATA", evaluation_data);
 });
 
 async function autoCompletarPrecios() {
@@ -28,17 +48,17 @@ async function autoCompletarPrecios() {
         cuotas: cuotas.value
     };
 
-    const precios = await fetchPost("/query_precio",query)
-    
+    const precios = await fetchPost("/query_precio", query)
+
     cuota.value = precios.cuota;
     total.value = precios.total;
 
 }
 
-async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
+function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
-    const {sabana,master} = evaluation_data;
+    const { sabana, master } = evaluation_data;
 
     //Genera el disponible en funcion de su calificaicon O BIEN, si tiene disponible
     let disponible;
@@ -58,8 +78,8 @@ async function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0,
     if (Estatus === 'Prepago') {
 
         const cuotas = document.getElementsByName("CUOTAS")[0].value;
-        const cuotas_entrega = await fetchPost("/query_prepago_entrega",{ calificacion: master.CALIF, cuotas });
-        if (cuotas_para_entrega >= cuotas_entrega.Entrega) return true;
+        const cuotas_entrega = evaluation_data.prepagos[cuotas];
+        if (cuotas_para_entrega >= cuotas_entrega?.ENTREGA) return true;
         return false;
 
     }
@@ -100,7 +120,7 @@ const input_file_arr = document.querySelectorAll("input[type='file']")
 input_file_arr.forEach(input => {
     input.addEventListener("change", e => {
         const files = e.target.files;
-        const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")}`);        
+        const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")}`);
         span_text.innerText = files && files.length > 0 ? files[0].name : "Sin foto cargada..";
     })
 })
@@ -109,23 +129,23 @@ input_file_arr.forEach(input => {
 //EVALUACION DE LA VENTA
 form.addEventListener("submit", async e => {
     e.preventDefault();
-    
+
     const responsable = document.getElementsByName("RESPONSABLE")[0].value;
     const Estatus = document.getElementsByName("ESTATUS")[0].value;
     const cuotas_para_entrega = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0].value;
     const vendido = document.getElementsByName("TOTAL")[0].value;
     const anticipo = document.getElementsByName("ANTICIPO")[0].value;
     const aprobado = document.getElementsByName("APROBADO")[0];
-    
+
     aprobado.value = "APROBADO";
     const isAprobado = await ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
-    if(isAprobado)
+    if (isAprobado)
         return e.target.submit();
-    
+
     aprobado.value = "DESAPROBADO";
-    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")) 
+    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?"))
         return e.target.submit();
-    
+
 
 })
 

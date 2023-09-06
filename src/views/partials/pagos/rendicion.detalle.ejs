@@ -1,0 +1,28 @@
+<div class="rendicion__container">
+  <header class="flex-space_between">
+    <span>Declarado</span>
+    <a href="<%=`/pagos/pasar_cobranza?COB=${rendicion.COB}&FECHA=${rendicion.FECHA}`%>" class="link">Ir a cobranza</a>
+  </header>
+  <table>
+    <thead>
+      <tr>
+        <th>Credito</th>
+        <th>Cuota</th>
+        <th>Cob</th>
+        <th>Mora</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Filtren pagos que la suma sea != a 0 -->
+      <% pagos.forEach(pago => { %>
+      <tr>
+        <td><%= pago.FICHA %></td>
+        <td><%= pago.DECLARADO_CUO %></td>
+        <td><%= pago.DECLARADO_COB %></td>
+        <td><%= 0 %></td>
+      </tr>
+      <% }) %>
+
+    </tbody>
+  </table>
+</div>

@@ -27,19 +27,22 @@
            details : "Cuota",
            classList : ["input-cuota"],
            name : "CUOTA",
-           placeholder : "Cuota cobrada"
+           placeholder : "Cuota cobrada",
+           required : true
         },{
            type : "number",
            details : "Mora",
            classList : ["input-mora"],
            name : "MORA",
-           placeholder : "Mora cobrada"
+           placeholder : "Mora cobrada",
+           required : true
         },{
            type : "number",
            details : "Servicio",
            classList : ["input-servicio"],
            name : "SERV",
-           placeholder : "Servicio cobrado"
+           placeholder : "Servicio cobrado",
+           required : true
         },{
            type : "date",
            details : "Proximo pago",
@@ -74,27 +77,30 @@
 
         <section class="cobranzas">
           <% if(pagos.length > 0) {%>
-          <header>  
+          <header>
             <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
             <span class="cobrador_total"><%= user.RANGO == "ADMIN" ? `Total : ${total_cobrado}` : "" %></span>
             <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
           </header>
-          <form class="orden__container" method="GET" action="/pagos/pasar_cobranza">
+          <form class="orden__container flex-space_between" method="GET" action="/pagos/pasar_cobranza">
+            <div>
               <span class="details">
                 Ordenar por:
               </span>
               <select name="ORDEN" class="section_ordenar">
-                <option value="Z" <%=ORDEN == "Z" ? "selected" : "" %> >Zona</option>
+                <option value="Z" <%=ORDEN == "Z" ? "selected" : "" %>>Zona</option>
                 <option value="ID" <%=ORDEN == "ID" ? "selected" : "" %>>Cobrado</option>
               </select>
-              <input type="hidden" name="COB" value="<%= pagos[0].COBRADOR %>">
-              <input type="hidden" name="FECHA" value="<%=  pagos[0].FECHA  %>">
+            </div>
+            <a href="<%=`/rendicion/rendicion_receptor?COB=${pagos[0].COBRADOR}&FECHA=${pagos[0].FECHA}`%>" class="link">Ir a rendicion</a>
 
+            <input type="hidden" name="COB" value="<%= pagos[0].COBRADOR %>">
+            <input type="hidden" name="FECHA" value="<%=  pagos[0].FECHA  %>">
           </form>
 
           <div class="lista_de_pagos">
             <% pagos.forEach(pago => { %>
-            <%- include("../partials/Components/pago.ejs", {pago}) %>
+            <%- include("../partials/Components/pago.ejs", {pago,COB : pagos[0].COBRADOR,FECHA : pagos[0].FECHA,rendicion}) %>
             <%})%>
 
           </div>
@@ -112,6 +118,7 @@
 
       <%- include("../partials/links/nav.logic.ejs") %>
       <script src="/js/lib/form.hide.js"></script>
+      <script src="/pagos/js/aside.js"></script>
       <script src="/pagos/js/button_events.js"></script>
 
     </body>

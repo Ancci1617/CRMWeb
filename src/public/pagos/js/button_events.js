@@ -6,6 +6,20 @@ const span_fecha = document.querySelector(".cobranza_fecha");
 const aside = document.querySelector("aside");
 const aside_i = document.querySelector(".aside__header i");
 const section_ordenar = document.querySelector(".section_ordenar");
+const borrar_gasto = document.querySelectorAll(".gastos-detalle .borrar_gasto");
+const cargar_gasto = document.querySelectorAll(".gastos-detalle .cargar_gasto");
+
+cargar_gasto.forEach(btn_cargar_gasto => {
+    btn_cargar_gasto.addEventListener("click", e => {
+        if (!confirm("Estas seguro de cargar este gasto?")) return e.preventDefault();
+    })
+})
+
+borrar_gasto.forEach(btn_borrar_gasto => {
+    btn_borrar_gasto.addEventListener("click", e => {
+        if (!confirm("Estas seguro de borrar este gasto?")) return e.preventDefault();
+    });
+})
 
 if (section_ordenar) {
     section_ordenar.addEventListener("change", e => {
@@ -40,7 +54,7 @@ if (span_fecha) {
     })
 }
 
-
+var dinero_recibido_por_pago = 0;
 pagos.forEach(pago => {
     const button = pago.querySelector(".btn_editar_pago");
     if (!button) return;
@@ -51,9 +65,14 @@ pagos.forEach(pago => {
         form_redistribuir.SERV.value = parseInt(pago.querySelector(".servicio").innerText);
         form_redistribuir.CODIGO.value = pago.querySelector(".codigo").innerText;
 
+        dinero_recibido_por_pago = parseInt(pago.querySelector(".cuota").innerText) + parseInt(pago.querySelector(".mora").innerText) + parseInt(pago.querySelector(".servicio").innerText);
+
+        console.log("dinero recibido por pago en show", dinero_recibido_por_pago);
+
         try {
             form_redistribuir.PROXIMO.value = pago.querySelector(".proxima").innerText;
         } catch (error) {
+            console.log("error al generar formulario ", error);
             form_redistribuir.PROXIMO.value = null;
         }
 
@@ -61,12 +80,31 @@ pagos.forEach(pago => {
     });
 
     const confirmar_pago = pago.querySelector(".confirmar_pago");
-    confirmar_pago.addEventListener("click", e => {
+    confirmar_pago?.addEventListener("click", e => {
         if (!confirm("Estás a punto de confirmar un pago. Esta acción no se puede deshacer. ¿Confirmar?"))
             e.preventDefault();
     })
+    const eliminar_pago = pago.querySelector(".invalidar_pago");
+    eliminar_pago?.addEventListener("click", e => {
+        if (!confirm("Estas seguro que queres eliminar este pago? Esta acción no se puede deshacer."))
+            e.preventDefault();
+    })
+
 })
 
+form_redistribuir?.addEventListener("submit", e => {
+    e.preventDefault();
+    const [CUOTA, MORA, SERV] = [...form_redistribuir].map(inp => parseInt(inp.value));
+    console.log(CUOTA, MORA, SERV)
+    console.log("suma", CUOTA + MORA + SERV);
+    console.log("DINERO POR PAGO", dinero_recibido_por_pago);
+    if (dinero_recibido_por_pago !== CUOTA + MORA + SERV) {
+        if (!confirm("El valor del dinero ingresado es distinto, esto afecta a las rendiciones..")) {
+            return
+        }
+    }
+    form_redistribuir.submit();
+})
 
 creditos.forEach(credito => {
 
@@ -82,15 +120,15 @@ creditos.forEach(credito => {
     }, false);
 
     const check_mp = credito.querySelector(".check_mp");
-    
+
     check_mp.addEventListener("change", e => {
         const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
         MP_INPUTS.forEach(input => {
             input.required = e.target.checked;
             input.hidden = !e.target.checked;
-            input.value = "";            
+            input.value = "";
         })
-    
+
 
     });
 

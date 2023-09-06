@@ -1,10 +1,11 @@
 const { getDoubt } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
 const { pagosModel } = require("../model/pagos.model.js");
+const { getRendicion } = require("../model/rendicion.model.js");
 
 
 async function cargarCobranza(req, res) {
-  const { FECHA = "", COB = "",ORDEN = "Z" } = req.query;
+  const { FECHA = "", COB = "", ORDEN = "Z" } = req.query;
   const data = await pagosModel.getFechasDePagosYCobradores();
   const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
   const render_links = FECHAS.map(fecha_evaluada => {
@@ -14,10 +15,11 @@ async function cargarCobranza(req, res) {
     }
   });
 
-  const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA,ORDEN });
+  const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA, ORDEN });
   const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA, 0);
-  console.log("pagos",pagos);
-  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado,ORDEN });
+  const rendicion = await getRendicion({ COB, FECHA });
+
+  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado, ORDEN, rendicion });
 }
 
 async function redistribuirPago(req, res) {
@@ -29,12 +31,15 @@ async function redistribuirPago(req, res) {
 
 async function generarSaldoAnteriorServicio(req, res) {
   const FICHAS = await pagosModel.getFichasByCte();
+
   const deudas = FICHAS.map(ficha => {
+    console.log(ficha)
     return { data: ficha, deuda: getDoubt(ficha) }
   });
-  const al_dia = deudas.filter(ficha => (ficha.deuda.atraso_evaluado === 0 && ficha.data.SERV_PAGO > 0));
-  const NUMEROS_DE_FICHAS = al_dia.map(ficha => ficha.data.FICHA);
+  // const al_dia = deudas.filter(ficha => (ficha.deuda.atraso_evaluado === 0 && ficha.data.SERV_PAGO > 0));
+  const al_dia = deudas.filter(ficha => (ficha.deuda.atraso_evaluado === 0));
 
+  const NUMEROS_DE_FICHAS = al_dia.map(ficha => ficha.data.FICHA);
   const resultado = await pagosModel.updateSaldosAnterioresYServicios(NUMEROS_DE_FICHAS);
 
   res.json(resultado);

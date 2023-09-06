@@ -7,6 +7,7 @@
   <title>Blanco gusmar | Pagos</title>
   <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
   <link rel="stylesheet" href="/pagos/css/pagos.cte.css">
+  <link rel="stylesheet" href="/css/navigation/buscador.css">
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
 <% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
@@ -15,6 +16,11 @@
   <%- include("../partials/navigation/navigation-bar.ejs")  %>
 
   <main class="main__container">
+
+    <form class="buscador__container" action="deuda_credito">
+      <i class="fa fa-search"></i>
+      <input type="text" class="buscador" name="CREDITO" value="" placeholder="Buscar ficha" />
+    </form>
 
     <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
@@ -55,7 +61,9 @@
         <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
       </div>
       <div class="details">
-
+        <% if(ficha.deuda.EsPrimerPago) {%>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Primer Ven", data : ficha.data.PRIMER_PAGO || "primer pago"}) %>
+        <% } %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Serv", data : ficha.deuda.servicio}) %>
         <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
@@ -66,7 +74,15 @@
         <%- include("../partials/pagos/detail_row.ejs",{title : "Saldo", data : ficha.data.SALDO}) %>
 
         <div class="input__container">
+
+
+          <% if(user.RANGO == "COBRADOR" || user.RANGO == "VENDEDOR") {%>
+          <input type="number" name="DECLARADO_CUO" class="" placeholder="Cuota Cobrado" required />
+          <input type="number" name="DECLARADO_COB" class="" placeholder="Cobrador" required />
+          <% } else { %>
           <input type="number" name="COBRADO" class="" placeholder="Monto cobrado" required />
+          <% } %>
+
           <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="" required>
           <input type="text" name="OBS" class="" placeholder="Observacion" />
 

@@ -69,8 +69,13 @@ ul .ul__cobradores li {
     margin-bottom: .4rem;
 }
 
-ul .li__fecha:hover>.ul__cobradores {
-    display: block;
+
+@media screen and (min-width:580px) {
+    ul .li__fecha:hover>.ul__cobradores {
+        display: block;
+    }
+
+        
 }
 
 
@@ -90,6 +95,10 @@ ul .li__fecha:hover>.ul__cobradores {
     margin-bottom: .7em;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.cobranzas header .link{
+    font-size: 1rem;
 }
 
 .cobranzas .lista_de_pagos {
@@ -132,9 +141,14 @@ ul .li__fecha:hover>.ul__cobradores {
     justify-content: space-between;
 }
 
-.data_container>* {
+.data_container > * {
     display: flex;
     gap: 1.1rem;
+    align-items: center;
+}
+.data_container .invalidar_pago{
+    font-size: 1.2rem;
+    color: rgb(251, 50, 50);
 }
 
 .pago .details_container {
@@ -173,6 +187,14 @@ ul .li__fecha:hover>.ul__cobradores {
 }
 
 @media screen and (max-width:580px) {
+    .li__fecha.show_aside_li__fecha > .ul__cobradores {
+        display: block;
+    }
+
+    /* ul .li__fecha:hover>.ul__cobradores {
+        display: none;
+    } */
+
     .lista_de_pagos .pago {
         display: flex;
         flex-direction: column;
