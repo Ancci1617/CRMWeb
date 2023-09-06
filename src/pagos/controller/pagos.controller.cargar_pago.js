@@ -161,8 +161,12 @@ async function cargarPago(req, res) {
 
 
     } else {
-        const ficha_data = await pagosModel.getFicha(FICHA);
+        // const ficha_data = await pagosModel.getFicha(FICHA);
+        const [ficha_data] = await pagosModel.getFichasByCte(FICHA, "FICHA");
+
         const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
+       
+       
         const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
         const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
         const CUOTA = COBRADO - MORA - SERV;
