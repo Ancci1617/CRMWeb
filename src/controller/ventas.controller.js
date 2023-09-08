@@ -25,6 +25,8 @@ const formCargarVenta = async (req, res) => {
 }
 const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
+    const {LATITUD_VENDEDOR,LONGITUD_VENDEDOR} = req.body;
+
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
 

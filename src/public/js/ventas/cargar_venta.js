@@ -29,10 +29,11 @@ ANTICIPO.addEventListener("change", e => {
 
 window.addEventListener("load", async e => {
 
+    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError,{enableHighAccuracy : true});
     evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
-    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 9 });
-    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 12 });
+    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
+    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });
 
     console.log("EVALUATION DATA", evaluation_data);
 });
@@ -127,7 +128,7 @@ input_file_arr.forEach(input => {
 
 
 //EVALUACION DE LA VENTA
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", e => {
     e.preventDefault();
 
     const responsable = document.getElementsByName("RESPONSABLE")[0].value;
@@ -138,7 +139,7 @@ form.addEventListener("submit", async e => {
     const aprobado = document.getElementsByName("APROBADO")[0];
 
     aprobado.value = "APROBADO";
-    const isAprobado = await ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
+    const isAprobado = ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
     if (isAprobado)
         return e.target.submit();
 
@@ -160,6 +161,22 @@ document.querySelector(".selector-cuotas").addEventListener("change", e => {
 
 
 
+const handleLocationError = (error) => {
+    console.log(error);
+     
 
+    if(error.code == 1){
+        alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
+        return location.href = "/crm"
+    }
+    console.log("Error desconocido",error);
+    alert(`Error desconocido ${error}, CODE ${error.code}`);
+}
 
-
+const handleLocationSuccess = (location) => {
+    const {latitude,longitude,accuracy} = location.coords 
+    console.log(location.coords);
+    document.querySelector("input[name='latitude']").value = latitude;
+    document.querySelector("input[name='longitude']").value = longitude;
+    document.querySelector("input[name='accuracy']").value = accuracy;
+}
