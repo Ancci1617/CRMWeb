@@ -169,33 +169,33 @@
           
           <!-- IMAGENES -->
           <% if(required_images.frente){ %>
-          <div class="input-box">
+          <!-- <div class="input-box">
             <span class="details">DNI Frente</span>
             <label for="FRENTE">
               <span class="IMG-FRENTE">Sin foto cargada...</span>
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
             </label>
-          </div>
+          </div> -->
           <% } %>
 
           <% if(required_images.dorso){ %>
-          <div class="input-box">
+          <!-- <div class="input-box">
             <span class="details">DNI Dorso</span>
             <label for="DORSO">
               <span class="IMG-DORSO">Sin foto cargada...</span>
               <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
             </label>
-          </div>
+          </div> -->
           <% } %>
 
           <% if(required_images.rostro){ %>
-          <div class="input-box">
+          <!-- <div class="input-box">
             <span class="details">ROSTRO</span>
             <label for="ROSTRO">
               <span class="IMG-ROSTRO">Sin foto cargada...</span>
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
             </label>
-          </div>
+          </div> -->
           <% } %>
 
           <!-- input hidden  Venta Aprobada/Desaprobada -->
@@ -203,9 +203,9 @@
             <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
           </div>
 
-          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "latitude"} }) %>
-          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "longitude"} }) %>
-          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "accuracy"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LATITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
 
           <!-- BOTONES DE SUBMIT -->
           <div class="button">

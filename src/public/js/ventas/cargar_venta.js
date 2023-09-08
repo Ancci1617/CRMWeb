@@ -11,6 +11,8 @@ const evaluation_data = { sabana: 0, master: 0, prepagos: { 9: "", 12: "" } };
 const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
 const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
 const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
+const ubicacion_cliente = document.querySelector("input[name='ubicacion_cliente']");
+
 
 ANTICIPO.addEventListener("change", e => {
 
@@ -159,12 +161,12 @@ document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
 
-
+ubicacion_cliente.addEventListener("keyup",e => {
+    ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ","")
+});
 
 const handleLocationError = (error) => {
-    console.log(error);
-     
-
+    
     if(error.code == 1){
         alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
         return location.href = "/crm"
@@ -174,9 +176,9 @@ const handleLocationError = (error) => {
 }
 
 const handleLocationSuccess = (location) => {
-    const {latitude,longitude,accuracy} = location.coords 
+    const {latitude,longitude,accuracy} = location.coords;
     console.log(location.coords);
-    document.querySelector("input[name='latitude']").value = latitude;
-    document.querySelector("input[name='longitude']").value = longitude;
-    document.querySelector("input[name='accuracy']").value = accuracy;
+    document.querySelector("input[name='LATITUD_VENDEDOR']").value = latitude;
+    document.querySelector("input[name='LONGITUD_VENDEDOR']").value = longitude;
+    document.querySelector("input[name='ACCURACY_VENDEDOR']").value = accuracy;
 }
