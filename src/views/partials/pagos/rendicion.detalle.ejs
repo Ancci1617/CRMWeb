@@ -9,7 +9,8 @@
         <th>Credito</th>
         <th>Cuota</th>
         <th>Cob</th>
-        <th>Mora</th>
+        <th>ZONA</th>
+        <th>Vence</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +20,8 @@
         <td><%= pago.FICHA %></td>
         <td><%= pago.DECLARADO_CUO %></td>
         <td><%= pago.DECLARADO_COB %></td>
-        <td><%= 0 %></td>
+        <td class="zona"><%= pago.Z %></td>
+        <td><%= pago.DIA_VENCIMIENTO %></td>
       </tr>
       <% }) %>
 
