@@ -3,6 +3,7 @@ const btn_mercaderia = document.querySelector(".btn-mercaderia");
 const btn_pedido = document.querySelector(".btn-pedido");
 const btn_contacto = document.querySelector(".btn-contacto");
 const btn_pago = document.querySelector(".btn-pago");
+const btn_ubicacion = document.querySelector(".btn-ubicacion");
 
 
 window.addEventListener("load", (e) => {
@@ -22,18 +23,15 @@ function gotoLink(link) {
 
 
 function addBtnEvents() {
-    if (btn_pedido)
-        btn_pedido.addEventListener("click", () => gotoLink(`pedidos/cargar_pedido/${getCteEvaluado()}`));
-    if (btn_venta)
-        btn_venta.addEventListener("click", () => { gotoLink(`/cargar_venta/${getCteEvaluado()}`) });
-    if (btn_mercaderia)
-        btn_mercaderia.addEventListener("click", () => { gotoLink(`/entrega_retiro/${getCteEvaluado()}`) })
-    if (btn_contacto)
-        btn_contacto.addEventListener("click", () => {
-            gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE"}`);
-        })
-    if (btn_pago)
-        btn_pago.addEventListener("click", () => { gotoLink(`pagos/deuda_cte?CTE=${getCteEvaluado()}`) });
+
+    btn_pedido?.addEventListener("click", () => gotoLink(`pedidos/cargar_pedido/${getCteEvaluado()}`));
+
+    btn_venta?.addEventListener("click", () => { gotoLink(`/cargar_venta/${getCteEvaluado()}`) });
+    btn_mercaderia?.addEventListener("click", () => { gotoLink(`/entrega_retiro/${getCteEvaluado()}`) })
+    btn_contacto?.addEventListener("click", () => {
+        gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE"}`);
+    })
+    btn_pago?.addEventListener("click", () => { gotoLink(`pagos/deuda_cte?CTE=${getCteEvaluado()}`) });
 
 }
 

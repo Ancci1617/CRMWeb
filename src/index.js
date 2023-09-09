@@ -5,7 +5,6 @@ const path = require("path");
 const flash = require("connect-flash");
 const session = require('express-session');
 const passport = require("passport")
-const { poolConfig } = require("./model/connection-config.js");
 const { userView } = require("./middlewares/user.middlewares.js");
 const fileUpload = require('express-fileupload');
 const { isLoggedIn } = require('./lib/auth.js');
@@ -90,8 +89,14 @@ const credentials = { key: privateKey, cert: certificate };
 const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(3000, () => {
+
     console.log('Server running on port, 3000');
+
 });
 
+app.listen(4000,()=> {
+    console.log('Server running on port, 4000');
+
+})
 
 
