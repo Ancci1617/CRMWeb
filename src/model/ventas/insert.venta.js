@@ -28,6 +28,7 @@ const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
         const ventaSinId = { ...Venta };
         delete ventaSinId.ID;
         delete ventaSinId.ANTICIPO_MP;
+        delete ventaSinId.ubicacion_cliente;
         //Actualiza la venta
         await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [ventaSinId, ID]);
 
