@@ -1,0 +1,25 @@
+<% const {CTE,FICHA,NOMBRE,ZONA} = venta; %>
+
+<div class="pago venta">
+
+  <div class="ficha">
+    <a href="/CRM?CTE=F:<%=`${CTE}-${FICHA}`%>"><%= FICHA %></a>
+    <span class="zona"><%= ZONA %></span>
+  </div>
+
+  <div class="data_container">
+    <span></span>
+    <div class="data_container__btn">
+      <a href="invalidar_pago?" class="invalidar_pago"> <i class="fas fa-times"></i></a>
+    </div>
+
+  </div>
+
+  <%- include("./venta.details_container.ejs",{dato1 :NOMBRE}) %>
+  <%- include("./venta.details_container.ejs",{dato1 :`${CALLE} [${CRUCES}-${CRUCES2}]`}) %>
+  <%- include("./venta.details_container.ejs",{dato1 :ARTICULOS}) %>
+  <%- include("./venta.details_container.ejs",{dato1 :`${TOTAL} (${CUOTAS} x ${CUOTA})`}) %>
+  <%- include("./venta.details_container.ejs",{dato1 :`Serv: ${500}`}) %>
+
+
+</div>
