@@ -1,25 +1,35 @@
-<% const {CTE,FICHA,NOMBRE,ZONA} = venta; %>
+<% const {CTE,FICHA,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,ARTICULOS,TOTAL,CUOTAS,CUOTA,SERV_UNIT = 500,WHATSAPP,DNI,PRIMER_PAGO,VENCIMIENTO,LATITUD,LONGITUD,INDICE} = venta; %>
 
 <div class="pago venta">
 
   <div class="ficha">
-    <a href="/CRM?CTE=F:<%=`${CTE}-${FICHA}`%>"><%= FICHA %></a>
+    <a href="/CRM?CTE=F:<%=FICHA%>"><%= `${CTE} - ${FICHA}` %></a>
     <span class="zona"><%= ZONA %></span>
   </div>
 
+
+
+  <%- include("./venta.details_container.ejs",{datos : {dato1 : NOMBRE,classList : ["nw"]}}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`${CALLE}`}}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`[${CRUCES}-${CRUCES2}]`,classList : ["nw"]}}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`TEL: ${WHATSAPP} DNI: ${DNI}`}}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 : ARTICULOS, classList : ["zona"]}}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`(${CUOTAS} x ${CUOTA}) $${TOTAL}`},classList : ["nw"]}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`P.Venc: ${VENCIMIENTO} - P.Pago: ${PRIMER_PAGO}`},classList : ["nw"]}) %>
+  <%- include("./venta.details_container.ejs",{datos : {dato1 :`Serv: ${SERV_UNIT}`}}) %>
   <div class="data_container">
-    <span></span>
     <div class="data_container__btn">
-      <a href="invalidar_pago?" class="invalidar_pago"> <i class="fas fa-times"></i></a>
+      <!-- <a href="invalidar_pago?" class="invalidar_pago"> <i class="fas fa-times"></i></a> -->
+      <a href="<%= `/ventas/editar/${INDICE}` %>"><i class="fas fa-edit btn_editar_pago"></i></a>
+      <i class="fas fa-check"></i>
+
     </div>
-
   </div>
-
-  <%- include("./venta.details_container.ejs",{dato1 :NOMBRE}) %>
-  <%- include("./venta.details_container.ejs",{dato1 :`${CALLE} [${CRUCES}-${CRUCES2}]`}) %>
-  <%- include("./venta.details_container.ejs",{dato1 :ARTICULOS}) %>
-  <%- include("./venta.details_container.ejs",{dato1 :`${TOTAL} (${CUOTAS} x ${CUOTA})`}) %>
-  <%- include("./venta.details_container.ejs",{dato1 :`Serv: ${500}`}) %>
-
+  <div class="details_container ">
+    <a href="/dnis/<%= CTE %>" target="_blank">Ver fotos</a>
+    <% if(LATITUD && LONGITUD) {%>
+    <a href=<%=`https://www.google.com.ar/maps/search/${LATITUD},${LONGITUD}`%> target="_blank">Ver ubicacion</a>
+    <% } %>
+  </div>
 
 </div>

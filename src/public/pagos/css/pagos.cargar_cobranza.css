@@ -86,7 +86,7 @@ ul .ul__cobradores li {
 
 .cobranzas {
     padding: .5rem .5rem .8rem calc(170px + 1rem);
-    overflow: auto;
+    /* overflow: auto; */
 }
 
 .cobranzas header {

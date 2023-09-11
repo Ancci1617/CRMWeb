@@ -8,6 +8,7 @@
   <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
   <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+  <link rel="stylesheet" href="/css/ventas/ventas.cargar.css">
 
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
@@ -27,16 +28,12 @@
         <span class="cobranza_fecha"><%= FECHA %></span>
       </header>
 
-      <div class="lista_de_pagos">
-
-
+      <div class="lista_de_pagos lista_de_ventas">
         <!-- TRANSFORMAR EL FOREACH DE VENTAS -->
         <% ventas.forEach(venta => { %>
         <%- include("../../partials/ventas/venta.para.cargar.ejs", {venta}) %>
         <%})%>
         <!-- TRANSFORMAR EL FOREACH DE VENTAS -->
-
-
       </div>
 
       <% }else{ %>

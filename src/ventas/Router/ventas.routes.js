@@ -8,6 +8,9 @@ const ventasController = require("../controller/ventas.controller.js");
 
 Router.get("/pasar_ventas",hasPermission(VENTAS_USER),ventasController.cargarVentas);
 
+//Aca va un permiso personalizado
+Router.get("/editar/:INDICE",hasPermission(VENTAS_USER),ventasController.editarVenta);
+
 
 
 

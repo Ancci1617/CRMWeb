@@ -1,9 +1,51 @@
 const pool = require("../../model/connection-database.js");
 
-const getVentas = async ({FECHA_VENTA,USUARIO}) => {
+const getVentas = async ({ filter }) => {
     try {
-        const [ventas] = await pool.query("SELECT * FROM VentasCargadas where FECHA_VENTA = ? AND USUARIO = ? AND VISIBLE = 1 ",[FECHA_VENTA,USUARIO]);
+        let keys = Object.keys(filter).reduce((accumulator, column) => { accumulator = accumulator + " AND " + column + " = ?"; return accumulator }, "")
+        let keys_sql = keys.substring(5,keys.length);  
 
+        const [ventas] = await pool.query(
+            `SELECT
+            CTE,
+            FICHA,
+            NOMBRE,
+            ZONA,
+            VentasCargadas.CALLE,
+            CRUCES,
+            CRUCES2,
+            WHATSAPP,
+            DNI,
+            ARTICULOS,
+            TOTAL,
+            ANTICIPO,
+            CUOTA,
+            CUOTAS,
+            TIPO,
+            ESTATUS,
+            PRIMER_PAGO,
+            VENCIMIENTO,
+            CUOTAS_PARA_ENTREGA,
+            FECHA_VENTA,
+            RESPONSABLE,
+            APROBADO,
+            USUARIO,
+            MODO,
+            LATITUD_VENDEDOR,
+            LONGITUD_VENDEDOR,
+            ACCURACY_VENDEDOR,
+            VISIBLE,
+            INDICE,
+            UBICACIONES.LATITUD,
+            UBICACIONES.LONGITUD
+        FROM
+            VentasCargadas
+        LEFT JOIN UBICACIONES ON UBICACIONES.CALLE = VentasCargadas.CALLE
+        WHERE 
+        ${keys_sql} AND Visible = 1`
+            , [...Object.values(filter)]);
+
+        //REFORMAR CON ESTO
         return ventas;
 
     } catch (error) {
@@ -11,6 +53,7 @@ const getVentas = async ({FECHA_VENTA,USUARIO}) => {
         console.log("error al momento de consultas las ventas");
     }
 }
+
 
 const getAsideVentas = async () => {
     try {
@@ -26,7 +69,7 @@ const getAsideVentas = async () => {
 }
 
 
-module.exports = { getAsideVentas ,getVentas}
+module.exports = { getAsideVentas, getVentas }
 
 
 
