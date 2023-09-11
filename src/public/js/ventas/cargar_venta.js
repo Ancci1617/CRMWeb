@@ -11,6 +11,8 @@ const evaluation_data = { sabana: 0, master: 0, prepagos: { 9: "", 12: "" } };
 const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
 const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
 const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
+const ubicacion_cliente = document.querySelector("input[name='ubicacion_cliente']");
+
 
 ANTICIPO.addEventListener("change", e => {
 
@@ -29,10 +31,11 @@ ANTICIPO.addEventListener("change", e => {
 
 window.addEventListener("load", async e => {
 
+    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError,{enableHighAccuracy : true});
     evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
-    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 9 });
-    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas : 12 });
+    evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
+    evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });
 
     console.log("EVALUATION DATA", evaluation_data);
 });
@@ -127,7 +130,7 @@ input_file_arr.forEach(input => {
 
 
 //EVALUACION DE LA VENTA
-form.addEventListener("submit", async e => {
+form.addEventListener("submit", e => {
     e.preventDefault();
 
     const responsable = document.getElementsByName("RESPONSABLE")[0].value;
@@ -138,7 +141,7 @@ form.addEventListener("submit", async e => {
     const aprobado = document.getElementsByName("APROBADO")[0];
 
     aprobado.value = "APROBADO";
-    const isAprobado = await ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
+    const isAprobado = ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
     if (isAprobado)
         return e.target.submit();
 
@@ -158,8 +161,24 @@ document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
 
+ubicacion_cliente.addEventListener("keyup",e => {
+    ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ","")
+});
 
+const handleLocationError = (error) => {
+    
+    if(error.code == 1){
+        alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
+        return location.href = "/crm"
+    }
+    console.log("Error desconocido",error);
+    alert(`Error desconocido ${error}, CODE ${error.code}`);
+}
 
-
-
-
+const handleLocationSuccess = (location) => {
+    const {latitude,longitude,accuracy} = location.coords;
+    console.log(location.coords);
+    document.querySelector("input[name='LATITUD_VENDEDOR']").value = latitude;
+    document.querySelector("input[name='LONGITUD_VENDEDOR']").value = longitude;
+    document.querySelector("input[name='ACCURACY_VENDEDOR']").value = accuracy;
+}

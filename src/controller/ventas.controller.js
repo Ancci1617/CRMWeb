@@ -7,6 +7,7 @@ const { generarContactoCTE } = require("../lib/contactos.js")
 const { pagosModel } = require("../pagos/model/pagos.model.js");
 const { getRandomCode } = require("../lib/random_code.js");
 const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId } = require("../model/contactos/contactos.model");
+const { insertarNuevaUbicacion } = require("../ubicaciones/model/ubicaciones.mode");
 
 const formCargarVenta = async (req, res) => {
     const { cte } = req.params;
@@ -25,10 +26,15 @@ const formCargarVenta = async (req, res) => {
 }
 const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
+    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP ,ubicacion_cliente,CALLE} = req.body;
+
+    
+    const [LATITUD = null,LONGITUD = null] =  ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
+    
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
 
-    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO"];
+    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO","LATITUD_VENDEDOR","LONGITUD_VENDEDOR","ACCURACY_VENDEDOR"];
 
     const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
         obj[propiedad] = req.body[propiedad];
@@ -36,6 +42,7 @@ const postCargarVenta = async (req, res) => {
     }, {});
     const { insertId } = await insertVenta({ Venta: Object.assign(objeto_venta, { CTE, USUARIO, MODO: "BGM" }) });
 
+    await insertarNuevaUbicacion({CALLE,LATITUD,LONGITUD})
 
 
     //Cargar imagen de frente y dorso a servidor
@@ -43,7 +50,6 @@ const postCargarVenta = async (req, res) => {
         saveFileFromEntry(Object.entries(req.files), CTE);
 
     //Si tiene anticipo que el cargue el pago
-    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP } = req.body;
     if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: insertId });
 
