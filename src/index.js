@@ -78,10 +78,10 @@ app.use("/rendicion/", require("./pagos/Router/rendiciones.routes.js"))
 
 
 
-
-const privateKey = fs.readFileSync(path.join(__dirname, "..", "cert", 'private-key.pem'), 'utf8');
-const certificate = fs.readFileSync(path.join(__dirname, "..", "cert", 'certificate.pem'), 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+console.log()
+const privateKey = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.key'), 'utf8');
+const certificate = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.crt'), 'utf8');
+const credentials = { key: privateKey, cert: certificate, cr: [fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'SectigoRSADomainValidationSecureServerCA.crt'), 'utf8')] };
 
 
 // Configurar rutas y middleware de Express aquí
@@ -95,7 +95,7 @@ httpsServer.listen(3000, () => {
 });
 
 
-app.listen(4000,()=> {
+app.listen(4000, () => {
     console.log('Server running on port, 4000');
 
 })
