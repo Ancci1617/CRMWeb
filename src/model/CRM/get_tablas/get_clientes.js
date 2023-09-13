@@ -19,7 +19,7 @@ const getClientes = async (cte) => {
             FROM
                 BaseCTE
             WHERE
-                BaseCTE.CTE = CTE and BaseCTE.VALIDACION = "VALIDO" order by BaseCTE.ID DESC
+                BaseCTE.CTE = Clientes.CTE and BaseCTE.VALIDACION = "VALIDO" order by BaseCTE.ID DESC
             LIMIT 1
         ),
         \`WHATS APP\`
