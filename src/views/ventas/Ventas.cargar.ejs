@@ -8,10 +8,12 @@
   <title>Blanco Gusmar | Cargar venta</title>
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
-  <% const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI,WHATSAPP} = cte_data %>
+  <% const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI,WHATSAPP,LATITUD,LONGITUD} = cte_data %>
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
+  <% console.log(cte_data)%>
 </head>
 
 <body>
@@ -25,7 +27,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
+      <form action="/ventas/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
 
         <div class="user-details">
           <div class="input-box ">
@@ -165,7 +167,7 @@
             </select>
           </div>
 
-          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
           
           <!-- IMAGENES -->
           <% if(required_images.frente){ %>
@@ -219,7 +221,7 @@
 
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
-  <script src="../js/ventas/cargar_venta.js"></script>
+  <script src="/js/ventas/cargar_venta.js"></script>
 
 </body>
 

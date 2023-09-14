@@ -1,8 +1,17 @@
 const { response } = require("express");
 const pool = require("../connection-database");
 
-const insertVenta = async ({ Venta }) => {
+const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
+    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO", "LATITUD_VENDEDOR", "LONGITUD_VENDEDOR", "ACCURACY_VENDEDOR"];
+
+    const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
+        obj[propiedad] = body[propiedad];
+        return obj;
+    }, {});
+
+    const Venta = Object.assign(objeto_venta, { CTE, USUARIO, MODO})
     const [KEYS, VALUES] = [Object.keys(Venta), Object.values(Venta)];
+
     try {
 
         const [response] = await pool.query(
@@ -19,7 +28,7 @@ const insertVenta = async ({ Venta }) => {
 }
 
 const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
-    const { FICHA, ID,ANTICIPO_MP  } = Venta;
+    const { FICHA, ID, ANTICIPO_MP } = Venta;
     console.log("venta", Venta);
     const connection = await pool.getConnection();
     try {
@@ -37,7 +46,7 @@ const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
 
         //Si antes el pago existia y ahora no existe, ademas de editarlo lo INVALIDA
         const nueva_confirmacion = !ANTICIPO || ANTICIPO_MP == "SI" ? "INVALIDO" : "PENDIENTE";
-        
+
         //Actualiza el pago
         await connection.query(`UPDATE PagosSV SET VALOR = ?,FICHA = ?, DECLARADO_CUO = VALOR, CONFIRMACION = ? WHERE ID_VENTA = ?;`, [ANTICIPO, FICHA, nueva_confirmacion, ID]);
 

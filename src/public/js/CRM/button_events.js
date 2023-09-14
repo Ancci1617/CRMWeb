@@ -26,7 +26,7 @@ function addBtnEvents() {
 
     btn_pedido?.addEventListener("click", () => gotoLink(`pedidos/cargar_pedido/${getCteEvaluado()}`));
 
-    btn_venta?.addEventListener("click", () => { gotoLink(`/cargar_venta/${getCteEvaluado()}`) });
+    btn_venta?.addEventListener("click", () => { gotoLink(`/ventas/cargar_venta/${getCteEvaluado()}`) });
     btn_mercaderia?.addEventListener("click", () => { gotoLink(`/entrega_retiro/${getCteEvaluado()}`) })
     btn_contacto?.addEventListener("click", () => {
         gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE"}`);

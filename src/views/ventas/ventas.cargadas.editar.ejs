@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
 
 </head>
 
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/ventas_cargadas/editar" method="POST" enctype="multipart/form-data" id="form_editar_venta">
+      <form action="/ventas/editar" method="POST" enctype="multipart/form-data" id="form_editar_venta">
 
         <div class="user-details">
           <div class="input-box ">
@@ -33,41 +34,21 @@
             <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE %>" name="CTE" required>
           </div>
 
-          <div class="input-box">
-            <span class="details">Ficha</span>
-            <input type="number" placeholder="Numero de ficha" value="<%= FICHA %>" name="FICHA" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "number",name : "FICHA",required:true,details : "Ficha",defaultValue : FICHA,placeholder : "Numero de ficha"}}) %>
 
-          <div class="input-box">
-            <span class="details">Apellido y nombre</span>
-            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "NOMBRE",required:true,details : "Apellido y nombre",defaultValue : NOMBRE, placeholder : "APELLIDO Nombre"}}) %>
 
-          <div class="input-box">
-            <span class="details">Zona</span>
-            <input type="text" placeholder="Zona" value="<%= ZONA   %>" name="ZONA" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ZONA",required:true,details : "Zona",defaultValue : ZONA, placeholder : "Zona"}}) %>
 
-          <div class="input-box">
-            <span class="details">Calle</span>
-            <input type="text" placeholder="Domicilio" value="<%= CALLE %>" name="CALLE" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CALLE",required:true,details : "Calle",defaultValue : CALLE, placeholder : "Domicilio"}}) %>
 
-          <div class="input-box">
-            <span class="details">Cruce 1</span>
-            <input type="text" placeholder="Cruce 1" value="<%= CRUCES %>" name="CRUCES" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES",required:true,details : "Cruce 1",defaultValue : CRUCES, placeholder : "Cruce 1"}}) %>
+          
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES2",required:true,details : "Cruce 2",defaultValue : CRUCES2, placeholder : "Cruce 2"}}) %>
 
-          <div class="input-box">
-            <span class="details">Cruce 2</span>
-            <input type="text" placeholder="Cruce 2" value="<%= CRUCES2 %>" name="CRUCES2" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "number",name : "WHATSAPP",details : "Telefono",defaultValue : WHATSAPP, placeholder : "WHATSAPP"}}) %>
 
-          <div class="input-box">
-            <span class="details">Telefono</span>
-            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>" name="WHATSAPP">
-          </div>
-
+          
           <div class="input-box">
             <span class="details">N° de documento</span>
             <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
@@ -165,7 +146,7 @@
             </select>
           </div>
 
-          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords }}) %>
 
 
           <!-- IMAGENES -->

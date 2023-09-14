@@ -61,6 +61,49 @@ const getClientesFull = async (cte) => {
 
 }
 
-module.exports = { getClientes, getClientesFull }
+const getClientesAndLocation = async (cte) => {
+
+    const [rows] = await pool.query(
+        `SELECT
+        CTE,
+        ZONA,
+        \`APELLIDO Y NOMBRE\` AS NOMBRE,
+        Clientes.CALLE,
+        CRUCES,
+        CRUCES2,
+        IFNULL(
+            (
+            SELECT
+                BaseCTE.TELEFONO
+            FROM
+                BaseCTE
+            WHERE
+                BaseCTE.CTE = Clientes.CTE AND BaseCTE.VALIDACION = "VALIDO"
+            ORDER BY
+                BaseCTE.ID
+            DESC
+        LIMIT 1
+        ),
+        \`WHATS APP\`
+        ) AS WHATSAPP, DNI, MASTER, OBS, UBICACIONESSV.LATITUD, UBICACIONESSV.LONGITUD
+    FROM
+        Clientes
+    LEFT JOIN UBICACIONESSV ON UBICACIONESSV.CALLE = Clientes.CALLE
+    WHERE
+        CTE = ?
+    ORDER BY UBICACIONESSV.ID_CALLE DESC        
+    LIMIT 1;`, [cte]);
+
+    if (rows.length > 0) {
+        return rows;
+    }
+
+    return [{
+        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
+    }];
+
+}
+
+module.exports = { getClientes, getClientesFull, getClientesAndLocation }
 
 

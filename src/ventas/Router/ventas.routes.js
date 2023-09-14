@@ -9,8 +9,11 @@ const ventasController = require("../controller/ventas.controller.js");
 Router.get("/pasar_ventas",hasPermission(VENTAS_USER),ventasController.cargarVentas);
 
 //Aca va un permiso personalizado
-Router.get("/editar/:INDICE",hasPermission(VENTAS_USER),ventasController.editarVenta);
+Router.get("/editar/:INDICE",hasPermission(VENTAS_USER),ventasController.formEditarVenta);
+Router.post("/editar",hasPermission(VENTAS_USER),ventasController.postEditarVenta);
 
+Router.get("/cargar_venta/:cte",hasPermission(VENTAS_USER),ventasController.formCargarVenta);
+Router.post("/cargar_venta",hasPermission(VENTAS_USER),ventasController.postCargarVenta);
 
 
 

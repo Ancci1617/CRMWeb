@@ -33,7 +33,7 @@
                 <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/contactos/campania">Campaña</a></div><%}%> 
                 <% if(hasPermission(permisos.PAGOS_USER) ) {%><div class="dashboard-item"><a href="/pagos/pasar_cobranza">Cobranza</a></div><%}%> 
                 <% if(hasPermission(permisos.USER_LISTADO) ) {%><div class="dashboard-item"><a href="/listado">Listado</a></div><%}%> 
-                <% if(hasPermission(permisos.PAGOS_USER) ) {%><div class="dashboard-item"><a href="/rendicion/rendicion_receptor">Rendiciones</a></div><%}%> 
+                <% if(hasPermission(permisos.VENTAS_ADMIN) ) {%><div class="dashboard-item"><a href="/ventas/pasar_ventas">Ventas</a></div><%}%>    
             
             </div>
         </div>

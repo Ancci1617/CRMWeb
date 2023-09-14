@@ -1,15 +1,10 @@
 const Router = require("express").Router();
 const pool = require("../../model/connection-database");
 const { getPrecio } = require("../../lib/get_precio");
-const { isLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
+const { isLoggedIn, isAdmin } = require("../../lib/auth");
 const { getVentaById, getVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const ventasController = require("../../controller/ventas.controller.js");
 
-Router.get("/cargar_venta/:cte", isLoggedIn, isAdminOrVendedor, ventasController.formCargarVenta);
-
-Router.get("/cargar_venta", isLoggedIn, async (req, res) => {
-    res.redirect("/cargar_venta/0");
-});
 
 Router.post("/cargar_venta", isLoggedIn, ventasController.postCargarVenta);
 
@@ -56,12 +51,12 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
     res.render("ventas/Ventas.cargadas.ejs", { ventas });
 });
 
-Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
-    const { ID } = req.params;
-    const venta = await getVentaById(ID);
-    res.render("ventas/ventas.cargadas.editar.ejs", venta);
+// Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
+//     const { ID } = req.params;
+//     const venta = await getVentaById(ID);
+//     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 
-});
+// });
 
 
 Router.post("/ventas_cargadas/editar", isLoggedIn, ventasController.updateVenta);

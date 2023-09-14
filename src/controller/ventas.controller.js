@@ -27,8 +27,6 @@ const formCargarVenta = async (req, res) => {
 const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
     const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP ,ubicacion_cliente,CALLE} = req.body;
-
-    
     const [LATITUD = null,LONGITUD = null] =  ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
     
     //Asigna numero de cte nuevo si hace falta
@@ -36,10 +34,6 @@ const postCargarVenta = async (req, res) => {
 
     const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO","LATITUD_VENDEDOR","LONGITUD_VENDEDOR","ACCURACY_VENDEDOR"];
 
-    const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
-        obj[propiedad] = req.body[propiedad];
-        return obj;
-    }, {});
     const { insertId } = await insertVenta({ Venta: Object.assign(objeto_venta, { CTE, USUARIO, MODO: "BGM" }) });
 
     await insertarNuevaUbicacion({CALLE,LATITUD,LONGITUD})
