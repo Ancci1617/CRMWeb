@@ -103,6 +103,19 @@
             <input type="text" placeholder="Valor de cuota" name="CUOTA" required>
           </div>
 
+
+          <div class="input-box">
+            <span class="details">Servicio unitario</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="" selected></option>
+              <option value="500">500</option>
+              <option value="750">750</option>
+              <option value="1000">1000</option>
+              <option value="1500">1500</option>
+              <option value="2000">2000</option>
+            </select>
+          </div>
+
           <div class="input-box">
             <span class="details">Anticipo</span>
             <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO">
@@ -138,8 +151,9 @@
           </div>
 
           <div class="input-box">
-            <span class="details">Dia de vencimiento</span>
+            <span class="details">Dia de vencimiento <span class="detail_primer_vencimiento">()</span></span>
             <select class="" name="VENCIMIENTO" required form="form_cargar_venta">
+              <option value="" selected></option>
               <option value="4">4</option>
               <option value="9">9</option>
               <option value="14">14</option>
@@ -208,6 +222,7 @@
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LATITUD_VENDEDOR"} }) %>
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO"} }) %>
 
           <!-- BOTONES DE SUBMIT -->
           <div class="button">

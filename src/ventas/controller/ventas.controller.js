@@ -43,6 +43,7 @@ const postCargarVenta = async (req, res) => {
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
     const { insertId: ID_VENTA } = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO });
+    if(ID_VENTA == "error") return res.send("Hubo un error al cargar las ventas.");
     await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
 
     if (req.files)

@@ -12,6 +12,69 @@ const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
 const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
 const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
 const ubicacion_cliente = document.querySelector("input[name='ubicacion_cliente']");
+const SERV_UNIT = document.getElementsByName("SERV_UNIT")[0];
+const detail_primer_vencimiento = document.querySelector(".detail_primer_vencimiento");
+
+const getServicio = (valor) => {
+    if (valor <= 5000) return 500;
+    if (valor <= 7500) return 750;
+    if (valor <= 10000) return 1000;
+    if (valor <= 15000) return 1500;
+    return 2000;
+}
+const handleServicioDeCobranza = () => {
+    const servicio = getServicio(cuota.value);
+    SERV_UNIT.value = servicio;
+}
+
+
+
+const cualEsPrimerVencimiento = (PRIMER_PAGO, dia) => {
+    const dia_mill = (1000 * 60 * 60 * 24);
+
+    const fechas = {
+        anterior: {
+            fecha: new Date(new Date(PRIMER_PAGO).setUTCMonth(PRIMER_PAGO.getUTCMonth() - 1, dia)),
+            difDias: 0
+        },
+        vigente: {
+            fecha: new Date(new Date(PRIMER_PAGO).setUTCMonth(PRIMER_PAGO.getUTCMonth(), dia)),
+            difDias: 0
+        },
+        proximo: {
+            fecha: new Date(new Date(PRIMER_PAGO).setUTCMonth(PRIMER_PAGO.getUTCMonth() + 1, dia)),
+            difDias: 0
+        }
+    }
+    fechas.anterior.difDias = Math.floor((new Date(fechas.anterior.fecha).setUTCMonth(fechas.anterior.fecha.getUTCMonth() + 1) - PRIMER_PAGO) / dia_mill)
+    fechas.vigente.difDias = Math.floor((new Date(fechas.vigente.fecha).setUTCMonth(fechas.vigente.fecha.getUTCMonth() + 1) - PRIMER_PAGO) / dia_mill)
+    fechas.proximo.difDias = Math.floor((new Date(fechas.proximo.fecha).setUTCMonth(fechas.proximo.fecha.getUTCMonth() + 1) - PRIMER_PAGO) / dia_mill)
+
+    if (fechas.anterior.difDias <= 40 && fechas.anterior.difDias >= 9) {
+        return fechas.anterior.fecha;
+    }
+
+    if (fechas.vigente.difDias <= 40 && fechas.vigente.difDias >= 9) {
+        return fechas.vigente.fecha;
+    }
+
+    return fechas.proximo.fecha;
+
+
+}
+
+const handlePrimerVencimiento = e => {
+    const primer_vencimiento = cualEsPrimerVencimiento(new Date(form.PRIMER_PAGO.value), form.VENCIMIENTO.value);
+    form.PRIMER_VENCIMIENTO.value = primer_vencimiento.toISOString().split("T")[0]; 
+
+
+    primer_vencimiento.setUTCMonth(primer_vencimiento.getUTCMonth() + 1);
+    const string_aux = primer_vencimiento.toISOString().split("T")[0];    
+    detail_primer_vencimiento.innerText =
+        `(${string_aux.split("-")[2]}/${string_aux.split("-")[1]})`
+
+};
+
 
 
 ANTICIPO.addEventListener("change", e => {
@@ -31,7 +94,7 @@ ANTICIPO.addEventListener("change", e => {
 
 window.addEventListener("load", async e => {
 
-    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError,{enableHighAccuracy : true});
+    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError, { enableHighAccuracy: true });
     evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
     evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
@@ -55,7 +118,7 @@ async function autoCompletarPrecios() {
 
     cuota.value = precios.cuota;
     total.value = precios.total;
-
+    handleServicioDeCobranza();
 }
 
 function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
@@ -123,15 +186,19 @@ const input_file_arr = document.querySelectorAll("input[type='file']")
 input_file_arr.forEach(input => {
     input.addEventListener("change", e => {
         const files = e.target.files;
-        const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")}`);
+        const span_text = document.querySelector(`.IMG - ${ e.target.getAttribute("NAME") } `);
         span_text.innerText = files && files.length > 0 ? files[0].name : "Sin foto cargada..";
     })
 })
 
+form.PRIMER_PAGO.addEventListener("change", handlePrimerVencimiento);
+form.VENCIMIENTO.addEventListener("change", handlePrimerVencimiento);
 
 //EVALUACION DE LA VENTA
 form.addEventListener("submit", e => {
     e.preventDefault();
+    if (form.TOTAL.value / form.CUOTA.value != form.CUOTAS.value) return alert("El total no es divisible por la cantidad de cuotas")
+
 
     const responsable = document.getElementsByName("RESPONSABLE")[0].value;
     const Estatus = document.getElementsByName("ESTATUS")[0].value;
@@ -160,23 +227,24 @@ articulos.addEventListener("change", e => {
 document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
+cuota.addEventListener("input", handleServicioDeCobranza);
 
-ubicacion_cliente.addEventListener("keyup",e => {
-    ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ","")
+ubicacion_cliente.addEventListener("keyup", e => {
+    ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ", "")
 });
 
 const handleLocationError = (error) => {
-    
-    if(error.code == 1){
+
+    if (error.code == 1) {
         alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
         return location.href = "/crm"
     }
-    console.log("Error desconocido",error);
-    alert(`Error desconocido ${error}, CODE ${error.code}`);
+    console.log("Error desconocido", error);
+    alert(`Error desconocido ${ error }, CODE ${ error.code } `);
 }
 
 const handleLocationSuccess = (location) => {
-    const {latitude,longitude,accuracy} = location.coords;
+    const { latitude, longitude, accuracy } = location.coords;
     console.log(location.coords);
     document.querySelector("input[name='LATITUD_VENDEDOR']").value = latitude;
     document.querySelector("input[name='LONGITUD_VENDEDOR']").value = longitude;

@@ -79,7 +79,6 @@ app.use("/ventas/",isLoggedIn,require("./ventas/Router/ventas.routes.js"));
 
 
 
-console.log()
 const privateKey = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.crt'), 'utf8');
 const credentials = { key: privateKey, cert: certificate, cr: [fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'SectigoRSADomainValidationSecureServerCA.crt'), 'utf8')] };
