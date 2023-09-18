@@ -8,4 +8,5 @@ function hasPermission(permiso) {
 }
 
 
+
 module.exports = { hasPermission }

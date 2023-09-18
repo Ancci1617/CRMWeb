@@ -6,26 +6,29 @@ const getVentas = async ({ filter }) => {
         let keys_sql = keys.substring(5, keys.length);
 
         const [ventas] = await pool.query(
-            `SELECT
-            CTE,
-            FICHA,
+        `SELECT
+            VentasCargadas.CTE,
+            VentasCargadas.FICHA,
             NOMBRE,
             ZONA,
             VentasCargadas.CALLE,
+            Fichas.ESTADO, 
             CRUCES,
             CRUCES2,
             WHATSAPP,
             DNI,
-            ARTICULOS,
-            TOTAL,
+            Fichas.ARTICULOS,
+            Fichas.TOTAL,
             ANTICIPO,
-            CUOTA,
+            Fichas.CUOTA,
             CUOTAS,
             TIPO,
             ESTATUS,
-            PRIMER_PAGO,
-            VENCIMIENTO,
+            Fichas.PRIMER_PAGO,
+            Fichas.VENCIMIENTO as VENCIMIENTO,
+            Day(Fichas.VENCIMIENTO) as DIA_VENCIMIENTO,
             CUOTAS_PARA_ENTREGA,
+            Fichas.SERV_UNIT,
             FECHA_VENTA,
             RESPONSABLE,
             APROBADO,
@@ -37,10 +40,12 @@ const getVentas = async ({ filter }) => {
             VISIBLE,
             INDICE,
             UBICACIONESSV.LATITUD,
-            UBICACIONESSV.LONGITUD
+            UBICACIONESSV.LONGITUD,
+            Fichas.VENCIMIENTO as PRIMER_VENCIMIENTO
         FROM
             VentasCargadas
         LEFT JOIN UBICACIONESSV ON UBICACIONESSV.ID_VENTA = VentasCargadas.INDICE
+		LEFT JOIN Fichas ON Fichas.ID_VENTA = VentasCargadas.INDICE
         WHERE 
         ${keys_sql} AND Visible = 1`
             , [...Object.values(filter)]);
@@ -51,6 +56,7 @@ const getVentas = async ({ filter }) => {
     } catch (error) {
         console.error(error);
         console.log("error al momento de consultas las ventas");
+        // return []
     }
 }
 
@@ -70,7 +76,7 @@ const getAsideVentas = async () => {
 
 const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO", "LATITUD_VENDEDOR", "LONGITUD_VENDEDOR", "ACCURACY_VENDEDOR"];
-    const { FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA,SERV_UNIT } = body;
+    const { NOMBRE,CALLE,CRUCES,CRUCES2,FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA, SERV_UNIT, PRIMER_VENCIMIENTO ,DNI} = body;
 
     const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
         obj[propiedad] = body[propiedad];
@@ -101,10 +107,12 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
             CUOTA_ANT,
             SERV_UNIT,
             ARTICULOS,
-            ID_VENTA
+            ID_VENTA,
+            ESTADO
         )
-        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_PAGO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId]]);
+        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId,"PENDIENTE"]]);
 
+        await connection.query(`INSERT IGNORE INTO  ClientesSV(CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,[[CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI]])
 
         await connection.commit()
 
@@ -115,11 +123,11 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     } finally {
         connection.release();
     }
-    return {insertId : "error"}
+    return { insertId: "error" }
 }
 
 
-const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID }) => {
+const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT }) => {
 
     const connection = await pool.getConnection();
     const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
@@ -129,7 +137,7 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
         const ANTICIPO_INT = parseInt(ANTICIPO || 0);
 
         //Actualiza la venta
-        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO }, ID]);
+        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, ANTICIPO }, ID]);
 
         //Actualiza el contacto
         await connection.query(`UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;`, [WHATSAPP, ID])
@@ -142,7 +150,7 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
 
         await connection.query(`UPDATE UBICACIONESSV SET CALLE = ?,LATITUD = ? ,LONGITUD = ?  WHERE ID_VENTA = ?`, [CALLE, LATITUD, LONGITUD, ID]);
 
-
+        await connection.query(`UPDATE Fichas SET ? where ID_VENTA = ?`, [{ FECHA: FECHA_VENTA, CTE, FICHA, Z: ZONA, TOTAL, CUOTA, VENCIMIENTO: PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, ESTADO: "PENDIENTE" }, ID]);
 
         await connection.commit()
     } catch (error) {
@@ -155,7 +163,55 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
 
 }
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta }
+const borrarVenta = async ({ ID_VENTA }) => {
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        //Fichas
+        await connection.query(`DELETE FROM Fichas where ID_VENTA = ?`, [ID_VENTA]);
+
+        //Contactos
+        await connection.query(`DELETE FROM BaseCTE where VENTA_ID = ?`, [ID_VENTA]);
+        
+        //Ubicaciones 
+        await connection.query(`UPDATE UBICACIONESSV set VALIDACION = 'INVALIDO' where ID_VENTA = ?`, [ID_VENTA]);
+
+        //Pagos
+        await connection.query(`UPDATE PagosSV SET CONFIRMACION='INVALIDO' WHERE ID_VENTA = ? `, [ID_VENTA]);
+
+        //VentasCargadas
+        await connection.query(`UPDATE VentasCargadas SET Visible = 0 where INDICE = ?`, [ID_VENTA]);
+
+        await connection.commit()
+    } catch (error) {
+        console.log(error);
+        await connection.rollback();
+    } finally {
+        connection.release();
+    }
+}
+const confirmarVenta = async ({venta}) => {
+    const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI} = venta;
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        await connection.query(`UPDATE Fichas SET ESTADO = 'ACTIVO' where ID_VENTA = ?`, [venta.INDICE]);
+        await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`,[{NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI},CTE])
+
+        await connection.commit()
+    } catch (error) {
+        console.log(error);
+        await connection.rollback();
+    } finally {
+        connection.release();
+    }
+}
+
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta }
 
 
 

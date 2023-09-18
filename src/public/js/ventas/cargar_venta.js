@@ -12,8 +12,9 @@ const ANTICIPO_MP = document.getElementsByName("ANTICIPO_MP")[0];
 const ANTICIPO_MP_CONTAINER = document.querySelector(".select_anticipo_container");
 const ANTICIPO = document.getElementsByName("ANTICIPO")[0];
 const ubicacion_cliente = document.querySelector("input[name='ubicacion_cliente']");
-const SERV_UNIT = document.getElementsByName("SERV_UNIT")[0];
 const detail_primer_vencimiento = document.querySelector(".detail_primer_vencimiento");
+const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
+
 
 const getServicio = (valor) => {
     if (valor <= 5000) return 500;
@@ -23,8 +24,9 @@ const getServicio = (valor) => {
     return 2000;
 }
 const handleServicioDeCobranza = () => {
-    const servicio = getServicio(cuota.value);
-    SERV_UNIT.value = servicio;
+
+    const servicio = zonas_sin_servicio_cobranza.includes(form.ZONA.value) ? Math.max(getServicio(cuota.value),1000) : getServicio(cuota.value);
+    form.SERV_UNIT.value = servicio;
 }
 
 
@@ -228,7 +230,7 @@ document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
 cuota.addEventListener("input", handleServicioDeCobranza);
-
+form.ZONA.addEventListener("input",handleServicioDeCobranza);
 ubicacion_cliente.addEventListener("keyup", e => {
     ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ", "")
 });

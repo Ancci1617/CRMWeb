@@ -9,16 +9,27 @@ const fs = require("fs");
 const { pagosModel } = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
 
+
+//Para admin
 const cargarVentas = async (req, res) => {
     const { FECHA_VENTA, USUARIO } = req.query;
     const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA, USUARIO } });
     const aside = await getAside();
     res.render("ventas/cargar_ventas/ventas.cargar.ejs", { aside, ventas, USUARIO, FECHA: FECHA_VENTA })
-
+}
+const confirmarVenta = async (req, res) => {
+    const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
+    await ventasModel.confirmarVenta({ venta, ID_VENTA: venta.INDICE });
+    res.redirect(req.headers.referer);
+}
+const borrarVenta = async (req, res) => {
+    await ventasModel.borrarVenta({ ID_VENTA: req.params.INDICE });
+    res.redirect(req.headers.referer);
 }
 
 
 
+//Vendeores
 const formCargarVenta = async (req, res) => {
     const { cte } = req.params;
 
@@ -43,7 +54,7 @@ const postCargarVenta = async (req, res) => {
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
     const { insertId: ID_VENTA } = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO });
-    if(ID_VENTA == "error") return res.send("Hubo un error al cargar las ventas.");
+    if (ID_VENTA == "error") return res.send("Hubo un error al cargar las ventas.");
     await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
 
     if (req.files)
@@ -62,21 +73,20 @@ const postCargarVenta = async (req, res) => {
 
 
 const formEditarVenta = async (req, res) => {
-    const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
+    const { venta } = res.locals;
+    // const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
+    console.log("🚀 ~ file: ventas.controller.js:66 ~ formEditarVenta ~ venta:", venta)
     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 }
-
-
 
 const postEditarVenta = async (req, res) => {
     const { CTE, ANTICIPO = 0, FECHA_VENTA, ID, FICHA, PRIMER_PAGO, ANTICIPO_MP } = req.body;
     const USUARIO = req.user.Usuario;
-    const [venta_prev] = await ventasModel.getVentas({ filter: { INDICE: ID,ID_VENTA : ID } });
-
+    const { venta: venta_prev } = res.locals;
     //Si antes no tenia anticipo y ahora si, que le genere el pago
-    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO") 
+    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
-    
+
 
     //Edita la venta
     await ventasModel.updateVenta(req.body);
@@ -86,10 +96,11 @@ const postEditarVenta = async (req, res) => {
         saveFileFromEntry(entries, req.body.CTE);
 
 
-    res.redirect("/ventas_cargadas");
+    res.redirect(`/ventas/pasar_ventas?USUARIO=${venta_prev.USUARIO}&FECHA_VENTA=${venta_prev.FECHA_VENTA}`);
 }
 
 
 
 
-module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta ,postEditarVenta}
+
+module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta }

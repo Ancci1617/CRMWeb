@@ -82,6 +82,20 @@
             <input type="text" placeholder="Valor de cuota" name="CUOTA" value="<%= CUOTA %>" required>
           </div>
 
+
+          <div class="input-box">
+            <span class="details">Servicio unitario</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="" selected></option>
+              <option value="500" <%= SERV_UNIT == 500 ? "selected" : "" %>>500</option>
+              <option value="750" <%= SERV_UNIT == 750 ? "selected" : "" %>>750</option>
+              <option value="1000" <%= SERV_UNIT == 1000 ? "selected" : "" %>>1000</option>
+              <option value="1500" <%= SERV_UNIT == 1500 ? "selected" : "" %>>1500</option>
+              <option value="2000" <%= SERV_UNIT == 2000 ? "selected" : "" %>>2000</option>
+            </select>
+          </div>
+          
+
           <div class="input-box">
             <span class="details">Anticipo</span>
             <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO" value="<%= ANTICIPO %>">
@@ -117,14 +131,14 @@
           </div>
 
           <div class="input-box">
-            <span class="details">Dia de vencimiento</span>
+            <span class="details">Dia de vencimiento <span class="detail_primer_vencimiento">()</span></span>
             <select class="" name="VENCIMIENTO" required form="form_editar_venta">
-              <option value="4" <%= VENCIMIENTO == "4" ? "selected" : null %>>4</option>
-              <option value="9" <%= VENCIMIENTO == "9" ? "selected" : null %>>9</option>
-              <option value="14" <%= VENCIMIENTO == "14" ? "selected" : null %>>14</option>
-              <option value="19" <%= VENCIMIENTO == "19" ? "selected" : null %>>19</option>
-              <option value="24" <%= VENCIMIENTO == "24" ? "selected" : null %>>24</option>
-              <option value="29" <%= VENCIMIENTO == "29" ? "selected" : null %>>29</option>
+              <option value="4" <%= DIA_VENCIMIENTO == "4" ? "selected" : null %>>4</option>
+              <option value="9" <%= DIA_VENCIMIENTO == "9" ? "selected" : null %>>9</option>
+              <option value="14" <%= DIA_VENCIMIENTO == "14" ? "selected" : null %>>14</option>
+              <option value="19" <%= DIA_VENCIMIENTO == "19" ? "selected" : null %>>19</option>
+              <option value="24" <%= DIA_VENCIMIENTO == "24" ? "selected" : null %>>24</option>
+              <option value="29" <%= DIA_VENCIMIENTO == "29" ? "selected" : null %>>29</option>
             </select>
           </div>
 
@@ -180,6 +194,8 @@
           </div>
 
           <input type="hidden" name="ID" value="<%= INDICE %>">
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO" , defaultValue : PRIMER_VENCIMIENTO } }) %>
+
           <!-- BOTONES DE SUBMIT -->
           <div class="button">
             <input type="submit" value="Editar venta">

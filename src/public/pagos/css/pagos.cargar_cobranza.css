@@ -130,7 +130,7 @@ ul .ul__cobradores li {
     cursor: pointer;
 }
 
-.pago.CONFIRMADO {
+.pago.CONFIRMADO,.pago.ACTIVO {
     background-color: var(--check-green);
 }
 

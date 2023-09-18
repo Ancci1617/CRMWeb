@@ -47,7 +47,7 @@
 
           <div class="input-box">
             <span class="details">Zona</span>
-            <input type="text" placeholder="Zona" value="<%= ZONA   %>" name="ZONA" required>
+            <input type="text" placeholder="Zona" value="<%= ZONA   %>" oninput="this.value = this.value.toUpperCase()" name="ZONA" required>
           </div>
 
           <div class="input-box">
@@ -105,7 +105,7 @@
 
 
           <div class="input-box">
-            <span class="details">Servicio unitario</span>
+            <span class="details">Servicio</span>
             <select class="" name="SERV_UNIT" required>
               <option value="" selected></option>
               <option value="500">500</option>

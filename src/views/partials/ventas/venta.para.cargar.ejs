@@ -1,6 +1,6 @@
-<% const {CTE,FICHA,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,ARTICULOS,TOTAL,CUOTAS,CUOTA,SERV_UNIT = 500,WHATSAPP,DNI,PRIMER_PAGO,VENCIMIENTO,LATITUD,LONGITUD,INDICE} = venta; %>
+<% const {CTE,FICHA,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,ARTICULOS,TOTAL,CUOTAS,CUOTA,SERV_UNIT = 500,WHATSAPP,DNI,PRIMER_PAGO,VENCIMIENTO,LATITUD,LONGITUD,INDICE,ESTADO} = venta; %>
 
-<div class="pago venta">
+<div class="pago venta <%= ESTADO %>">
 
   <div class="ficha">
     <a href="/CRM?CTE=F:<%=FICHA%>"><%= `${CTE} - ${FICHA}` %></a>
@@ -17,15 +17,20 @@
   <%- include("./venta.details_container.ejs",{datos : {dato1 :`(${CUOTAS} x ${CUOTA}) $${TOTAL}`},classList : ["nw"]}) %>
   <%- include("./venta.details_container.ejs",{datos : {dato1 :`P.Venc: ${VENCIMIENTO} - P.Pago: ${PRIMER_PAGO}`},classList : ["nw"]}) %>
   <%- include("./venta.details_container.ejs",{datos : {dato1 :`Serv: ${SERV_UNIT}`}}) %>
-  <div class="data_container">
-    <div class="data_container__btn">
-      <!-- <a href="invalidar_pago?" class="invalidar_pago"> <i class="fas fa-times"></i></a> -->
-      <a href="<%= `/ventas/editar/${INDICE}` %>"><i class="fas fa-edit btn_editar_pago"></i></a>
-      <i class="fas fa-check"></i>
-      <a href="#" class="invalidar_venta"> <i class="fas fa-times"></i></a>
 
+  <div class="data_container">
+
+    <div class="data_container__btn">
+      <% if(ESTADO == "PENDIENTE"){ %>
+      <a href="<%=`/ventas/editar/${INDICE}`%>"><i class="fas fa-edit"></i></a>
+      <a href="<%=`/ventas/confirmar/${INDICE}`%>" class="btn_confirmar_venta"><i class="fas fa-check"></i></a>
+      <% if(hasPermission(permisos.VENTAS_GERENCIA)){ %>
+      <a href="<%=`/ventas/borrar/${INDICE}`%>" class="invalidar_venta btn_invalidar_venta"><i class="fas fa-times"></i></a>
+      <% }%>
+      <% } %>
     </div>
   </div>
+
   <div class="details_container ">
     <a href="/dnis/<%= CTE %>" target="_blank">Ver fotos</a>
     <% if(LATITUD && LONGITUD) {%>
