@@ -2,7 +2,7 @@ const Router = require("express").Router();
 const pool = require("../../model/connection-database");
 const { getPrecio } = require("../../lib/get_precio");
 const { isLoggedIn, isAdmin } = require("../../lib/auth");
-const { getVentaById, getVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
+const {  getVentasDelDia, getVentasVendedores, getVendedores, getFechaDeVentas, getVentasDelDiaGeneral } = require("../../model/ventas/ventas.query");
 const ventasController = require("../../controller/ventas.controller.js");
 
 

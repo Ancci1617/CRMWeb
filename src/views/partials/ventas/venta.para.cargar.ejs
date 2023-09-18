@@ -32,7 +32,9 @@
   </div>
 
   <div class="details_container ">
+    <% if(hasPermission(permisos.DNI_USER)){ %>
     <a href="/dnis/<%= CTE %>" target="_blank">Ver fotos</a>
+    <% } %>
     <% if(LATITUD && LONGITUD) {%>
     <a href=<%=`https://www.google.com.ar/maps/search/${LATITUD},${LONGITUD}`%> target="_blank">Ver ubicacion</a>
     <% } %>
