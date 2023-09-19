@@ -25,7 +25,7 @@ const getServicio = (valor) => {
 }
 const handleServicioDeCobranza = () => {
 
-    const servicio = zonas_sin_servicio_cobranza.includes(form.ZONA.value) ? Math.max(getServicio(cuota.value),1000) : getServicio(cuota.value);
+    const servicio = zonas_sin_servicio_cobranza.includes(form.ZONA.value) ? Math.max(getServicio(cuota.value), 1000) : getServicio(cuota.value);
     form.SERV_UNIT.value = servicio;
 }
 
@@ -67,11 +67,11 @@ const cualEsPrimerVencimiento = (PRIMER_PAGO, dia) => {
 
 const handlePrimerVencimiento = e => {
     const primer_vencimiento = cualEsPrimerVencimiento(new Date(form.PRIMER_PAGO.value), form.VENCIMIENTO.value);
-    form.PRIMER_VENCIMIENTO.value = primer_vencimiento.toISOString().split("T")[0]; 
+    form.PRIMER_VENCIMIENTO.value = primer_vencimiento.toISOString().split("T")[0];
 
 
     primer_vencimiento.setUTCMonth(primer_vencimiento.getUTCMonth() + 1);
-    const string_aux = primer_vencimiento.toISOString().split("T")[0];    
+    const string_aux = primer_vencimiento.toISOString().split("T")[0];
     detail_primer_vencimiento.innerText =
         `(${string_aux.split("-")[2]}/${string_aux.split("-")[1]})`
 
@@ -188,7 +188,7 @@ const input_file_arr = document.querySelectorAll("input[type='file']")
 input_file_arr.forEach(input => {
     input.addEventListener("change", e => {
         const files = e.target.files;
-        const span_text = document.querySelector(`.IMG - ${ e.target.getAttribute("NAME") } `);
+        const span_text = document.querySelector(`.IMG-${e.target.getAttribute("NAME")} `);
         span_text.innerText = files && files.length > 0 ? files[0].name : "Sin foto cargada..";
     })
 })
@@ -230,7 +230,7 @@ document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
 cuota.addEventListener("input", handleServicioDeCobranza);
-form.ZONA.addEventListener("input",handleServicioDeCobranza);
+form.ZONA.addEventListener("input", handleServicioDeCobranza);
 ubicacion_cliente.addEventListener("keyup", e => {
     ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ", "")
 });
@@ -242,7 +242,7 @@ const handleLocationError = (error) => {
         return location.href = "/crm"
     }
     console.log("Error desconocido", error);
-    alert(`Error desconocido ${ error }, CODE ${ error.code } `);
+    alert(`Error desconocido ${error}, CODE ${error.code} `);
 }
 
 const handleLocationSuccess = (location) => {
