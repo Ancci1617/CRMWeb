@@ -11,7 +11,10 @@
 
     <div class="data_container__cobranza">
       <span class="proxima"><%= PROXIMO %></span>
-      <% if(user.RANGO == "ADMIN" || user.Usuario == COBRADOR ){ %>
+      
+
+      <!-- Si tiene permisos de rendicion _ user o es su rendicion puede ver los montos -->
+      <% if(hasPermission(permisos.RENDICION_ADMIN) || user.Usuario == COBRADOR ){ %>
       <span class="cuota"><%= CUOTA %></span>
       <span class="saldo"><%= SALDO %></span>
       <span class="cobrador"><%= CUOTA_SERV %></span>
@@ -20,13 +23,10 @@
 
     <div class="data_container__btn">
       <% if(CONFIRMACION !== "CONFIRMADO"){ %>
-      <!-- <div class="confirmar_pago"> -->
+        
       <a href="confirmar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
-      <!-- </div> -->
-
-      <!-- <div class="editar_pago"> -->
       <i class="fas fa-edit btn_editar_pago"></i>
-      <!-- </div> -->
+
       <% if(   !rendicion || rendicion.EDITABLE == 1 ) {%>
       <a href="invalidar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>&FECHA=<%= FECHA %>&COB=<%= COB %>" class="invalidar_pago"> <i class="fas fa-times"></i></a>
       <% } %>
