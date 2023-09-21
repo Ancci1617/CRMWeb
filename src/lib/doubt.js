@@ -25,14 +25,15 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
             0);
 
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
-
+            
     let atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
 
 
     // const deuda_mora = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0);
-    const deuda_mora = Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0);
-
-
+    
+    // const deuda_mora = Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0);
+    const deuda_mora = Math.floor( Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso - 1, 0) * CUOTA * 0.1, 0) /100) * 100;
+    
 
 
     //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
