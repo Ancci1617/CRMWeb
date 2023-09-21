@@ -67,7 +67,6 @@ async function rendicionReceptor(req, res) {
     }
 
     const rendicion = await getRendicion({ FECHA, COB });
-    console.log("rEND", rendicion);
 
     const [gastos] = await pool.query(
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB]);
