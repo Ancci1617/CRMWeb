@@ -1,4 +1,4 @@
-const { pagosModel } = require("../model/pagos.model.js");
+const pagosModel = require("../model/pagos.model.js");
 const { getToday } = require("../../lib/dates.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
@@ -9,7 +9,6 @@ const { getRendicion } = require("../model/rendicion.model.js");
 const permisos = require("../../constants/permisos.js");
 const { getCliente } = require("../../lib/get_cliente.js");
 const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
-
 
 
 
@@ -164,8 +163,8 @@ async function cargarPago(req, res) {
         const [ficha_data] = await pagosModel.getFichasByCte(FICHA, "FICHA");
 
         const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
-       
-       
+
+
         const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
         const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
         const CUOTA = COBRADO - MORA - SERV;
@@ -202,7 +201,7 @@ async function confirmarPago(req, res) {
     try {
         const pago = await pagosModel.getPagoByCodigo(CODIGO);
         await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
-        
+
         res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
 
     } catch (error) {

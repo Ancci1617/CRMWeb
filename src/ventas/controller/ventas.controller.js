@@ -6,7 +6,7 @@ const { insertarNuevaUbicacion } = require("../../ubicaciones/model/ubicaciones.
 const ventasModel = require("../model/ventas.model.js");
 const { getAside } = require("./lib/aside.js");
 const fs = require("fs");
-const { pagosModel } = require("../../pagos/model/pagos.model.js");
+const  pagosModel  = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
 
 
