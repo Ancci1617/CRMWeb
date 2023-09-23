@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Cobranza</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/cobrador/recorrido.css">
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+  
+  <div class="main__container">
+    <header class="btn__container">
+        <a href="" class="btn_header btn__clientes link">CLIENTES</a>
+        <a href="" class="btn_header btn__recorrido link">RECORRIDO</a>
+        <a href="" class="btn_header btn__recorrido link">INICIAR</a>
+    </header>
+  <ul class="lista_por_cobrar">
+    <li class="credito_por_cobrar">
+        <div class="zona">A2</div>
+        <div class="details">
+            <span class="calle">Las violetas 2015 [Antares - C. del sur]</span>
+            <span class="nombre nw">CORONEL Analia</span>
+        </div>
+        <div>||</div>
+    </li>
+  </ul>
+</div>
+
+  <!-- <ul id="sortable" class="ui-sortable collection">
+    <li class="ui-state-default ui-sortable-handle collection-item avatar z-depth-3">
+      <div>1</div>
+    </li>
+    <li class="ui-state-default ui-sortable-handle collection-item avatar z-depth-3">
+      <div>2</div>
+    </li>
+    <li class="ui-state-default ui-sortable-handle collection-item avatar z-depth-3">
+      <div>3</div>
+    </li>
+  </ul> -->
+
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script> -->
+  <!-- <script src="//code.jquery.com/mobile/git/jquery.mobile-git.js"></script> -->
+  <!-- <script src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script> -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+  <script src="/cobrador/recorrido.js"></script>
+  <%- include("../partials/links/nav.logic.ejs") %>
+</body>
+
+</html>

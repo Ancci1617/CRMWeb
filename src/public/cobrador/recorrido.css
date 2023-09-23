@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+*{
+  /* font-family: 'Poppins', sans-serif; */
+  /* font-family: sans-serif; */
+}
+html,
+body {
+    /* background-color: var(--light_white); */
+    background-color: rgb(131, 131, 130);
+}
+
+.main__container {
+  background-color: white;
+  min-height: calc(100vh - 48px);
+  border-radius: 8px 8px;
+  overflow: hidden;
+  padding: 8px 5px;
+}
+
+header.btn__container{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  margin-bottom: .4rem;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+
+}
+
+.btn_header{
+  height: 2.3rem;
+  display: grid;
+  text-align: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+.btn_header:nth-child(2){
+  border-inline: 1px solid black;
+}
+.btn_header:hover{
+  background-color: lightblue;
+}
+
+
+.credito_por_cobrar{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  border: 1px solid lightblue;
+  border-radius: .7rem;
+
+}
+.credito_por_cobrar .zona{
+  display: grid;
+  align-items: center;
+  font-size: 1.4rem;
+
+}
+.credito_por_cobrar .details  {
+  
+}
+
+
