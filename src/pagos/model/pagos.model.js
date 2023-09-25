@@ -293,4 +293,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichas, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichas, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha,updateDistribucionByCodigo ,updateEstadoPagoByCodigo,updateMoraYServicioAntBase,updateSaldosAnterioresYServicios}
