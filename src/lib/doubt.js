@@ -57,15 +57,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
 
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
-    console.log("deuda,", {
-        cuota: deudaCuota,
-        servicio: deuda_serv,
-        vencidas,
-        mora: deuda_mora,
-        atraso,
-        atraso_evaluado: atraso_eval,
-        pagas, vencimiento_vigente, EsPrimerPago
-    });
+
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
