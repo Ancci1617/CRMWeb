@@ -38,7 +38,7 @@ async function getListadoZona(req, res) {
         "'IMAN' AS BGM,'1' AS CALIF,'' AS CRUCES,'' AS CRUCES2 , " + 
         "Listado.RESOLUCION,Listado.USUARIO,Listado.ID,BaseZ.TELEFONO FROM Listado " +
         "LEFT JOIN BaseZ on BaseZ.Z = Listado.CTE where Listado.CTE like '%Z%'  AND Listado.RESOLUCION = 'ACTIVO'  " + 
-        "AND BaseZ.ZONA = ? AND BaseZ.CALLE like ? ORDER BY CALLE limit 20" 
+        "AND BaseZ.ZONA = ? AND BaseZ.CALLE like ? ORDER BY CALLE limit 35" 
          , [ZONA,`%${FILTRO}%`,ZONA,`%${FILTRO}%`])
 
 
