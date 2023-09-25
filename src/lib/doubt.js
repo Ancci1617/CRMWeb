@@ -32,7 +32,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     // const deuda_mora = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0);
     
     // const deuda_mora = Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0);
-    const deuda_mora = Math.floor( Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso - 1, 0) * CUOTA * 0.1, 0) /100) * 100;
+    const deuda_mora = Math.floor( Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0) /100) * 100;
     
 
 
