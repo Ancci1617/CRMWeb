@@ -71,6 +71,7 @@ app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));
 app.use("/rendicion/", require("./pagos/Router/rendiciones.routes.js"));
 app.use("/ventas/",isLoggedIn,require("./ventas/Router/ventas.routes.js"));
+app.use("/cobrador/",isLoggedIn,require("./cobrador/Router/cobrador.routes.js"));
 // app.use("/rendiciones/",require("./pagos/Router/rendiciones.routes.js"));
 
 // morgan.token('usuario', (req, res) => { return req.user? req.user.Usuario : "WL"});
