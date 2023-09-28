@@ -43,7 +43,7 @@
           <input type="hidden" name="LONGITUD" value="<%= ficha.LONGITUD %>">
         </div>
         <div class="icons__container">
-          <a href="https://www.google.com.ar/maps/search/<%= `${ficha.LATITUD},${ficha.LONGITUD}` %>" target="_blank"><%- include("../partials/icons/map.ejs") %></a>
+          <a class="link-mapa" href="https://www.google.com.ar/maps/search/<%= `${ficha.LATITUD},${ficha.LONGITUD}` %>" target="_blank"><%- include("../partials/icons/map.ejs") %></a>
           <%- include("../partials/icons/lock.ejs") %>
         </div>
       </li>
