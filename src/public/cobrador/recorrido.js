@@ -34,7 +34,6 @@ const ordenarRecorrido = () => {
         let latitud_inicial = parseFloat(creditos_ordenados[i].querySelector("input[name='LATITUD']").value);
         let longitud_inicial = parseFloat(creditos_ordenados[i].querySelector("input[name='LONGITUD']").value);
 
-        console.log("inicial", { latitud_inicial, longitud_inicial });
 
         let creditos_encontrados = []
         let margen = 0.0001
@@ -85,7 +84,7 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
     let response = await cargarHandler();
     if (response.success) {
         alert(response.msg)
-        return window.location.href = `/cobrador/deuda?ORDEN=0&ZONA=${zona}`;
+        return window.location.href = `/cobrador/recorrido/${zona}`;
     }
     alert(response.msg)
 

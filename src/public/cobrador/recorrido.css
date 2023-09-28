@@ -106,14 +106,13 @@ header .lista_zonas {
   right: -55px;
 }
 .credito_por_cobrar .icons__container{
-  margin-left: auto;
   display: flex;
   align-items: center;
   flex-direction: column;
   flex-wrap: wrap;
   gap: 8px;
-  height: 100%;
-  justify-content: center;
+  /* height: 100%; */
+  /* justify-content: center; */
 }
 
 .credito_por_cobrar .zona {
@@ -133,4 +132,10 @@ header .lista_zonas {
 
 
 
-
+.right{
+  display: grid;
+  margin-left: auto;
+  grid-auto-flow: column;
+  gap: .7rem;
+  align-items: center;
+}
