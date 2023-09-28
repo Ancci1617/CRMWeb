@@ -1,6 +1,7 @@
 
-
-
+const creditos = document.querySelectorAll(".credito_por_cobrar");
+const bloquear = document.querySelector(".btn__bloquear");
+const desbloquear = document.querySelector(".btn__desbloquear");
 
 
 const cargarHandler = async () => {
@@ -58,10 +59,8 @@ const ordenarRecorrido = () => {
         creditos_para_ordenar = creditos_para_ordenar.filter(credito => !(credito == creditos_encontrados[0]));
     }
 
-    console.log("ordenados");
-    console.log(creditos_ordenados);
     document.querySelector(".lista_por_cobrar").append(...creditos_ordenados);
-
+    creditos.forEach(credito => credito.classList.add("locked"));
 }
 
 
@@ -70,6 +69,15 @@ document.querySelector(".btn__ordenar_recorrido").addEventListener("click", e =>
     e.preventDefault();
     ordenarRecorrido();
 })
+bloquear.addEventListener("click",e => {
+    e.preventDefault();
+    creditos.forEach(credito => credito.classList.add("locked"));
+})
+desbloquear.addEventListener("click",e => {
+    e.preventDefault();
+    creditos.forEach(credito => credito.classList.remove("locked"));
+})
+
 
 document.querySelector(".btn__iniciar_recorrido").addEventListener("click", async e => {
     e.preventDefault();
@@ -82,5 +90,14 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
     alert(response.msg)
 
 
+})
+
+
+
+creditos.forEach(credito => {
+    let candado = credito.querySelector(".lock-icon");
+    candado.addEventListener("click",e => {
+        credito.classList.toggle("locked")
+    })
 })
 

@@ -103,13 +103,14 @@
 
 
           <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
+          <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">
           <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
         </div>
 
       </div>
 
       <div class="btn__container">
-        <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
+        <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="/pagos/cargar_pago"></input>
         <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambiarFecha"></input>
         <a class="btn btn-cargar-pago link" href="<%=`volver?FICHA=${ficha.data.FICHA}&ORDEN=${ORDEN}&ZONA=${ficha.data.Z}`%>">Volver</a>
         <% if(ORDEN > 0) {%>

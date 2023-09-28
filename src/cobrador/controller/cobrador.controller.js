@@ -14,11 +14,7 @@ const formOrdenarRecorrido = async (req, res) => {
     const { ZONA = "SZ" } = req.query;
     const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA } });
 
-    // console.log("fichas por cobrar", fichas_data.map(ficha => ficha.FICHA).join(","));
     const fichas = fichas_data.map(ficha => ({ ficha, deuda: getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
-    // fichas.splice(1,fichas.length - 5)
-    // console.log("fichas por cobrar", fichas.map(ficha => ficha.ficha.FICHA));
-
 
     //Aca filtrariamos las que corresponden que vallan para el local
     res.render("cobrador/recorrido2.ejs", { fichas })
@@ -43,10 +39,10 @@ const formDeudaRecorrido = async (req, res) => {
 }
 
 const postCambiarFecha = async (req,res) => {
-    const {CTE,FICHA,FECHA_COB} = req.body;
+    const {CTE,FICHA,FECHA_COB,ZONA} = req.body;
     await cobradorModel.insertCambioDeFecha({FICHA,FECHA : FECHA_COB,COBRADOR : req.user.Usuario}); 
-    
-    res.send("cargo")
+
+    res.redirect(`recorrido?ZONA=${ZONA}`);
 }
 
 
