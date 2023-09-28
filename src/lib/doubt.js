@@ -27,7 +27,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
     const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
 
-    const deuda_mora = Math.floor(Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso - 1, 0) * CUOTA * 0.1, 0) / 100) * 100;
+    const deuda_mora = Math.floor(Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0) / 100) * 100;
 
 
 

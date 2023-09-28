@@ -20,7 +20,8 @@ const cargarHandler = async () => {
         },
         body: JSON.stringify(body)
     })
-
+    const res_json = await res.json();
+    return res_json;
 }
 
 const ordenarRecorrido = () => {
@@ -65,12 +66,21 @@ const ordenarRecorrido = () => {
 
 
 
-document.querySelector(".btn__cargar_recorrido").addEventListener("click",e => {
-
+document.querySelector(".btn__ordenar_recorrido").addEventListener("click", e => {
     e.preventDefault();
     ordenarRecorrido();
-
 })
 
+document.querySelector(".btn__iniciar_recorrido").addEventListener("click", async e => {
+    e.preventDefault();
+    const zona = new URLSearchParams(window.location.search).get("ZONA");
+    let response = await cargarHandler();
+    if (response.success) {
+        alert(response.msg)
+        return window.location.href = `/cobrador/deuda?ORDEN=0&ZONA=${zona}`;
+    }
+    alert(response.msg)
 
+
+})
 
