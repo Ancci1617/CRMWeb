@@ -42,7 +42,7 @@ const postCambiarFecha = async (req,res) => {
     const {CTE,FICHA,FECHA_COB,ZONA} = req.body;
     await cobradorModel.insertCambioDeFecha({FICHA,FECHA : FECHA_COB,COBRADOR : req.user.Usuario}); 
 
-    res.redirect(`recorrido?ZONA=${ZONA}`);
+    res.redirect(`recorrido/${ZONA}`);
 }
 
 
@@ -51,9 +51,21 @@ const postVolver = async (req,res) => {
     await cobradorModel.volverAlFinal({FICHA : req.query.FICHA});
     res.redirect(`/cobrador/deuda?ORDEN=${parseInt(ORDEN) + 1}&ZONA=${ZONA}`);
 }
+const formIniciarRecorrido = async (req,res) => {
 
+    const {ZONA} = req.params;
+    let fichas_data = await cobradorModel.getFichasPorCobrar({filter : {Z : ZONA }});
+    let fichas = fichas_data.map(ficha => ({ ficha, deuda: getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
+    fichas.splice(6,fichas.length);
 
-module.exports = { postOrdenarRecorrido, formOrdenarRecorrido, formDeudaRecorrido ,postCambiarFecha,postVolver}
+    const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
+    
+    console.log("fichas",fichas);
+    console.log("len",fichas.length);
+    res.render("cobrador/iniciar.ejs",{ fichas ,usuarios});
+}
+
+module.exports = { postOrdenarRecorrido, formOrdenarRecorrido, formDeudaRecorrido ,postCambiarFecha,postVolver,formIniciarRecorrido}
 
 
 

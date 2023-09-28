@@ -105,13 +105,17 @@
 
           <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
           <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
+          <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">
+
         </div>
 
       </div>
 
       <div class="btn__container">
         <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
-        <!-- <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambio_de_fecha"></input> -->
+        <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
+
+
         <!-- <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo"></input> -->
       </div>
 
