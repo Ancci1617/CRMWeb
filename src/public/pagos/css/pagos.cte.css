@@ -125,11 +125,10 @@ input[type="number"]::-webkit-outer-spin-button {
     text-align: center;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-
 }
 
 .btn-cargar-pago {
-    grid-column: span 2;
+    /* grid-column: span 2; */
     order: 30;
 }
 

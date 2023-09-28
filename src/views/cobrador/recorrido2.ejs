@@ -16,9 +16,10 @@
 
   <div class="main__container">
     <header class="btn__container">
-      <a href="" class="btn_header btn__clientes link">RECORDAR</a>
-      <a href="" class="btn_header btn__cargar_recorrido link">ORDENAR</a>
-      <a href="" class="btn_header btn__recorrido link">INICIAR</a>
+      <a href="" class="btn_header btn__desbloquear link">DESBLOQUEAR</a>
+      <a href="" class="btn_header btn__bloquear link">BLOQUEAR</a>
+      <a href="" class="btn_header btn__ordenar_recorrido link">ORDENAR</a>
+      <a href="" class="btn_header btn__iniciar_recorrido link">INICIAR</a>
       <div class="lista_zonas">
         <% user.ZONAS.forEach(zona => { %>
         <a href="<%=`?ZONA=${zona}`%>" class="zona link"><%= zona %></a>

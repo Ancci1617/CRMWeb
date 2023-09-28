@@ -1,6 +1,7 @@
 
-
-
+const creditos = document.querySelectorAll(".credito_por_cobrar");
+const bloquear = document.querySelector(".btn__bloquear");
+const desbloquear = document.querySelector(".btn__desbloquear");
 
 
 const cargarHandler = async () => {
@@ -20,7 +21,8 @@ const cargarHandler = async () => {
         },
         body: JSON.stringify(body)
     })
-
+    const res_json = await res.json();
+    return res_json;
 }
 
 const ordenarRecorrido = () => {
@@ -57,20 +59,45 @@ const ordenarRecorrido = () => {
         creditos_para_ordenar = creditos_para_ordenar.filter(credito => !(credito == creditos_encontrados[0]));
     }
 
-    console.log("ordenados");
-    console.log(creditos_ordenados);
     document.querySelector(".lista_por_cobrar").append(...creditos_ordenados);
-
+    creditos.forEach(credito => credito.classList.add("locked"));
 }
 
 
 
-document.querySelector(".btn__cargar_recorrido").addEventListener("click",e => {
-
+document.querySelector(".btn__ordenar_recorrido").addEventListener("click", e => {
     e.preventDefault();
     ordenarRecorrido();
+})
+bloquear.addEventListener("click",e => {
+    e.preventDefault();
+    creditos.forEach(credito => credito.classList.add("locked"));
+})
+desbloquear.addEventListener("click",e => {
+    e.preventDefault();
+    creditos.forEach(credito => credito.classList.remove("locked"));
+})
+
+
+document.querySelector(".btn__iniciar_recorrido").addEventListener("click", async e => {
+    e.preventDefault();
+    const zona = new URLSearchParams(window.location.search).get("ZONA");
+    let response = await cargarHandler();
+    if (response.success) {
+        alert(response.msg)
+        return window.location.href = `/cobrador/deuda?ORDEN=0&ZONA=${zona}`;
+    }
+    alert(response.msg)
+
 
 })
 
 
+
+creditos.forEach(credito => {
+    let candado = credito.querySelector(".lock-icon");
+    candado.addEventListener("click",e => {
+        credito.classList.toggle("locked")
+    })
+})
 
