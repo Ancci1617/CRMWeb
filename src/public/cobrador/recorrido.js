@@ -69,11 +69,11 @@ document.querySelector(".btn__ordenar_recorrido").addEventListener("click", e =>
     e.preventDefault();
     ordenarRecorrido();
 })
-bloquear.addEventListener("click",e => {
+bloquear.addEventListener("click", e => {
     e.preventDefault();
     creditos.forEach(credito => credito.classList.add("locked"));
 })
-desbloquear.addEventListener("click",e => {
+desbloquear.addEventListener("click", e => {
     e.preventDefault();
     creditos.forEach(credito => credito.classList.remove("locked"));
 })
@@ -96,8 +96,23 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
 
 creditos.forEach(credito => {
     let candado = credito.querySelector(".lock-icon");
-    candado.addEventListener("click",e => {
-        credito.classList.toggle("locked")
-    })
+    let mapa = credito.querySelector(".link-mapa");
+    if (window.navigator.userAgentData.mobile) {
+        candado.addEventListener("touchstart", e => {
+            credito.classList.toggle("locked")
+        });
+
+        mapa.addEventListener("touchstart", e => {
+            mapa.click();
+        })
+    } else {
+
+        candado.addEventListener("click", e => {
+            credito.classList.toggle("locked")
+        });
+    }
+
+
 })
+
 
