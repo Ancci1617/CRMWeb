@@ -47,9 +47,11 @@ const postCambiarFecha = async (req,res) => {
 
 
 const postVolver = async (req,res) => {
-    const {ZONA,FICHA,ORDEN} = req.query;
-    await cobradorModel.volverAlFinal({FICHA : req.query.FICHA});
-    res.redirect(`/cobrador/deuda?ORDEN=${parseInt(ORDEN) + 1}&ZONA=${ZONA}`);
+    const {ZONA,FICHA} = req.query;
+
+    await cobradorModel.volverAlFinal({FICHA : req.query.FICHA,ZONA});
+
+    res.redirect(`/cobrador/recorrido/${ZONA}`);
 }
 const formIniciarRecorrido = async (req,res) => {
 
@@ -60,8 +62,6 @@ const formIniciarRecorrido = async (req,res) => {
 
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     
-    console.log("fichas",fichas);
-    console.log("len",fichas.length);
     res.render("cobrador/iniciar.ejs",{ fichas ,usuarios});
 }
 

@@ -114,9 +114,9 @@
       <div class="btn__container">
         <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
         <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
+        <a class="btn btn-cambiar-fecha" href="/cobrador/volver?<%=`ZONA=${ficha.data.Z}&FICHA=${ficha.data.FICHA}`%>">Volver</a>
 
-
-        <!-- <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Reclamo"></input> -->
+        <!-- <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Volver"></input> -->
       </div>
 
       <div class="deep_details show">

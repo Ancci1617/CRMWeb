@@ -91,22 +91,36 @@ const insertCambioDeFecha = async ({ FICHA, FECHA, COBRADOR }) => {
 
     try {
         const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR) VALUES (?,?,?) `, [FICHA, FECHA, COBRADOR]);
-        console.log("respuesta insertar cambio de fecha",res);
+        console.log("respuesta insertar cambio de fecha", res);
     } catch (error) {
         console.log(error);
     }
 }
 
-const volverAlFinal = async ({FICHA}) => {
+const volverAlFinal = async ({ FICHA ,ZONA}) => {
+    const connection = await pool.getConnection();
     try {
-        const [res] = await pool.query(
-            `UPDATE FichasTest set ORDEN_COBRANZA = (SELECT MAX(ORDEN_COBRANZA) + 1 from FichasTest WHERE Z = (SELECT Z from FichasTest where FICHA = ?)) where FICHA = ?;`, [FICHA,FICHA]);
-        
+        await connection.beginTransaction();
+
+        let [res] = await connection.query(
+            `UPDATE FichasTest set ORDEN_COBRANZA = (SELECT MAX(ORDEN_COBRANZA) + 1 from FichasTest WHERE Z = (SELECT Z from FichasTest where FICHA = ?)) where FICHA = ?;`, [FICHA, FICHA]);
+        let [res2] = await connection.query(`
+        UPDATE FichasTest F left join (SELECT FichasTest.FICHA,(ROW_NUMBER() OVER(ORDER BY ORDEN_COBRANZA asc)) - 1 as ORDEN from FichasTest where ORDEN_COBRANZA is not null and FichasTest.Z = ?) AUX on AUX.FICHA = F.FICHA SET F.ORDEN_COBRANZA = AUX.ORDEN WHERE ORDEN_COBRANZA IS NOT NULL AND Z = ? order by ORDEN_COBRANZA asc;
+        `,[ZONA,ZONA])
+        console.log({res,res2});
+
+
+
+        await connection.commit();
+
     } catch (error) {
         console.log(error);
-        
+        await connection.rollback();
+
+    } finally {
+        await connection.release();
     }
 }
 
 
-module.exports = { getFichasPorCobrar, ordenarRecorrido, insertCambioDeFecha,volverAlFinal }
+module.exports = { getFichasPorCobrar, ordenarRecorrido, insertCambioDeFecha, volverAlFinal }
