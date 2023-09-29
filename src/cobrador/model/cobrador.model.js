@@ -74,8 +74,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
         LEFT JOIN PagosSV ON PagosSV.FICHA = FichasTest.FICHA 
         LEFT JOIN ClientesSV on FichasTest.CTE = ClientesSV.CTE 
         WHERE
-            ${keys_sql} AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = FichasTest.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE
-        GROUP BY
+            ${keys_sql} AND FichasTest.ESTADO = 'ACTIVO' AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = FichasTest.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE  GROUP BY
             FichasTest.FICHA order by ORDEN_COBRANZA asc;`
         , [...Object.values(filter)]);
 
