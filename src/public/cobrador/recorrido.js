@@ -95,23 +95,9 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
 
 creditos.forEach(credito => {
     let candado = credito.querySelector(".lock-icon");
-    let mapa = credito.querySelector(".link-mapa");
-    if (window.navigator.userAgentData.mobile) {
-        candado.addEventListener("touchstart", e => {
-            credito.classList.toggle("locked")
-        });
-
-        mapa.addEventListener("touchstart", e => {
-            mapa.click();
-        })
-    } else {
-
-        candado.addEventListener("click", e => {
-            credito.classList.toggle("locked")
-        });
-    }
-
-
+    candado.addEventListener("click", e => {
+        credito.classList.toggle("locked");
+    });
 })
 
 

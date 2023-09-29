@@ -1,5 +1,5 @@
 $(function () {
-  $("#sortable").sortable({axis : "y",cancel: '.locked, .icons__container',items : "li"} );
+  $("#sortable").sortable({axis : "y",cancel: '.locked',items : "li",handle : ".details"} );
   $("#sortable").disableSelection();
 });
 

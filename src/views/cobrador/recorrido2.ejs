@@ -44,7 +44,7 @@
         </div>
         <div class="right">
           <div class="icons__container">
-            <a class="link-mapa" href="https://www.google.com.ar/maps/search/<%= `${ficha.LATITUD},${ficha.LONGITUD}` %>" target="_blank"><%- include("../partials/icons/map.ejs") %></a>
+            <a class="link-mapa" href="https://www.google.com/maps/search/?api=1&query=<%=`${ficha.LATITUD},${ficha.LONGITUD}`%>" ><%- include("../partials/icons/map.ejs") %></a>
             <%- include("../partials/icons/lock.ejs") %>
           </div>
         </div>
@@ -54,13 +54,15 @@
 
   </div>
 
+  <%- include("../partials/links/nav.logic.ejs") %>
   <script src="//code.jquery.com/jquery-1.12.4.js"></script>
   <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
-  <script src="/cobrador/recorrido.js"></script>
-  <%- include("../partials/links/nav.logic.ejs") %>
   <script src="/cobrador/recorrido_draggable.js"></script>
+  <script src="/cobrador/recorrido.js"></script>
 </body>
 
 </html>
+
+
