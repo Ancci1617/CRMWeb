@@ -35,7 +35,7 @@
       <li class="credito_por_cobrar">
         <div class="zona <%= (!ficha.LATITUD || !ficha.LONGITUD) ? "sin_coordenadas" : "" %>"><%= ficha.Z %></div>
         <div class="details">
-          <span class="calle"><%= ficha.CALLE %></span>
+          <span class="calle"><%= `(${ficha.FICHA}) ${ficha.CALLE}` %></span>
           <span class="">[<%=`${ficha.CRUCES} - ${ficha.CRUCES2}`%>]</span>
           <span class="nombre nw"><%= ficha.NOMBRE %></span>
           <input type="hidden" name="ID" value="<%= ficha.ID %>">
