@@ -77,7 +77,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
             ${keys_sql} AND Fichas.ESTADO = 'ACTIVO' AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = Fichas.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE  GROUP BY
             Fichas.FICHA order by ORDEN_COBRANZA asc;`
         , [...Object.values(filter)]);
-
+//
     if (fichas.length > 0) {
         return fichas;
     }
