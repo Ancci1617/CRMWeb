@@ -12,8 +12,6 @@ const getCliente = async (request_data) => {
             return getCteDni(data);
         case "Ficha":
             return getCteFicha(data);
-        case "Fichas":
-            return getClienteEnFichas(data);
         case "Telefono":
             return getCteTel(data);
         case "Nombre":
