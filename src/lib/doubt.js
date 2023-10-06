@@ -1,8 +1,7 @@
 const { getVencidas, getToday, sumarMeses } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
 
-function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FECHA_VENTA }, COBRADOR = false) {
+const getVencimientoValido = ({VENCIMIENTO,PRIMER_PAGO}) => {
     const HOY = new Date(getToday());
 
     let EsPrimerPago = false;
@@ -14,19 +13,49 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
         VENCIMIENTO_EVALUA = PRIMER_PAGO;
     }
 
-    //AGREGAR ALGORITMO PARA COBRADOR
-    const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
+    return {EsPrimerPago,VENCIMIENTO_EVALUA}
+}
+
+const getAtrasos = ({VENCIMIENTO_EVALUA,CUOTAS,TOTAL,SALDO,CUOTA}) => {
 
     const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(getToday()), CUOTAS);
-    const deudaCuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
     const pagas =
         Math.max(
             Math.trunc((TOTAL - SALDO) / CUOTA * 10) / 10,
             0);
-
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
     const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
 
+
+    return {vencidas,pagas,atraso,atraso_eval}
+
+}
+
+
+function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FECHA_VENTA }, COBRADOR = false) {
+
+
+    //AGREGAR ALGORITMO PARA COBRADOR
+    const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
+
+    const {VENCIMIENTO_EVALUA,EsPrimerPago} = getVencimientoValido({VENCIMIENTO,PRIMER_PAGO});
+
+
+    //Data
+    const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(getToday()), CUOTAS);
+    const pagas =
+        Math.max(
+            Math.trunc((TOTAL - SALDO) / CUOTA * 10) / 10,
+            0);
+    const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
+    const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
+
+
+
+
+    //Deuda
+    const deudaCuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
     const deuda_mora = Math.floor(Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0) / 100) * 100;
 
 
@@ -63,7 +92,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     }
 }
 
-module.exports = { getDoubt }
+module.exports = { getDoubt ,getAtrasos,getVencimientoValido}
 
 
 
