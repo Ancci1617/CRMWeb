@@ -81,7 +81,6 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     // memo[cte] = query_result;
     //Appendiarlo junto a la data que va a ser respondida
-    console.log("query", query_result);
 
     guardar_respuesta_crm(req.user.Usuario, JSON.stringify(req.body), JSON.stringify(query_result), hora);
 

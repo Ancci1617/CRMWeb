@@ -33,7 +33,7 @@ const getFichas = async (cte) => {
         Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER) AS SALDO,
         Fichas.CUOTA,
         ROUND(
-            Fichas.TOTAL /(
+            (Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER)) /(
             SELECT
                 LP.\`CUOTAS 6\`
             FROM
