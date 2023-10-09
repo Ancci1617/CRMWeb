@@ -8,7 +8,7 @@ const getFichas = async (cte) => {
 
         `SELECT
         DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
-        Fichas.FECHA,
+        CONVERT(Fichas.FECHA,INTEGER) as FECHA,
         Fichas.CTE,
         Fichas.FICHA,
         Fichas.Z,
