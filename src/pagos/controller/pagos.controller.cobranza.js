@@ -1,6 +1,6 @@
 const { getDoubt } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
-const  pagosModel  = require("../model/pagos.model.js");
+const pagosModel = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 
 
@@ -56,12 +56,24 @@ async function rendicionController(req, res) {
 
 
 
+const getCobranzas = async (req, res) => {
+  const cobranzas = await pagosModel.getCobranzas();
+  const items = cobranzas
+  const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+  const header = Object.keys(items[0])
+  const csv = [
+    header.join(','), // header row first
+    ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+  ].join('\r\n')
+
+  res.send(csv)
+  // res.send("ok")
+}
 
 
 
 
 
 
-
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController, getCobranzas };
 

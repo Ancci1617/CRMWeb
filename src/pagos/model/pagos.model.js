@@ -289,8 +289,20 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 }
 
 
+const getCobranzas = async () => {
+
+    try {
+
+        const [cobranzas] = await pool.query(`SELECT Fichas.FECHA, Fichas.CTE, Fichas.FICHA, Fichas.Z, Fichas.TOTAL, acumulados.MES0, acumulados.MES1, acumulados.MES2, acumulados.MES3, acumulados.MES4, acumulados.MES5, Fichas.CUOTA_ANT, pagos.ABONADO, Fichas.CUOTA_ANT - pagos.ABONADO AS SALDO, Fichas.CUOTA, 'V', Fichas.ESTADO, Fichas.VENCIMIENTO, ( SELECT CambiosDeFecha.CAMBIO FROM CambiosDeFecha WHERE CambiosDeFecha.FICHA = Fichas.FICHA ORDER BY CambiosDeFecha.ID DESC LIMIT 1 ) AS CDeFecha, Fichas.SERV_UNIT FROM Fichas LEFT JOIN( SELECT PagosSVAcumulado.FICHA, PagosSVAcumulado.CTE, SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES5, SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES4, 
+        SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES3, SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES2, SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES1, SUM( IF( MONTH(PagosSVAcumulado.FECHA) = MONTH( DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) ) AND YEAR(PagosSVAcumulado.FECHA) = YEAR( DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) ), PagosSVAcumulado.VALOR, 0 ) ) AS MES0 FROM PagosSVAcumulado GROUP BY FICHA ) acumulados ON acumulados.FICHA = Fichas.FICHA AND acumulados.CTE = Fichas.CTE 
+        LEFT JOIN( SELECT PagosSV.CTE, PagosSV.FICHA, IFNULL(SUM(PagosSV.VALOR),0) AS ABONADO  FROM PagosSV WHERE PagosSV.CONFIRMACION != 'INVALIDO' GROUP BY FICHA ) pagos ON pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE GROUP BY Fichas.FICHA;`)
+
+        return cobranzas;
+    } catch (error) {
+        return ["Error al cargar cobranzas"]
+    }
+}
 
 
 
-
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichas, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha,updateDistribucionByCodigo ,updateEstadoPagoByCodigo,updateMoraYServicioAntBase,updateSaldosAnterioresYServicios}
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichas, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios ,getCobranzas}
