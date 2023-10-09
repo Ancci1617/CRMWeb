@@ -18,7 +18,7 @@ body {
 
 .main__container {
     margin: auto;
-    display: grid;
+    /* display: inline-grid; */
     /* gap: 1rem; */
     max-width: 620px;
     background-color: white;
@@ -31,6 +31,7 @@ body {
     padding: 4px .8em;
     position: sticky;
     top: 3rem;
+    /* width: 100%; */
 }
 
 
@@ -116,11 +117,16 @@ input[type="number"]::-webkit-outer-spin-button {
     border: 1px solid var(--light_white);
     border-radius: .5rem;
     background: white;
-    display: inline-flex;
+    /* display: inline-flex; */
     flex-direction: row;
     justify-content: space-between;
 }
-
+.input__mp{
+    display: flex;
+}
+.input__mp > input[name='MP_PORCENTAJE']{
+    max-width: 70%;
+}
 
 .btn__container {
     display: grid;

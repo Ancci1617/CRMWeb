@@ -28,10 +28,10 @@ const cargarPago = async ({
             `INSERT INTO PagosSV (CTE, FICHA, VALOR, PROXIMO, MP, SERV, MORA, COBRADOR, FECHA, CONFIRMACION,CODIGO,OBS,MP_OPERACION,MP_TITULAR,DECLARADO_COB,DECLARADO_CUO,ID_VENTA) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? where not EXISTS (SELECT true from PagosSV where ID_VENTA = ?)`
             , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO, ID_VENTA, ID_VENTA]);
 
+        if (PROXIMO)
+            await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO) VALUES (?)`, [[FICHA, PROXIMO, USUARIO, FECHA, CODIGO]])
 
-        await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO) VALUES (?)`,[[FICHA,PROXIMO,USUARIO,FECHA,CODIGO]])
 
-        
         await connection.query(
             `INSERT INTO PlanillasDeCobranza 
                 (FECHA,COB, EDITABLE,EFECTIVO, RECEPCION) SELECT 
@@ -224,28 +224,41 @@ const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }
     return [];
 }
 const updateEstadoPagoByCodigo = async ({ newState, filter }) => {
-    const [update_result] = await pool.query
-        (`UPDATE PagosSV SET ? WHERE ? `, [newState, filter]);
 
-    if (update_result.length > 0) {
-        return update_result;
+    try {
+
+        const [update_result] = await pool.query
+            (`UPDATE PagosSV SET ? WHERE ? `, [newState, filter]);
+
+        if (update_result.length > 0) {
+            return update_result;
+        }
+
+
+    } catch (error) {
+        console.log("error al editar pago");
+        console.log("new state", newState);
+        console.log("filter", filter);
     }
     return [];
 }
+const invalidarPago = async ({ CODIGO }) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+        
+        await connection.query(`UPDATE PagosSV set CONFIRMACION = 'INVALIDO' WHERE CODIGO = ?`, [CODIGO]);
+        await connection.query(`DELETE FROM CambiosDeFecha WHERE CODIGO_PAGO = ?`,[CODIGO]);
 
+        await connection.commit()
+    } catch (error) {
 
-const getFichas = async () => {
-    const [FICHAS] = await pool.query(
-        "SELECT `FECHA`, `CTE`, `FICHA`, `Z`, `TOTAL`, `CUOTA`, " +
-        "`VENCIMIENTO`, `CUOTA_ANT`, `SERVICIO_ANT`, `MORA_ANT`, `SERV_UNIT`, " +
-        "`ARTICULOS`, `ID` FROM `Fichas` ");
-
-    if (FICHAS.length > 0) {
-        return FICHAS;
+        await connection.rollback();
+    } finally {
+        connection.release();
     }
-    return [];
-
 }
+
 
 const updateMoraYServicioAntBase = async () => {
     const [update_result] = await pool.query(
@@ -295,4 +308,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios ,invalidarPago}

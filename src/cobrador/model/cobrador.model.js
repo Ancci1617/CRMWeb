@@ -89,7 +89,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
 const insertCambioDeFecha = async ({ FICHA, FECHA, COBRADOR , TODAY}) => {
 
     try {
-        const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR,FECHA) VALUES (?,?,?) `, [FICHA, FECHA, COBRADOR,TODAY]);
+        const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR,FECHA) VALUES (?,?,?,?) `, [FICHA, FECHA, COBRADOR,TODAY]);
         console.log("respuesta insertar cambio de fecha", res);
     } catch (error) {
         console.log(error);

@@ -1,4 +1,4 @@
-const creditos = document.querySelectorAll(".credito");
+
 const form_redistribuir = document.getElementById("form_redistribuir_pago");
 const form__container = document.getElementById("form__container");
 const pagos = document.querySelectorAll(".pago");
@@ -106,33 +106,7 @@ form_redistribuir?.addEventListener("submit", e => {
     form_redistribuir.submit();
 })
 
-creditos.forEach(credito => {
 
-    const btn_mostrar_detalle = credito.querySelector(".btn-detalles");
-    const btn_ocultar_detalle = credito.querySelector(".btn-cerrar-detalle");
-    const deep_details = credito.querySelector(".deep_details");
-
-    btn_mostrar_detalle.addEventListener("click", e => {
-        deep_details.classList.toggle("show");
-    }, false);
-    btn_ocultar_detalle.addEventListener("click", e => {
-        deep_details.classList.toggle("show");
-    }, false);
-
-    const check_mp = credito.querySelector(".check_mp");
-
-    check_mp.addEventListener("change", e => {
-        const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
-        MP_INPUTS.forEach(input => {
-            input.required = e.target.checked;
-            input.hidden = !e.target.checked;
-            input.value = "";
-        })
-
-
-    });
-
-});
 
 
 

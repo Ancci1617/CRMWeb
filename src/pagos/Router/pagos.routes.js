@@ -15,7 +15,7 @@ Router.get("/codigo_pago", hasPermission(PAGOS_USER), pagosController.codigoDePa
 
 Router.get("/pasar_cobranza", hasPermission(PAGOS_USER), cobranzasController.cargarCobranza);
 Router.post("/cargar_pago", hasPermission(PAGOS_USER), pagosController.cargarPago);
-Router.post("/cambio_de_fecha", hasPermission(PAGOS_USER), pagosController.cambiarFecha);
+
 Router.post("/redistribuir_pago", hasPermission(PAGOS_ADMIN), cobranzasController.redistribuirPago);
 Router.get("/confirmar_pago", hasPermission(PAGOS_ADMIN),pagosController.confirmarPago);
 Router.get("/invalidar_pago", hasPermission(PAGOS_USER), pagosController.invalidarPago);

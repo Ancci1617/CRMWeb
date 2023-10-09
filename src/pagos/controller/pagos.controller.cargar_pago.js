@@ -84,15 +84,7 @@ async function deudaFicha(req, res) {
 
 }
 
-async function cambiarFecha(req, res) {
-    const { CTE, FICHA, FECHA_COB } = req.body;
-    const { Usuario } = req.user;
-    const insert_response = await pagosModel.insertCambioDeFecha({ CTE, FICHA, FECHA_COB, COBRADOR: Usuario, FECHA: getToday() });
 
-    const origin = req.headers.referer;
-
-    res.redirect(origin);
-}
 
 async function cargarPago(req, res) {
 
@@ -234,7 +226,7 @@ async function invalidarPago(req, res) {
 
 
 
-module.exports = { deudaCte, cargarPago, cambiarFecha, codigoDePago, confirmarPago, deudaFicha, invalidarPago, deudaCredito };
+module.exports = { deudaCte, cargarPago, codigoDePago, confirmarPago, deudaFicha, invalidarPago, deudaCredito };
 
 
 
