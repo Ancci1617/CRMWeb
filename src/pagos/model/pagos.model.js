@@ -200,12 +200,48 @@ const getFechasDePagosYCobradores = async () => {
 const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
 
     const [PAGOS] = await pool.query(
-        "SELECT PagosSV.`CTE`, PagosSV.`FICHA`,Clientes.ZONA as Z, `VALOR` AS CUOTA,DAY(Fichas.VENCIMIENTO) as DIA_VENCIMIENTO, `PROXIMO`, " +
-        "PagosSV.`OBS` , `MP`, `SERV`, `MORA`, `COBRADOR`, PagosSV.`FECHA`,PagosSV.`MP_TITULAR`, `CONFIRMACION`, `CODIGO`, " +
-        "PagosSV.`ID`, Fichas.CUOTA_ANT - (SELECT SUM(PagosSV.VALOR) FROM PagosSV " +
-        "Where PagosSV.FICHA = Fichas.FICHA and PagosSV.CONFIRMACION != 'INVALIDO') as SALDO,PagosSV.DECLARADO_CUO,PagosSV.DECLARADO_COB , PagosSV.SERV + PagosSV.MORA as CUOTA_SERV, Clientes.CALLE,Clientes.`APELLIDO Y NOMBRE` AS NOMBRE " +
-        "FROM `PagosSV` left join Fichas on Fichas.FICHA = PagosSV.FICHA left join Clientes on Clientes.CTE = PagosSV.CTE where PagosSV.FECHA " +
-        "like ? and PagosSV.COBRADOR like ? AND PagosSV.CONFIRMACION != 'INVALIDO' group by CODIGO order by CONFIRMACION, ?? ,PagosSV.FICHA; "
+        `SELECT
+        PagosSV.CTE,
+        PagosSV.FICHA,
+        ClientesSV.ZONA AS Z,
+        VALOR AS CUOTA,
+        DAY(Fichas.VENCIMIENTO) AS DIA_VENCIMIENTO,
+        PROXIMO,
+        PagosSV.OBS,
+        MP,
+        SERV,
+        MORA,
+        COBRADOR,
+        PagosSV.FECHA,
+        PagosSV.MP_TITULAR,
+        CONFIRMACION,
+        CODIGO,
+        PagosSV.ID,
+        Fichas.CUOTA_ANT -(
+        SELECT
+            SUM(PagosSV.VALOR)
+        FROM
+            PagosSV
+        WHERE
+            PagosSV.FICHA = Fichas.FICHA AND PagosSV.CONFIRMACION != 'INVALIDO'
+    ) AS SALDO,
+    PagosSV.DECLARADO_CUO,
+    PagosSV.DECLARADO_COB,
+    PagosSV.SERV + PagosSV.MORA AS CUOTA_SERV,
+    ClientesSV.CALLE,
+    ClientesSV.NOMBRE AS NOMBRE
+    FROM
+        PagosSV
+    LEFT JOIN Fichas ON Fichas.FICHA = PagosSV.FICHA
+    LEFT JOIN ClientesSV ON ClientesSV.CTE = PagosSV.CTE
+    WHERE
+        PagosSV.FECHA LIKE ? AND PagosSV.COBRADOR LIKE ? AND PagosSV.CONFIRMACION != 'INVALIDO'
+    GROUP BY
+        CODIGO
+    ORDER BY
+        CONFIRMACION,
+        ? ?,
+        PagosSV.FICHA`
         , [FECHA, COB, ORDEN]);
 
     if (PAGOS.length > 0) {
@@ -246,9 +282,9 @@ const invalidarPago = async ({ CODIGO }) => {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
-        
+
         await connection.query(`UPDATE PagosSV set CONFIRMACION = 'INVALIDO' WHERE CODIGO = ?`, [CODIGO]);
-        await connection.query(`DELETE FROM CambiosDeFecha WHERE CODIGO_PAGO = ?`,[CODIGO]);
+        await connection.query(`DELETE FROM CambiosDeFecha WHERE CODIGO_PAGO = ?`, [CODIGO]);
 
         await connection.commit()
     } catch (error) {
@@ -308,4 +344,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios ,invalidarPago}
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios, invalidarPago }
