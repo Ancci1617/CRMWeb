@@ -1,8 +1,8 @@
 const { getDoubt } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
-const  pagosModel  = require("../model/pagos.model.js");
+const pagosModel = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
-
+const { getFichas } = require("../../model/CRM/get_tablas/get_fichas.js")
 
 async function cargarCobranza(req, res) {
   const { FECHA = "", COB = "", ORDEN = "Z" } = req.query;
@@ -56,12 +56,23 @@ async function rendicionController(req, res) {
 
 
 
+const getCobranzas = async (req, res) => {
+  let cobranzas = await getFichas("%");
+  for(let i = 0 ; i< cobranzas.length;i++){
+    delete cobranzas[i].FECHA_FORMAT
+  }
+
+  console.log("COB");
+  console.log(cobranzas[0]);
+
+  res.json(cobranzas)
+
+}
 
 
 
 
 
 
-
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController, getCobranzas };
 

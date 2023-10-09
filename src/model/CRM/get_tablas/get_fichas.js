@@ -8,7 +8,8 @@ const getFichas = async (cte) => {
 
         `SELECT
         DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
-        Fichas.FECHA,
+        CONVERT(Fichas.FECHA,INTEGER) as FECHA,
+        Fichas.CTE,
         Fichas.FICHA,
         Fichas.Z,
         Fichas.TOTAL,
@@ -20,18 +21,15 @@ const getFichas = async (cte) => {
 		IFNULL(acumulados.MES4, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH),0,null) ) as MES4,
 		IFNULL(acumulados.MES5, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH),0,null) ) as MES5,
         Fichas.CUOTA_ANT,
-        Fichas.SERVICIO_ANT,
-        Fichas.MORA_ANT,
-        Fichas.SERV_UNIT,
-        CONVERT(IFNULL(pagos.MORA_PAGO,0),INTEGER) as MORA_PAGO,
-        CONVERT(IFNULL(pagos.SERV_PAGO,0),INTEGER) as SERV_PAGO,
-        CONVERT(
-                Fichas.TOTAL / Fichas.CUOTA,
-                INTEGER
-            ) AS CUOTAS,
         CONVERT(IFNULL(pagos.CUOTA_PAGO, 0),INTEGER) AS CUOTA_PAGO,
         Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER) AS SALDO,
         Fichas.CUOTA,
+        CONVERT(
+            Fichas.TOTAL / Fichas.CUOTA,
+            INTEGER
+        ) AS CUOTAS,
+
+        Fichas.ESTADO,
         ROUND(
             (Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER)) /(
             SELECT
@@ -43,18 +41,29 @@ const getFichas = async (cte) => {
             LIMIT 1
         ),
         1
-        ) AS VU, Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,(
-        SELECT
-            CambiosDeFecha.CAMBIO
-        FROM
-            CambiosDeFecha
-        WHERE
-            CambiosDeFecha.FICHA = Fichas.FICHA
-        ORDER BY
-            CambiosDeFecha.ID
-        DESC
-    LIMIT 1
-    ) AS CDeFecha
+        ) AS VU,
+        Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,(
+            SELECT
+                CambiosDeFecha.CAMBIO
+            FROM
+                CambiosDeFecha
+            WHERE
+                CambiosDeFecha.FICHA = Fichas.FICHA
+            ORDER BY
+                CambiosDeFecha.ID
+            DESC
+        LIMIT 1
+        ) AS CDeFecha,
+
+        Fichas.SERVICIO_ANT,
+        CONVERT(IFNULL(pagos.SERV_PAGO,0),INTEGER) as SERV_PAGO,
+        Fichas.SERV_UNIT,
+
+        Fichas.MORA_ANT,
+        CONVERT(IFNULL(pagos.MORA_PAGO,0),INTEGER) as MORA_PAGO
+        
+
+
     FROM
         Fichas
     LEFT JOIN(
@@ -160,7 +169,7 @@ const getFichas = async (cte) => {
     ON
         pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
     WHERE
-        Fichas.CTE = ?
+        Fichas.CTE like ?
     GROUP BY
         Fichas.FICHA;;`, [cte]);
 
