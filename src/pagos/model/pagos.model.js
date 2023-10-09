@@ -240,7 +240,7 @@ const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
         CODIGO
     ORDER BY
         CONFIRMACION,
-        ? ?,
+        ??,
         PagosSV.FICHA`
         , [FECHA, COB, ORDEN]);
 
