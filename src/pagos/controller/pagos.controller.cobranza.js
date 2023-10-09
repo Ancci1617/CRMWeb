@@ -2,7 +2,7 @@ const { getDoubt } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
 const pagosModel = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
-
+const { getFichas } = require("../../model/CRM/get_tablas/get_fichas.js")
 
 async function cargarCobranza(req, res) {
   const { FECHA = "", COB = "", ORDEN = "Z" } = req.query;
@@ -57,17 +57,16 @@ async function rendicionController(req, res) {
 
 
 const getCobranzas = async (req, res) => {
-  const cobranzas = await pagosModel.getCobranzas();
-  const items = cobranzas
-  const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
-  const header = Object.keys(items[0])
-  const csv = [
-    header.join(','), // header row first
-    ...items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
-  ].join('\r\n')
+  let cobranzas = await getFichas("%");
+  for(let i = 0 ; i< cobranzas.length;i++){
+    delete cobranzas[i].FECHA_FORMAT
+  }
 
-  res.send(csv)
-  // res.send("ok")
+  console.log("COB");
+  console.log(cobranzas[0]);
+
+  res.json(cobranzas)
+
 }
 
 
