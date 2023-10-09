@@ -110,11 +110,15 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .input__container>* {
     outline: none;
-    border: none;
+    /* border: none; */
     font-size: 1.2rem;
     padding: 1px 9px;
     border: 1px solid var(--light_white);
     border-radius: .5rem;
+    background: white;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 

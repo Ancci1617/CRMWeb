@@ -83,12 +83,17 @@
           <input type="number" name="COBRADO" class="" placeholder="Monto cobrado" required />
           <% } %>
 
-          <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="" required>
+          <div class="input__container_input">
+            <span>COB:</span>
+            <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="">
+          </div>
           <input type="text" name="OBS" class="" placeholder="Observacion" />
 
           <div class="input__mp">
-            <input type="checkbox" name="ISMP" class="check_mp" />
-            <label for="MPCHECK">MP</label>
+            <div>
+              <input type="checkbox" name="ISMP" class="check_mp" />
+              <label for="MPCHECK">MP</label>
+            </div>
             <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
           </div>
 

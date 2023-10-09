@@ -1,7 +1,9 @@
+"use strict";
 const pagosModel = require("../../pagos/model/pagos.model.js");
 const cobradorModel = require("../model/cobrador.model.js");
 const { getDoubt } = require("../../lib/doubt.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
+const { getToday } = require("../../lib/dates.js");
 
 
 
@@ -39,8 +41,8 @@ const formDeudaRecorrido = async (req, res) => {
 }
 
 const postCambiarFecha = async (req,res) => {
-    const {CTE,FICHA,FECHA_COB,ZONA} = req.body;
-    await cobradorModel.insertCambioDeFecha({FICHA,FECHA : FECHA_COB,COBRADOR : req.user.Usuario}); 
+    const {FICHA,FECHA_COB,ZONA} = req.body;
+    await cobradorModel.insertCambioDeFecha({FICHA,FECHA : FECHA_COB,COBRADOR : req.user.Usuario,TODAY : getToday()}); 
 
     res.redirect(`recorrido/${ZONA}`);
 }

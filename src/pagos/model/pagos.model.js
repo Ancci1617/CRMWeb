@@ -29,6 +29,9 @@ const cargarPago = async ({
             , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO, ID_VENTA, ID_VENTA]);
 
 
+        await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO) VALUES (?)`,[[FICHA,PROXIMO,USUARIO,FECHA,CODIGO]])
+
+        
         await connection.query(
             `INSERT INTO PlanillasDeCobranza 
                 (FECHA,COB, EDITABLE,EFECTIVO, RECEPCION) SELECT 
