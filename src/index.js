@@ -69,7 +69,7 @@ app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
-
+app.use("/mp/api/",isLoggedIn,require("./MP/Router/api.mp.routes.js"));
 app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));
 app.use("/rendicion/", require("./pagos/Router/rendiciones.routes.js"));
