@@ -252,23 +252,27 @@ const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
 
 const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) => {
     const connection = await pool.getConnection();
+    console.log({ PROXIMO, SERV, MORA, CUOTA, CODIGO });
     try {
         await connection.beginTransaction();
         const [update_result] = await connection.query(
             "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+        
 
+            await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO_PAGO = ?`, [PROXIMO, CODIGO]);
 
-        await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO_PAGO = ?`, [PROXIMO, CODIGO]);
-
-
+            await connection.commit();
         if (update_result.length > 0) {
             return update_result;
         }
         return [];
 
     } catch (error) {
+        connection.rollback();
         console.log("error al redistirbuir pago");
         console.log(error);
+    } finally{
+        connection.release()
     }
 }
 const updateEstadoPagoByCodigo = async ({ newState, filter }) => {
