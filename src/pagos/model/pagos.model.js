@@ -29,7 +29,7 @@ const cargarPago = async ({
             , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO, ID_VENTA, ID_VENTA]);
 
         if (PROXIMO)
-            await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO) VALUES (?)`, [[FICHA, PROXIMO, USUARIO, FECHA, CODIGO]])
+            await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO,CAMBIO_ORIGINAL) VALUES (?)`, [[FICHA, PROXIMO, USUARIO, FECHA, CODIGO,PROXIMO]])
 
 
         await connection.query(
@@ -255,7 +255,7 @@ const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }
     try {
         await connection.beginTransaction();
         const [update_result] = await connection.query(
-            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO_PAGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
 
 
         await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO = ?`, [PROXIMO, CODIGO]);
