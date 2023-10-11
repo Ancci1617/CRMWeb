@@ -4,7 +4,7 @@ const {getToday} = require("../../lib/dates.js");
 async function getListadoZonas(req, res) {
 
     try {
-        const [zonas] = await pool.query("SELECT DISTINCT ZONA FROM Clientes where ZONA not in ('FZ') ORDER BY ZONA");
+        const [zonas] = await pool.query("SELECT DISTINCT ZONA FROM ClientesSV where ZONA not in ('FZ') ORDER BY ZONA");
         console.log("zonas", zonas);
         res.render("listado/listado.zonas.ejs", { zonas });
 
@@ -25,10 +25,10 @@ async function getListadoZona(req, res) {
     try { 
         
         const [domicilios] = await pool.query(
-        "SELECT DISTINCT Listado.CTE,C.ZONA,C.`APELLIDO Y NOMBRE` as NOMBRE,  " + 
+        "SELECT DISTINCT Listado.CTE,C.ZONA,C.NOMBRE,  " + 
         "C.CALLE,MR.`BGM DISPONIBLE` AS BGM,MR.CALIF as CALIF,C.CRUCES,C.CRUCES2, " +
         "Listado.RESOLUCION,Listado.USUARIO,Listado.ID,(SELECT BC.TELEFONO FROM BaseCTE BC where BC.CTE = Listado.CTE and BC.VALIDACION = 'VALIDO' order by BC.ID DESC LIMIT 1) AS TELEFONO FROM `Listado` " +
-        "LEFT JOIN Clientes C on C.CTE = Listado.CTE LEFT join MasterResumen MR on MR.Cliente = Listado.CTE " +
+        "LEFT JOIN ClientesSV C on C.CTE = Listado.CTE LEFT join MasterResumen MR on MR.Cliente = Listado.CTE " +
         "where Listado.CTE NOT LIKE '%Z%' AND Listado.RESOLUCION = 'ACTIVO' " + 
         "AND C.ZONA = ? AND C.CALLE like ? " +
 
