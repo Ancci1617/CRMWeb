@@ -251,13 +251,25 @@ const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
 }
 
 const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) => {
-    const [update_result] = await pool.query(
-        "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+        const [update_result] = await connection.query(
+            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
 
-    if (update_result.length > 0) {
-        return update_result;
+
+        await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO = ?`, [PROXIMO, CODIGO]);
+
+
+        if (update_result.length > 0) {
+            return update_result;
+        }
+        return [];
+
+    } catch (error) {
+        console.log("error al redistirbuir pago");
+        console.log(error);
     }
-    return [];
 }
 const updateEstadoPagoByCodigo = async ({ newState, filter }) => {
 
