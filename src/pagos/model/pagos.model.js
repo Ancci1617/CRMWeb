@@ -255,10 +255,10 @@ const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }
     try {
         await connection.beginTransaction();
         const [update_result] = await connection.query(
-            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO_PAGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
+            "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
 
 
-        await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO = ?`, [PROXIMO, CODIGO]);
+        await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO_PAGO = ?`, [PROXIMO, CODIGO]);
 
 
         if (update_result.length > 0) {
