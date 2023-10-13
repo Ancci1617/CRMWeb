@@ -10,7 +10,7 @@ const getFichas = async (cte) => {
         DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
         Fichas.FECHA as FECHA,
         Fichas.CTE,
-        Fichas.FICHA,
+        CONVERT(Fichas.FICHA,INTEGER) as FICHA,
         Fichas.Z,
         Fichas.TOTAL,
         acumulados.ANT,
