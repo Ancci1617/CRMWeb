@@ -1,6 +1,33 @@
 const pool = require("../../model/connection-database")
 
+const getPagosMP = async () => {
+    try {
+        const [pagos] = await pool.query(
+`SELECT
+    CTE,
+    FICHA,
+    MP_OPERACION,
+    VALOR,
+    SERV,
+    MORA,
+    MP,
+    MP_TITULAR,
+    COBRADOR
+FROM
+    PagosSV
+WHERE
+    CONFIRMACION != 'INVALIDO' AND MP_TITULAR IS NOT NULL AND MP_TITULAR != '' AND MP_OPERACION IS NOT NULL AND MP_OPERACION != ''
+ORDER BY
+    PagosSV.MP_OPERACION ASC`);
 
+    return pagos;
+
+
+    } catch (error) {
+        console.log("error al consultar los pagos", error);
+    }
+
+}
 
 const getPagoByCodigo = async (CODIGO) => {
     const [ficha_data] = await pool.query(
@@ -344,4 +371,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios, invalidarPago }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }

@@ -1,5 +1,26 @@
 const pool = require("../connection-database");
 
+async function getUsuariosWithMp() {
+    try {
+        const [users] = await pool.query(
+    `SELECT
+        ID,
+        Usuario,
+        RANGO,
+        UNIDAD,
+        PERMISOS,
+        ZONAS,
+        MP_TOKEN
+    FROM Usuarios
+    WHERE
+        MP_TOKEN IS NOT NULL`);
+
+        return users; 
+    
+    } catch (error) {
+        console.log("error", error);
+    }
+}
 
 async function getUserByPassword(username, password) {
 
@@ -29,13 +50,11 @@ async function getUserById(ID) {
 
 async function getUserByUsuario(Usuario) {
     try {
-        console.log("usuario",Usuario);
         const [user] = await pool.query(
             "SELECT * FROM Usuarios where " +
             "Usuario = ? LIMIT 1"
             , [Usuario]);
 
-        console.log("usuario por pool", user);
 
         if (user.length > 0) {
             return user[0];
@@ -50,4 +69,4 @@ async function getUserByUsuario(Usuario) {
 }
 
 
-module.exports = { getUserByPassword, getUserById, getUserByUsuario }
+module.exports = { getUserByPassword, getUserById, getUserByUsuario, getUsuariosWithMp }

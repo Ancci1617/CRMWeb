@@ -1,0 +1,25 @@
+<%  const {id,payer,transaction_amount}  = payment %>
+<%  const total_asignado = payment.asociados.reduce((acumm,pago) => {return acumm + pago.MP + pago.SERV + pago.MORA + pago.VALOR },0) %>
+<% const sin_asignar = transaction_amount - total_asignado %>
+<% const estado = sin_asignar > 300 ? "sin_asignar" : (sin_asignar < -300 ? "exceso" : "asignado") %>
+
+<div class="<%= `payment ${estado}` %>">
+
+  <div class="n_operacion flex-space_between"><%= id%> <span class="monto_transferencia">$<%= transaction_amount  %></span></div>
+
+  <div><%= `${payer.identification.type} ${payer.identification.number == MP_TITULAR.CUIL ? "--" : payer.identification.number}`%></div>
+
+  <div><%=`Sin asignar: ${sin_asignar}`  %></div>
+
+  <% if(payment.asociados.length > 0) { %>
+  <div>Pagos asociados:</div>
+  <% } %>
+
+  <% payment.asociados.forEach(pago => {  %>
+  <% const total_cobrado =  pago.MP + pago.SERV + pago.MORA + pago.VALOR %>
+
+  <div>C:<%= pago.FICHA %> $<%= total_cobrado %></div>
+  <% }) %>
+
+
+</div>

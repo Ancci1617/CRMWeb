@@ -1,6 +1,8 @@
 const { getUserByUsuario } = require("../../model/auth/getUser.js");
 const mercadoPagoModel = require("../model/mercadoPagoModel.js");
-
+const { getAside } = require("../lib/aside.js");
+const { get_body } = require("../constants/fetch_body.js");
+const { getPagosMP } = require("../../pagos/model/pagos.model.js");
 
 const postCheckMP = async (req, res) => {
     const { N_OPERACION, MP_PORCENTAJE, MONTO_CTE, MP_TITULAR } = req.body;
@@ -46,7 +48,6 @@ const postCheckMP = async (req, res) => {
         const { transaction_details } = MP_DATA;
 
         const N_OPERACION_DATA = await mercadoPagoModel.getOperationData({ N_OPERACION });
-        console.log("🚀 ~ file: api.mp.routes.js:48 ~ Router.post ~ N_OPERACION_DATA:", N_OPERACION_DATA)
 
         //Revisamos si la plata que estamos pasando es mayor que la plata recibida
         if (N_OPERACION_DATA.TOTAL + parseInt(MONTO_CTE) + parseInt(MP_PORCENTAJE) > transaction_details.net_received_amount + 100)
@@ -73,4 +74,51 @@ const postCheckMP = async (req, res) => {
 
 }
 
-module.exports = { postCheckMP }
+const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE }) => {
+    try {
+        const raw_payments = await fetch(
+            `https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved`, get_body(MP_TOKEN))
+            .then(res => res.json()).then(results => results.results)
+
+
+        const payments = raw_payments.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
+
+        return payments
+
+    } catch (error) {
+        console.log("ERROR AL BUSCAR PAGOS EN MP")
+        console.log(error);
+        return [];
+    }
+
+}
+
+const formController = async (req, res) => {
+    const aside = await getAside();
+    const { MES, MP_TITULAR } = req.query;
+
+    if (!MES || !MP_TITULAR) return res.render("MP/mp.list.ejs", { payments: [], aside });
+
+    const date = new Date(MES);
+
+    const START_DATE = date.toISOString();
+    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate() - 1).toISOString();
+
+    const user = await getUserByUsuario(MP_TITULAR);
+
+    const payments = await getPayments({ MP_TOKEN: user.MP_TOKEN, START_DATE, END_DATE });
+    const pagos_mp = await getPagosMP();
+
+
+
+    payments.forEach(payment => {
+        payment.asociados = pagos_mp.filter(pago => pago.MP_OPERACION == payment.id)
+    });
+
+    res.locals.MP_TITULAR = user;
+    res.locals.MES = MES;
+    res.render("MP/mp.list.ejs", { payments, aside });
+}
+
+
+module.exports = { postCheckMP, formController }
