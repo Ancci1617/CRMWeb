@@ -3,6 +3,7 @@ const mercadoPagoModel = require("../model/mercadoPagoModel.js");
 const { getAside } = require("../lib/aside.js");
 const { get_body } = require("../constants/fetch_body.js");
 const { getPagosMP } = require("../../pagos/model/pagos.model.js");
+const axios = require("axios");
 
 const postCheckMP = async (req, res) => {
     const { N_OPERACION, MP_PORCENTAJE, MONTO_CTE, MP_TITULAR } = req.body;
@@ -22,14 +23,7 @@ const postCheckMP = async (req, res) => {
         return res.json({ success: false, msg: "El MP de este titular no se encuentra asociado a la empresa, no se pudo validar el pago." });
 
     try {
-        const response = await fetch(`https://api.mercadopago.com/v1/payments/${N_OPERACION}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + MP_TOKEN
-            }
-        })
-        const MP_DATA = await response.json();
+        const { data: MP_DATA } = await axios.get(`https://api.mercadopago.com/v1/payments/${N_OPERACION}`,get_body)
 
         if (MP_DATA.status == 404)
             return res.json({ success: true, found: false, msg: "El pago no se encuentra dentro de la cuenta declarada." });
@@ -76,12 +70,18 @@ const postCheckMP = async (req, res) => {
 
 const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE }) => {
     try {
-        const raw_payments = await fetch(
-            `https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved`, get_body(MP_TOKEN))
-            .then(res => res.json()).then(results => results.results)
+        // const raw_payments = await fetch(
+        //     `https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved`, get_body(MP_TOKEN))
+        //     .then(res => res.json()).then(results => results.results)
 
+        const {data : raw_payments } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + MP_TOKEN
+            }
+        })
 
-        const payments = raw_payments.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
+        const payments = raw_payments.results.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
 
         return payments
 
