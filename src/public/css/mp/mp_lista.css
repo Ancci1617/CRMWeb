@@ -1,0 +1,34 @@
+.lista_de_ingresos {
+
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+}
+
+.payment {
+    box-shadow: 1px 1px 3px 2px lightgray;
+    padding: 5px 3px;
+    border-radius: 3px;
+}
+
+.payment.sin_asignar{
+    background: linear-gradient(rgb(241, 241, 141), rgb(241, 200, 100));
+}
+.payment.sin_asignar:hover{
+    background: linear-gradient(rgb(241, 241, 141) , rgb(241, 200, 100) 50%);
+
+}
+.payment.exceso{
+    background: linear-gradient(rgb(221, 120, 120) , rgb(221, 20, 20) );
+
+}
+.payment.asignado{
+    background: linear-gradient( rgb(174, 235, 83),rgb(148, 232, 124)) ;
+
+}
+
+.monto_transferencia{
+    font-size: 1.1rem;
+    font-weight: 500;
+}

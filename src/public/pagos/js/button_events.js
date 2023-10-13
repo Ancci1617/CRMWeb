@@ -13,13 +13,13 @@ cargar_gasto.forEach(btn_cargar_gasto => {
     btn_cargar_gasto.addEventListener("click", e => {
         if (!confirm("Estas seguro de cargar este gasto?")) return e.preventDefault();
     })
-})
+});
 
 borrar_gasto.forEach(btn_borrar_gasto => {
     btn_borrar_gasto.addEventListener("click", e => {
         if (!confirm("Estas seguro de borrar este gasto?")) return e.preventDefault();
     });
-})
+});
 
 if (section_ordenar) {
     section_ordenar.addEventListener("change", e => {
@@ -104,7 +104,7 @@ form_redistribuir?.addEventListener("submit", e => {
         }
     }
     form_redistribuir.submit();
-})
+});
 
 
 
