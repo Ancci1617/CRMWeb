@@ -73,9 +73,6 @@ const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE }) => {
         
         const { data: raw_payments } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved&limit=200`,get_body(MP_TOKEN))
         
-        console.log("pago encontrado")
-        console.log(JSON.stringify(raw_payments.results));
-
         const payments = raw_payments.results.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
 
         return payments
