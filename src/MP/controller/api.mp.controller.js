@@ -70,9 +70,9 @@ const postCheckMP = async (req, res) => {
 
 const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE }) => {
     try {
-        
-        const { data: raw_payments } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved&limit=200`,get_body(MP_TOKEN))
-        
+
+        const { data: raw_payments } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved&limit=200`, get_body(MP_TOKEN))
+
         const payments = raw_payments.results.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
 
         return payments
@@ -93,8 +93,8 @@ const formController = async (req, res) => {
 
     const date = new Date(MES);
 
-    const START_DATE = date.toISOString();
-    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate() - 1).toISOString();
+    const START_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - 1).toISOString();
+    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()).toISOString();
 
     const user = await getUserByUsuario(MP_TITULAR);
 
