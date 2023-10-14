@@ -9,7 +9,7 @@
   <div class="n_operacion flex-space_between"><%= id%> <span class="monto_transferencia">$<%= transaction_amount  %></span></div>
 
   <div><%= `${payer.identification.type} ${payer.identification.number == MP_TITULAR.CUIL ? "--" : payer.identification.number}`%></div>
-  <div><%= new Date(fecha_aprobado).toLocaleDateString() %></div>
+  <div><%= new Date(fecha_aprobado).toLocaleDateString("es") %></div>
   <div><%=`Sin asignar: ${sin_asignar}`  %></div>
 
   <% if(payment.asociados.length > 0) { %>
