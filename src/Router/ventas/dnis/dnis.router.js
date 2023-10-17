@@ -2,15 +2,16 @@ const Router = require("express").Router();
 const path = require("path");
 const { isLoggedIn } = require("../../../lib/auth");
 const fs = require("fs/promises");
-const {saveFileFromEntry} = require("../../../lib/files");
-
+const { saveFileFromEntry } = require("../../../lib/files");
+const {hasPermission} = require("../../../middlewares/permission.middleware.js");
+const permisos = require("../../../constants/permisos.js");
 
 const getDirectories = async src => (await fs.readdir(src, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
 
 
-Router.get("/dnis", async (req, res) => {
+Router.get("/dnis",hasPermission(permisos.DNI_USER) , async (req, res) => {
     const dirs = await getDirectories(path.join("..", "ImagenesDeClientes"));
     const dirs_ordered = dirs.map(e => parseInt(e)).filter(e => !isNaN(e)).sort((a, b) => {
         if (a < b) return -1;
@@ -22,17 +23,17 @@ Router.get("/dnis", async (req, res) => {
     res.render("list-items.ejs", { data });
 });
 
-Router.get("/dnis/:CTE", isLoggedIn, async (req, res) => {
+Router.get("/dnis/:CTE", isLoggedIn, hasPermission(permisos.DNI_USER),async (req, res) => {
     const { CTE } = req.params;
     res.render("ventas/dnis/dnis.visualizar.ejs", { CTE });
 });
 
 Router.post("/dnis/cargar_imagen/:CTE", isLoggedIn, async (req, res) => {
-    if(!req.files) return res.send("Archivos no encontrados");
+    if (!req.files) return res.send("Archivos no encontrados");
 
-    const {CTE} = req.params;
+    const { CTE } = req.params;
     const entries = Object.entries(req.files);
-    saveFileFromEntry(entries,CTE);
+    saveFileFromEntry(entries, CTE);
     res.redirect(`/dnis/${CTE}`);
 });
 

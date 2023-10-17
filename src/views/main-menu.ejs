@@ -2,23 +2,22 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blanco Gusmar | Panel</title>
-    <%- include("./partials/links/normalize-fa-nav.styles.ejs") %>
-    <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Panel</title>
+  <%- include("./partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
-    <%- include("./partials/navigation/navigation-bar") %>
-        <div class="page-container">
+  <%- include("./partials/navigation/navigation-bar") %>
+  <div class="page-container">
 
-            <!------------------- REPENSAR -------------------->
-            <div class="dashboard-container">
-                <div class="dashboard-item"><a href="/CRM">CRM</a></div>
-                <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/ventas_cargadas">Ventas del dia</a></div><%}%>
-                <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/ventas_cargadas_vendedores">Ventas vendedores</a></div><%}%>
+    <!------------------- REPENSAR -------------------->
+    <div class="dashboard-container">
+      <div class="dashboard-item"><a href="/CRM">CRM</a></div>
+      <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/ventas_cargadas_vendedores">Ventas vendedores</a></div><%}%>
                 <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/mis_planillas">Planillas de carga</a></div><%}%>
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/archivo_de_entrega">Archivo de entrega</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN" || user.RANGO == "VENDEDOR" ) {%><div class="dashboard-item"><a href="/cargas_camionetas">Carga de camionetas</a></div><%}%> 
@@ -31,6 +30,11 @@
 
                 <% if(user.RANGO == "ADMIN") {%><div class="dashboard-item"><a href="/contactos/">Contactos</a></div><%}%> 
                 <% if(user.RANGO == "ADMIN" || user.Usuario == "Tiago" || user.Usuario == "Elsa") {%><div class="dashboard-item"><a href="/contactos/campania">Campaña</a></div><%}%> 
+                <% if(hasPermission(permisos.PAGOS_USER) ) {%><div class="dashboard-item"><a href="/pagos/pasar_cobranza">Cobranza</a></div><%}%> 
+                <% if(hasPermission(permisos.USER_LISTADO) ) {%><div class="dashboard-item"><a href="/listado">Listado</a></div><%}%> 
+                <% if(hasPermission(permisos.VENTAS_USER) ) {%><div class="dashboard-item"><a href="<%= `/ventas/pasar_ventas?USUARIO=${user.Usuario}&FECHA_VENTA=${getToday()}`%>">Ventas</a></div><%}%>    
+                <% if(hasPermission(permisos.RECORRIDO_ADMIN) ) {%><div class="dashboard-item"><a href="<%= `/cobrador/recorrido`%>">Recorridos</a></div><%}%>    
+                <% if(hasPermission(permisos.MP_ADMIN) ) {%><div class="dashboard-item"><a href="/mp/pagos_recibidos">Mercado pago</a></div><%}%>    
             
             </div>
         </div>

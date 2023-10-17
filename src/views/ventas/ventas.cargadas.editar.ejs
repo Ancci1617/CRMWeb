@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
 
 </head>
 
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/ventas_cargadas/editar" method="POST" enctype="multipart/form-data" id="form_editar_venta">
+      <form action="/ventas/editar" method="POST" enctype="multipart/form-data" id="form_editar_venta">
 
         <div class="user-details">
           <div class="input-box ">
@@ -33,41 +34,21 @@
             <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE %>" name="CTE" required>
           </div>
 
-          <div class="input-box">
-            <span class="details">Ficha</span>
-            <input type="number" placeholder="Numero de ficha" value="<%= FICHA %>" name="FICHA" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "number",name : "FICHA",required:true,details : "Ficha",defaultValue : FICHA,placeholder : "Numero de ficha"}}) %>
 
-          <div class="input-box">
-            <span class="details">Apellido y nombre</span>
-            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "NOMBRE",required:true,details : "Apellido y nombre",defaultValue : NOMBRE, placeholder : "APELLIDO Nombre"}}) %>
 
-          <div class="input-box">
-            <span class="details">Zona</span>
-            <input type="text" placeholder="Zona" value="<%= ZONA   %>" name="ZONA" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ZONA",required:true,details : "Zona",defaultValue : ZONA, placeholder : "Zona"}}) %>
 
-          <div class="input-box">
-            <span class="details">Calle</span>
-            <input type="text" placeholder="Domicilio" value="<%= CALLE %>" name="CALLE" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CALLE",required:true,details : "Calle",defaultValue : CALLE, placeholder : "Domicilio"}}) %>
 
-          <div class="input-box">
-            <span class="details">Cruce 1</span>
-            <input type="text" placeholder="Cruce 1" value="<%= CRUCES %>" name="CRUCES" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES",required:true,details : "Cruce 1",defaultValue : CRUCES, placeholder : "Cruce 1"}}) %>
+          
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES2",required:true,details : "Cruce 2",defaultValue : CRUCES2, placeholder : "Cruce 2"}}) %>
 
-          <div class="input-box">
-            <span class="details">Cruce 2</span>
-            <input type="text" placeholder="Cruce 2" value="<%= CRUCES2 %>" name="CRUCES2" required>
-          </div>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "number",name : "WHATSAPP",details : "Telefono",defaultValue : WHATSAPP, placeholder : "WHATSAPP"}}) %>
 
-          <div class="input-box">
-            <span class="details">Telefono</span>
-            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>" name="WHATSAPP">
-          </div>
-
+          
           <div class="input-box">
             <span class="details">N° de documento</span>
             <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
@@ -101,10 +82,26 @@
             <input type="text" placeholder="Valor de cuota" name="CUOTA" value="<%= CUOTA %>" required>
           </div>
 
+
+          <div class="input-box">
+            <span class="details">Servicio unitario</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="" selected></option>
+              <option value="500" <%= SERV_UNIT == 500 ? "selected" : "" %>>500</option>
+              <option value="750" <%= SERV_UNIT == 750 ? "selected" : "" %>>750</option>
+              <option value="1000" <%= SERV_UNIT == 1000 ? "selected" : "" %>>1000</option>
+              <option value="1500" <%= SERV_UNIT == 1500 ? "selected" : "" %>>1500</option>
+              <option value="2000" <%= SERV_UNIT == 2000 ? "selected" : "" %>>2000</option>
+            </select>
+          </div>
+          
+
           <div class="input-box">
             <span class="details">Anticipo</span>
-            <input type="text" placeholder="Anticipo cobrado" name="ANTICIPO" value="<% ANTICIPO %>">
+            <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO" value="<%= ANTICIPO %>">
           </div>
+
+          <%- include("../partials/Components/input-box-select.ejs",{input: {classListContainer : ["select_anticipo_container"],hidden : false,required : true,name : "ANTICIPO_MP",details: "Anticipo por MP?" , classList : ["select_anticipo"],options:[null,"NO","SI"]}}) %>
 
           <div class="input-box">
             <span class="details">Tipo</span>
@@ -134,14 +131,14 @@
           </div>
 
           <div class="input-box">
-            <span class="details">Dia de vencimiento</span>
+            <span class="details">Dia de vencimiento <span class="detail_primer_vencimiento">()</span></span>
             <select class="" name="VENCIMIENTO" required form="form_editar_venta">
-              <option value="4" <%= VENCIMIENTO == "4" ? "selected" : null %>>4</option>
-              <option value="9" <%= VENCIMIENTO == "9" ? "selected" : null %>>9</option>
-              <option value="14" <%= VENCIMIENTO == "14" ? "selected" : null %>>14</option>
-              <option value="19" <%= VENCIMIENTO == "19" ? "selected" : null %>>19</option>
-              <option value="24" <%= VENCIMIENTO == "24" ? "selected" : null %>>24</option>
-              <option value="29" <%= VENCIMIENTO == "29" ? "selected" : null %>>29</option>
+              <option value="4" <%= DIA_VENCIMIENTO == "4" ? "selected" : null %>>4</option>
+              <option value="9" <%= DIA_VENCIMIENTO == "9" ? "selected" : null %>>9</option>
+              <option value="14" <%= DIA_VENCIMIENTO == "14" ? "selected" : null %>>14</option>
+              <option value="19" <%= DIA_VENCIMIENTO == "19" ? "selected" : null %>>19</option>
+              <option value="24" <%= DIA_VENCIMIENTO == "24" ? "selected" : null %>>24</option>
+              <option value="29" <%= DIA_VENCIMIENTO == "29" ? "selected" : null %>>29</option>
             </select>
           </div>
 
@@ -162,6 +159,9 @@
               <option value="SI" <%= RESPONSABLE == "SI" ? "selected" : null %>>SI</option>
             </select>
           </div>
+
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords }}) %>
+
 
           <!-- IMAGENES -->
           <div class="input-box">
@@ -194,6 +194,8 @@
           </div>
 
           <input type="hidden" name="ID" value="<%= INDICE %>">
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO" , defaultValue : PRIMER_VENCIMIENTO } }) %>
+
           <!-- BOTONES DE SUBMIT -->
           <div class="button">
             <input type="submit" value="Editar venta">

@@ -6,17 +6,20 @@
     display: inline-block;
 
 }
-.btn-flex{
+
+.btn-flex {
     display: flex;
     align-items: center;
 }
-.btn-text{
+
+.btn-text {
     font-weight: 500;
     font-size: 1.1rem;
     color: white;
     text-decoration: none;
     cursor: pointer;
 }
+
 .btn:hover {
     position: relative;
     left: 2px;
@@ -37,22 +40,29 @@
 .btn-ventas {
     background-color: #E06000;
 }
-.btn-pedido{
+
+.btn-pedido {
     background-color: #82b96b;
 }
 
-.btn-mercaderia{
+.btn-mercaderia {
     background-color: #366092;
 }
-.btn-contacto{
+
+.btn-contacto {
     background: #8d1d8d;
 }
 
-.img-zoom{
+.btn-ubicacion {
+    color: white;
+    background-color: rgb(54, 128, 54);
+}
+
+.img-zoom {
     position: absolute;
     width: 40vw;
     border-radius: 1rem;
-    max-height: calc( 100vh - 100px);
+    max-height: calc(100vh - 100px);
     object-fit: cover;
     right: 0;
     left: 0;
@@ -103,7 +113,7 @@
     background-color: #F2F2F2;
 }
 
-.img-container{
+.img-container {
     overflow: hidden;
     border: 2px solid black;
     border-radius: 1rem;
@@ -111,7 +121,8 @@
     background: whitesmoke;
     box-shadow: 3px 3px 3px black;
 }
-.img-cte{
+
+.img-cte {
     object-fit: cover;
     object-position: top;
     aspect-ratio: 1 / 1;
@@ -155,14 +166,18 @@
 }
 
 @media screen and (max-width:500px) {
-    .busqueda-container, .disponible-container{
+
+    .busqueda-container,
+    .disponible-container {
         width: 100%;
         /* flex: 0 0 1; */
     }
-    .img-container{
+
+    .img-container {
         order: 30;
     }
-    .buscador-disponible-container{
+
+    .buscador-disponible-container {
         justify-content: center;
     }
 }

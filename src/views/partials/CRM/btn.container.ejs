@@ -1,10 +1,13 @@
 <div class="btn-container">
 
-    <input type="button" class="btn btn-evaluar btn-text" value="Evaluar"></input>
-    <input type="button" class="btn btn-ventas btn-text"  value="Cargar venta"></input>
-    <input type="button" class="btn btn-mercaderia btn-text" value="Entrega/Retiro"></input>
-    <input type="button" class="btn btn-pedido btn-text" value="Pedido"></input>
-    <input type="button" class="btn btn-contacto btn-text" value="Contacto"></input>
-    <!-- <input type="button" class="btn btn-mercaderia btn-pago btn-text" value="Procesar pago"></input> -->
+  <input type="button" class="btn btn-evaluar btn-text" value="Evaluar"></input>
+  <input type="button" class="btn btn-ventas btn-text" value="Cargar venta"></input>
+  <input type="button" class="btn btn-mercaderia btn-text" value="Entrega/Retiro"></input>
+  <input type="button" class="btn btn-pedido btn-text" value="Pedido"></input>
+  <input type="button" class="btn btn-contacto btn-text" value="Contacto"></input>
+  <% if(hasPermission(permisos.PAGOS_USER)){ %>
+  <input type="button" class="btn btn-mercaderia btn-pago btn-text" value="Procesar pago"></input>
+  <% } %>
+  <!-- <div><a href="" target="" class="btn btn-ubicacion link">Ubicacion</a></div> -->
 
 </div>

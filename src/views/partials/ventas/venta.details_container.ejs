@@ -1,0 +1,5 @@
+<% const {dato1,dato2 = null,classList = []} = datos %>
+<div class="<%=`details_container ${classList.join(" ")}`%>">
+    <span ><%= dato1 %></span>
+    <span ><%= dato2 || ""  %></span>
+</div>

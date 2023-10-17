@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | <%=ZONA%></title>
+  <link rel="stylesheet" href="/listado/css/listado.css" />
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css" />
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+</head>
+
+
+<body>
+  <%- include("../partials/navigation/navigation-bar") %>
+
+
+
+  <%const container = {id : "form__container"}; 
+  const form = {title : "Terminar revisita",
+  action : "/listado/finalizar_revisita",
+  method : "POST",
+  id : "form_finalizar_revisita" } %>
+  <% const inputs = 
+  [{
+     type : "select",
+    details : "Finalizar revisita",
+    classList : [""],
+    name : "RESOLUCION",
+    options : ["No quiso","Mal domicilio","Mal cliente","Venta","Pedido","No encontrado"]
+   },{
+    type : "text",
+    details:"obs",
+    classList : [""],
+    name : "OBS",
+    placeholder : "Observacion",
+    required : true
+  },{
+     type : "hidden",
+     classList : ["input-codigo"],
+     name : "ID"
+  }]%>
+
+  <%- include("../partials/Components/absolute.form.ejs",{form ,inputs,container} )  %>
+
+
+
+
+
+  <div class="listado__container app">
+    <div class="header">
+      <a href="/listado"><i class="fas fa-arrow-left"> <span>Volver</span></i></a>
+      <h2>Domicilios disponibles</h2>
+      <span class="zona"><%= ZONA %></span>
+    </div>
+    <form class="buscador__container" method="GET">
+      <i class="fa fa-search"></i>
+      <input type="text" class="buscador" name="FILTRO" value="<%= //search_origin | null %>" placeholder="Filtrar por calle" />
+    </form>
+
+    <div class="domicilios_disponibles">
+
+      <% if(domicilios.length === 0){ %>
+      <h2>Domicilios no encontrado</h2>
+      <%}%>
+      
+      <% domicilios.forEach(domicilio => {  %>
+      <div class="listado_card domicilio_card">
+        <div class="calle"><a href="/crm?CTE=<%=domicilio.CTE%>"><%= domicilio.CTE %></a> - <%= domicilio.CALLE %></div>
+        <div class="nombre"><%= domicilio.NOMBRE %></div>
+        <div class="disponibles"><span class="calificacion <%= domicilio.CALIF %>"><%= domicilio.CALIF%></span> | <span class="disponible"><%= domicilio.BGM%></span></div>
+        <div class="telefono"><%= domicilio.TELEFONO%></div>
+        <span class="hidden ID"><%= domicilio.ID%></span>
+      </div>
+      <% }) %>
+
+
+    </div>
+  </div>
+
+  <%- include("../partials/links/nav.logic.ejs")  %>
+  <script src="/js/lib/form.hide.js"></script>
+  <script src="/listado/js/listado.js"></script>
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>

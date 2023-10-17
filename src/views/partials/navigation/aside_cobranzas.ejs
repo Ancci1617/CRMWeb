@@ -1,0 +1,15 @@
+<aside class="aside">
+    <div class="aside__header"><i class="fas fa-arrow-left"></i> <%= TITULO %></div>
+    <ul class="ul__fechas">
+      <% aside.forEach(link => { %>
+      <li class="li__fecha">
+        <span><%= link.FECHA %></span>
+        <ul class="ul__cobradores">
+          <% link.VINCULOS.forEach(vinculo =>{ %>
+          <li><a href="?USUARIO=<%=vinculo%>&FECHA_VENTA=<%=link.FECHA%>"><%= vinculo %></a></li>
+          <% })%>
+        </ul>
+      </li>
+      <%}) %>
+    </ul>
+  </aside>

@@ -1,0 +1,87 @@
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+html,
+body {
+    background-color: #f3f3f3;
+}
+.app *{
+    font-family: 'Roboto', sans-serif ;
+}
+.app{
+    padding: 5px 1em;
+}
+.header, header > *{
+    text-align: center;
+    font-size: 1.2rem;
+    border-bottom: 1px solid lightgray;
+    padding: .3rem;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header span,.header a{
+    flex:1; 
+}
+
+
+.zonas_disponibles{
+    display: flex;
+    gap: 10px;
+    padding: 1em;
+    flex-wrap: wrap;
+}
+
+
+.listado_card{
+    background-color: white;
+    box-shadow: 1px 1px lightgray;
+    padding: 1em;
+    border-radius: 10px;
+}
+.listado_card:hover{
+    background-color: rgb(255, 248, 248);
+    cursor: pointer;
+}
+.listado_card a{
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.buscador__container{
+    position: sticky;
+    top: 50px;
+}
+
+
+/* .domicilios_disponibles{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+} */
+.domicilios_disponibles{
+    display: flex;
+    white-space: nowrap;
+    flex-wrap: wrap;
+    gap: 1em;
+    padding-bottom: 8px;
+}
+
+.domicilio_card{
+    flex: 1;
+    display: grid;
+    gap: 4px;
+}
+.domicilio_card a, .domicilio_card > .calle  {
+    color: blue;
+    font-size: 1.3rem;
+}
+
+@media screen and (max-width:500px) {
+    .zonas_disponibles > * {
+        flex:1;
+        text-align: center;
+    }
+
+
+}

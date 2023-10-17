@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Cobranza</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/cobrador/recorrido.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <div class="main__container">
+    <header class="btn__container">
+      <a href="" class="btn_header btn__desbloquear link">DESBLOQUEAR</a>
+      <a href="" class="btn_header btn__bloquear link">BLOQUEAR</a>
+      <a href="" class="btn_header btn__ordenar_recorrido link">ORDENAR</a>
+      <a href="" class="btn_header btn__iniciar_recorrido link">INICIAR</a>
+      <div class="lista_zonas">
+        <% user.ZONAS.forEach(zona => { %>
+        <a href="<%=`?ZONA=${zona}`%>" class="zona link"><%= zona %></a>
+        <% }) %>
+      </div>
+    </header>
+
+    <ul class="lista_por_cobrar" id="sortable">
+
+      <% fichas.forEach(ficha_data => {
+         const {ficha,deuda} = ficha_data; %>
+
+      <li class="credito_por_cobrar">
+        <div class="zona <%= (!ficha.LATITUD || !ficha.LONGITUD) ? "sin_coordenadas" : "" %>"><%= ficha.Z %></div>
+        <div class="details">
+          <span class="calle"><%= `(${ficha.FICHA}) ${ficha.CALLE}` %></span>
+          <span class="">[<%=`${ficha.CRUCES} - ${ficha.CRUCES2}`%>]</span>
+          <span class="nombre nw"><%= ficha.NOMBRE %></span>
+          <input type="hidden" name="ID" value="<%= ficha.ID %>">
+          <input type="hidden" name="LATITUD" value="<%= ficha.LATITUD %>">
+          <input type="hidden" name="LONGITUD" value="<%= ficha.LONGITUD %>">
+        </div>
+        <div class="right">
+          <div class="icons__container">
+            <a class="link-mapa" href="https://www.google.com/maps/search/?api=1&query=<%=`${ficha.LATITUD},${ficha.LONGITUD}`%>" ><%- include("../partials/icons/map.ejs") %></a>
+            <%- include("../partials/icons/lock.ejs") %>
+          </div>
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+
+  </div>
+
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+
+  <script src="/cobrador/recorrido_draggable.js"></script>
+  <script src="/cobrador/recorrido.js"></script>
+</body>
+
+</html>
+
+

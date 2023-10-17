@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | MP</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+  <link rel="stylesheet" href="/css/ventas/ventas.cargar.css">
+  <link rel="stylesheet" href="/css/mp/mp_lista.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <main class="main__container">
+    <%- include("../partials/navigation/aside_generico.ejs",{TITULO : "MP",aside} ) %>
+
+
+    <section class="cobranzas">
+      <% if(payments.length > 0) {%>
+      <header>
+        <span class="cobrador_nombre"><%= MP_TITULAR.Usuario %></span>
+        <span>Limite: $<%= MP_TITULAR.LIMITE_FACTURACION %></span>
+        <span>Disponible: $<%= MP_TITULAR.LIMITE_FACTURACION - payments.reduce((acum,payment) => acum + payment.transaction_amount,0) %></span>
+        <span class="cobranza_fecha"><%= MES %></span>
+      </header>
+
+      <div class="lista_de_ingresos">
+        <% payments.forEach(payment => { %>
+        <%- include("../partials/pagos/payment_mp.ejs", {payment}) %>
+        <%})%>
+      </div>
+
+      <% }else{ %>
+
+      <header>
+        <span class="cobrador_nombre">- - - -</span>
+        <span class="cobranza_fecha">- - - -</span>
+      </header>
+
+      <%  } %>
+    </section>
+
+  </main>
+
+
+
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/pagos/js/aside.js"></script>
+  <script src="/pagos/js/button_events.js"></script>
+  <!-- <script src="/js/ventas/button_events.js"></script> -->
+
+
+</body>
+
+</html>

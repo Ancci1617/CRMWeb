@@ -3,20 +3,36 @@ const pool = require("../../connection-database.js");
 
 //UNIFICAR ESTOS 2
 const getClientes = async (cte) => {
-    
+
     const [rows] = await pool.query(
-        "SELECT " +
-        "`CTE`, `ZONA`, `APELLIDO Y NOMBRE` as NOMBRE, " +
-        "`CALLE`, `CRUCES`, `CRUCES2`," +
-        "`WHATS APP` AS WHATSAPP, `DNI`, `Master`, `OBS` FROM `Clientes` " +
-        "WHERE `CTE` = ? LIMIT 1;", [cte]);
+        `SELECT
+        ClientesSV.CTE,
+        ClientesSV.ZONA,
+        ClientesSV.NOMBRE,
+        ClientesSV.CALLE,
+        ClientesSV.CRUCES,
+        ClientesSV.CRUCES2,
+        BaseCTE.TELEFONO AS WHATSAPP,
+        ClientesSV.DNI,
+        MasterResumen.CALIF AS MASTER,
+        NULL AS OBS
+    FROM
+        ClientesSV
+    LEFT JOIN (SELECT * FROM BaseCTE where BaseCTE.VALIDACION = 'VALIDO') BaseCTE ON BaseCTE.CTE = ClientesSV.CTE
+    LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE
+    WHERE
+        ClientesSV.CTE = ?
+    ORDER BY
+        BaseCTE.ID
+    DESC
+    LIMIT 1;`, [cte]);
 
     if (rows.length > 0) {
         return rows;
     }
 
     return [{
-        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES : null, CRUCES2:null, DNI: null
+        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
     }];
 
 }
@@ -24,24 +40,79 @@ const getClientes = async (cte) => {
 
 
 const getClientesFull = async (cte) => {
-        
+
     const [rows] = await pool.query(
-        "SELECT " +
-        "`CTE`, `FICHA`,`ZONA`, `APELLIDO Y NOMBRE` as NOMBRE, " +
-        "`CALLE`, `CRUCES`, `CRUCES2`," +
-        "`WHATS APP` AS WHATSAPP, `DNI`, `Master`, `OBS`,`ARTICULO` FROM `Clientes` " +
-        "WHERE `CTE` = ? ORDER BY FICHA DESC;", [cte]);
+        `SELECT
+        ClientesSV.CTE,
+        Fichas.FICHA,
+        ClientesSV.ZONA,
+        ClientesSV.NOMBRE,
+        ClientesSV.CALLE,
+        ClientesSV.CRUCES,
+        ClientesSV.CRUCES2,
+        BaseCTE.TELEFONO AS WHATSAPP,
+        ClientesSV.DNI,
+        MasterResumen.CALIF AS MASTER,
+        NULL AS OBS,
+        Fichas.ARTICULOS as ARTICULO
+    FROM
+        ClientesSV
+    LEFT JOIN (SELECT * from BaseCTE where BaseCTE.VALIDACION = 'VALIDO') BaseCTE ON BaseCTE.CTE = ClientesSV.CTE
+    LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE
+    LEFT join Fichas on Fichas.CTE = ClientesSV.CTE 
+    WHERE
+        ClientesSV.CTE = ?
+    ORDER BY
+        BaseCTE.ID
+    DESC`, [cte]);
 
     if (rows.length > 0) {
         return rows;
     }
 
     return [{
-        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES : null, CRUCES2:null, DNI: null
+        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
     }];
 
 }
 
-module.exports = { getClientes,getClientesFull }
+const getClientesAndLocation = async (cte) => {
+
+    const [rows] = await pool.query(
+        `SELECT
+        ClientesSV.CTE,
+        ClientesSV.ZONA,
+        ClientesSV.NOMBRE,
+        ClientesSV.CALLE,
+        ClientesSV.CRUCES,
+        ClientesSV.CRUCES2,
+        BaseCTE.TELEFONO AS WHATSAPP,
+        ClientesSV.DNI,
+        MasterResumen.CALIF AS MASTER,
+        NULL AS OBS,
+		UBICACIONESSV.LATITUD,UBICACIONESSV.LONGITUD
+    FROM
+        ClientesSV
+    LEFT JOIN (SELECT * FROM BaseCTE WHERE BaseCTE.VALIDACION = 'VALIDO') BaseCTE ON BaseCTE.CTE = ClientesSV.CTE
+    LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE
+    LEFT JOIN UBICACIONESSV  on UBICACIONESSV.CALLE = ClientesSV.CALLE
+    WHERE
+        ClientesSV.CTE = ?
+    ORDER BY
+    BaseCTE.ID DESC,
+		UBICACIONESSV.ID_CALLE DESC
+    limit 1;`, [cte]);
+
+    if (rows.length > 0) {
+        return rows;
+    }
+
+    return [{
+        CTE: null, NOMBRE: null, ZONA: null, CALLE: null, WHATSAPP: null, CRUCES: null, CRUCES2: null, DNI: null
+    }];
+
+}
+
+module.exports = { getClientes, getClientesFull, getClientesAndLocation }
 
 

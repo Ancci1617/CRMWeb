@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco gusmar | Pagos</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/pagos/css/pagos.cte.css">
+  <link rel="stylesheet" href="/css/navigation/buscador.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+</head>
+<% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <main class="main__container">
+
+    <!-- <form class="buscador__container" action="deuda_credito">
+      <i class="fa fa-search"></i>
+      <input type="text" class="buscador" name="CREDITO" value="" placeholder="Buscar ficha" />
+    </form> -->
+
+    <header class="creditos__header">
+      <h1 class="CTE_NOMBRE"><%= fichas[0].data.CALLE  %></h1>
+      <div class="CTE_CALLE">
+        <span class="CTE"><%= fichas[0].data.CTE %></span>
+        <span class="CALLE"><%=fichas[0].data.NOMBRE %></span>
+        <span class="zona"><%= fichas[0].data.Z %></span>
+      </div>
+
+      <div class="COBRANZA_RESUMEN">
+        <!-- <div class="detail">
+          <span class="detail__title">Cuota:</span>
+          <span class="detail__data valor__cuota"><%=// totales.cuota %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Serv:</span>
+          <span class="detail__data valor__servicio"><%= //totales.serv %></span>
+        </div>
+        <div class="detail">
+          <span class="detail__title">Mora:</span>
+          <span class="detail__data valor__mora"><%= //totales.mora %></span>
+        </div> -->
+
+      </div>
+    </header>
+
+    <%// prestamos.forEach(prestamo => { %>
+    <%//- include("../partials/Components/credito.prestamo.ejs",{prestamo}) %>
+    <%// }) %>
+    <% fichas.forEach(ficha => { %>
+    <% const {vencimiento_vigente} = ficha.deuda %>
+    <form class="credito" method="POST" action="cargar_pago">
+      <div class="credito__header">
+        <span>
+          <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= ficha.data.FICHA %>
+        </span>
+        <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
+      </div>
+      <div class="details">
+        <% if(ficha.deuda.EsPrimerPago) {%>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Primer Ven", data : ficha.data.PRIMER_PAGO || "primer pago"}) %>
+        <% } %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Serv", data : ficha.deuda.servicio}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Atrasos", data : ficha.deuda.atraso}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Vencidas", data : ficha.deuda.vencidas}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Valor cuota", data : ficha.data.CUOTA}) %>
+        <%- include("../partials/pagos/detail_row.ejs",{title : "Saldo", data : ficha.data.SALDO}) %>
+
+        <div class="input__container">
+
+
+          <% if(user.RANGO == "COBRADOR" || user.RANGO == "VENDEDOR") {%>
+          <input type="number" name="DECLARADO_CUO" class="" placeholder="Cuota Cobrado" required />
+          <input type="number" name="DECLARADO_COB" class="" placeholder="Cobrador" required />
+          <% } else { %>
+          <input type="number" name="COBRADO" class="" placeholder="Monto cobrado" required />
+          <% } %>
+
+          <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="" required>
+          <input type="text" name="OBS" class="" placeholder="Observacion" />
+
+          <div class="input__mp">
+            <input type="checkbox" name="ISMP" class="check_mp" />
+            <label for="MPCHECK">MP</label>
+            <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
+          </div>
+
+          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" class="" minlength="6" hidden />
+
+
+          <select name="MP_TITULAR" hidden>
+            <option value="" selected>Titular de la cuenta</option>
+            <% usuarios.forEach(usuario => {%>
+            <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+            <% }); %>
+          </select>
+
+
+          <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
+          <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">
+          <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
+        </div>
+
+      </div>
+
+      <div class="btn__container">
+        <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="/pagos/cargar_pago"></input>
+        <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="cambiarFecha"></input>
+        <a class="btn btn-cargar-pago link" href="<%=`volver?FICHA=${ficha.data.FICHA}&ORDEN=${ORDEN}&ZONA=${ficha.data.Z}`%>">Volver</a>
+        <% if(ORDEN > 0) {%>
+        <a class="btn btn-cargar-pago link" href="<%=`?ORDEN=${parseInt(ORDEN) - 1}&ZONA=${ficha.data.Z}`%>">Anterior</a>
+        <% } %>
+        <a class="btn btn-cargar-pago link" href="<%=`?ORDEN=${parseInt(ORDEN) + 1}&ZONA=${ficha.data.Z}`%>">Siguiente</a>
+      </div>
+
+      <div class="deep_details show">
+        <div class="header">
+          <h3>Credito : <%= ficha.data.FICHA %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
+        </div>
+        <div class="details">
+
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Fecha de venta", data : ficha.data.FECHA_VENTA}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Vencimiento", data : ficha.data.VENCIMIENTO}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Servicio", data : ficha.deuda.servicio}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Atraso", data : ficha.deuda.atraso}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Articulos", data : ficha.data.ARTICULOS}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cant cuotas", data : ficha.data.CUOTAS}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.data.CUOTA}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "Total", data : ficha.data.TOTAL}) %>
+          <%- include("../partials/pagos/detail_row.ejs",{title : "ServicioUnitario", data : ficha.data.SERV_UNIT}) %>
+
+
+          <!-- TABLA DE MESES -->
+          <div class="table">
+            <table>
+              <thead>
+                <th>Mes</th>
+                <th>Cuota</th>
+                <th>Cobrador</th>
+              </thead>
+              <tbody>
+                <% console.log( "ficha iterada",ficha) %>
+                <% for(let i = 0;i < ficha.acumulado.length;i++) {%>
+                <tr>
+                  <td><%= meses[ficha.acumulado[i].MES] %></td>
+                  <td><%= ficha.acumulado[i].CUOTA %></td>
+                  <td><%= ficha.acumulado[i].MORA + ficha.acumulado[i].SERV %></td>
+                </tr>
+                <% } %>
+
+              </tbody>
+            </table>
+          </div>
+          <!-- QUERY AGRUPADA POR MESES -->
+
+        </div>
+
+
+
+      </div>
+
+    </form>
+
+    <% }); %>
+
+
+
+
+
+  </main>
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/pagos/js/form_validation.js"></script>
+  <script src="/pagos/js/button_events.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<% const {FICHA,PROXIMO,CUOTA,MORA,SERV,SALDO,CUOTA_SERV,CODIGO,CONFIRMACION,OBS,Z,NOMBRE,CALLE,MP_TITULAR,COBRADOR} = pago; %>
+
+<div class="pago <%= CONFIRMACION %> ">
+
+  <div class="ficha">
+    <a href="/CRM?CTE=F:<%=FICHA%>"><%= FICHA %></a>
+    <span class="zona"><%= Z %></span>
+  </div>
+
+  <div class="data_container">
+
+    <div class="data_container__cobranza">
+      <span class="proxima"><%= PROXIMO %></span>
+      
+
+      <!-- Si tiene permisos de rendicion _ user o es su rendicion puede ver los montos -->
+      <% if(hasPermission(permisos.RENDICION_ADMIN) || user.Usuario == COBRADOR ){ %>
+      <span class="cuota"><%= CUOTA %></span>
+      <span class="saldo"><%= SALDO %></span>
+      <span class="cobrador"><%= CUOTA_SERV %></span>
+      <% } %>
+    </div>
+
+    <div class="data_container__btn">
+      <% if(CONFIRMACION !== "CONFIRMADO"){ %>
+        
+      <a href="confirmar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>" class="confirmar_pago"><i class="fas fa-check"></i></a>
+      <i class="fas fa-edit btn_editar_pago"></i>
+
+      <% if(   !rendicion || rendicion.EDITABLE == 1 ) {%>
+      <a href="invalidar_pago?CODIGO=<%= CODIGO %>&ORDEN=<%= ORDEN %>&FECHA=<%= FECHA %>&COB=<%= COB %>" class="invalidar_pago"> <i class="fas fa-times"></i></a>
+      <% } %>
+      <% } %>
+    </div>
+
+    <span class="servicio hidden"><%= SERV %></span>
+    <span class="mora hidden"><%= MORA %></span>
+    <span class="codigo hidden"><%= CODIGO %></span>
+  </div>
+
+
+  <div class="details_container">
+    <span class="obs"><%= NOMBRE %> - <%= CALLE %></span>
+    <span class="MP"><%= MP_TITULAR ? `MP ${MP_TITULAR}` : "" %></span>
+  </div>
+
+  <% if(OBS) {%>
+  <div class="details_container">
+    <span class="obs"><%= OBS %></span>
+  </div>
+  <% } %>
+</div>

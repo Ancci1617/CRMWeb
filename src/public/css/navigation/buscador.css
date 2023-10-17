@@ -1,0 +1,22 @@
+.buscador__container{
+    background: white;
+    padding: .2rem .2rem;
+    gap: .4rem;
+    /* margin-bottom: 1.3rem; */
+    display: flex;
+    align-items: center;
+}
+.buscador__container i::before{
+    font-size: 1.3rem;
+    margin-left: 5px;
+}
+.buscador__container input[type="text"]{
+    flex:1;
+    border-radius: .3rem;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    padding: .8em 8px;
+    /* display: inline-block; */
+}

@@ -24,8 +24,8 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(async (id, done) => {
 
     const user = await getUserById(id);
-
-
+    user.PERMISOS = JSON.parse(user.PERMISOS);
+    user.ZONAS = JSON.parse(user.ZONAS)
     done(null, user)
 
 })

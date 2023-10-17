@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Zonas</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/listado/css/listado.css">
+</head>
+
+
+<body>
+  <%- include("../partials/navigation/navigation-bar") %>
+
+  <div class="listado__container app">
+    <div class="header">
+      <h2>Zonas disponibles:</h2>
+    </div>
+
+    <div class="zonas_disponibles">
+      <% zonas.forEach(zona => {%>
+      <div class="listado_card zona_card">
+        <a href="/listado/<%= zona.ZONA%>" class="zona"><%= zona.ZONA %></a>
+      </div>
+      <%   }); %>
+
+      
+    </div>
+  </div>
+
+  <%- include("../partials/links/nav.logic.ejs")  %>
+</body>
+
+
+</html>

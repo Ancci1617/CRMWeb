@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blanco Gusmar | Recorrido</title>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
+  <link rel="stylesheet" href="/cobrador/recorrido.css">
+  <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <div class="main__container">
+    <header class="btn__container">
+      <a href="/cobrador/recorrido?ZONA=<%= fichas[0].ficha.Z %>" class="btn_header link">RECORRIDO</a>
+      <div class="lista_zonas">
+        <% user.ZONAS.forEach(zona => { %>
+        <a href="<%=`${zona}`%>" class="zona link"><%= zona %></a>
+        <% }) %>
+      </div>
+    </header>
+
+    <ul class="lista_por_cobrar" id="sortable">
+
+      <% fichas.forEach(ficha_data => {
+        const {ficha} = ficha_data; %>
+
+      <li class="credito_por_cobrar" >
+        <div class="zona <%= (!ficha.LATITUD || !ficha.LONGITUD) ? "sin_coordenadas" : "" %>"><%= ficha.Z %></div>
+        <div class="details">
+          <span class="calle"><%= ficha.CALLE %></span>
+          <span class="">[<%=`${ficha.CRUCES} - ${ficha.CRUCES2}`%>]</span>
+          <span class="nombre nw"><%= ficha.NOMBRE %></span>
+
+
+          <input type="hidden" name="ID" value="<%= ficha.ID %>">
+          <input type="hidden" name="LATITUD" value="<%= ficha.LATITUD %>">
+          <input type="hidden" name="LONGITUD" value="<%= ficha.LONGITUD %>">
+          <input type="hidden" name="FICHA" value="<%= ficha.FICHA %>">
+        </div>
+        <div class="right">
+          <div class="icons__container">
+            <a class="link-mapa" href="https://www.google.com.ar/maps/search/<%= `${ficha.LATITUD},${ficha.LONGITUD}` %>" target="_blank"><%- include("../partials/icons/map.ejs") %></a>
+          </div>
+        </div>
+      </li>
+      <% }) %>
+    </ul>
+
+  </div>
+
+
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/cobrador/iniciar_button_events.js"></script>
+</body>
+
+</html>

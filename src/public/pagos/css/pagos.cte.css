@@ -1,0 +1,236 @@
+:root {
+    --pink-credito: rgb(255, 247, 247);
+}
+
+:root {
+    --light_white: #EBE3D8;
+    --normal_white: #DDD1C2;
+    --light_gray: #727272;
+    --light_brown: #AA8A6D;
+    --normal_brown: #886F63;
+    --dark_gray: #313236;
+}
+
+html,
+body {
+    background-color: rgb(247, 247, 247);
+}
+
+.main__container {
+    margin: auto;
+    /* display: inline-grid; */
+    /* gap: 1rem; */
+    max-width: 620px;
+    background-color: white;
+}
+
+.creditos__header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background-color: #fdfdfd;
+    padding: 4px .8em;
+    position: sticky;
+    top: 3rem;
+    /* width: 100%; */
+}
+
+
+.creditos__header .CTE_CALLE {
+    display: grid;
+    font-size: 1.1rem;
+    white-space: nowrap;
+
+}
+
+.valor__servicio {
+    color: rgb(108, 108, 255);
+}
+
+.CTE_NOMBRE {
+    grid-column: span 2;
+    text-align: center;
+}
+
+
+.credito {
+    background-color: rgb(255, 247, 247);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 9px;
+}
+
+.prestamo {
+    background-color: #f2feff;
+}
+
+.credito__header {
+    background-color: transparent;
+    font-size: 1.3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.credito__header .vencimiento_atrasado {
+    color: lightcoral;
+}
+
+.credito__header .vencimiento_al-dia {
+    color: rgb(89, 130, 27);
+}
+
+.credito .details {
+    background-color: rgb(252, 242, 242);
+    display: flex;
+    flex-direction: column;
+    gap: .8em;
+    background-color: transparent;
+}
+
+.details .detail {
+    background-color: rgb(216, 213, 213);
+    border-radius: .5rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.input__container {
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - .7rem));
+    gap: .7rem;
+}
+
+.input__container>* {
+    outline: none;
+    /* border: none; */
+    font-size: 1.2rem;
+    padding: 1px 9px;
+    border: 1px solid var(--light_white);
+    border-radius: .5rem;
+    background: white;
+    /* display: inline-flex; */
+    flex-direction: row;
+    justify-content: space-between;
+}
+.input__mp{
+    display: flex;
+}
+.input__mp > input[name='MP_PORCENTAJE']{
+    max-width: 70%;
+}
+
+.btn__container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: .5em;
+    text-align: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.btn-cargar-pago {
+    /* grid-column: span 2; */
+    order: 30;
+}
+
+
+
+.btn-detalles::before {
+    color: rgb(172, 170, 170);
+
+}
+
+.btn-detalles:hover:before {
+    color: rgb(200, 193, 193);
+    cursor: pointer;
+}
+
+.btn {
+    background-color: rgb(141, 249, 125);
+    border-radius: .8rem;
+    min-width: 40%;
+    padding: 4px;
+    font-size: 1.1rem;
+    border: none;
+    box-shadow: 1px 1px 1px gray;
+}
+
+.btn:hover {
+    background-color: rgb(119, 249, 99);
+}
+
+.btn-reclamo {
+    background-color: rgb(253, 177, 177);
+}
+
+
+.deep_details {
+    position: fixed;
+    background-color: #fbfbfb;
+    border: 1px solid VAR(--dark_gray);
+    width: min(430px, 90%);
+    max-height: 80vh;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 100%;
+    top: 3.5rem;
+    border-radius: .5rem;
+    padding: 1rem;
+    overflow-y: auto;
+    margin: auto;
+    gap: .9em;
+    white-space: nowrap;
+    transition: top .3s;
+}
+
+.deep_details .header {
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+
+    /* top: 0; */
+    /* background: white; */
+}
+
+.deep_details .header i {
+    font-size: 1.4em;
+    color: var(--normal_brown);
+}
+
+.deep_details .header i:hover {
+    color: var(--dark_gray);
+    cursor: pointer;
+}
+
+table,
+td,
+thead,
+tr,
+th {
+    padding: 8px;
+    overflow: hidden;
+    /* margin: auto; */
+}
+
+.table {
+    overflow-x: auto;
+    text-align: center;
+    display: grid;
+    align-items: center;
+}
+
+@media screen and (max-width:420px) {
+    .input__container {
+        grid-template-columns: 1fr;
+    }
+}

@@ -162,11 +162,10 @@ Router.post("/pedidos/editar_pedido", isAdmin, async (req, res) => {
         QUE_NECESITA, DIA_VISITA, RANGO_HORARIO_DESDE,
         RANGO_HORARIO_HASTA, VENDEDOR_DESIGNADO, ID } = req.body;
 
-    const REDES = req.user.Usuario;
     await updatePedidoByID({
         CTE, ZONA, NOMBRE, CALLE, CRUCES, CRUCES2, TELEFONO,
         QUE_NECESITA, DIA_VISITA, DESDE: RANGO_HORARIO_DESDE,
-        HASTA: RANGO_HORARIO_HASTA, DESIGNADO: VENDEDOR_DESIGNADO, REDES
+        HASTA: RANGO_HORARIO_HASTA, DESIGNADO: VENDEDOR_DESIGNADO
     }, ID);
 
 

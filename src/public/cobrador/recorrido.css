@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  /* font-family: 'Poppins', sans-serif; */
+  /* font-family: sans-serif; */
+}
+
+html,
+body {
+  /* background-color: var(--light_white); */
+  background-color: rgb(131, 131, 130);
+}
+
+.main__container {
+  background-color: white;
+  min-height: calc(100vh - 48px);
+  border-radius: 8px 8px;
+  overflow: hidden;
+  padding: 8px 5px;
+}
+
+header.btn__container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: .4rem;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  grid-row-gap: 5px;
+}
+
+header .lista_zonas {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / 5;
+  gap: 4px;
+  padding-inline: 8px;
+}
+.lista_zonas .zona{
+  display: grid;
+  padding: 4px;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+
+.btn_header {
+  height: 2.3rem;
+  display: grid;
+  text-align: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.btn_header:nth-child(2) {
+  border-inline: 1px solid black;
+}
+
+.btn_header:hover {
+  background-color: lightblue;
+}
+
+.lista_por_cobrar {
+  display: grid;
+  gap: 9px;
+  padding-right: 2rem;
+}
+
+.credito_por_cobrar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px 4px 8px;
+  border: 1px solid gray;
+  box-shadow: 1px 1px 1px gray;
+  border-radius: .7rem;
+  position: relative;
+}
+.credito_por_cobrar .icon{
+  font-size: 1.2rem;
+  width: 1.2rem;
+  cursor: pointer;
+}
+.credito_por_cobrar .lock-icon{
+  fill: red;
+}
+.credito_por_cobrar.locked .lock-icon{
+  fill: rgb(89, 132, 89);
+}
+.credito_por_cobrar.locked {
+  background-color: #b5ffba;
+}
+.credito_por_cobrar .map-icon{
+  fill: rgb(128, 178, 29);
+  width: 1.2rem;
+  font-size: 1.2rem;
+}
+.credito_por_cobrar .link-mapa{
+  /* width: 2rem; */
+  /* display: inline-block; */
+  /* text-align: center; */
+  /* position: absolute; */
+  /* height: 100%; */
+  right: -55px;
+}
+.credito_por_cobrar .icons__container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* height: 100%; */
+  /* justify-content: center; */
+}
+
+.credito_por_cobrar .zona {
+  display: grid;
+  align-items: center;
+  font-size: 1.4rem;
+
+}
+.credito_por_cobrar .sin_coordenadas{
+  color: rgb(67, 67, 180);
+}
+
+.credito_por_cobrar .details span {
+  display: block;
+  text-align: left;
+}
+
+
+
+.right{
+  display: grid;
+  margin-left: auto;
+  grid-auto-flow: column;
+  gap: .7rem;
+  align-items: center;
+}

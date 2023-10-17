@@ -1,0 +1,68 @@
+table th,table td{
+    padding: 3px 5px;
+    position: static;
+}
+table{
+    border: 1px solid lightgray;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin: auto;
+    width: 100%;
+    background: white;
+}
+table td input{
+    max-width: 70px;
+}
+
+.rendicion__container{
+    padding: 1rem;
+    border: 1px solid var(--light_gray);
+    min-height: 200px;
+    border-radius: .8rem;
+    box-shadow: 1px 1px 5px gray;
+    max-width: 530px;
+    margin: .6rem auto;
+    background: var(--light_white);
+}
+.gastos-detalle{
+    border:1px solid gray;
+    border-radius: .8rem;
+    overflow: auto;
+    margin-top: .8rem;
+}
+.rendicion_details{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 8px;
+}
+
+.input__container{
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    font-size: 1rem;
+}
+.input__container > input {
+    font-size: 1rem;
+}
+.input__container input[type="number"]{
+    padding: 5px 12px;
+    min-width: 100%;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-bottom: 5px;
+}
+
+.btn-rendicion{
+    background-color: lightgreen;
+    border: none;
+    box-shadow: 1px 1px 2px gray;
+    flex:1;
+    padding: 3px 8px;
+}
+.btn-rendicion:hover{
+    cursor: pointer;
+    background-color: rgb(156, 243, 156);
+}

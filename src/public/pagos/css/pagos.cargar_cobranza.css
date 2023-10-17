@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* font-family: 'Roboto', sans-serif; */
+:root {
+    --light_white: rgb(247, 247, 247);
+    --medium_white: #EBE3D8;
+    --ocre-pink: #DDD1C2;
+    --light_gray: #727272;
+    --light_brown: #f6f6f6;
+    --normal_brown: #886F63;
+    --dark_gray: #313236;
+    --click_green: rgb(100, 170, 100);
+    --check-green: rgb(214, 255, 153);
+    --aside-left: 170px;
+}
+
+ul {
+    list-style: none;
+}
+
+html,
+body {
+    /* background-color: var(--light_white); */
+    background-color: white;
+}
+
+.aside {
+    position: fixed;
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    gap: .4rem;
+    left: 0;
+    width: var(--aside-left);
+    height: calc(100vh - 3rem);
+    box-shadow: 1px 0 1px gray;
+    padding: .5em;
+    font-family: 'Roboto', sans-serif;
+    background-color: white;
+    transition: left .1s;
+}
+
+.aside__header {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.aside__header i {
+    cursor: pointer;
+    display: none;
+}
+
+.aside__header i:hover {
+    color: var(--dark_gray);
+}
+
+.aside .ul__fechas {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
+    padding: 7px;
+}
+
+.ul__cobradores {
+    display: none;
+}
+
+ul .ul__cobradores li {
+    margin-bottom: .4rem;
+}
+
+
+@media screen and (min-width:580px) {
+    ul .li__fecha:hover>.ul__cobradores {
+        display: block;
+    }
+
+        
+}
+
+
+
+
+
+
+
+.cobranzas {
+    padding: .5rem .5rem .8rem calc(170px + 1rem);
+    /* overflow: auto; */
+}
+
+.cobranzas header {
+    font-size: 1.5rem;
+    gap: .1rem;
+    margin-bottom: .7em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cobranzas header .link{
+    font-size: 1rem;
+}
+
+.cobranzas .lista_de_pagos {
+    display: grid;
+    gap: .8rem;
+}
+
+.orden__container {
+    margin-bottom: .6rem;
+}
+
+
+.lista_de_pagos .pago {
+    padding: .3rem .3rem .1rem .3rem;
+    border: 1px solid var(--light_gray);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+
+}
+
+.pago:hover {
+    background-color: rgb(237, 246, 243);
+}
+
+.pago i:hover {
+    color: var(--click_green);
+    cursor: pointer;
+}
+
+.pago.CONFIRMADO,.pago.ACTIVO {
+    background-color: var(--check-green);
+}
+
+.data_container {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.data_container > * {
+    display: flex;
+    gap: 1.1rem;
+    align-items: center;
+}
+.data_container .invalidar_pago{
+    font-size: 1.2rem;
+    color: rgb(251, 50, 50);
+}
+
+.pago .details_container {
+    min-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pago .obs {
+    font-size: .8rem;
+    color: var(--dark_gray);
+}
+
+.ficha a {
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: var(--dark_gray);
+}
+
+.ficha {
+    display: flex;
+    justify-content: space-between;
+}
+
+.cuota {
+    color: rgb(26, 147, 26);
+}
+
+.cobrador {
+    color: rgb(208, 4, 4);
+}
+.MP{
+    color:rgb(60, 85, 94);
+    font-weight: 600;
+}
+
+@media screen and (max-width:580px) {
+    .li__fecha.show_aside_li__fecha > .ul__cobradores {
+        display: block;
+    }
+
+    /* ul .li__fecha:hover>.ul__cobradores {
+        display: none;
+    } */
+
+    .lista_de_pagos .pago {
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .cobranzas header,
+    .cobranzas header * {
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .pago * {
+        gap: .5em;
+        flex-wrap: wrap;
+    }
+
+    .cobranzas {
+        padding: .5rem 1rem;
+    }
+
+    .aside {
+        left: -170px;
+    }
+
+    .show_aside {
+        left: 0;
+    }
+
+    .cobranza_fecha {
+        cursor: pointer;
+        border-radius: 16px;
+        padding: 1px 4px;
+        box-shadow: 1px 1px 2px lightgray;
+        background: linear-gradient(transparent 70%,lightgray);
+    }
+    .cobranza_fecha:hover{
+        background: linear-gradient(transparent 40%,lightgray);
+
+    }
+    .aside__header i {
+        display: inline-block;
+    }
+}

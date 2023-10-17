@@ -8,10 +8,12 @@
   <title>Blanco Gusmar | Cargar venta</title>
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/cargar_venta/ventas_form.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
-
+  <% const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI,WHATSAPP,LATITUD,LONGITUD} = cte_data %>
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
+  <% console.log(cte_data)%>
 </head>
 
 <body>
@@ -25,7 +27,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
+      <form action="/ventas/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
 
         <div class="user-details">
           <div class="input-box ">
@@ -45,7 +47,7 @@
 
           <div class="input-box">
             <span class="details">Zona</span>
-            <input type="text" placeholder="Zona" value="<%= ZONA   %>" name="ZONA" required>
+            <input type="text" placeholder="Zona" value="<%= ZONA   %>" oninput="this.value = this.value.toUpperCase()" name="ZONA" required>
           </div>
 
           <div class="input-box">
@@ -101,10 +103,25 @@
             <input type="text" placeholder="Valor de cuota" name="CUOTA" required>
           </div>
 
+
+          <div class="input-box">
+            <span class="details">Servicio</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="" selected></option>
+              <option value="500">500</option>
+              <option value="750">750</option>
+              <option value="1000">1000</option>
+              <option value="1500">1500</option>
+              <option value="2000">2000</option>
+            </select>
+          </div>
+
           <div class="input-box">
             <span class="details">Anticipo</span>
-            <input type="text" placeholder="Anticipo cobrado" name="ANTICIPO">
+            <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO">
           </div>
+
+          <%- include("../partials/Components/input-box-select.ejs",{input: {classListContainer : ["select_anticipo_container"],hidden : true,required : false,name : "ANTICIPO_MP",details: "Anticipo por MP?" , classList : ["select_anticipo"],options:[null,"NO","SI"]}}) %>
 
           <div class="input-box">
             <span class="details">Tipo</span>
@@ -134,8 +151,9 @@
           </div>
 
           <div class="input-box">
-            <span class="details">Dia de vencimiento</span>
+            <span class="details">Dia de vencimiento <span class="detail_primer_vencimiento">()</span></span>
             <select class="" name="VENCIMIENTO" required form="form_cargar_venta">
+              <option value="" selected></option>
               <option value="4">4</option>
               <option value="9">9</option>
               <option value="14">14</option>
@@ -163,7 +181,10 @@
             </select>
           </div>
 
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
+          
           <!-- IMAGENES -->
+          <% if(required_images.frente){ %>
           <div class="input-box">
             <span class="details">DNI Frente</span>
             <label for="FRENTE">
@@ -171,6 +192,9 @@
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
             </label>
           </div>
+          <% } %>
+
+          <% if(required_images.dorso){ %>
           <div class="input-box">
             <span class="details">DNI Dorso</span>
             <label for="DORSO">
@@ -178,6 +202,9 @@
               <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
             </label>
           </div>
+          <% } %>
+
+          <% if(required_images.rostro){ %>
           <div class="input-box">
             <span class="details">ROSTRO</span>
             <label for="ROSTRO">
@@ -185,12 +212,17 @@
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
             </label>
           </div>
+          <% } %>
 
           <!-- input hidden  Venta Aprobada/Desaprobada -->
           <div class="input-box hidden">
             <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
           </div>
 
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LATITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO"} }) %>
 
           <!-- BOTONES DE SUBMIT -->
           <div class="button">
@@ -204,7 +236,7 @@
 
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
-  <script src="../js/ventas/cargar_venta.js"></script>
+  <script src="/js/ventas/cargar_venta.js"></script>
 
 </body>
 

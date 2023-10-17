@@ -1,0 +1,33 @@
+<aside class="aside">
+
+
+  <div class="aside__header"><i class="fas fa-arrow-left"></i> <%= TITULO %></div>
+
+
+  <ul class="ul__fechas">
+
+    <% aside.forEach(obj => { %>
+    <li class="li__fecha">
+
+      <span><%= obj.TITULO %></span>
+
+      <ul class="ul__cobradores">
+        <% obj.VINCULOS.forEach(vinculo => { %>
+
+        <% let keys = Object.keys(vinculo).filter(key => key !== 'INDICE') %>
+        <% let query = keys.reduce((acc,key) => `${acc}${key}=${vinculo[key]}&` , '') %>
+        <% query = query.substr(0, query.length - 1) %>
+
+        <li><a href="<%=`?${query}`%>"><%= vinculo.INDICE %></a></li>
+
+        <% })%>
+      </ul>
+
+    </li>
+    <%}) %>
+
+
+
+  </ul>
+
+</aside>

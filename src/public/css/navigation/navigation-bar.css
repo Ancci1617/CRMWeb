@@ -47,8 +47,8 @@
     cursor: pointer;
 }
 
-.navigation-bar ul.show {
-    top: -200vh;
+.show {
+    top: -200vh !important;
 }
 
 @media screen and (max-width:500px) {
