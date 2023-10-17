@@ -4,23 +4,26 @@
 <% const sin_asignar = transaction_amount - total_asignado %>
 <% const estado = sin_asignar > 300 ? "sin_asignar" : (sin_asignar < -300 ? "exceso" : "asignado") %>
 
+
 <div class="<%= `payment ${estado}` %>">
-
-  <div class="n_operacion flex-space_between"><%= id%> <span class="monto_transferencia">$<%= transaction_amount  %></span></div>
-
-  <div><%= `${payer.identification.type} ${payer.identification.number == MP_TITULAR.CUIL ? "--" : payer.identification.number}`%></div>
-  <div><%= new Date(fecha_aprobado).toLocaleDateString("es") %></div>
-  <div><%=`Sin asignar: ${sin_asignar}`  %></div>
-
-  <% if(payment.asociados.length > 0) { %>
-  <div>Pagos asociados:</div>
-  <% } %>
-
-  <% payment.asociados.forEach(pago => {  %>
-  <% const total_cobrado =  pago.MP + pago.SERV + pago.MORA + pago.VALOR %>
-
-  <div>C:<%= pago.FICHA %> $<%= total_cobrado %></div>
-  <% }) %>
+  <% if(estado == "sin_asignar") { %><a href="<%= `/pagos/deuda_cte?CTE=0&N_OPERACION=${id}&TITULAR=${TITULAR}` %>" class="link"> <% } %>
 
 
+    <div class="n_operacion flex-space_between"><%= id %> <span class="monto_transferencia">$<%= transaction_amount  %></span></div>
+
+    <div><%= `${payer.identification.type} ${payer.identification.number == MP_TITULAR.CUIL ? "--" : payer.identification.number}`%></div>
+    <div><%= new Date(fecha_aprobado).toLocaleDateString("es") %></div>
+    <div><%=`Sin asignar: ${sin_asignar}`  %></div>
+
+    <% if(payment.asociados.length > 0) { %>
+    <div>Pagos asociados:</div>
+    <% } %>
+
+    <% payment.asociados.forEach(pago => {  %>
+    <% const total_cobrado =  pago.MP + pago.SERV + pago.MORA + pago.VALOR %>
+
+    <div>C:<%= pago.FICHA %> $<%= total_cobrado %></div>
+    <% }) %>
+
+    <% if(estado == "sin_asignar") { %> </a> <% } %>
 </div>

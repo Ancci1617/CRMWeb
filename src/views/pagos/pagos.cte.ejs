@@ -17,10 +17,21 @@
 
   <main class="main__container">
 
-    <form class="buscador__container" action="deuda_credito">
-      <i class="fa fa-search"></i>
-      <input type="text" class="buscador" name="CREDITO" value="" placeholder="Buscar ficha" />
-    </form>
+    <div class="buscador__container">
+      <form action="deuda_credito">
+        <i class="fa fa-search"></i>
+        <input type="text" class="buscador" name="CREDITO" value="" placeholder="Buscar ficha" />
+        <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
+        <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
+      </form>
+
+      <form action="deuda_cte">
+        <i class="fa fa-search"></i>
+        <input type="text" class="buscador" name="CTE" value="" placeholder="Buscar cliente" />
+        <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
+        <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
+      </form>
+    </div>
 
     <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
@@ -48,7 +59,7 @@
     </header>
 
     <% prestamos.forEach(prestamo => { %>
-    <%- include("../partials/Components/credito.prestamo.ejs",{prestamo}) %>
+    <%- include("../partials/Components/credito.prestamo.ejs",{prestamo, N_OPERACION, TITULAR}) %>
     <% }) %>
 
     <% fichas.forEach(ficha => { %>
@@ -77,37 +88,33 @@
 
 
           <% if(user.RANGO == "COBRADOR" || user.RANGO == "VENDEDOR") {%>
-          <input type="number" name="DECLARADO_CUO" class="" placeholder="Cuota Cobrado" required />
-          <input type="number" name="DECLARADO_COB" class="" placeholder="Cobrador" required />
+          <input type="number" name="DECLARADO_CUO" placeholder="Cuota Cobrado" required />
+          <input type="number" name="DECLARADO_COB" placeholder="Cobrador" required />
           <% } else { %>
-          <input type="number" name="COBRADO" class="" placeholder="Monto cobrado" required />
+          <input type="number" name="COBRADO" placeholder="Monto cobrado" required />
           <% } %>
 
           <div class="input__container_input">
             <span>COB:</span>
-            <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>" class="">
+            <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>">
           </div>
-          <input type="text" name="OBS" class="" placeholder="Observacion" />
-
-          <div class="input__mp">
-            <div>
-              <input type="checkbox" name="ISMP" class="check_mp" />
-              <label for="MPCHECK">MP</label>
-            </div>
-            <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
-          </div>
-
-          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" class="" minlength="6" hidden />
+          <input type="text" name="OBS" placeholder="Observacion" />
 
 
-          <select name="MP_TITULAR" hidden>
-            <option value="" selected>Titular</option>
+          <% if(N_OPERACION && TITULAR){ %>
+          <input type="number" name="MP_PORCENTAJE" placeholder="Recargo por MP" required />
+          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" />
+
+          <select name="MP_TITULAR">
+            <option value="">Titular</option>
             <% usuarios.forEach(usuario => {%>
-            <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+            <option value="<%= usuario.Usuario %>" <%= usuario.Usuario == TITULAR ? "selected" : "" %>> <%= usuario.Usuario %></option>
             <% }); %>
           </select>
 
+          <% } %>
 
+          <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
           <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
           <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
           <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">

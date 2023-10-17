@@ -19,23 +19,23 @@
       <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0] %>" required>
       <input type="text" name="OBS" placeholder="Observacion" />
 
-      <div class="input__mp">
-        <input type="checkbox" name="ISMP" class="check_mp" />
-        <label for="MPCHECK">MP</label>
-        <input type="number" name="MP_PORCENTAJE" placeholder="MP Porcentaje" hidden />
-      </div>
-
-      <input type="number" placeholder="Numero de operacion" name="N_OPERACION" minlength="6" hidden />
 
 
-      <select name="MP_TITULAR" hidden>
-        <option value="" selected>Titular de la cuenta</option>
+
+      <% if(N_OPERACION && TITULAR){ %>
+      <input type="number" name="MP_PORCENTAJE" placeholder="Recargo por MP" required />
+      <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" />
+
+      <select name="MP_TITULAR">
+        <option value="">Titular</option>
         <% usuarios.forEach(usuario => {%>
-        <option value="<%= usuario.Usuario %>"> <%= usuario.Usuario %></option>
+        <option value="<%= usuario.Usuario %>" <%= usuario.Usuario == TITULAR ? "selected" : "" %>> <%= usuario.Usuario %></option>
         <% }); %>
       </select>
 
+      <% } %>
 
+      <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
       <input type="hidden" name="CTE" value="<%= prestamo.CTE %>">
       <input type="hidden" name="FICHA" value="<%= prestamo.Prestamo %>">
     </div>
@@ -53,7 +53,7 @@
       <h3>Prestamo : <%= prestamo.Prestamo %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
     </div>
     <div class="details">
-        
+
       <%- include("../pagos/detail_row.ejs",{title : "Fecha de venta", data : prestamo.FECHA})  %>
       <%- include("../pagos/detail_row.ejs",{title : "Capital", data : prestamo.Capital})  %>
       <%- include("../pagos/detail_row.ejs",{title : "Valor total", data : prestamo.Valor})  %>

@@ -15,7 +15,7 @@ const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.
 async function deudaCredito(req, res) {
 
     const render_obj = { totales: { cuota: 0, serv: 0, mora: 0 }, prestamos: [], fichas: [] };
-    const { CREDITO } = req.query;
+    const { CREDITO ,N_OPERACION,TITULAR} = req.query;
 
     const CTE = await getClienteEnFichas(CREDITO);
 
@@ -39,7 +39,8 @@ async function deudaCredito(req, res) {
     }
 
     render_obj.usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
-
+    render_obj.N_OPERACION = N_OPERACION;
+    render_obj.TITULAR = TITULAR;
 
     res.render("pagos/pagos.cte.ejs", render_obj);
 
@@ -47,7 +48,7 @@ async function deudaCredito(req, res) {
 }
 
 async function deudaCte(req, res) {
-    const { CTE } = req.query;
+    const { CTE,N_OPERACION,TITULAR } = req.query;
     const fichas_data = await pagosModel.getFichasByCte(CTE);
     const prestamos = await pagosModel.getPrestamosByCte(CTE);
 
@@ -68,7 +69,7 @@ async function deudaCte(req, res) {
         mora: fichas.reduce((accumulator, ficha) => accumulator + ficha.deuda.mora, 0)
     }
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales, usuarios, prestamos });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], totales, usuarios, prestamos,N_OPERACION ,TITULAR});
 }
 
 async function deudaFicha(req, res) {
