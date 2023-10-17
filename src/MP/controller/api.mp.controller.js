@@ -7,7 +7,6 @@ const axios = require("axios");
 
 const postCheckMP = async (req, res) => {
     const { N_OPERACION, MP_PORCENTAJE, MONTO_CTE, MP_TITULAR } = req.body;
-
     //parametros de respuesta : 
     //success : existio algun error tecnico al consultar el MercadoPago
     //msg : leyenda que explica la situacion del N_OPERACION
@@ -23,26 +22,17 @@ const postCheckMP = async (req, res) => {
         return res.json({ success: false, msg: "El MP de este titular no se encuentra asociado a la empresa, no se pudo validar el pago." });
 
     try {
+
         const { data: MP_DATA } = await axios.get(`https://api.mercadopago.com/v1/payments/${N_OPERACION}`, get_body(MP_TOKEN))
 
-        if (MP_DATA.status == 404)
-            return res.json({ success: true, found: false, msg: "El pago no se encuentra dentro de la cuenta declarada." });
-
-
-        if (MP_DATA.error) {
-            console.log("ERROR MP");
-            console.log("MP_DATA", MP_DATA);
-            console.log("Body_data", req.body);
-            return res.json({ success: false, msg: "Error al intentar consultar a Mercado pago." });
-        }
 
         if (MP_DATA.payer_id)
             return res.json({ success: true, found: true, available: false, msg: "La transferencia es un EGRESO DE DINERO, no un ingreso." });
 
+
         const { transaction_details } = MP_DATA;
 
         const N_OPERACION_DATA = await mercadoPagoModel.getOperationData({ N_OPERACION });
-
         //Revisamos si la plata que estamos pasando es mayor que la plata recibida
         if (N_OPERACION_DATA.TOTAL + parseInt(MONTO_CTE) + parseInt(MP_PORCENTAJE) > transaction_details.net_received_amount + 100)
             return res.json({
@@ -61,8 +51,18 @@ const postCheckMP = async (req, res) => {
 
 
     } catch (error) {
-        console.log("error", error);
+        const { data: MP_DATA } = error.response;
+
+        if (MP_DATA.status == 404)
+            return res.json({ success: true, found: false, msg: "El pago no se encuentra dentro de la cuenta declarada." });
+
+        if (MP_DATA.error)
+            return res.json({ success: false, msg: "Error al intentar consultar a Mercado pago." });
+
+
+
         return res.json({ success: false, msg: "Error al consultar a Mercado Pago, verifique las credenciales de acceso." });
+
     }
 
 

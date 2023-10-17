@@ -2,15 +2,22 @@
     background: white;
     padding: .2rem .2rem;
     gap: .4rem;
-    /* margin-bottom: 1.3rem; */
+    margin-bottom: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.buscador__container form {
     display: flex;
     align-items: center;
+    flex: 1;
+    border-bottom: 1px solid lightgray;
 }
 .buscador__container i::before{
     font-size: 1.3rem;
     margin-left: 5px;
 }
-.buscador__container input[type="text"]{
+.buscador__container form input[type="text"]{
     flex:1;
     border-radius: .3rem;
     outline: none;

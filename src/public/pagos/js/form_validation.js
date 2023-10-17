@@ -4,9 +4,11 @@ const btn_submit = document.querySelectorAll("input[type='submit']");
 const creditos_arr = document.querySelectorAll(".credito");
 const check_mp = document.getElementsByName("ISMP")
 
+console.log("vinculado")
+
 const mpCheckHandler = async (e) => {
     const credito = e.target;
-
+    console.log("is mp",credito.ISMP.checked);
     if (!credito.ISMP.checked) return;
 
     const creditoData = new FormData(credito);
@@ -61,15 +63,15 @@ creditos_arr.forEach(credito => {
         deep_details.classList.toggle("show");
     }, false);
 
-    credito.querySelector(".check_mp").addEventListener("click", e => {
-        const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
-        MP_INPUTS.forEach(input => {
-            input.required = e.target.checked;
-            input.hidden = !e.target.checked;
-            input.value = "";
-        })
+    // credito.querySelector(".check_mp").addEventListener("click", e => {
+    //     const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
+    //     MP_INPUTS.forEach(input => {
+    //         input.required = e.target.checked;
+    //         input.hidden = !e.target.checked;
+    //         input.value = "";
+    //     })
 
-    });
+    // });
 
 
 
