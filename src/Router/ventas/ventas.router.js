@@ -51,17 +51,10 @@ Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
     res.render("ventas/Ventas.cargadas.ejs", { ventas });
 });
 
-<<<<<<< HEAD
-Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
-    const { ID } = req.params;
-    const venta = await getVentaById(ID);
-    res.render("ventas/ventas.cargadas.editar.ejs", venta);
-=======
 // Router.get("/ventas_cargadas/editar/:ID", isLoggedIn, async (req, res) => {
 //     const { ID } = req.params;
 //     const venta = await getVentaById(ID);
 //     res.render("ventas/ventas.cargadas.editar.ejs", venta);
->>>>>>> main
 
 // });
 

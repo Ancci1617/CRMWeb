@@ -12,20 +12,16 @@ const getClientes = async (cte) => {
         ClientesSV.CALLE,
         ClientesSV.CRUCES,
         ClientesSV.CRUCES2,
-        BaseCTE.TELEFONO AS WHATSAPP,
+        (SELECT BaseCTE.TELEFONO FROM BaseCTE WHERE cte = ? AND ID = (SELECT MAX(ID) from BaseCTE where CTE = ?)) AS WHATSAPP,
         ClientesSV.DNI,
         MasterResumen.CALIF AS MASTER,
         NULL AS OBS
     FROM
         ClientesSV
-    LEFT JOIN (SELECT * FROM BaseCTE where BaseCTE.VALIDACION = 'VALIDO') BaseCTE ON BaseCTE.CTE = ClientesSV.CTE
     LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE
     WHERE
         ClientesSV.CTE = ?
-    ORDER BY
-        BaseCTE.ID
-    DESC
-    LIMIT 1;`, [cte]);
+    LIMIT 1;`, [cte,cte,cte]);
 
     if (rows.length > 0) {
         return rows;
