@@ -7,6 +7,7 @@
   <title>Blanco Gusmar | Recorrido</title>
   <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
   <link rel="stylesheet" href="/cobrador/recorrido.css">
+  <link rel="stylesheet" href="/cobrador/recorrido.iniciar.css">
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 
 </head>
@@ -28,7 +29,7 @@
 
       <% fichas.forEach(ficha_data => {
         const {ficha} = ficha_data; %>
-      <%- include(`${global.dir_partials}/cobrador/credito.por.cobrar.ejs`,{ficha}) %>
+      <%- include(`${global.dir_partials}/cobrador/credito.por.cobrar.ejs`,{ficha,conCandado : false,conMapa : true}) %>
       <% }) %>
     </ul>
 

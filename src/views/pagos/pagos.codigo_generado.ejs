@@ -28,7 +28,13 @@
       <span>Proxima : <%= pago.PROXIMO %></span>
     </div>
     <div class="codigo">CODIGO:<%= pago.CODIGO %></div>
-    <a href="<%= `/pagos/deuda_cte?CTE=${pago.CTE}` %>" class="volver">Volver al cliente</a>
+
+    <a href="<%= `/CRM?CTE=${pago.CTE}` %>" class="volver link">Ver cliente</a>
+
+    <% if(EsRecorrido){ %>
+    <a href="<%= `/cobrador/recorrido/${cte_data.ZONA}` %>" class="volver link">Volver al recorrido</a>
+    <a href="<%= `/pagos/deuda_credito?CREDITO=${pago.FICHA}&EsRecorrido=true` %>" class="volver link">Volver al credito</a>
+    <% } %>
 
   </main>
   <%- include("../partials/links/nav.logic.ejs") %>

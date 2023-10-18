@@ -1,28 +1,32 @@
-<% const {LATITUD,LONGITUD,Z,FICHA,CALLE,CRUCES,CRUCES2,NOMBRE,ID} = ficha %>
+<% const {LATITUD,LONGITUD,Z,FICHA,CALLE,CRUCES,CRUCES2,NOMBRE,ID,CTE} = ficha %>
+<% const tieneUbicaciones = (LATITUD && LONGITUD) %>
 
 
+<li class="credito_por_cobrar">
+  <div class="zona <%= !tieneUbicaciones ? "sin_coordenadas" : "" %>"><%= Z %></div>
+  <div class="details">
+    <span class="calle"><%= `(${FICHA}) ${CALLE}` %></span>
+    <span class="">[<%=`${CRUCES} - ${CRUCES2}`%>]</span>
+    <span class="nombre nw"><%= NOMBRE %></span>
 
-<li class="credito_por_cobrar" >
-    <div class="zona <%= (!LATITUD || !LONGITUD) ? "sin_coordenadas" : "" %>"><%= Z %></div>
-    <div class="details">
-      <span class="calle"><%= `(${FICHA}) ${CALLE}` %></span>
-      <span class="">[<%=`${CRUCES} - ${CRUCES2}`%>]</span>
-      <span class="nombre nw"><%= NOMBRE %></span>
 
+    <input type="hidden" name="ID" value="<%= ID %>">
+    <input type="hidden" name="LATITUD" value="<%= LATITUD %>">
+    <input type="hidden" name="LONGITUD" value="<%= LONGITUD %>">
+    <input type="hidden" name="FICHA" value="<%= FICHA %>">
+    <input type="hidden" name="CTE" value="<%= CTE %>">
+  </div>
+  <div class="right">
+    <div class="icons__container">
 
-      <input type="hidden" name="ID" value="<%= ID %>">
-      <input type="hidden" name="LATITUD" value="<%= LATITUD %>">
-      <input type="hidden" name="LONGITUD" value="<%= LONGITUD %>">
-      <input type="hidden" name="FICHA" value="<%= FICHA %>">
+      <% if(tieneUbicaciones && conMapa) { %>
+      <a class="link-mapa" href="https://www.google.com.ar/maps/search/<%= `${LATITUD},${LONGITUD}` %>" target="_blank">
+        <%- include(`${global.dir_partials}/icons/map.ejs`) %>
+      </a>
+      <% } %>
+      <% if(conCandado){ %>
+        <%- include(`${global.dir_partials}/icons/lock.ejs`) %>
+      <% } %>
     </div>
-    <div class="right">
-      <div class="icons__container">
-        <a class="link-mapa" href="https://www.google.com.ar/maps/search/<%= `${LATITUD},${LONGITUD}` %>" target="_blank">
-            <%- include(`${global.dir_partials}/icons/map.ejs`) %>
-        </a>
-      </div>
-    </div>
-  </li>
-
-
-
+  </div>
+</li>

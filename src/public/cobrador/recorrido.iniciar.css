@@ -1,0 +1,12 @@
+
+.credito_por_cobrar:hover{
+    background-color: lightgreen;
+}
+.credito_por_cobrar .details{
+    cursor: pointer;
+}
+
+
+
+
+

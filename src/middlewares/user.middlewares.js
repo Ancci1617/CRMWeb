@@ -11,6 +11,7 @@ const userView = (req,res,next) => {
     res.locals.user = req.user;
     res.locals.getToday = getToday;
     res.locals.permisos = permisos;
+    
 
     res.locals.hasPermission = (permiso) => {
         return req.user.PERMISOS.includes("*") ? true : req.user.PERMISOS.includes(permiso);

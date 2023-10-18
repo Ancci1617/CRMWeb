@@ -121,6 +121,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
         FROM
             Fichas
         LEFT JOIN PagosSV ON PagosSV.FICHA = Fichas.FICHA
+        
         WHERE
             Fichas.?? LIKE ? 
         GROUP BY

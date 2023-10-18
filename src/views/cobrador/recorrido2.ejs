@@ -29,27 +29,10 @@
 
     <ul class="lista_por_cobrar" id="sortable">
 
-      <% fichas.forEach(ficha_data => {
-         const {ficha,deuda} = ficha_data; %>
-
-      <li class="credito_por_cobrar">
-        <div class="zona <%= (!ficha.LATITUD || !ficha.LONGITUD) ? "sin_coordenadas" : "" %>"><%= ficha.Z %></div>
-        <div class="details">
-          <span class="calle"><%= `(${ficha.FICHA}) ${ficha.CALLE}` %></span>
-          <span class="">[<%=`${ficha.CRUCES} - ${ficha.CRUCES2}`%>]</span>
-          <span class="nombre nw"><%= ficha.NOMBRE %></span>
-          <input type="hidden" name="ID" value="<%= ficha.ID %>">
-          <input type="hidden" name="LATITUD" value="<%= ficha.LATITUD %>">
-          <input type="hidden" name="LONGITUD" value="<%= ficha.LONGITUD %>">
-        </div>
-        <div class="right">
-          <div class="icons__container">
-            <a class="link-mapa" href="https://www.google.com/maps/search/?api=1&query=<%=`${ficha.LATITUD},${ficha.LONGITUD}`%>" ><%- include("../partials/icons/map.ejs") %></a>
-            <%- include("../partials/icons/lock.ejs") %>
-          </div>
-        </div>
-      </li>
+      <% fichas.forEach(ficha_data => { const {ficha,deuda} = ficha_data; %>
+      <%- include(`${global.dir_partials}/cobrador/credito.por.cobrar.ejs`,{ficha, conCandado : true,conMapa: true}) %>
       <% }) %>
+      
     </ul>
 
   </div>
@@ -64,5 +47,3 @@
 </body>
 
 </html>
-
-

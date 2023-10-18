@@ -93,7 +93,13 @@ body {
     border-radius: .5rem;
     display: flex;
     justify-content: space-between;
+    gap: 8px;
     padding: 4px;
+    overflow: auto;
+}
+.detail.important{
+    font-weight: 600;
+    font-size: 1.05rem;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -130,16 +136,16 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .btn__container {
     display: grid;
-    grid-auto-flow: column;
+    grid-auto-flow: row;
     gap: .5em;
     text-align: center;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    /* grid-template-rows: 1fr 1fr; */
 }
 
 .btn-cargar-pago {
     /* grid-column: span 2; */
-    order: 30;
+    /* order: 30; */
 }
 
 

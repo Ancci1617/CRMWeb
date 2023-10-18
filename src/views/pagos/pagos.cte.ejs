@@ -36,25 +36,13 @@
     <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
       <div class="CTE_CALLE">
-        <span class="CTE"><%= cte_data.CTE %></span>
+        <a href="/CRM?CTE=<%= cte_data.CTE %>" class="CTE link"><%= cte_data.CTE %></a>
         <span class="CALLE"><%=cte_data.NOMBRE %></span>
         <span class="zona"><%= cte_data.ZONA %></span>
       </div>
 
-      <div class="COBRANZA_RESUMEN">
-        <div class="detail">
-          <span class="detail__title">Cuota:</span>
-          <span class="detail__data valor__cuota"><%= totales.cuota %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Serv:</span>
-          <span class="detail__data valor__servicio"><%= totales.serv %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Mora:</span>
-          <span class="detail__data valor__mora"><%= totales.mora %></span>
-        </div>
-
+      <div>
+        <div>Tel:<%= cte_data.WHATSAPP || "Sin telefono"%></div>
       </div>
     </header>
 
@@ -63,26 +51,28 @@
     <% }) %>
 
     <% fichas.forEach(ficha => { %>
-    <% const {vencimiento_vigente} = ficha.deuda %>
+    <% const {vencimiento_vigente,cuota,servicio,mora,atraso,pagas,vencidas,EsPrimerPago} = ficha.deuda %>
+    <% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT} = ficha.data %>
     <form class="credito" method="POST" action="cargar_pago">
       <div class="credito__header">
         <span>
-          <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= ficha.data.FICHA %>
+          <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= FICHA %>
         </span>
         <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
       </div>
       <div class="details">
-        <% if(ficha.deuda.EsPrimerPago) {%>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Primer Ven", data : ficha.data.PRIMER_PAGO || "primer pago"}) %>
+        <% if(EsPrimerPago) {%>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven", data : PRIMER_PAGO || "primer pago"}) %>
         <% } %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Serv", data : ficha.deuda.servicio}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Atrasos", data : ficha.deuda.atraso}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Vencidas", data : ficha.deuda.vencidas}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Valor cuota", data : ficha.data.CUOTA}) %>
-        <%- include("../partials/pagos/detail_row.ejs",{title : "Saldo", data : ficha.data.SALDO}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.important.ejs`,{title : "Total a cobrar", data : (cuota || Math.min(CUOTA,SALDO)) + servicio + mora }) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : cuota}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Serv", data : servicio}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora", data : mora}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atrasos", data : atraso}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas", data : pagas}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencidas", data : vencidas}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Valor cuota", data : CUOTA}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Saldo actual", data : SALDO}) %>
 
         <div class="input__container">
 
@@ -114,9 +104,10 @@
           <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
           <% } %>
 
-          <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
-          <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
-          <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">
+          <input type="hidden" name="CTE" value="<%= CTE %>">
+          <input type="hidden" name="FICHA" value="<%= FICHA %>">
+          <input type="hidden" name="ZONA" value="<%= Z %>">
+          <input type="hidden" name="EsRecorrido" value="<%= EsRecorrido %>">
 
         </div>
 
@@ -125,29 +116,30 @@
       <div class="btn__container">
         <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
         <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
-        <a class="btn btn-cambiar-fecha" href="/cobrador/volver?<%=`ZONA=${ficha.data.Z}&FICHA=${ficha.data.FICHA}`%>">Volver</a>
-
-        <!-- <input type="submit" class="btn btn-cargar-pago btn-reclamo" value="Volver"></input> -->
+        <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Z}&FICHA=${FICHA}`%>">Mover al final</a>
+        <% if(EsRecorrido == 'true'){%>
+        <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Z}`%>">Ver recorrido</a>
+        <% } %>
       </div>
 
       <div class="deep_details show">
         <div class="header">
-          <h3>Credito : <%= ficha.data.FICHA %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
+          <h3>Credito : <%= FICHA %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
         </div>
         <div class="details">
 
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Fecha de venta", data : ficha.data.FECHA_VENTA}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Vencimiento", data : ficha.data.VENCIMIENTO}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.deuda.cuota}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Servicio", data : ficha.deuda.servicio}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Mora", data : ficha.deuda.mora}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Atraso", data : ficha.deuda.atraso}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Pagas", data : ficha.deuda.pagas}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Articulos", data : ficha.data.ARTICULOS}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Cant cuotas", data : ficha.data.CUOTAS}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Cuota", data : ficha.data.CUOTA}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "Total", data : ficha.data.TOTAL}) %>
-          <%- include("../partials/pagos/detail_row.ejs",{title : "ServicioUnitario", data : ficha.data.SERV_UNIT}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta", data : FECHA_VENTA}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento", data : VENCIMIENTO}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : ficha.deuda.cuota}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio", data : ficha.deuda.servicio}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora", data : ficha.deuda.mora}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atraso", data : ficha.deuda.atraso}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas", data : ficha.deuda.pagas}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Articulos", data : ficha.articulos_string}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cant cuotas", data : CUOTAS}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : CUOTA}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Total", data : TOTAL}) %>
+          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "ServicioUnitario", data : SERV_UNIT}) %>
 
 
           <!-- TABLA DE MESES -->
