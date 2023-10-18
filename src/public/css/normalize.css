@@ -41,6 +41,7 @@ body {
 .link {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 .zona {

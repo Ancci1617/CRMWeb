@@ -13,16 +13,19 @@ const fs = require("fs");
 const https = require('https');
 
 
-//Set config
-app.set("views", path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-
 
 
 //Set Variables;
 app.set("PORT", process.env.PORT || 3000);
+global.dir_views = path.join(__dirname,"views");
+global.dir_partials = path.join(__dirname,"views","partials");
 
+
+
+//Set config
+app.set("views", path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
@@ -90,7 +93,6 @@ const credentials = { key: privateKey, cert: certificate, cr: [fs.readFileSync(p
 
 
 // Configurar rutas y middleware de Express aquí
-
 const httpsServer = https.createServer(credentials, app);
 
 httpsServer.listen(3000, () => {
