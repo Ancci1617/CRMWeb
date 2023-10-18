@@ -9,7 +9,7 @@ console.log("vinculado")
 const mpCheckHandler = async (e) => {
     const credito = e.target;
     console.log("is mp",credito.ISMP.checked);
-    if (!credito.ISMP.checked) return;
+    if (!credito.ISMP) return;
 
     const creditoData = new FormData(credito);
     let obj = {};

@@ -27,7 +27,6 @@
       <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" />
 
       <select name="MP_TITULAR">
-        <option value="">Titular</option>
         <% usuarios.forEach(usuario => {%>
         <option value="<%= usuario.Usuario %>" <%= usuario.Usuario == TITULAR ? "selected" : "" %>> <%= usuario.Usuario %></option>
         <% }); %>
