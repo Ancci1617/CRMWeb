@@ -106,15 +106,14 @@
           <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" />
 
           <select name="MP_TITULAR">
-            <option value="">Titular</option>
             <% usuarios.forEach(usuario => {%>
             <option value="<%= usuario.Usuario %>" <%= usuario.Usuario == TITULAR ? "selected" : "" %>> <%= usuario.Usuario %></option>
             <% }); %>
           </select>
 
+          <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
           <% } %>
 
-          <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
           <input type="hidden" name="CTE" value="<%= ficha.data.CTE %>">
           <input type="hidden" name="FICHA" value="<%= ficha.data.FICHA %>">
           <input type="hidden" name="ZONA" value="<%= ficha.data.Z %>">

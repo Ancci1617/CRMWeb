@@ -38,6 +38,10 @@ body {
     text-decoration: none;
     color: white;
 }
+.link {
+    text-decoration: none;
+    color: inherit;
+}
 
 .zona {
     color: red;
@@ -62,10 +66,7 @@ body {
     justify-content: space-between;
 }
 
-.link {
-    text-decoration: none;
-    color: inherit;
-}
+
 
 .input_upper_case {
     text-transform: uppercase

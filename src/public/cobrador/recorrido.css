@@ -28,6 +28,10 @@ header.btn__container {
   grid-row-gap: 5px;
 }
 
+header>a:not(:first-child) {
+  border-left: 1px solid black;
+}
+
 header .lista_zonas {
   display: flex;
   flex-wrap: wrap;
@@ -35,7 +39,8 @@ header .lista_zonas {
   gap: 4px;
   padding-inline: 8px;
 }
-.lista_zonas .zona{
+
+.lista_zonas .zona {
   display: grid;
   padding: 4px;
   align-items: center;
@@ -54,9 +59,6 @@ header .lista_zonas {
   font-family: 'Poppins', sans-serif;
 }
 
-.btn_header:nth-child(2) {
-  border-inline: 1px solid black;
-}
 
 .btn_header:hover {
   background-color: lightblue;
@@ -78,26 +80,32 @@ header .lista_zonas {
   border-radius: .7rem;
   position: relative;
 }
-.credito_por_cobrar .icon{
+
+.credito_por_cobrar .icon {
   font-size: 1.2rem;
   width: 1.2rem;
   cursor: pointer;
 }
-.credito_por_cobrar .lock-icon{
+
+.credito_por_cobrar .lock-icon {
   fill: red;
 }
-.credito_por_cobrar.locked .lock-icon{
+
+.credito_por_cobrar.locked .lock-icon {
   fill: rgb(89, 132, 89);
 }
+
 .credito_por_cobrar.locked {
   background-color: #b5ffba;
 }
-.credito_por_cobrar .map-icon{
+
+.credito_por_cobrar .map-icon {
   fill: rgb(128, 178, 29);
   width: 1.2rem;
   font-size: 1.2rem;
 }
-.credito_por_cobrar .link-mapa{
+
+.credito_por_cobrar .link-mapa {
   /* width: 2rem; */
   /* display: inline-block; */
   /* text-align: center; */
@@ -105,7 +113,8 @@ header .lista_zonas {
   /* height: 100%; */
   right: -55px;
 }
-.credito_por_cobrar .icons__container{
+
+.credito_por_cobrar .icons__container {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -121,7 +130,8 @@ header .lista_zonas {
   font-size: 1.4rem;
 
 }
-.credito_por_cobrar .sin_coordenadas{
+
+.credito_por_cobrar .sin_coordenadas {
   color: rgb(67, 67, 180);
 }
 
@@ -132,7 +142,7 @@ header .lista_zonas {
 
 
 
-.right{
+.right {
   display: grid;
   margin-left: auto;
   grid-auto-flow: column;

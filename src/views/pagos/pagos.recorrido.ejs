@@ -31,25 +31,11 @@
       </div>
 
       <div class="COBRANZA_RESUMEN">
-        <!-- <div class="detail">
-          <span class="detail__title">Cuota:</span>
-          <span class="detail__data valor__cuota"><%=// totales.cuota %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Serv:</span>
-          <span class="detail__data valor__servicio"><%= //totales.serv %></span>
-        </div>
-        <div class="detail">
-          <span class="detail__title">Mora:</span>
-          <span class="detail__data valor__mora"><%= //totales.mora %></span>
-        </div> -->
 
       </div>
     </header>
 
-    <%// prestamos.forEach(prestamo => { %>
-    <%//- include("../partials/Components/credito.prestamo.ejs",{prestamo}) %>
-    <%// }) %>
+
     <% fichas.forEach(ficha => { %>
     <% const {vencimiento_vigente} = ficha.deuda %>
     <form class="credito" method="POST" action="cargar_pago">
