@@ -32,6 +32,7 @@ body {
     position: sticky;
     top: 3rem;
     /* width: 100%; */
+    z-index: 10;
 }
 
 
@@ -58,6 +59,8 @@ body {
     flex-direction: column;
     gap: 1em;
     padding: 9px;
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
 }
 
 .prestamo {
@@ -101,6 +104,16 @@ body {
     font-weight: 600;
     font-size: 1.05rem;
 }
+.detail.articulos{
+    color:  rgb(10, 10, 130);
+    font-weight: 800;
+}
+.detail.detail_group{
+    display: flex;
+    flex-direction: column;
+}
+
+
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -233,6 +246,11 @@ th {
     text-align: center;
     display: grid;
     align-items: center;
+}
+
+.diferencia_positiva{
+    color: green;
+    font-weight: 800;
 }
 
 @media screen and (max-width:420px) {

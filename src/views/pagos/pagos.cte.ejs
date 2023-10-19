@@ -11,6 +11,7 @@
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
 <% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
+<% const formatNumber = number => {return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} %>
 
 <body>
   <%- include("../partials/navigation/navigation-bar.ejs")  %>
@@ -36,9 +37,9 @@
     <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
       <div class="CTE_CALLE">
+        <span class="zona"><%= cte_data.ZONA %></span>
         <a href="/CRM?CTE=<%= cte_data.CTE %>" class="CTE link"><%= cte_data.CTE %></a>
         <span class="CALLE"><%=cte_data.NOMBRE %></span>
-        <span class="zona"><%= cte_data.ZONA %></span>
       </div>
 
       <div>
@@ -58,21 +59,45 @@
         <span>
           <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= FICHA %>
         </span>
-        <span class="<%= vencimiento_vigente < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
+        <span class="<%= ( EsPrimerPago ? PRIMER_PAGO : vencimiento_vigente) < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
       </div>
       <div class="details">
+
+
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : ficha.articulos_string, data : "",classList : ["articulos"]}) %>
         <% if(EsPrimerPago) {%>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven", data : PRIMER_PAGO || "primer pago"}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven:", data : PRIMER_PAGO || "primer pago"}) %>
         <% } %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.important.ejs`,{title : "Total a cobrar", data : (cuota || Math.min(CUOTA,SALDO)) + servicio + mora }) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : cuota}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Serv", data : servicio}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora", data : mora}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atrasos", data : atraso}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas", data : pagas}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencidas", data : vencidas}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Valor cuota", data : CUOTA}) %>
-        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Saldo actual", data : SALDO}) %>
+
+        <div class="detail detail_group ">
+          <div class="title detail important">
+            <span class="detail__title">Total a cobrar:</span>
+            <span class="detail__data"><%= formatNumber((cuota || Math.min(CUOTA,SALDO)) + servicio + mora) %></span>
+          </div>
+          <div class="data hidden">
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota:", data : formatNumber(cuota)}) %>
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Serv:", data : formatNumber(servicio)}) %>
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora:", data : formatNumber(mora)}) %>
+          </div>
+        </div>
+
+        <div class="detail detail_group ">
+          <div class="title detail important <%= atraso > 0 ? "zona" : "" %>">
+            <span class="detail__title">Atrasos:</span>
+            <span class="detail__data"><%= atraso %></span>
+          </div>
+          <div class="data hidden">
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencidas:", data : vencidas}) %>
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas:", data : pagas}) %>
+            <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atrasos:", data : atraso , classList : [atraso > 0 ? "zona" : ""]}) %>
+          </div>
+        </div>
+
+
+
+
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Valor cuota:", data : formatNumber(CUOTA)}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Saldo actual:", data : formatNumber(SALDO)}) %>
 
         <div class="input__container">
 
@@ -116,59 +141,48 @@
       <div class="btn__container">
         <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
         <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
-        <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Z}&FICHA=${FICHA}`%>">Mover al final</a>
         <% if(EsRecorrido == 'true'){%>
+        <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Z}&FICHA=${FICHA}`%>">Mover al final</a>
         <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Z}`%>">Ver recorrido</a>
         <% } %>
       </div>
 
-      <div class="deep_details show">
-        <div class="header">
-          <h3>Credito : <%= FICHA %></h3> <span><i class="fas fa-times btn-cerrar-detalle"></i></span>
-        </div>
-        <div class="details">
-
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta", data : FECHA_VENTA}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento", data : VENCIMIENTO}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : ficha.deuda.cuota}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio", data : ficha.deuda.servicio}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora", data : ficha.deuda.mora}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atraso", data : ficha.deuda.atraso}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas", data : ficha.deuda.pagas}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Articulos", data : ficha.articulos_string}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cant cuotas", data : CUOTAS}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota", data : CUOTA}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Total", data : TOTAL}) %>
-          <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "ServicioUnitario", data : SERV_UNIT}) %>
 
 
-          <!-- TABLA DE MESES -->
-          <div class="table">
-            <table>
-              <thead>
-                <th>Mes</th>
-                <th>Cuota</th>
-                <th>Cobrador</th>
-              </thead>
-              <tbody>
-                <% for(let i = 0;i< ficha.acumulado.length;i++) {%>
-                <tr>
-                  <td><%= meses[ficha.acumulado[i].MES] %></td>
-                  <td><%= ficha.acumulado[i].CUOTA %></td>
-                  <td><%= ficha.acumulado[i].MORA + ficha.acumulado[i].SERV %></td>
-                </tr>
-                <% } %>
 
-              </tbody>
-            </table>
-          </div>
-          <!-- QUERY AGRUPADA POR MESES -->
-
-        </div>
-
-
+      <div class="details">
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta:", data : FECHA_VENTA}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento original:", data : VENCIMIENTO}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Venta:", data : `${formatNumber(CUOTAS)} x ${formatNumber(CUOTA)} = ${formatNumber(TOTAL)}`}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio unitario:", data : SERV_UNIT}) %>
 
       </div>
+      <div class="table">
+        <table>
+          <thead>
+            <th>Mes</th>
+            <th>Cuota</th>
+            <th>Diferencias</th>
+            <th>Servicios</th>
+            <th>Mora</th>
+
+          </thead>
+          <tbody>
+            <% for(let i = 0;i< ficha.acumulado.length;i++) {%>
+            <%  const diferencia = ficha.acumulado[i].DIFERENCIA %>
+            <tr>
+              <td><%= meses[ficha.acumulado[i].MES] %></td>
+              <td><%= ficha.acumulado[i].CUOTA %></td>
+              <td class="<%= diferencia < 0 ? "zona" : "diferencia_positiva" %>"><%= diferencia %></td>
+              <td><%= ficha.acumulado[i].SERV %></td>
+              <td><%= ficha.acumulado[i].MORA %></td>
+            </tr>
+            <% } %>
+
+          </tbody>
+        </table>
+      </div>
+
 
     </form>
 
@@ -182,6 +196,7 @@
   <%- include("../partials/links/nav.logic.ejs") %>
   <script src="/pagos/js/form_validation.js"></script>
   <script src="/pagos/js/button_events.js"></script>
+  <script src="/pagos/js/show_hide_groups.js"></script>
 </body>
 
 </html>

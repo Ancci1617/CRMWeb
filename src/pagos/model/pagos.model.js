@@ -158,10 +158,18 @@ const getAcumuladoByCteFicha = async ({ CTE, FICHA }) => {
 
     const [pago_data] = await pool.query(
         `SELECT
-        MES,CONVERT(SUM(CUOTA),INTEGER) as CUOTA,CONVERT(SUM(t.MORA),INTEGER) AS MORA,CONVERT(sum(t.SERV),INTEGER) AS SERV
+        MES_ANIO,
+        MES,
+        CONVERT(SUM(CUOTA),
+        INTEGER) AS CUOTA,
+        CONVERT(SUM(t.MORA),
+        INTEGER) AS MORA,
+        CONVERT(SUM(t.SERV),
+        INTEGER) AS SERV
     FROM
         (
         SELECT
+            CONCAT(YEAR(PagosSVAcumulado.FECHA) ,'-', MONTH(PagosSVAcumulado.FECHA)) AS MES_ANIO,
             MONTH(PagosSVAcumulado.FECHA) AS MES,
             SUM(VALOR) AS CUOTA,
             CONVERT(IFNULL(SUM(MORA),
@@ -178,6 +186,7 @@ const getAcumuladoByCteFicha = async ({ CTE, FICHA }) => {
             MES
         UNION
     SELECT
+        CONCAT(YEAR(CURRENT_DATE) ,'-',MONTH(CURRENT_DATE))AS MES_ANIO,
         MONTH(CURRENT_DATE) AS MES,
         SUM(PagosSV.VALOR) AS CUOTA,
         CONVERT(

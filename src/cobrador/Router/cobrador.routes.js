@@ -6,7 +6,7 @@ Router.get("/recorrido",cobradorController.formOrdenarRecorrido);
 Router.get("/recorrido/:ZONA",cobradorController.formIniciarRecorrido);
 
 
-Router.get("/deuda",cobradorController.formDeudaRecorrido);
+
 
 Router.post("/recorrido",cobradorController.postOrdenarRecorrido);
 Router.post("/cambiarFecha",cobradorController.postCambiarFecha);

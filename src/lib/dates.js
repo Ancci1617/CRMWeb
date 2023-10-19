@@ -1,7 +1,7 @@
 function getToday(){
-    return new Date().toISOString().split("T")[0]
+    return new Date().toISOString().split("T")[0];
     
-    // return "2023-09-10"
+    // return "2023-10-20"
 }
 
 function getVencidas(vencimiento, today, maximo = 6) {

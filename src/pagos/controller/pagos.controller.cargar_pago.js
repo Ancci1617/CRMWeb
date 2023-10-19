@@ -1,6 +1,6 @@
 const pagosModel = require("../model/pagos.model.js");
 const { getToday } = require("../../lib/dates.js");
-const { getDoubt } = require("../../lib/doubt.js");
+const { getDoubt, getVencimientoValido } = require("../../lib/doubt.js");
 const { getClientes, getClientesFull } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
@@ -39,8 +39,7 @@ async function deudaCredito(req, res) {
             await pagosModel.getAcumuladoByCteFicha({ CTE: render_obj.fichas[0].data.CTE, FICHA: render_obj.fichas[0].data.FICHA });
 
         render_obj.fichas[0].articulos_string = await getArticulosString(render_obj.fichas[0].data.ARTICULOS.split(" "));
-        
-        console.log("Resultado",render_obj.fichas[0].articulos);
+
     }
 
     render_obj.usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
@@ -49,8 +48,45 @@ async function deudaCredito(req, res) {
     render_obj.EsRecorrido = EsRecorrido;
 
 
-    res.render("pagos/pagos.cte.ejs", render_obj);
 
+    //Agrega los 0 para atras en los acumulados
+    render_obj.fichas.forEach(ficha => {
+        while (new Date(ficha.acumulado[0]?.MES_ANIO) > new Date(getVencimientoValido({ VENCIMIENTO: ficha.data.VENCIMIENTO, PRIMER_PAGO: ficha.data.PRIMER_PAGO }).VENCIMIENTO_EVALUA)) {
+            const { acumulado: first_acumulado } = ficha;
+            const { MES_ANIO } = first_acumulado[0];
+            const fecha_aux = new Date(MES_ANIO);
+            const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() - 1);
+            const [year, month] = mes_anio_date.toISOString().split("-");
+            const obj = { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 };
+            ficha.acumulado.unshift(obj);
+        }
+    })
+    //Por cada una de las fichas quiero que agrege en Cada uno de los acumulados los 0..
+
+    render_obj.fichas.forEach(ficha => {
+
+        for (let i = 1; i < ficha.acumulado.length; i++) {
+
+            const auxiliar = new Date(ficha.acumulado[i - 1].MES_ANIO);
+
+            if (new Date(ficha.acumulado[i].MES_ANIO).toISOString().split("T")[0]
+                !=
+                new Date(auxiliar.getUTCFullYear(), auxiliar.getUTCMonth() + 1).toISOString().split("T")[0]) {
+
+
+                const fecha_aux = new Date(ficha.acumulado[i - 1].MES_ANIO);
+                const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() + 1);
+                const [year, month] = mes_anio_date.toISOString().split("-");
+                ficha.acumulado.splice(i, 0, { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 });
+                i = i + 2;
+            }
+
+        }
+
+    })
+
+
+    res.render("pagos/pagos.cte.ejs", render_obj);
 
 }
 
@@ -63,22 +99,65 @@ async function deudaCte(req, res) {
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }))
 
-    if (fichas_data.map(ficha => ficha.FICHA).includes(FICHA_PRIMERA)) 
+    if (fichas_data.map(ficha => ficha.FICHA).includes(FICHA_PRIMERA))
         fichas.sort(ficha => ficha.data.FICHA == FICHA_PRIMERA ? -1 : 1)
-    
 
 
-    //*Que sea 1 sola consulta usando "in"
-    for (let i = 0; i < fichas.length; i++) {
+        for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
         fichas[i].articulos_string = await getArticulosString(fichas[i].data.ARTICULOS.split(" "));
     }
-    // console.log("🚀 ~ file: pagos.controller.cargar_pago.js:70 ~ deudaCte ~ fichas[i].articulos:", fichas[0].data.articulos)
 
     const cte_data = await getClientes(CTE);
 
+    fichas.forEach(ficha => {
+        while (new Date(ficha.acumulado[0]?.MES_ANIO) > new Date(getVencimientoValido({ VENCIMIENTO: ficha.data.VENCIMIENTO, PRIMER_PAGO: ficha.data.PRIMER_PAGO }).VENCIMIENTO_EVALUA)) {
+            const { acumulado: first_acumulado } = ficha;
+            const { MES_ANIO } = first_acumulado[0];
+            const fecha_aux = new Date(MES_ANIO);
+            const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() - 1);
+            const [year, month] = mes_anio_date.toISOString().split("-");
+            const obj = { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 };
+            ficha.acumulado.unshift(obj);
+        }
+    })
+
+    fichas.forEach(ficha => {
+
+        for (let i = 1; i < ficha.acumulado.length; i++) {
+
+            const auxiliar = new Date(ficha.acumulado[i - 1].MES_ANIO);
+
+            if (new Date(ficha.acumulado[i].MES_ANIO).toISOString().split("T")[0]
+                !=
+                new Date(auxiliar.getUTCFullYear(), auxiliar.getUTCMonth() + 1).toISOString().split("T")[0]) {
+
+
+                const fecha_aux = new Date(ficha.acumulado[i - 1].MES_ANIO);
+                const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() + 1);
+                const [year, month] = mes_anio_date.toISOString().split("-");
+                ficha.acumulado.splice(i, 0, { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 });
+                i = i + 2;
+            }
+
+        }
+
+    })
+    
+    fichas.forEach(ficha => {
+        ficha.acumulado = ficha.acumulado.map(acumulado => {
+            const {MES_ANIO,MES,CUOTA,MORA,SERV} = acumulado
+            return {MES_ANIO,MES,DIFERENCIA : CUOTA - ficha.data.CUOTA  ,CUOTA,MORA,SERV};
+        })
+    })
+    
+
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data: cte_data[0], usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido });
 }
+
+
+
+
 
 async function deudaFicha(req, res) {
     const { CTE, FICHA } = req.query;

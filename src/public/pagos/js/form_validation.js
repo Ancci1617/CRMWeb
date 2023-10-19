@@ -8,7 +8,6 @@ console.log("vinculado")
 
 const mpCheckHandler = async (e) => {
     const credito = e.target;
-    console.log("is mp",credito.ISMP.checked);
     if (!credito.ISMP) return;
 
     const creditoData = new FormData(credito);
@@ -52,28 +51,6 @@ const mpCheckHandler = async (e) => {
 
 creditos_arr.forEach(credito => {
     const btn_submit = [...credito.querySelectorAll("input[type='submit']")];
-    const btn_mostrar_detalle = credito.querySelector(".btn-detalles");
-    const btn_ocultar_detalle = credito.querySelector(".btn-cerrar-detalle");
-    const deep_details = credito.querySelector(".deep_details");
-
-    btn_mostrar_detalle.addEventListener("click", e => {
-        deep_details.classList.toggle("show");
-    }, false);
-    btn_ocultar_detalle.addEventListener("click", e => {
-        deep_details.classList.toggle("show");
-    }, false);
-
-    // credito.querySelector(".check_mp").addEventListener("click", e => {
-    //     const MP_INPUTS = credito.querySelectorAll("input[name='N_OPERACION'],input[name='MP_PORCENTAJE'],select[name='MP_TITULAR']");
-    //     MP_INPUTS.forEach(input => {
-    //         input.required = e.target.checked;
-    //         input.hidden = !e.target.checked;
-    //         input.value = "";
-    //     })
-
-    // });
-
-
 
     btn_submit.find(element => element.formAction.includes("cambiarFecha"))?.addEventListener("click", e => {
         credito.COBRADO.required = false;
@@ -89,8 +66,5 @@ creditos_arr.forEach(credito => {
 
     //Al momento de subir un pago de MP valide que el dinero este en las cuentas
     credito.addEventListener("submit", mpCheckHandler);
-
-
-
 
 })

@@ -22,23 +22,7 @@ const formOrdenarRecorrido = async (req, res) => {
     res.render("cobrador/recorrido2.ejs", { fichas })
 }
 
-const formDeudaRecorrido = async (req, res) => {
-    const { ZONA, ORDEN } = req.query;
 
-    const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA, ORDEN_COBRANZA: ORDEN } });
-    
-    const fichas =
-        fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
-
-    fichas[0].acumulado =
-        await pagosModel.getAcumuladoByCteFicha({ CTE: fichas_data[0].CTE, FICHA: fichas_data[0].FICHA });
-
-        const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
-
-    res.render("pagos/pagos.recorrido.ejs", { fichas: [fichas[0]], usuarios,ORDEN });
-
-
-}
 
 const postCambiarFecha = async (req,res) => {
     const {FICHA,FECHA_COB,ZONA} = req.body;
@@ -67,7 +51,7 @@ const formIniciarRecorrido = async (req,res) => {
     res.render("cobrador/iniciar.ejs",{ fichas ,usuarios});
 }
 
-module.exports = { postOrdenarRecorrido, formOrdenarRecorrido, formDeudaRecorrido ,postCambiarFecha,postVolver,formIniciarRecorrido}
+module.exports = { postOrdenarRecorrido, formOrdenarRecorrido ,postCambiarFecha,postVolver,formIniciarRecorrido}
 
 
 
