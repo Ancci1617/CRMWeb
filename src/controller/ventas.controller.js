@@ -4,7 +4,7 @@ const { insertVenta, updateVentaById, eliminarVentaById } = require("../model/ve
 const { getNuevoNumeroDeCte, getVentaById, borrarVentasDelDia } = require("../model/ventas/ventas.query.js")
 const { saveFileFromEntry } = require("../lib/files.js");
 const { generarContactoCTE } = require("../lib/contactos.js")
-const  pagosModel  = require("../pagos/model/pagos.model.js");
+const pagosModel = require("../pagos/model/pagos.model.js");
 const { getRandomCode } = require("../lib/random_code.js");
 const { validarUltimoTelefonoByCte, borrarTelefonoByVentaId } = require("../model/contactos/contactos.model");
 const { insertarNuevaUbicacion } = require("../ubicaciones/model/ubicaciones.mode");
@@ -26,17 +26,17 @@ const formCargarVenta = async (req, res) => {
 }
 const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
-    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP ,ubicacion_cliente,CALLE} = req.body;
-    const [LATITUD = null,LONGITUD = null] =  ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
-    
+    const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP, ubicacion_cliente, CALLE } = req.body;
+    const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
+
     //Asigna numero de cte nuevo si hace falta
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
 
-    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO","LATITUD_VENDEDOR","LONGITUD_VENDEDOR","ACCURACY_VENDEDOR"];
+    const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO", "LATITUD_VENDEDOR", "LONGITUD_VENDEDOR", "ACCURACY_VENDEDOR"];
 
     const { insertId } = await insertVenta({ Venta: Object.assign(objeto_venta, { CTE, USUARIO, MODO: "BGM" }) });
 
-    await insertarNuevaUbicacion({CALLE,LATITUD,LONGITUD})
+    await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD })
 
 
     //Cargar imagen de frente y dorso a servidor
@@ -73,10 +73,9 @@ const updateVenta = async (req, res) => {
 
 
     //Si antes no tenia anticipo y ahora si, que le genere el pago
-    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO") {
-        console.log("intenta cargar pago");
+    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
-    }
+
 
     //Edita la venta
     await updateVentaById(req.body, venta_prev.ANTICIPO);
@@ -106,17 +105,4 @@ const eliminarVenta = async (req, res) => {
 
 
 module.exports = { formCargarVenta, postCargarVenta, getEntregaDePrepago, updateVenta, eliminarVenta }
-
-
-function estaIncluido(a, b) {
-    const propiedades = Object.keys(b);
-
-    for (let propiedad of propiedades) {
-        if (a[propiedad] != b[propiedad]) {
-            return false;
-        }
-
-    }
-    return true;
-}
 

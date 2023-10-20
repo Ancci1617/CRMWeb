@@ -9,7 +9,6 @@ const { PAGOS_ADMIN, PAGOS_USER } = require("../../constants/permisos.js");
 
 
 Router.get("/deuda_cte", pagosController.deudaCte);
-Router.get("/deuda_credito",pagosController.deudaCredito);
 Router.get("/saldo_servicio_anterior", hasPermission(PAGOS_USER), cobranzasController.generarSaldoAnteriorServicio);
 Router.get("/codigo_pago", hasPermission(PAGOS_USER), pagosController.codigoDePago);
 

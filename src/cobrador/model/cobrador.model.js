@@ -106,7 +106,6 @@ const volverAlFinal = async ({ FICHA ,ZONA}) => {
         let [res2] = await connection.query(`
         UPDATE Fichas F left join (SELECT Fichas.FICHA,(ROW_NUMBER() OVER(ORDER BY ORDEN_COBRANZA asc)) - 1 as ORDEN from Fichas where ORDEN_COBRANZA is not null and Fichas.Z = ?) AUX on AUX.FICHA = F.FICHA SET F.ORDEN_COBRANZA = AUX.ORDEN WHERE ORDEN_COBRANZA IS NOT NULL AND Z = ? order by ORDEN_COBRANZA asc;
         `,[ZONA,ZONA])
-        console.log({res,res2});
 
 
 

@@ -15,13 +15,6 @@ const getAside = async () => {
     ]
 
 
-    // let dayIterator = new Date(today.getUTCFullYear(), today.getMonth() - 3, 0, today.getUTCDate());
-    // while (dayIterator <= today) {
-    //     FECHAS.push(dayIterator.toISOString().split("T")[0] );
-    //     dayIterator.setDate(dayIterator.getUTCDate() + 1);
-    // }
-
-    // FECHAS.reverse();
 
 
     const usuarios = await getUsuariosWithMp();

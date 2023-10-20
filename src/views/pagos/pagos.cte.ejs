@@ -12,27 +12,29 @@
 </head>
 <% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
 <% const formatNumber = number => {return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} %>
+<% const clasesPorVisitas = ["visitas_normal", "visitas_intermedio" ,"visitas_grave"] %>
+
+
 
 <body>
   <%- include("../partials/navigation/navigation-bar.ejs")  %>
 
   <main class="main__container">
 
-    <div class="buscador__container">
-      <form action="deuda_credito">
-        <i class="fa fa-search"></i>
-        <input type="text" class="buscador" name="CREDITO" value="" placeholder="Buscar ficha" />
-        <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
-        <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
-      </form>
+    <form class="buscador__container" action="deuda_cte">
+      <div>
+        <%- include(`${global.dir_partials}/icons/search.ejs`) %>
+        <input type="text" class="buscador" name="FICHA_PRIMERA" placeholder="Buscar ficha" />
+      </div>
+      <div>
+        <%- include(`${global.dir_partials}/icons/search.ejs`) %>
+        <input type="text" class="buscador" name="CTE" placeholder="Buscar cliente" />
+      </div>
 
-      <form action="deuda_cte">
-        <i class="fa fa-search"></i>
-        <input type="text" class="buscador" name="CTE" value="" placeholder="Buscar cliente" />
-        <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
-        <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
-      </form>
-    </div>
+      <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
+      <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
+      <input type="submit" hidden>
+    </form>
 
     <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
@@ -53,12 +55,13 @@
 
     <% fichas.forEach(ficha => { %>
     <% const {vencimiento_vigente,cuota,servicio,mora,atraso,pagas,vencidas,EsPrimerPago} = ficha.deuda %>
-    <% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT} = ficha.data %>
+    <% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT,CAMBIOS_DE_FECHA} = ficha.data %>
     <form class="credito" method="POST" action="cargar_pago">
       <div class="credito__header">
         <span>
           <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= FICHA %>
         </span>
+        <span class="visitas <%= clasesPorVisitas[Math.min(CAMBIOS_DE_FECHA,clasesPorVisitas.length)] %>"><%= CAMBIOS_DE_FECHA %></span>
         <span class="<%= ( EsPrimerPago ? PRIMER_PAGO : vencimiento_vigente) < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
       </div>
       <div class="details">
@@ -169,7 +172,7 @@
           </thead>
           <tbody>
             <% for(let i = 0;i< ficha.acumulado.length;i++) {%>
-            <%  const diferencia = ficha.acumulado[i].DIFERENCIA %>
+            <%  const diferencia = ficha.acumulado[i].CUOTA - ficha.data.CUOTA %>
             <tr>
               <td><%= meses[ficha.acumulado[i].MES] %></td>
               <td><%= ficha.acumulado[i].CUOTA %></td>

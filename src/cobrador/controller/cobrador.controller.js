@@ -34,9 +34,7 @@ const postCambiarFecha = async (req,res) => {
 
 const postVolver = async (req,res) => {
     const {ZONA,FICHA} = req.query;
-
-    await cobradorModel.volverAlFinal({FICHA : req.query.FICHA,ZONA});
-
+    await cobradorModel.volverAlFinal({FICHA ,ZONA});
     res.redirect(`/cobrador/recorrido/${ZONA}`);
 }
 const formIniciarRecorrido = async (req,res) => {

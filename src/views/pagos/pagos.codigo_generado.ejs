@@ -33,7 +33,7 @@
 
     <% if(EsRecorrido){ %>
     <a href="<%= `/cobrador/recorrido/${cte_data.ZONA}` %>" class="volver link">Volver al recorrido</a>
-    <a href="<%= `/pagos/deuda_credito?CREDITO=${pago.FICHA}&EsRecorrido=true` %>" class="volver link">Volver al credito</a>
+    <a href="<%= `/pagos/deuda_cte?FICHA_PRIMERA=${pago.FICHA}&EsRecorrido=true` %>" class="volver link">Volver al credito</a>
     <% } %>
 
   </main>

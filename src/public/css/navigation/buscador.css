@@ -7,7 +7,7 @@
     flex-wrap: wrap;
 }
 
-.buscador__container form {
+.buscador__container > div {
     display: flex;
     align-items: center;
     flex: 1;
@@ -17,7 +17,7 @@
     font-size: 1.3rem;
     margin-left: 5px;
 }
-.buscador__container form input[type="text"]{
+.buscador__container > div input[type="text"]{
     flex:1;
     border-radius: .3rem;
     outline: none;

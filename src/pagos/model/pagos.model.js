@@ -81,55 +81,65 @@ const cargarPago = async ({
 const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     const [fichas] = await pool.query(
         `SELECT
-            Fichas.FECHA AS FECHA_VENTA,
-            Fichas.CTE,
-            Fichas.PRIMER_PAGO,
-            Fichas.FICHA,
-            Fichas.Z,
-            Fichas.VENCIMIENTO,
-            Fichas.TOTAL,
-            Fichas.SERVICIO_ANT,
-            Fichas.ARTICULOS,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.SERV,0)),
-                0),
-                INTEGER
-            ) AS SERV_PAGO,
-            SERV_UNIT,
-            CUOTA,
-            CUOTA_ANT,
-            Fichas.CUOTA_ANT - CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
-                0),
-                INTEGER
-            ) AS SALDO,
-            CONVERT(
-                Fichas.TOTAL / Fichas.CUOTA,
-                INTEGER
-            ) AS CUOTAS,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
-                0),
-                INTEGER
-            ) AS CUOTA_PAGO,
-            Fichas.MORA_ANT,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.MORA,0)),
-                0),
-                INTEGER
-            ) AS MORA_PAGO
+        Fichas.FECHA AS FECHA_VENTA,
+        Fichas.CTE,
+        Fichas.PRIMER_PAGO,
+        Fichas.FICHA,
+        Fichas.Z,
+        Fichas.VENCIMIENTO,
+        Fichas.TOTAL,
+        Fichas.SERVICIO_ANT,
+        Fichas.ARTICULOS,
+        PagosSV.SERV_PAGO,
+        SERV_UNIT,
+        CUOTA,
+        CUOTA_ANT,
+        Fichas.CUOTA_ANT - IFNULL(PagosSV.CUOTA_PAGO,0) AS SALDO,
+        Fichas.TOTAL / Fichas.CUOTA AS CUOTAS,
+        IFNULL(PagosSV.CUOTA_PAGO,0) AS CUOTA_PAGO,
+        Fichas.MORA_ANT,
+        IFNULL(PagosSV.MORA_PAGO,0) AS MORA_PAGO,
+        Pagas(
+            IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
+            CUOTA
+        ) AS CUOTAS_PAGAS,
+        (
+        SELECT
+            COUNT(*)
         FROM
-            Fichas
-        LEFT JOIN PagosSV ON PagosSV.FICHA = Fichas.FICHA
-        
+            CambiosDeFecha
         WHERE
-            Fichas.?? LIKE ? 
+            CambiosDeFecha.FECHA > DATE_ADD(
+                Fichas.VENCIMIENTO,
+                INTERVAL Pagas(
+                    IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
+                    CUOTA
+                ) MONTH
+            ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+    ) AS CAMBIOS_DE_FECHA
+    FROM
+        Fichas
+    LEFT JOIN(
+        SELECT
+            PagosSV.FICHA,
+            SUM(PagosSV.VALOR) AS CUOTA_PAGO,
+            SUM(PagosSV.MORA) AS MORA_PAGO,
+            SUM(PagosSV.SERV) AS SERV_PAGO
+        FROM
+            PagosSV
+        WHERE
+            PagosSV.CONFIRMACION != 'INVALIDO'
         GROUP BY
-            Fichas.FICHA;`
+            FICHA
+    ) PagosSV
+    ON
+        PagosSV.FICHA = Fichas.FICHA
+    WHERE
+        Fichas.?? LIKE ?;`
         // HAVING
         //     SALDO > 0;
         , [MODO, CTE]);
-
+        console.log("fichas",fichas);
     if (fichas.length > 0) {
         return fichas;
     }

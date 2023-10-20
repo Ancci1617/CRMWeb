@@ -40,18 +40,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
 
     const {VENCIMIENTO_EVALUA,EsPrimerPago} = getVencimientoValido({VENCIMIENTO,PRIMER_PAGO});
-
-
-    //Data
-    const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(getToday()), CUOTAS);
-    const pagas =
-        Math.max(
-            Math.trunc((TOTAL - SALDO) / CUOTA * 10) / 10,
-            0);
-    const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
-    const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
-
-
+    const {vencidas,pagas,atraso,atraso_eval} = getAtrasos({CUOTA,CUOTAS,SALDO,TOTAL,VENCIMIENTO_EVALUA});
 
 
     //Deuda

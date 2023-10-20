@@ -82,6 +82,21 @@ body {
 .credito__header .vencimiento_al-dia {
     color: rgb(89, 130, 27);
 }
+.visitas {
+    background-color: lightgray;
+    width: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+.credito__header .visitas_normal{
+    color: rgb(89, 130, 27);
+}
+.credito__header .visitas_intermedio{
+    color: rgb(212, 189, 16);
+}
+.credito__header .visitas_grave{
+    color: rgb(255,0,0);
+}
 
 .credito .details {
     background-color: rgb(252, 242, 242);
