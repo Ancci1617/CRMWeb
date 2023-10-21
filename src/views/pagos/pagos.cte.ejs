@@ -121,7 +121,7 @@
 
           <% if(N_OPERACION && TITULAR){ %>
           <input type="number" name="MP_PORCENTAJE" placeholder="Recargo por MP" required />
-          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" />
+          <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" required/>
 
           <select name="MP_TITULAR">
             <% usuarios.forEach(usuario => {%>
