@@ -30,7 +30,7 @@ const getFichas = async (cte) => {
         ) AS CUOTAS,
 
         Fichas.ESTADO,
-        ROUND(
+        CONVERT(ROUND(
             (Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER)) /(
             SELECT
                 LP.\`CUOTAS 6\`
@@ -41,7 +41,7 @@ const getFichas = async (cte) => {
             LIMIT 1
         ),
         1
-        ) AS VU,
+        ),FLOAT) AS VU,
         Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,(
             SELECT
                 CambiosDeFecha.CAMBIO
@@ -60,10 +60,15 @@ const getFichas = async (cte) => {
         Fichas.SERV_UNIT,
 
         Fichas.MORA_ANT,
-        CONVERT(IFNULL(pagos.MORA_PAGO,0),INTEGER) as MORA_PAGO
+        CONVERT(IFNULL(pagos.MORA_PAGO,0),INTEGER) as MORA_PAGO,
+        Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) as VENCIDAS,
         
+        ROUND( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA ,1) as Pagas,
+        
+		ROUND(Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) -  (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA,1) AS Atraso,
 
-
+		Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) - FLOOR( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA + 0.3)  as Atraso_evaluado
+    
     FROM
         Fichas
     LEFT JOIN(
