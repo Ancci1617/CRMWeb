@@ -46,7 +46,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     //Agregar vencidas,pagas,totales,atrasos;
     query_result.Fichas = query_result.Fichas.map(ficha => {
-        const { FECHA_FORMAT, FICHA, Z, TOTAL, ANT, MES0, MES1, MES2, MES3, MES4, MES5, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, VU, VENCIMIENTO, CDeFecha, PRIMER_PAGO, CUOTAS, SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, FECHA } = ficha;
+        const { FECHA_FORMAT, FICHA, Z, TOTAL, ANT, MES0, MES1, MES2, MES3, MES4, MES5, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, VU, VENCIMIENTO, CDeFecha, PRIMER_PAGO, CUOTAS, SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, FECHA,ESTADO } = ficha;
         const deuda = getDoubt({
             VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
             SERVICIO_ANT, Z, FECHA_VENTA: FECHA, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO
@@ -54,7 +54,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
 
         const { vencidas, pagas, atraso } = deuda;
-        return { FECHA_FORMAT, FICHA, Z, TOTAL, ANT, MES0, MES1, MES2, MES3, MES4, MES5, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, VU, VENCIMIENTO, CDeFecha, vencidas, pagas, CUOTAS, atraso }
+        return { FECHA_FORMAT, FICHA, Z, TOTAL, ANT, MES0, MES1, MES2, MES3, MES4, MES5, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, VU, VENCIMIENTO, CDeFecha, vencidas, pagas, CUOTAS, atraso,ESTADO }
 
     }
     )
