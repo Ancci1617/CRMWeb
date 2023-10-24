@@ -6,8 +6,9 @@ const { insertarNuevaUbicacion } = require("../../ubicaciones/model/ubicaciones.
 const ventasModel = require("../model/ventas.model.js");
 const { getAside } = require("./lib/aside.js");
 const fs = require("fs");
-const  pagosModel  = require("../../pagos/model/pagos.model.js");
+const pagosModel = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
+const { getRequiredImages } = require("./lib/required_images.js");
 
 
 //Para admin
@@ -29,45 +30,55 @@ const borrarVenta = async (req, res) => {
 
 
 
-//Vendeores
+//Vendedores
 const formCargarVenta = async (req, res) => {
     const { cte } = req.params;
-
     const [cte_data] = await getClientesAndLocation(cte);
-
-    //Buscar si ya tenemos las imagenes
-    const required_images = { frente: true, dorso: true, rostro: true };
-    if (fs.existsSync(`../ImagenesDeClientes/${cte}`)) {
-        required_images.frente = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-FRENTE.jpg`);
-        required_images.dorso = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-DORSO.jpg`);
-        required_images.rostro = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-ROSTRO.jpg`);
-    }
-    res.render("ventas/Ventas.cargar.ejs", { cte_data, required_images });
+    res.render("ventas/Ventas.cargar.ejs", { cte_data, required_images: getRequiredImages(cte) });
 }
+
+const formCargarPrestamo = async (req, res) => {
+    const { cte } = req.params;
+    const [cte_data] = await getClientesAndLocation(cte);
+    res.render("ventas/prestamo.cargar.ejs", { cte_data, required_images: getRequiredImages(cte) });
+}
+
+
 
 
 const postCargarVenta = async (req, res) => {
     const USUARIO = req.user.Usuario;
     const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP, ubicacion_cliente, CALLE } = req.body;
     const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
-
+    
     //Asigna numero de cte nuevo si hace falta
+
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-    const { insertId: ID_VENTA } = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO });
+    const { insertId: ID_VENTA } = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO }); //x
     if (ID_VENTA == "error") return res.send("Hubo un error al cargar las ventas.");
+
     await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
 
     if (req.files)
         saveFileFromEntry(Object.entries(req.files), CTE);
 
+    await generarContactoCTE(CTE, USUARIO, { TELEFONO }, ID_VENTA);
+
     if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
-    await generarContactoCTE(CTE, USUARIO, { TELEFONO }, ID_VENTA);
-
-
     res.redirect("/CRM");
 }
+
+const postCargarPrestamo = async (req,res) => {
+    const USUARIO = req.user.Usuario;
+    const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
+    const response = await ventasModel.cargarPrestamo({body : req.body});
+    console.log(req.files)
+    res.redirect("/CRM")
+}
+
+
 
 
 
@@ -103,4 +114,4 @@ const postEditarVenta = async (req, res) => {
 
 
 
-module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta }
+module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta, formCargarPrestamo }

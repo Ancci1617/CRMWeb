@@ -6,7 +6,7 @@ const getVentas = async ({ filter }) => {
         let keys_sql = keys.substring(5, keys.length);
 
         const [ventas] = await pool.query(
-        `SELECT
+            `SELECT
             VentasCargadas.CTE,
             VentasCargadas.FICHA,
             NOMBRE,
@@ -76,7 +76,7 @@ const getAsideVentas = async () => {
 
 const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO", "LATITUD_VENDEDOR", "LONGITUD_VENDEDOR", "ACCURACY_VENDEDOR"];
-    const { NOMBRE,CALLE,CRUCES,CRUCES2,FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA, SERV_UNIT, PRIMER_VENCIMIENTO ,DNI} = body;
+    const { NOMBRE, CALLE, CRUCES, CRUCES2, FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA, SERV_UNIT, PRIMER_VENCIMIENTO, DNI } = body;
 
     const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
         obj[propiedad] = body[propiedad];
@@ -95,7 +95,7 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
 
 
         await connection.query(
-        `INSERT INTO Fichas(
+            `INSERT INTO Fichas(
             FECHA,
             CTE,
             FICHA,
@@ -110,9 +110,9 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
             ID_VENTA,
             ESTADO
         )
-        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId,"PENDIENTE"]]);
+        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId, "PENDIENTE"]]);
 
-        await connection.query(`INSERT IGNORE INTO  ClientesSV(CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,[[CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI]])
+        await connection.query(`INSERT IGNORE INTO  ClientesSV(CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`, [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI]])
 
         await connection.commit()
 
@@ -125,7 +125,28 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     }
     return { insertId: "error" }
 }
+const insertPrestamo = async ({ body }) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+        const [res] = await connection.query(``);
+        
+        
+        await connection.commit();
 
+
+
+    } catch (error) {
+
+
+
+        await connection.rollback();
+    } finally {
+        connection.release();
+    }
+
+
+}
 
 const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT }) => {
 
@@ -174,7 +195,7 @@ const borrarVenta = async ({ ID_VENTA }) => {
 
         //Contactos
         await connection.query(`DELETE FROM BaseCTE where VENTA_ID = ?`, [ID_VENTA]);
-        
+
         //Ubicaciones 
         await connection.query(`UPDATE UBICACIONESSV set VALIDACION = 'INVALIDO' where ID_VENTA = ?`, [ID_VENTA]);
 
@@ -192,15 +213,15 @@ const borrarVenta = async ({ ID_VENTA }) => {
         connection.release();
     }
 }
-const confirmarVenta = async ({venta}) => {
-    const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI} = venta;
+const confirmarVenta = async ({ venta }) => {
+    const { CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI } = venta;
     const connection = await pool.getConnection();
 
     try {
         await connection.beginTransaction();
 
         await connection.query(`UPDATE Fichas SET ESTADO = 'ACTIVO' where ID_VENTA = ?`, [venta.INDICE]);
-        await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`,[{NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI},CTE])
+        await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI }, CTE])
 
         await connection.commit()
     } catch (error) {

@@ -99,6 +99,7 @@ const getClientesAndLocation = async (cte) => {
 		UBICACIONESSV.ID_CALLE DESC
     limit 1;`, [cte]);
 
+    
     if (rows.length > 0) {
         return rows;
     }

@@ -176,7 +176,9 @@ const getFichas = async (cte) => {
     WHERE
         Fichas.CTE like ?
     GROUP BY
-        Fichas.FICHA;`, [cte]);
+        Fichas.FICHA 
+    ORDER BY 
+        Fichas.FECHA;`, [cte]);
 
 
     if (rows.length > 0) {
