@@ -79,7 +79,7 @@ const handlePrimerVencimiento = e => {
 
 
 
-ANTICIPO.addEventListener("change", e => {
+ANTICIPO?.addEventListener("change", e => {
 
     if (e.target.value > 0) {
         ANTICIPO_MP.required = true;

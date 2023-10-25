@@ -1,4 +1,6 @@
 const pool = require("../../model/connection-database.js");
+const contactosModel = require("../../contactos/model/contactos.model.js");
+const ubicacionesModel = require("../../ubicaciones/model/ubicaciones.mode.js");
 
 const getVentas = async ({ filter }) => {
     try {
@@ -125,21 +127,50 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     }
     return { insertId: "error" }
 }
-const insertPrestamo = async ({ body }) => {
+const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
+    const { CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DOMICILIO_LABORAL, WHATSAPP, DNI, CAPITAL, CUOTAS, CUOTA, TOTAL, SERV_UNIT, PRIMER_PAGO, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, GARANTE_CTE, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO, APROBADO, VENCIMIENTO, CUOTAS_PARA_ENTREGA = 0, LATITUD_VENDEDOR = 0, LONGITUD_VENDEDOR = 0, ACCURACY_VENDEDOR = 0 ,ARTICULOS } = body;
+    const [LATITUD, LONGITUD] = body.ubicacion_cliente.split(",");
+
     const connection = await pool.getConnection();
     try {
+
         await connection.beginTransaction();
-        const [res] = await connection.query(``);
+
+        const [responseInsertVentasCargadas] = await connection.query(`
+        INSERT INTO VentasCargadas
+        (CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, 
+            DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, 
+            ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, 
+            FECHA_VENTA, RESPONSABLE, APROBADO, USUARIO, MODO, LATITUD_VENDEDOR, 
+            LONGITUD_VENDEDOR, ACCURACY_VENDEDOR, VISIBLE) 
+            VALUES (?)
+        `, [[CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI,
+            ARTICULOS || CAPITAL, TOTAL, CUOTA,CUOTAS ,'PRESTAMO','Para entregar',PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA,
+            FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, MODO,
+            LATITUD_VENDEDOR, LONGITUD_VENDEDOR,ACCURACY_VENDEDOR, 1]]);
+
+
+        const [responseInsertFichas] = await connection.query(
+            `INSERT INTO Fichas(
+                FECHA, CTE, FICHA, Z, TOTAL, CUOTA, VENCIMIENTO, 
+                PRIMER_PAGO, CUOTA_ANT, SERVICIO_ANT, MORA_ANT, SERV_UNIT, 
+                ARTICULOS, ESTADO,ID_VENTA) VALUES (?)`,
+            [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_PAGO,
+                PRIMER_PAGO, TOTAL, 0, 0, SERV_UNIT, CAPITAL || ARTICULOS, "PENDIENTE", responseInsertVentasCargadas.insertId]]);
+
+
+        const contacto_generado = await contactosModel.generarContactoCTEWithConection({ conexion: connection, CTE, TELEFONO: WHATSAPP, Usuario, VENTA_ID: responseInsertVentasCargadas.insertId });
+        const ubicacion_generada = await ubicacionesModel.insertarNuevaUbicacionWithConection({ conexion: connection, CALLE, LATITUD, LONGITUD, ID_VENTA: responseInsertVentasCargadas.insertId });
+
         
+        await connection.query(`INSERT IGNORE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,
+         [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI]])
         
+
         await connection.commit();
-
-
-
+        return responseInsertVentasCargadas;        
     } catch (error) {
-
-
-
+        console.log("error al cargar el prestamo" , error);
         await connection.rollback();
     } finally {
         connection.release();
@@ -232,7 +263,7 @@ const confirmarVenta = async ({ venta }) => {
     }
 }
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta }
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta,insertPrestamo }
 
 
 

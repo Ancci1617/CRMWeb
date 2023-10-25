@@ -61,7 +61,7 @@ const getCteFicha = async (ficha) => {
 }
 const getCteTel = async (tel) => {
     const [rows] = await pool.query(
-        `SELECT ClientesSV.CALLE,BaseCTE.CTE FROM BaseCTE LEFT join ClientesSV on ClientesSV.CTE = BaseCTE.CTE WHERE TELEFONO = ? limit 1;`, [tel]);
+        `SELECT ClientesSV.CALLE,BaseCTE.CTE FROM BaseCTE inner join ClientesSV on ClientesSV.CTE = BaseCTE.CTE WHERE TELEFONO = ? limit 1;`, [tel]);
     if (rows.length > 0) {
         return rows[0];
     }

@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="cargar_prestamo" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
+      <form action="/ventas/prestamos/cargar_prestamo" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
 
 
         <div class="user-details">
@@ -116,7 +116,7 @@
             <span class="details">DNI Frente</span>
             <label for="FRENTE">
               <span class="IMG-FRENTE">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="CTE_FRENTE" accept="image/*" required>
             </label>
           </div>
           <% } %>
@@ -126,7 +126,7 @@
             <span class="details">DNI Dorso</span>
             <label for="DORSO">
               <span class="IMG-DORSO">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
+              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="CTE_DORSO" accept="image/*" required>
             </label>
           </div>
           <% } %>
@@ -136,7 +136,7 @@
             <span class="details">ROSTRO</span>
             <label for="ROSTRO">
               <span class="IMG-ROSTRO">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="CTE_ROSTRO" accept="image/*" required>
             </label>
           </div>
           <% } %>
@@ -148,7 +148,7 @@
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "CTE garante",type : "number" , placeholder : "Numero de CTE de garante" ,defaultValue : "" , name : "GARANTE_CTE", required : false}}) %>
 
             
-          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "DNI garante",type : "number" , placeholder : "DNI de garante" ,defaultValue : "" , name : "GARANTE_CTE", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "DNI garante",type : "number" , placeholder : "DNI de garante" ,defaultValue : "" , name : "GARANTE_DNI", required : true}}) %>
           <!-- nombre zona domicilio cruces cruces2 telefono -->
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Nombre garante",type : "text" , placeholder : "Nombre de garante" ,defaultValue : "" , name : "GARANTE_NOMBRE", required : true}}) %>
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "ZONA garante",type : "text" , placeholder : "Zona" ,defaultValue : "" , name : "GARANTE_ZONA", required : true}}) %>
@@ -160,25 +160,25 @@
 
             <div class="input-box">
               <span class="details">DNI Frente</span>
-              <label for="FRENTE">
+              <label for="FRENTE_GARANTE">
                 <span class="IMG-FRENTE">Sin foto cargada...</span>
-                <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
+                <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE_GARANTE" name="FRENTE_GARANTE" accept="image/*" required>
               </label>
             </div>
   
             <div class="input-box">
               <span class="details">DNI Dorso</span>
-              <label for="DORSO">
+              <label for="DORSO_GARANTE">
                 <span class="IMG-DORSO">Sin foto cargada...</span>
-                <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
+                <input type="file" class="inputfile-for-label" id="DORSO_GARANTE" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO_GARANTE" accept="image/*" required>
               </label>
             </div>
   
             <div class="input-box">
               <span class="details">ROSTRO</span>
-              <label for="ROSTRO">
+              <label for="ROSTRO_GARANTE">
                 <span class="IMG-ROSTRO">Sin foto cargada...</span>
-                <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
+                <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO_GARANTE" value="DNI Frente" name="ROSTRO_GARANTE" accept="image/*" required>
               </label>
             </div>
 
@@ -203,7 +203,7 @@
 
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
-  <script src="/js/ventas/cargar_venta.js"></script>
+  <!-- <script src="/js/ventas/cargar_venta.js"></script> -->
 
 </body>
 

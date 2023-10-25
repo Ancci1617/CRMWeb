@@ -1,15 +1,16 @@
 const Router = require("express").Router();
 const { hasPermission } = require("../../middlewares/permission.middleware.js");
-const ventasController = require("../controller/ventas.controller.js");
+const prestamosController = require("../controller/prestamos.controller.js");
 
 
 
+Router.get("/cargar_prestamo/:cte",prestamosController.formCargarPrestamo);
 
-Router.get("/cargar_prestamo/:cte",ventasController.formCargarPrestamo);
-
-// Router.post("/cargar_prestamo",ventasController.postCargarPrestamo);
+Router.post("/cargar_prestamo",prestamosController.postCargarPrestamo);
 
 
+
+// Router.get("/pasar_prestamos",)
 
 
 
