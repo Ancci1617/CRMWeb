@@ -74,8 +74,9 @@ const postCargarVenta = async (req, res) => {
 
 const formEditarVenta = async (req, res) => {
     const { venta } = res.locals;
-    // const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
-    console.log("🚀 ~ file: ventas.controller.js:66 ~ formEditarVenta ~ venta:", venta)
+    if (venta.MODO == "EASY")
+        return res.render("ventas/prestamo.cargado.editar.ejs", {venta});
+
     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 }
 

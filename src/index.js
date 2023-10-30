@@ -74,6 +74,7 @@ app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
 app.use("/mp/api/",isLoggedIn,require("./MP/Router/api.mp.routes.js"));
+app.use("/api/",isLoggedIn,require("./shared/Router/api.routes.js"));
 app.use("/mp/",isLoggedIn,require("./MP/Router/mp.routes.js"));
 app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));

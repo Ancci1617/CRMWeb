@@ -1,3 +1,4 @@
+const { getToday } = require("../../lib/dates");
 const { saveFileFromEntry } = require("../../lib/files");
 const { getClientesAndLocation } = require("../../model/CRM/get_tablas/get_clientes");
 const { getNuevoNumeroDeCte } = require("../../model/ventas/ventas.query");
@@ -28,8 +29,7 @@ const postCargarPrestamo = async (req, res) => {
         saveFileFromEntry(Object.entries(obj_garante), GARANTE_CTE);
     }
 
-    console.log({CTE,GARANTE_CTE});
-    res.send("OK")
+    res.redirect(`/ventas/pasar_ventas?USUARIO=${Usuario}&FECHA_VENTA=${getToday()}`)
 }
 
 const formCargarPrestamo = async (req, res) => {

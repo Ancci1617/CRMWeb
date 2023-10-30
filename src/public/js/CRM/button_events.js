@@ -4,11 +4,13 @@ const btn_pedido = document.querySelector(".btn-pedido");
 const btn_contacto = document.querySelector(".btn-contacto");
 const btn_pago = document.querySelector(".btn-pago");
 const btn_ubicacion = document.querySelector(".btn-ubicacion");
-
+const btn_prestamo = document.querySelector(".btn-prestamo");
 
 window.addEventListener("load", (e) => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.size > 0) evaluarCliente();
+    addBtnEvents();
+
 });
 
 
@@ -32,10 +34,9 @@ function addBtnEvents() {
         gotoLink(`/contactos/generar_contacto/${getCteEvaluado()}?TIPO=${getCteEvaluado() == 0 ? "Y" : "CTE"}`);
     })
     btn_pago?.addEventListener("click", () => { gotoLink(`pagos/deuda_cte?CTE=${getCteEvaluado()}`) });
-
+    btn_prestamo?.addEventListener("click", e => gotoLink(`ventas/prestamos/cargar_prestamo/${getCteEvaluado()}`))
 }
 
-addBtnEvents();
 
 
 
