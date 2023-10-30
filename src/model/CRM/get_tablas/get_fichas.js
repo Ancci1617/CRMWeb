@@ -77,7 +77,7 @@ const getFichas = async (cte) => {
             PagosSVAcumulado.CTE,
             SUM(
                 IF(
-                    PagosSVAcumulado.FECHA < DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH) OR PagosSVAcumulado.FECHA = 'ANT',
+                    PagosSVAcumulado.FECHA <= DATE_SUB(LAST_DAY(CURRENT_DATE), INTERVAL 7 MONTH) OR PagosSVAcumulado.FECHA = 'ANT',
                     PagosSVAcumulado.VALOR,
                     0
                 )
@@ -151,7 +151,7 @@ const getFichas = async (cte) => {
         FROM
             PagosSVAcumulado
         GROUP BY
-            FICHA
+            CONCAT(FICHA,'-',CTE)
     ) acumulados
     ON
         CONCAT(acumulados.FICHA,'-',acumulados.CTE) = CONCAT(Fichas.FICHA,'-',Fichas.CTE) 
