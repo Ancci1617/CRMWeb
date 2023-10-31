@@ -30,17 +30,17 @@ const postCheckMP = async (req, res) => {
             return res.json({ success: true, found: true, available: false, msg: "La transferencia es un EGRESO DE DINERO, no un ingreso." });
 
 
-        const { transaction_details } = MP_DATA;
+        const { transaction_details,transaction_amount } = MP_DATA;
 
         const N_OPERACION_DATA = await mercadoPagoModel.getOperationData({ N_OPERACION });
         //Revisamos si la plata que estamos pasando es mayor que la plata recibida
-        if (N_OPERACION_DATA.TOTAL + parseInt(MONTO_CTE) + parseInt(MP_PORCENTAJE) > transaction_details.total_paid_amount + 100)
+        if (N_OPERACION_DATA.TOTAL + parseInt(MONTO_CTE) + parseInt(MP_PORCENTAJE) > transaction_amount + 100)
             return res.json({
                 success: true,
                 found: true,
                 available: false,
                 data: {
-                    net_worth: transaction_details.total_paid_amount,
+                    net_worth: transaction_amount,
                     asociado: N_OPERACION_DATA
                 },
                 msg: `El dinero recibido no concuerda con los pagos que se intenta registrar.`
