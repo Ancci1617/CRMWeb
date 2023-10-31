@@ -14,12 +14,12 @@ const getFichas = async (cte) => {
         Fichas.Z,
         Fichas.TOTAL,
         acumulados.ANT,
-        IFNULL(acumulados.MES0, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH),0,null) ) as MES0,
-        IFNULL(acumulados.MES1, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH),0,null) ) as MES1,
-        IFNULL(acumulados.MES2, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH),0,null) ) as MES2,
-		IFNULL(acumulados.MES3, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH),0,null) ) as MES3,
-		IFNULL(acumulados.MES4, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH),0,null) ) as MES4,
-		IFNULL(acumulados.MES5, IF(Fichas.FECHA <= DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH),0,null) ) as MES5,
+        IFNULL(acumulados.MES0, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)),0,null) ) as MES0,
+        IFNULL(acumulados.MES1, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH)),0,null) ) as MES1,
+        IFNULL(acumulados.MES2, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH)),0,null) ) as MES2,
+		IFNULL(acumulados.MES3, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH)),0,null) ) as MES3,
+		IFNULL(acumulados.MES4, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH)),0,null) ) as MES4,
+		IFNULL(acumulados.MES5, IF(Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)),0,null) ) as MES5,
         Fichas.CUOTA_ANT,
         CONVERT(IFNULL(pagos.CUOTA_PAGO, 0),INTEGER) AS CUOTA_PAGO,
         Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO,0),INTEGER) AS SALDO,
@@ -58,12 +58,11 @@ const getFichas = async (cte) => {
         Fichas.SERVICIO_ANT,
         CONVERT(IFNULL(pagos.SERV_PAGO,0),INTEGER) as SERV_PAGO,
         Fichas.SERV_UNIT,
-
         Fichas.MORA_ANT,
         CONVERT(IFNULL(pagos.MORA_PAGO,0),INTEGER) as MORA_PAGO,
         Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) as VENCIDAS,
         
-        ROUND( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA ,1) as Pagas,
+        CONVERT(ROUND( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA ,1),FLOAT) as Pagas,
         
 		ROUND(Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) -  (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA,1) AS Atraso,
 

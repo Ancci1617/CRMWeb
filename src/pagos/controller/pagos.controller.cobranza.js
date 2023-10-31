@@ -58,12 +58,19 @@ async function rendicionController(req, res) {
 
 const getCobranzas = async (req, res) => {
   let cobranzas = await getFichas("%");
-  for(let i = 0 ; i< cobranzas.length;i++){
+  for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
   }
 
-  console.log("COB");
-  console.log(cobranzas[0]);
+  const cobranzas_final = cobranzas.map(ficha => {
+    const {
+      cuota: deuda_cuota,
+      servicio: deuda_serv,
+      mora: deuda_mora,
+      vencimiento_vigente, EsPrimerPago
+    } = getDoubt(ficha)
+    return Object.assign(ficha, {deuda_cuota,deuda_serv,deuda_mora,vencimiento_vigente,EsPrimerPago} );
+  })
 
   res.json(cobranzas)
 
