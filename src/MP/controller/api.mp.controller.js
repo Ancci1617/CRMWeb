@@ -1,9 +1,10 @@
-const { getUserByUsuario } = require("../../model/auth/getUser.js");
+const { getUserByUsuario, getUsuariosWithMp } = require("../../model/auth/getUser.js");
 const mercadoPagoModel = require("../model/mercadoPagoModel.js");
 const { getAside } = require("../lib/aside.js");
 const { get_body } = require("../constants/fetch_body.js");
 const { getPagosMP } = require("../../pagos/model/pagos.model.js");
 const axios = require("axios");
+const { getLimitDates, getToday } = require("../../lib/dates.js");
 
 const postCheckMP = async (req, res) => {
     const { N_OPERACION, MP_PORCENTAJE, MONTO_CTE, MP_TITULAR } = req.body;
@@ -30,7 +31,7 @@ const postCheckMP = async (req, res) => {
             return res.json({ success: true, found: true, available: false, msg: "La transferencia es un EGRESO DE DINERO, no un ingreso." });
 
 
-        const { transaction_details,transaction_amount } = MP_DATA;
+        const { transaction_amount } = MP_DATA;
 
         const N_OPERACION_DATA = await mercadoPagoModel.getOperationData({ N_OPERACION });
         //Revisamos si la plata que estamos pasando es mayor que la plata recibida
@@ -68,37 +69,18 @@ const postCheckMP = async (req, res) => {
 
 }
 
-const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE }) => {
-    try {
-
-        const { data: raw_payments } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&range=date_created&begin_date=${START_DATE}&end_date=${END_DATE}&status=approved&limit=200`, get_body(MP_TOKEN))
-
-        const payments = raw_payments.results.filter(payment => !payment.payer_id && payment.transaction_amount > 100);
-
-        return payments
-
-    } catch (error) {
-        console.log("ERROR AL BUSCAR PAGOS EN MP")
-        console.log(error);
-        return [];
-    }
-
-}
-
 const formController = async (req, res) => {
     const aside = await getAside();
     const { MES, MP_TITULAR } = req.query;
 
     if (!MES || !MP_TITULAR) return res.render("MP/mp.list.ejs", { payments: [], aside });
 
-    const date = new Date(MES);
 
-    const START_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - 1).toISOString();
-    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()).toISOString();
+    const { START_DATE, END_DATE } = getLimitDates({ MES })
 
     const user = await getUserByUsuario(MP_TITULAR);
 
-    const payments = await getPayments({ MP_TOKEN: user.MP_TOKEN, START_DATE, END_DATE });
+    const payments = await mercadoPagoModel.getPayments({ MP_TOKEN: user.MP_TOKEN, START_DATE, END_DATE, filtered: true });
     const pagos_mp = await getPagosMP();
 
 
@@ -112,5 +94,31 @@ const formController = async (req, res) => {
     res.render("MP/mp.list.ejs", { payments, aside });
 }
 
+const getSaldoEnCuentas = async (req, res) => {
+    const usuarios = await getUsuariosWithMp();
+    const [year, month] = getToday().split("-");
+    const { START_DATE, END_DATE } = getLimitDates({ MES: `${year}-${month}` });
+    console.log({ START_DATE, END_DATE });
 
-module.exports = { postCheckMP, formController }
+    let result = [];
+    for (let i = 0; i < usuarios.length; i++) {
+
+        const mp_data = await mercadoPagoModel.getPayments({ MP_TOKEN: usuarios[i].MP_TOKEN, START_DATE, END_DATE });
+
+        const ingresos = mp_data.results.filter(payment => !payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+        const egresos = mp_data.results.filter(payment => payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+        result.push({
+            titular: usuarios[i].Usuario,
+            saldo_ant: usuarios[i].MP_SALDO_ANT,
+            ingresos, egresos,
+            saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos
+        })
+
+    }
+
+
+    res.json(result)
+}
+
+
+module.exports = { postCheckMP, formController, getSaldoEnCuentas }

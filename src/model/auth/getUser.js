@@ -10,7 +10,8 @@ async function getUsuariosWithMp() {
         UNIDAD,
         PERMISOS,
         ZONAS,
-        MP_TOKEN
+        MP_TOKEN,
+        MP_SALDO_ANT
     FROM Usuarios
     WHERE
         MP_TOKEN IS NOT NULL`);

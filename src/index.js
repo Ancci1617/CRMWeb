@@ -54,6 +54,9 @@ app.use(morgan(":method :url :status :response-time ms - :res[content-length] - 
 
 
 // Routes
+app.use("/mp/api/",require("./MP/Router/api.mp.routes.js"));
+
+
 app.use("/api/pagos",require("./pagos/Router/pagos.api.routes.js"));
 
 app.get("/deuda_ficha", deudaFicha);
@@ -72,7 +75,6 @@ app.use(require("./Router/ventas/dnis/dnis.router.js"));
 app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
-app.use("/mp/api/",isLoggedIn,require("./MP/Router/api.mp.routes.js"));
 app.use("/mp/",isLoggedIn,require("./MP/Router/mp.routes.js"));
 app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));
