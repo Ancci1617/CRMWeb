@@ -3,7 +3,7 @@ const pool = require("../../model/connection-database")
 const getPagosMP = async () => {
     try {
         const [pagos] = await pool.query(
-`SELECT
+    `SELECT
     CTE,
     FICHA,
     MP_OPERACION,
@@ -20,7 +20,7 @@ WHERE
 ORDER BY
     PagosSV.MP_OPERACION ASC`);
 
-    return pagos;
+        return pagos;
 
 
     } catch (error) {
@@ -56,7 +56,7 @@ const cargarPago = async ({
             , [CTE, FICHA, CUOTA, PROXIMO, MP_PORCENTAJE, SERV, MORA, USUARIO, FECHA, CONFIRMACION, CODIGO, OBS, N_OPERACION, MP_TITULAR, DECLARADO_COB, DECLARADO_CUO, ID_VENTA, ID_VENTA]);
 
         if (PROXIMO)
-            await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO,CAMBIO_ORIGINAL) VALUES (?)`, [[FICHA, PROXIMO, USUARIO, FECHA, CODIGO,PROXIMO]])
+            await connection.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO,CAMBIO_ORIGINAL) VALUES (?)`, [[FICHA, PROXIMO, USUARIO, FECHA, CODIGO, PROXIMO]])
 
 
         await connection.query(
@@ -139,7 +139,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
         // HAVING
         //     SALDO > 0;
         , [MODO, CTE]);
-        console.log("fichas",fichas);
+    console.log("fichas", fichas);
     if (fichas.length > 0) {
         return fichas;
     }
@@ -304,11 +304,11 @@ const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }
         await connection.beginTransaction();
         const [update_result] = await connection.query(
             "UPDATE PagosSV SET PROXIMO = ?, SERV = ? , MORA = ?, VALOR = ? WHERE CODIGO = ? ", [PROXIMO, SERV, MORA, CUOTA, CODIGO]);
-        
 
-            await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO_PAGO = ?`, [PROXIMO, CODIGO]);
 
-            await connection.commit();
+        await connection.query(`UPDATE CambiosDeFecha SET CAMBIO = ? WHERE CODIGO_PAGO = ?`, [PROXIMO, CODIGO]);
+
+        await connection.commit();
         if (update_result.length > 0) {
             return update_result;
         }
@@ -318,7 +318,7 @@ const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }
         connection.rollback();
         console.log("error al redistirbuir pago");
         console.log(error);
-    } finally{
+    } finally {
         connection.release()
     }
 }
