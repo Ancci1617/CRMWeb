@@ -41,7 +41,6 @@ function getLimitDates({ MES }) {
     
     START_DATE.setHours(-3, 0, 0, 0);
     END_DATE.setHours(-3, 0, 0, 0);
-    console.log({ START_DATE: START_DATE.toISOString(), END_DATE: END_DATE.toISOString() });
 
     return { START_DATE: START_DATE.toISOString(), END_DATE: END_DATE.toISOString() };
 }

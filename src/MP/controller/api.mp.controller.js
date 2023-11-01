@@ -98,7 +98,6 @@ const getSaldoEnCuentas = async (req, res) => {
     const usuarios = await getUsuariosWithMp();
     const [year, month] = getToday().split("-");
     const { START_DATE, END_DATE } = getLimitDates({ MES: `${year}-${month}` });
-    console.log({ START_DATE, END_DATE });
 
     let result = [];
     for (let i = 0; i < usuarios.length; i++) {
@@ -109,9 +108,12 @@ const getSaldoEnCuentas = async (req, res) => {
         const egresos = mp_data.results.filter(payment => payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
         result.push({
             titular: usuarios[i].Usuario,
+            limite: usuarios[i].LIMITE_FACTURACION,
             saldo_ant: usuarios[i].MP_SALDO_ANT,
             ingresos, egresos,
-            saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos
+            saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
+            disponible : usuarios[i].LIMITE_FACTURACION - ingresos,
+
         })
 
     }

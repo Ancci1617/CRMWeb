@@ -11,7 +11,8 @@ async function getUsuariosWithMp() {
         PERMISOS,
         ZONAS,
         MP_TOKEN,
-        MP_SALDO_ANT
+        MP_SALDO_ANT,
+        LIMITE_FACTURACION
     FROM Usuarios
     WHERE
         MP_TOKEN IS NOT NULL`);
