@@ -1,7 +1,7 @@
-function getToday(){
-    // return new Date().toISOString().split("T")[0];
-    
-    return "2023-11-01"
+function getToday() {
+    return new Date().toISOString().split("T")[0];
+
+    // return "2023-11-01"
 }
 
 function getVencidas(vencimiento, today, maximo = 6) {
@@ -33,16 +33,21 @@ function sumarMeses(fecha, meses) {
 
 }
 
-function getLimitDates({MES}){
+function getLimitDates({ MES }) {
     const date = new Date(MES);
 
-    const START_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() ).toISOString();
-    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()).toISOString();
-    return {START_DATE,END_DATE};
+    const START_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+    
+    START_DATE.setHours(-3, 0, 0, 0);
+    END_DATE.setHours(-3, 0, 0, 0);
+    console.log({ START_DATE: START_DATE.toISOString(), END_DATE: END_DATE.toISOString() });
+
+    return { START_DATE: START_DATE.toISOString(), END_DATE: END_DATE.toISOString() };
 }
 
 module.exports = {
-    getToday,sumarMeses,getVencidas,getLimitDates
+    getToday, sumarMeses, getVencidas, getLimitDates
 }
 
 
