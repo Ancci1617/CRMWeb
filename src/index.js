@@ -8,7 +8,6 @@ const passport = require("passport")
 const { userView } = require("./middlewares/user.middlewares.js");
 const fileUpload = require('express-fileupload');
 const { isLoggedIn } = require('./lib/auth.js');
-const { deudaFicha } = require("./pagos/controller/pagos.controller.cargar_pago.js")
 const fs = require("fs");
 const https = require('https');
 
@@ -56,7 +55,6 @@ app.use(morgan(":method :url :status :response-time ms - :res[content-length] - 
 // Routes
 app.use("/api/pagos",require("./pagos/Router/pagos.api.routes.js"));
 
-app.get("/deuda_ficha", deudaFicha);
 app.use(require("./Router/auth/auth.router"));
 app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));

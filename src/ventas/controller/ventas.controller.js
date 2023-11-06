@@ -84,12 +84,15 @@ const postEditarVenta = async (req, res) => {
     const { CTE, ANTICIPO = 0, FECHA_VENTA, ID, FICHA, PRIMER_PAGO, ANTICIPO_MP } = req.body;
     const USUARIO = req.user.Usuario;
     const { venta: venta_prev } = res.locals;
+
+    console.log("venta_prev",venta_prev);
     //Si antes no tenia anticipo y ahora si, que le genere el pago
     if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
-
+    
 
     //Edita la venta
+    console.log("datos para editar venta",req.body);
     await ventasModel.updateVenta(req.body);
 
     //Cargar imagen de frente y dorso a servidor

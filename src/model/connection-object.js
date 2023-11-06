@@ -1,10 +1,20 @@
+// const connection_data = {
+//     host: 'srv815.hstgr.io', //srv815.hstgr.io
+// 	port: 3306,
+// 	user: 'u970133903_BGMTest',
+// 	password: 'h2?Fx3@E',
+// 	database: 'u970133903_BGMTest'
+// }
+
+//LOCAL
 const connection_data = {
-    host: 'srv815.hstgr.io', //srv815.hstgr.io
+    host: 'localhost', //srv815.hstgr.io
 	port: 3306,
-	user: 'u970133903_BGMTest',
-	password: 'h2?Fx3@E',
-	database: 'u970133903_BGMTest'
+	user: 'root',
+	password: '',
+	database: 'bgm_db'
 }
+
 
 //DE PRUEBA
 // const connection_data = {

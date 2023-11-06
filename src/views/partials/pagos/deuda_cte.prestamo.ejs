@@ -1,0 +1,140 @@
+<% const clasesPorVisitas = ["visitas_normal", "visitas_intermedio" ,"visitas_grave"] %>
+<% const formatNumber = number => {return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} %>
+<% const meses = ["ANT","ENE","FEB","MAR","ABR","MAY","JUN", "JUL","AGO","SEP","OCT","NOV"] %>
+
+
+<% const {vencimiento_vigente,cuota,servicio,mora,atraso,pagas,vencidas,EsPrimerPago} = ficha.deuda %>
+<% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT,CAMBIOS_DE_FECHA} = ficha.data %>
+
+
+<form class="credito prestamo" method="POST" action="cargar_pago">
+  <div class="credito__header">
+    <span>
+      <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= FICHA %>
+    </span> 
+    <span class="visitas <%= clasesPorVisitas[Math.min(CAMBIOS_DE_FECHA,clasesPorVisitas.length)] %>"><%= CAMBIOS_DE_FECHA %></span>
+    <span class="<%= ( EsPrimerPago ? PRIMER_PAGO : vencimiento_vigente) < getToday() ? "vencimiento_atrasado" : "vencimiento_al-dia" %>"><%= vencimiento_vigente %></span>
+  </div>
+  <div class="details">
+
+
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : ARTICULOS, data : "",classList : ["articulos"]}) %>
+    <% if(EsPrimerPago) {%>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven:", data : PRIMER_PAGO || "primer pago"}) %>
+    <% } %>
+
+    <div class="detail detail_group ">
+      <div class="title detail important">
+        <span class="detail__title">Total a cobrar:</span>
+        <span class="detail__data"><%= formatNumber((cuota || Math.min(CUOTA,SALDO)) + servicio + mora) %></span>
+      </div>
+      <div class="data hidden">
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota:", data : formatNumber(cuota)}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Serv:", data : formatNumber(servicio)}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Mora:", data : formatNumber(mora)}) %>
+      </div>
+    </div>
+
+    <div class="detail detail_group ">
+      <div class="title detail important <%= atraso > 0 ? "zona" : "" %>">
+        <span class="detail__title">Atrasos:</span>
+        <span class="detail__data"><%= atraso %></span>
+      </div>
+      <div class="data hidden">
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencidas:", data : vencidas}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Pagas:", data : pagas}) %>
+        <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Atrasos:", data : atraso , classList : [atraso > 0 ? "zona" : ""]}) %>
+      </div>
+    </div>
+
+
+
+
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Valor cuota:", data : formatNumber(CUOTA)}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Saldo actual:", data : formatNumber(SALDO)}) %>
+
+    <div class="input__container">
+
+
+      <input type="number" name="DECLARADO_CUO" placeholder="Cuota cobrada" required />
+      <input type="number" name="DECLARADO_MORA" placeholder="Mora cobrada" required />
+      <input type="number" name="DECLARADO_SERV" placeholder="Servicio cobrado" required />
+
+      <div class="input__container_input">
+        <span>COB:</span>
+        <input type="date" name="FECHA_COB" min="<%= getToday() %>" max="<%= new Date(new Date().getTime()+ 1000*60*60*24*50).toISOString().split("T")[0]%>">
+      </div>
+      <input type="text" name="OBS" placeholder="Observacion" />
+
+
+      <% if(N_OPERACION && TITULAR){ %>
+      <input type="number" name="MP_PORCENTAJE" placeholder="Recargo por MP" required />
+      <input type="number" placeholder="Numero de operacion" name="N_OPERACION" value="<%= N_OPERACION %>" minlength="6" required />
+
+      <select name="MP_TITULAR">
+        <% usuarios.forEach(usuario => {%>
+        <option value="<%= usuario.Usuario %>" <%= usuario.Usuario == TITULAR ? "selected" : "" %>> <%= usuario.Usuario %></option>
+        <% }); %>
+      </select>
+
+      <input type="checkbox" name="ISMP" hidden checked="<%= !!(N_OPERACION && TITULAR) %>" />
+      <% } %>
+
+      <input type="hidden" name="CTE" value="<%= CTE %>">
+      <input type="hidden" name="FICHA" value="<%= FICHA %>">
+      <input type="hidden" name="ZONA" value="<%= Z %>">
+      <input type="hidden" name="EsRecorrido" value="<%= EsRecorrido %>">
+
+    </div>
+
+  </div>
+
+  <div class="btn__container">
+    <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
+    <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
+
+    <% if(EsRecorrido == 'true'){%>
+    <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Z}&FICHA=${FICHA}`%>">Mover al final</a>
+    <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Z}`%>">Ver recorrido</a>
+    <% } %>
+
+</div>
+
+
+
+
+  <div class="details">
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta:", data : FECHA_VENTA}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento original:", data : VENCIMIENTO}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Venta:", data : `${formatNumber(CUOTAS)} x ${formatNumber(CUOTA)} = ${formatNumber(TOTAL)}`}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio unitario:", data : SERV_UNIT}) %>
+
+  </div>
+  <div class="table">
+    <table>
+      <thead>
+        <th>Mes</th>
+        <th>Cuota</th>
+        <th>Diferencias</th>
+        <th>Servicios</th>
+        <th>Mora</th>
+
+      </thead>
+      <tbody>
+        <% for(let i = 0;i< ficha.acumulado.length;i++) {%>
+        <%  const diferencia = ficha.acumulado[i].CUOTA - ficha.data.CUOTA %>
+        <tr>
+          <td><%= meses[ficha.acumulado[i].MES] %></td>
+          <td><%= ficha.acumulado[i].CUOTA %></td>
+          <td class="<%= diferencia < 0 ? "zona" : "diferencia_positiva" %>"><%= diferencia %></td>
+          <td><%= ficha.acumulado[i].SERV %></td>
+          <td><%= ficha.acumulado[i].MORA %></td>
+        </tr>
+        <% } %>
+
+      </tbody>
+    </table>
+  </div>
+
+
+</form>

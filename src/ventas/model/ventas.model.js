@@ -158,7 +158,7 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
             ARTICULOS || CAPITAL, TOTAL, CUOTA, CUOTAS, 'PRESTAMO', 'Para entregar', PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA,
             FECHA_VENTA, RESPONSABLE, APROBADO, Usuario, MODO,
             LATITUD_VENDEDOR, LONGITUD_VENDEDOR, ACCURACY_VENDEDOR, 1, GARANTE_CTE, GARANTE_DNI,
-            GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO,DOMICILIO_LABORAL,GARANTE_NOMBRE]]);
+            GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO, DOMICILIO_LABORAL, GARANTE_NOMBRE]]);
 
 
         const [responseInsertFichas] = await connection.query(
@@ -167,13 +167,13 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
                 PRIMER_PAGO, CUOTA_ANT, SERVICIO_ANT, MORA_ANT, SERV_UNIT, 
                 ARTICULOS, ESTADO,ID_VENTA) VALUES (?)`,
             [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_PAGO,
-                PRIMER_PAGO, TOTAL, 0, 0, SERV_UNIT, CAPITAL || ARTICULOS, "PENDIENTE", responseInsertVentasCargadas.insertId]]);
+                PRIMER_PAGO, TOTAL, 0, 0, SERV_UNIT, CAPITAL, "PENDIENTE", responseInsertVentasCargadas.insertId]]);
 
         const contacto_generado = await contactosModel.generarContactoCTEWithConection({ conexion: connection, CTE, TELEFONO: WHATSAPP, Usuario, VENTA_ID: responseInsertVentasCargadas.insertId });
         const ubicacion_generada = await ubicacionesModel.insertarNuevaUbicacionWithConection({ conexion: connection, CALLE, LATITUD, LONGITUD, ID_VENTA: responseInsertVentasCargadas.insertId });
 
         await connection.query(`INSERT IGNORE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI,DOMICILIO_LABORAL) VALUES (?)`,
-            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI,DOMICILIO_LABORAL]])
+            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL]])
         await connection.query(`INSERT IGNORE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,
             [[GARANTE_CTE, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI]])
 
@@ -190,7 +190,7 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
 
 }
 
-const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT }) => {
+const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT, DOMICILIO_LABORAL }) => {
 
     const connection = await pool.getConnection();
     const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
@@ -200,7 +200,7 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
         const ANTICIPO_INT = parseInt(ANTICIPO || 0);
 
         //Actualiza la venta
-        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, ANTICIPO }, ID]);
+        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, ANTICIPO, DOMICILIO_LABORAL }, ID]);
 
         //Actualiza el contacto
         await connection.query(`UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;`, [WHATSAPP, ID])
@@ -213,7 +213,7 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
 
         await connection.query(`UPDATE UBICACIONESSV SET CALLE = ?,LATITUD = ? ,LONGITUD = ?  WHERE ID_VENTA = ?`, [CALLE, LATITUD, LONGITUD, ID]);
 
-        await connection.query(`UPDATE Fichas SET ? where ID_VENTA = ?`, [{ FECHA: FECHA_VENTA, CTE, FICHA, Z: ZONA, TOTAL, CUOTA, VENCIMIENTO: PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, ESTADO: "PENDIENTE" }, ID]);
+        await connection.query(`UPDATE Fichas SET ? where ID_VENTA = ?`, [{ FECHA: FECHA_VENTA, CTE, FICHA, Z: ZONA, TOTAL, CUOTA, VENCIMIENTO: PRIMER_VENCIMIENTO, CUOTA_ANT: TOTAL, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, ESTADO: "PENDIENTE" }, ID]);
 
         await connection.commit()
     } catch (error) {
@@ -257,17 +257,25 @@ const borrarVenta = async ({ ID_VENTA }) => {
 }
 const confirmarVenta = async ({ venta }) => {
     const { CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2,
-        DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI, MODO } = venta;
+        DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI, MODO, GARANTE_CTE, DOMICILIO_LABORAL } = venta;
     const connection = await pool.getConnection();
 
     try {
         await connection.beginTransaction();
 
         await connection.query(`UPDATE Fichas SET ESTADO = 'ACTIVO' where ID_VENTA = ?`, [venta.INDICE]);
-        await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI }, CTE])
 
-        if (MODO == "EASY")
-            await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI }, GARANTE_CTE])
+        if (MODO == "EASY") {
+            await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL, GARANTE_CTE }, CTE])
+            await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{
+                NOMBRE: GARANTE_NOMBRE, ZONA: GARANTE_ZONA,
+                CALLE: GARANTE_CALLE, CRUCES: GARANTE_CRUCES,
+                CRUCES2: GARANTE_CRUCES2, DNI: GARANTE_DNI
+            }, GARANTE_CTE])
+        } else {
+            await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL }, CTE])
+        }
+
 
         await connection.commit()
     } catch (error) {

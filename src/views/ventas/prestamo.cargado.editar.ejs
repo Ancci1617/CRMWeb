@@ -62,7 +62,7 @@
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "N° de documento",type : "number" , placeholder : "DNI" ,defaultValue : DNI , name : "DNI", required : true}}) %>
 
 
-          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Capital",defaultValue : ARTICULOS,type : "number" , placeholder : "Capital colocado"  , name : "CAPITAL", step : 5000,required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Capital",defaultValue : ARTICULOS,type : "number" , placeholder : "Capital colocado"  , name : "ARTICULOS", step : 5000,required : true}}) %>
 
           <div class="input-box">
             <span class="details">Cuotas</span>
@@ -104,12 +104,13 @@
 
           <div class="input-box">
             <span class="details">Primer pago</span>
-            <input type="date" value="<%= PRIMER_PAGO %>" placeholder="Primer fecha de pago" name="PRIMER_PAGO" min="<%= today %>" required>
+            <input type="date" value="<%= PRIMER_PAGO %>" placeholder="Primer fecha de pago" name="PRIMER_PAGO" min="<%= today %>" oninput="document.getElementsByName('PRIMER_VENCIMIENTO')[0].value = this.value" required>
           </div>
-
-
+          
+          
+          
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Fecha de venta",type : "date"  ,defaultValue : FECHA_VENTA , name : "FECHA_VENTA", required : true, max : today , min : treeDaysAgo}}) %>
-
+          
           <div class="input-box">
             <span class="details">Se hace responsable el vendedor?</span>
             <select class="options" name="RESPONSABLE" form="form_cargar_venta">
@@ -119,7 +120,7 @@
           </div>
 
           <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
-
+          
           <!-- IMAGENES -->
           <div class="input-box">
             <span class="details">DNI Frente</span>
@@ -144,13 +145,13 @@
               <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="CTE_ROSTRO" accept="image/*">
             </label>
           </div>
+          
 
-
-
+          
 
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "CTE garante",type : "number" , placeholder : "Numero de CTE de garante" ,defaultValue : GARANTE_CTE , name : "GARANTE_CTE", required : false}}) %>
-
-
+          
+          
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "DNI garante",type : "number" , placeholder : "DNI de garante" ,defaultValue : GARANTE_DNI , name : "GARANTE_DNI", required : true}}) %>
           <!-- nombre zona domicilio cruces cruces2 telefono -->
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Nombre garante",type : "text" , placeholder : "Nombre de garante" ,defaultValue : GARANTE_NOMBRE , name : "GARANTE_NOMBRE", required : true}}) %>
@@ -159,13 +160,13 @@
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruces Garante",type : "text" , placeholder : "Cruces de garante" ,defaultValue : GARANTE_CRUCES , name : "GARANTE_CRUCES", required : true}}) %>
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruces2 Garante",type : "text" , placeholder : "Cruces de garante" ,defaultValue : GARANTE_CRUCES2 , name : "GARANTE_CRUCES2", required : true}}) %>
           <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Telefono garante",type : "number" , placeholder : "Telefono de garante" ,defaultValue : GARANTE_TELEFONO , name : "GARANTE_TELEFONO", required : false}}) %>
-
-
+          
+          
           <div class="input-box garante_frente">
             <span class="details">DNI Frente</span>
             <label for="FRENTE_GARANTE">
               <span class="IMG-FRENTE_GARANTE">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE_GARANTE" name="FRENTE_GARANTE" accept="image/*" >
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE_GARANTE" name="FRENTE_GARANTE" accept="image/*">
             </label>
           </div>
 
@@ -173,23 +174,26 @@
             <span class="details">DNI Dorso</span>
             <label for="DORSO_GARANTE">
               <span class="IMG-DORSO_GARANTE">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" id="DORSO_GARANTE" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO_GARANTE" accept="image/*" >
+              <input type="file" class="inputfile-for-label" id="DORSO_GARANTE" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO_GARANTE" accept="image/*">
             </label>
           </div>
-
+          
           <div class="input-box garante_rostro">
             <span class="details">ROSTRO</span>
             <label for="ROSTRO_GARANTE">
               <span class="IMG-ROSTRO_GARANTE">Sin foto cargada...</span>
-              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO_GARANTE" value="DNI Frente" name="ROSTRO_GARANTE" accept="image/*" >
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO_GARANTE" value="DNI Frente" name="ROSTRO_GARANTE" accept="image/*">
             </label>
           </div>
-
-
-
-
+          
+          
+          
+          
           <div class="input-box hidden">
             <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
+            <input type="hidden" name="ID" value="<%= INDICE %>">
+            <input value="<%= PRIMER_PAGO %>" name="PRIMER_VENCIMIENTO" required>
+            
           </div>
 
           <div class="button">
@@ -197,13 +201,13 @@
           </div>
 
 
-
+          
         </div>
 
       </form>
     </div>
   </div>
-
+  
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
   <!-- <script src="/js/ventas/cargar_venta.js"></script> -->
@@ -212,4 +216,5 @@
 
 
 </body>
+
 </html>
