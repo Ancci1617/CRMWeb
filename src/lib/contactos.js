@@ -1,21 +1,21 @@
 const { getClientes } = require("../model/CRM/get_tablas/get_clientes");
-const { invalidarTelefonosDeCte,getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../model/contactos/contactos.model");
+const { invalidarTelefonosDeCte, getContactoByTelefono, insertContacto, invalidarTelefono, getNuevoY } = require("../model/contactos/contactos.model");
 const { getToday } = require("./dates");
 
 //Volver promesas?? (Ventaja entre promesas y Funciona asincrona)
 async function generarContactoCTE(CTE, Usuario, body, VENTA_ID = null) {
     const { TELEFONO } = body;
-    if (!checkPhoneFormat(TELEFONO)) return
 
     const cte_data = await getClientes(CTE);
 
     if (!cte_data[0].CTE) return "Cliente invalido";
 
     await invalidarTelefono(TELEFONO);
-    await invalidarTelefonosDeCte(CTE);
-    return await insertContacto("CTE", TELEFONO, getToday(), CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario,VENTA_ID);
+    return await insertContacto("CTE", TELEFONO, getToday(), CTE, cte_data[0].ZONA, cte_data[0].NOMBRE, cte_data[0].CALLE, Usuario, VENTA_ID);
 
 }
+
+
 
 async function generarContactoY(Y, Usuario, body) {
     let { CTEYZ, ZONA, TELEFONO, NOMBRE, CALLE, TIPO } = body;
@@ -28,7 +28,7 @@ async function generarContactoY(Y, Usuario, body) {
 
         if (tipos.includes("CTE")) {
             const CTE_CONTACTO = contactos.filter(contacto => contacto.TIPO == "CTE")[0].CTE
-            return await generarContactoCTE(CTE_CONTACTO,Usuario,body);
+            return await generarContactoCTE(CTE_CONTACTO, Usuario, body);
         }
         if (tipos.includes("Z")) return "El contacto, ya pertenece a un IMAN, no se puede cargar como nuevo...";
     }
@@ -59,10 +59,6 @@ async function generarContactoZ(Z, Usuario, body) {
 
 }
 
-function checkPhoneFormat() {
-    return true;
-}
 
 
-
-module.exports = {checkPhoneFormat,generarContactoZ,generarContactoY,generarContactoCTE}
+module.exports = { generarContactoZ, generarContactoY, generarContactoCTE}

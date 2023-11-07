@@ -1,3 +1,4 @@
+const { getToday } = require("../../lib/dates.js");
 const pool = require("../../model/connection-database.js");
 
 const ordenarRecorrido = async (body) => {
@@ -77,7 +78,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
             ${keys_sql} AND Fichas.ESTADO = 'ACTIVO' AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = Fichas.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE  GROUP BY
             Fichas.FICHA order by ORDEN_COBRANZA asc;`
         , [...Object.values(filter)]);
-//
+
     if (fichas.length > 0) {
         return fichas;
     }
@@ -86,17 +87,17 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
 }
 
 
-const insertCambioDeFecha = async ({ FICHA, FECHA, COBRADOR , TODAY}) => {
+const insertCambioDeFecha = async ({ FICHA, FECHA, COBRADOR, TODAY }) => {
 
     try {
-        const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR,FECHA,CAMBIO_ORIGINAL) VALUES (?,?,?,?,?) `, [FICHA, FECHA, COBRADOR,TODAY,FECHA]);
+        const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR,FECHA,CAMBIO_ORIGINAL) VALUES (?,?,?,?,?) `, [FICHA, FECHA, COBRADOR, TODAY, FECHA]);
         console.log("respuesta insertar cambio de fecha", res);
     } catch (error) {
         console.log(error);
     }
 }
 
-const volverAlFinal = async ({ FICHA ,ZONA}) => {
+const volverAlFinal = async ({ FICHA, ZONA, Usuario }) => {
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
@@ -105,8 +106,10 @@ const volverAlFinal = async ({ FICHA ,ZONA}) => {
             `UPDATE Fichas set ORDEN_COBRANZA = (SELECT MAX(ORDEN_COBRANZA) + 1 from Fichas WHERE Z = (SELECT Z from Fichas where FICHA = ?)) where FICHA = ?;`, [FICHA, FICHA]);
         let [res2] = await connection.query(`
         UPDATE Fichas F left join (SELECT Fichas.FICHA,(ROW_NUMBER() OVER(ORDER BY ORDEN_COBRANZA asc)) - 1 as ORDEN from Fichas where ORDEN_COBRANZA is not null and Fichas.Z = ?) AUX on AUX.FICHA = F.FICHA SET F.ORDEN_COBRANZA = AUX.ORDEN WHERE ORDEN_COBRANZA IS NOT NULL AND Z = ? order by ORDEN_COBRANZA asc;
-        `,[ZONA,ZONA])
-
+        `, [ZONA, ZONA])
+        let [res3] = await connection.query(
+            `INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO, CAMBIO_ORIGINAL) VALUES (?)`
+            , [[FICHA, null, Usuario, getToday(), null, null]])
 
 
         await connection.commit();

@@ -73,7 +73,7 @@ const updateVenta = async (req, res) => {
 
 
     //Si antes no tenia anticipo y ahora si, que le genere el pago
-    if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
+    if (venta_prev.MODO != "EASY" && !venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
 
 
@@ -86,8 +86,6 @@ const updateVenta = async (req, res) => {
         saveFileFromEntry(entries, req.body.CTE);
 
     res.redirect("/ventas_cargadas");
-
-
 }
 
 const eliminarVenta = async (req, res) => {

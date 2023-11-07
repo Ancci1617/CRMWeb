@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Editar prestamo</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% var today=new Date().toISOString().substring(0,10) %>
+  <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <%
+   const {CTE,FICHA,NOMBRE,ZONA,CALLE,ESTADO,CRUCES,CRUCES2,
+    WHATSAPP,DNI,ARTICULOS,TOTAL,ANTICIPO,CUOTA,CUOTAS,TIPO,
+    ESTATUS,PRIMER_PAGO,VENCIMIENTO,DIA_VENCIMIENTO,CUOTAS_PARA_ENTREGA,
+    SERV_UNIT,FECHA_VENTA,RESPONSABLE,APROBADO,USUARIO,MODO,
+    LATITUD_VENDEDOR,LONGITUD_VENDEDOR,ACCURACY_VENDEDOR,VISIBLE,
+    INDICE,LATITUD,LONGITUD,GARANTE_CTE,GARANTE_DNI,GARANTE_NOMBRE,
+    GARANTE_ZONA,GARANTE_CALLE,GARANTE_CRUCES,GARANTE_CRUCES2,GARANTE_TELEFONO,
+    PRIMER_VENCIMIENTO,DOMICILIO_LABORAL} = venta 
+    %>
+
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="titles">
+      <div class="title">Cargar venta</div>
+      <div>
+        <!-- <input class="btn-green btn-nuevo hidden" type="button" value="Cliente nuevo"> -->
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/ventas/editar" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
+
+
+        <div class="user-details">
+          <%- include(global.dir_partials + "/shared/input-box",{input : {type : "number",defaultValue : CTE,details : "CTE" ,name : "CTE",properties : ["readonly"] }}) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {type : "number",defaultValue : FICHA,details : "N°Prestamo",placeholder : "Numero de prestamo",name : "FICHA" , required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {type : "text",details:"Apellido y nombre",placeholder : "APELLIDO Nombre",defaultValue : NOMBRE,name : "NOMBRE",required : true}}) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {type : "text",details:"Zona",placeholder : "Zona",defaultValue : ZONA,name : "ZONA",required : true}}) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Calle",type : "text" , placeholder : "Domicilio" ,defaultValue : CALLE , name : "CALLE", required : true}}) %>
+
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruce 1",type : "text" , placeholder : "Cruce 1" ,defaultValue : CRUCES , name : "CRUCES", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruce 2",type : "text" , placeholder : "Cruce 2" ,defaultValue : CRUCES2  , name : "CRUCES2", required : true}}) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Domicilio laboral",defaultValue : DOMICILIO_LABORAL,type : "text" , placeholder : "Domicilio laboral" , name : "DOMICILIO_LABORAL"}}) %>
+
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Telefono",type : "number" , placeholder : "Numero de telefono" ,defaultValue : WHATSAPP , name : "WHATSAPP", required : false}}) %>
+
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "N° de documento",type : "number" , placeholder : "DNI" ,defaultValue : DNI , name : "DNI", required : true}}) %>
+
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Capital",defaultValue : ARTICULOS,type : "number" , placeholder : "Capital colocado"  , name : "ARTICULOS", step : 5000,required : true}}) %>
+
+          <div class="input-box">
+            <span class="details">Cuotas</span>
+            <select form="form_cargar_venta" class="selector-cuotas" name="CUOTAS" required>
+              <option value="1" <% CUOTAS == 1 ? "select" : "" %>>1</option>
+              <option value="2" <% CUOTAS == 2 ? "select" : "" %>>2</option>
+              <option value="3" <% CUOTAS == 3 ? "select" : "" %>>3</option>
+              <option value="6" <% CUOTAS == 6 ? "select" : "" %>>6</option>
+              <option value="7" <% CUOTAS == 7 ? "select" : "" %>>7</option>
+              <option value="8" <% CUOTAS == 8 ? "select" : "" %>>8</option>
+              <option value="9" <% CUOTAS == 9 ? "select" : "" %>>9</option>
+              <option value="10" <% CUOTAS == 10 ? "select" : "" %>>10</option>
+              <option value="11" <% CUOTAS == 11 ? "select" : "" %>>11</option>
+              <option value="12" <% CUOTAS == 12 ? "select" : "" %>>12</option>
+            </select>
+          </div>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cuota",type : "number" ,defaultValue : CUOTA, placeholder : "Valor de cuota"  , name : "CUOTA", required : true}}) %>
+
+
+
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Vta total",defaultValue : TOTAL,type : "number" , placeholder : "Suma de cuotas" , name : "TOTAL", required : true}}) %>
+
+
+
+
+
+          <div class="input-box">
+            <span class="details">Servicio</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="1000">1000</option>
+            </select>
+          </div>
+
+
+
+
+
+          <div class="input-box">
+            <span class="details">Primer pago</span>
+            <input type="date" value="<%= PRIMER_PAGO %>" placeholder="Primer fecha de pago" name="PRIMER_PAGO" min="<%= today %>" oninput="document.getElementsByName('PRIMER_VENCIMIENTO')[0].value = this.value" required>
+          </div>
+          
+          
+          
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Fecha de venta",type : "date"  ,defaultValue : FECHA_VENTA , name : "FECHA_VENTA", required : true, max : today , min : treeDaysAgo}}) %>
+          
+          <div class="input-box">
+            <span class="details">Se hace responsable el vendedor?</span>
+            <select class="options" name="RESPONSABLE" form="form_cargar_venta">
+              <option value="NO" <% RESPONSABLE == "NO" ? "selected" : "" %>>NO</option>
+              <option value="SI" <% RESPONSABLE == "SI" ? "selected" : "" %>>SI</option>
+            </select>
+          </div>
+
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
+          
+          <!-- IMAGENES -->
+          <div class="input-box">
+            <span class="details">DNI Frente</span>
+            <label for="FRENTE">
+              <span class="IMG-CTE_FRENTE">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="CTE_FRENTE" accept="image/*">
+            </label>
+          </div>
+
+          <div class="input-box">
+            <span class="details">DNI Dorso</span>
+            <label for="DORSO">
+              <span class="IMG-CTE_DORSO">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="CTE_DORSO" accept="image/*">
+            </label>
+          </div>
+
+          <div class="input-box">
+            <span class="details">ROSTRO</span>
+            <label for="ROSTRO">
+              <span class="IMG-CTE_ROSTRO">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="CTE_ROSTRO" accept="image/*">
+            </label>
+          </div>
+          
+
+          
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "CTE garante",type : "number" , placeholder : "Numero de CTE de garante" ,defaultValue : GARANTE_CTE , name : "GARANTE_CTE", required : false}}) %>
+          
+          
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "DNI garante",type : "number" , placeholder : "DNI de garante" ,defaultValue : GARANTE_DNI , name : "GARANTE_DNI", required : true}}) %>
+          <!-- nombre zona domicilio cruces cruces2 telefono -->
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Nombre garante",type : "text" , placeholder : "Nombre de garante" ,defaultValue : GARANTE_NOMBRE , name : "GARANTE_NOMBRE", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "ZONA garante",type : "text" , placeholder : "Zona" ,defaultValue : GARANTE_ZONA , name : "GARANTE_ZONA", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Domicilio garante",type : "text" , placeholder : "Domicilio de garante" ,defaultValue : GARANTE_CALLE , name : "GARANTE_CALLE", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruces Garante",type : "text" , placeholder : "Cruces de garante" ,defaultValue : GARANTE_CRUCES , name : "GARANTE_CRUCES", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Cruces2 Garante",type : "text" , placeholder : "Cruces de garante" ,defaultValue : GARANTE_CRUCES2 , name : "GARANTE_CRUCES2", required : true}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Telefono garante",type : "number" , placeholder : "Telefono de garante" ,defaultValue : GARANTE_TELEFONO , name : "GARANTE_TELEFONO", required : false}}) %>
+          
+          
+          <div class="input-box garante_frente">
+            <span class="details">DNI Frente</span>
+            <label for="FRENTE_GARANTE">
+              <span class="IMG-FRENTE_GARANTE">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE_GARANTE" name="FRENTE_GARANTE" accept="image/*">
+            </label>
+          </div>
+
+          <div class="input-box garante_dorso">
+            <span class="details">DNI Dorso</span>
+            <label for="DORSO_GARANTE">
+              <span class="IMG-DORSO_GARANTE">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" id="DORSO_GARANTE" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO_GARANTE" accept="image/*">
+            </label>
+          </div>
+          
+          <div class="input-box garante_rostro">
+            <span class="details">ROSTRO</span>
+            <label for="ROSTRO_GARANTE">
+              <span class="IMG-ROSTRO_GARANTE">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO_GARANTE" value="DNI Frente" name="ROSTRO_GARANTE" accept="image/*">
+            </label>
+          </div>
+          
+          
+          
+          
+          <div class="input-box hidden">
+            <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
+            <input type="hidden" name="ID" value="<%= INDICE %>">
+            <input value="<%= PRIMER_PAGO %>" name="PRIMER_VENCIMIENTO" required>
+            
+          </div>
+
+          <div class="button">
+            <input type="submit" value="Registrar venta">
+          </div>
+
+
+          
+        </div>
+
+      </form>
+    </div>
+  </div>
+  
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/js/lib/file.weight.js"></script>
+  <!-- <script src="/js/ventas/cargar_venta.js"></script> -->
+  <script src="/js/ventas/file_event_tag.js"></script>
+  <script src="/js/ventas/prestamos.cargar.js"></script>
+
+
+</body>
+
+</html>

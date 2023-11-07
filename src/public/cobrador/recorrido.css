@@ -149,3 +149,7 @@ header .lista_zonas {
   gap: .7rem;
   align-items: center;
 }
+
+.prestamo{
+  background-color: rgb(209, 232, 240);
+}

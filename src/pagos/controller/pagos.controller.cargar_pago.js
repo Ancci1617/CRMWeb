@@ -1,16 +1,16 @@
 const pagosModel = require("../model/pagos.model.js");
 const { getToday } = require("../../lib/dates.js");
-const { getDoubt } = require("../../lib/doubt.js");
+const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
 const pool = require("../../model/connection-database.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 const permisos = require("../../constants/permisos.js");
-const { getCliente } = require("../../lib/get_cliente.js");
 const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
 const { getArticulos, getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
 const { agregarMeses } = require("../lib/agregar_meses.js");
+const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 
 
 
@@ -24,7 +24,13 @@ async function deudaCte(req, res) {
     const prestamos = await pagosModel.getPrestamosByCte(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const [cte_data] = await getClientes(CTE);
-    const fichas = fichas_data.map(ficha => ({ data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }));
+
+    const fichas = fichas_data.map(ficha => {
+        if (ficha.FICHA >= 50000)
+            return { data: ficha, deuda: getDebtEasy(ficha) }
+
+        return { data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
+    });
 
 
     //Si la ficha de FICHA_PRIMERA esta incluida en las fichas de este cliente, la pone primera
@@ -39,115 +45,42 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas , cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido });
 }
 
 
 
 
 
-async function deudaFicha(req, res) {
-    const { CTE, FICHA } = req.query;
-    const fichas_data = await pagosModel.getFichasByCte(CTE);
-
-    const fichas = fichas_data.filter(ficha_data => ficha_data.FICHA == FICHA);
-    if (fichas.length == 0) return res.send("No encontrado");
 
 
 
-    const deuda = getDoubt(fichas[0]);
-    res.send(`${deuda.atraso_evaluado}`);
 
-}
-
-
-
+//Redistribuye el pago de forma automatica si es BGM
+//No redistribuye nada, simplemente carga el pago si es EasyCash
+//Luego de eso carga el pago con pagosModel
 async function cargarPago(req, res) {
 
-    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS, DECLARADO_CUO = 0, DECLARADO_COB = 0, EsRecorrido } = req.body;
 
+    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS, DECLARADO_CUO = 0, DECLARADO_COB = 0, DECLARADO_SERV = 0, DECLARADO_MORA = 0, EsRecorrido } = req.body;
+
+    //Aca deberia ir un schema//
     const COBRADO = parseInt(req.body.COBRADO) || parseInt(DECLARADO_COB) + parseInt(DECLARADO_CUO);
-
     const CODIGO = getRandomCode(6);
 
 
-    //DISTRIBUIR
-    let pago_obj = {};
-    if (FICHA >= 50000) {
-        const prestamo_arr = await pagosModel.getPrestamosByCte(CTE);
-        const prestamo = prestamo_arr.find(prestamo => prestamo.Prestamo == FICHA);
+    const pago_obj = FICHA >= 50000 ?
+        { CUOTA: DECLARADO_CUO, MORA: DECLARADO_MORA, SERV: DECLARADO_SERV } :
+        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO });
 
-        let { SERVICIOS, MORA, DEUDA_CUO } = prestamo;
-        let cuota_paga_1 = Math.min(COBRADO * 0.5, DEUDA_CUO);
-        let mora_paga_1 = Math.min((COBRADO - cuota_paga_1) * 0.5, MORA);
-        let serv_paga_1 = Math.min((COBRADO - cuota_paga_1) * 0.5, SERVICIOS);
-        const remanente_a_distribuir = COBRADO - (cuota_paga_1 + mora_paga_1 + serv_paga_1);
-        let mora_paga_2 = Math.min(MORA - mora_paga_1, remanente_a_distribuir);
-        let serv_paga_2 = Math.min(SERVICIOS - serv_paga_1, remanente_a_distribuir - mora_paga_2);
-        let cuota_paga_2 = remanente_a_distribuir - mora_paga_2 - serv_paga_2;
-        const resultado_final = { mora: 0, servicios: 0, cuota: 0 };
-
-        if (DEUDA_CUO - (cuota_paga_2 + cuota_paga_1) <= 0) {
-
-            if (MORA - (mora_paga_1 + mora_paga_2) > 0) {
-
-                resultado_final.mora = (mora_paga_1 + mora_paga_2) + Math.min(MORA - (mora_paga_1 + mora_paga_2), 100);
-                resultado_final.cuota = (cuota_paga_1 + cuota_paga_2) - Math.min(MORA - (mora_paga_1 + mora_paga_2), 100);
-                resultado_final.servicios = serv_paga_1 + serv_paga_2;
-
-            } else if (SERVICIOS - (serv_paga_1 + serv_paga_2) > 0) {
-
-                resultado_final.servicios = (serv_paga_1 + serv_paga_2) + Math.min(SERVICIOS - (serv_paga_1 + serv_paga_2), 100);
-                resultado_final.cuota = (cuota_paga_1 + cuota_paga_2) - Math.min(SERVICIOS - (serv_paga_1 + serv_paga_2), 100);
-                resultado_final.mora = mora_paga_1 + mora_paga_2;
-
-            } else {
-                resultado_final.mora = mora_paga_1 + mora_paga_2;
-                resultado_final.cuota = cuota_paga_1 + cuota_paga_2;
-                resultado_final.servicios = serv_paga_1 + serv_paga_2;
-            }
-
-        } else {
-            resultado_final.mora = mora_paga_1 + mora_paga_2;
-            resultado_final.cuota = cuota_paga_1 + cuota_paga_2;
-            resultado_final.servicios = serv_paga_1 + serv_paga_2;
-        }
-
-
-
-        pago_obj = {
-            CTE, FICHA, CUOTA: resultado_final.cuota,
-            MORA: resultado_final.mora, SERV: resultado_final.servicios,
-            PROXIMO: FECHA_COB,
-            CODIGO, USUARIO: req.user.Usuario,
+    const submit_obj = Object.assign(pago_obj,
+        {
+            CTE, FICHA, PROXIMO: FECHA_COB, CODIGO, USUARIO: req.user.Usuario,
             FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
-            DECLARADO_COB: DECLARADO_COB || resultado_final.mora + resultado_final.servicios,
-            DECLARADO_CUO: DECLARADO_CUO || resultado_final.cuota
-        };
+            DECLARADO_COB: parseInt(DECLARADO_SERV) + parseInt(DECLARADO_MORA), DECLARADO_CUO, DECLARADO_SERV
+        });
 
-
-    } else {
-        // const ficha_data = await pagosModel.getFicha(FICHA);
-        const [ficha_data] = await pagosModel.getFichasByCte(FICHA, "FICHA");
-
-        const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
-
-
-        const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
-        const SERV = Math.min(COBRADO - MORA, ficha_data_deuda.deuda.servicio);
-        const CUOTA = COBRADO - MORA - SERV;
-
-        pago_obj = {
-            CTE, FICHA, CUOTA,
-            MORA, SERV, PROXIMO: FECHA_COB,
-            CODIGO, USUARIO: req.user.Usuario,
-            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
-            DECLARADO_COB: DECLARADO_COB || MORA + SERV,
-            DECLARADO_CUO: DECLARADO_CUO || CUOTA
-        };
-    }
-    //ESTO TENDRIA QUE LLEVAR AL CODIGO DEL PAGO;
-    await pagosModel.cargarPago(pago_obj);
+    await pagosModel.cargarPago(submit_obj);
 
 
     res.redirect(`/pagos/codigo_pago?CODIGO=${CODIGO}&EsRecorrido=${EsRecorrido}`);
@@ -203,7 +136,7 @@ async function invalidarPago(req, res) {
 
 
 
-module.exports = { deudaCte, cargarPago, codigoDePago, confirmarPago, deudaFicha, invalidarPago};
+module.exports = { deudaCte, cargarPago, codigoDePago, confirmarPago, invalidarPago };
 
 
 

@@ -1,7 +1,7 @@
 function getToday() {
     return new Date().toISOString().split("T")[0];
-
-    // return "2023-11-01"
+    
+    // return "2023-11-11"  
 }
 
 function getVencidas(vencimiento, today, maximo = 6) {
@@ -29,10 +29,12 @@ function sumarMeses(fecha, meses) {
     } else {
         nuevaFecha.mes += meses;
     };
+
     return new Date(`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
 
 }
 
+<<<<<<< HEAD
 function getLimitDates({ MES }) {
     const date = new Date(MES);
 
@@ -47,6 +49,14 @@ function getLimitDates({ MES }) {
 
 module.exports = {
     getToday, sumarMeses, getVencidas, getLimitDates
+=======
+const dateDiff = (FECHA1,FECHA2) => {
+    return (new Date(FECHA1).getTime() - new Date(FECHA2).getTime()) / 1000 / 60 / 60 / 24
+}
+
+module.exports = {
+    getToday,sumarMeses,getVencidas,dateDiff
+>>>>>>> EasyCash
 }
 
 

@@ -1,8 +1,10 @@
 const Router = require("express").Router();
-const { getCobranzas } = require("../controller/pagos.controller.cobranza.js");
+const { getCobranzas, getCobranzasEasy } = require("../controller/pagos.controller.cobranza.js");
 
 
 Router.get("/get_cobranzas", getCobranzas);
+Router.get("/get_cobranzasEasy", getCobranzasEasy);
+
 
 module.exports = Router
 

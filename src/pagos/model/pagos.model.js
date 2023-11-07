@@ -77,65 +77,72 @@ const cargarPago = async ({
     return [];
 
 }
-
+    
 const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     const [fichas] = await pool.query(
-        `SELECT
-        Fichas.FECHA AS FECHA_VENTA,
-        Fichas.CTE,
-        Fichas.PRIMER_PAGO,
-        Fichas.FICHA,
-        Fichas.Z,
-        Fichas.VENCIMIENTO,
-        Fichas.TOTAL,
-        Fichas.SERVICIO_ANT,
-        Fichas.ARTICULOS,
-        PagosSV.SERV_PAGO,
-        SERV_UNIT,
-        CUOTA,
-        CUOTA_ANT,
-        Fichas.CUOTA_ANT - IFNULL(PagosSV.CUOTA_PAGO,0) AS SALDO,
-        Fichas.TOTAL / Fichas.CUOTA AS CUOTAS,
-        IFNULL(PagosSV.CUOTA_PAGO,0) AS CUOTA_PAGO,
-        Fichas.MORA_ANT,
-        IFNULL(PagosSV.MORA_PAGO,0) AS MORA_PAGO,
-        Pagas(
-            IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
-            CUOTA
-        ) AS CUOTAS_PAGAS,
-        (
-        SELECT
-            COUNT(*)
-        FROM
-            CambiosDeFecha
-        WHERE
-            CambiosDeFecha.FECHA > DATE_ADD(
-                Fichas.VENCIMIENTO,
-                INTERVAL Pagas(
-                    IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
-                    CUOTA
-                ) MONTH
-            ) AND CambiosDeFecha.FICHA = Fichas.FICHA
-    ) AS CAMBIOS_DE_FECHA
+    `SELECT
+    Fichas.FECHA AS FECHA_VENTA,
+    Fichas.CTE,
+    Fichas.PRIMER_PAGO,
+    Fichas.FICHA,
+    Fichas.Z,
+    Fichas.VENCIMIENTO,
+    Fichas.TOTAL,
+    Fichas.SERVICIO_ANT,
+    Fichas.ARTICULOS,
+    PagosSV.SERV_PAGO,
+    SERV_UNIT,
+    CUOTA,
+    CUOTA_ANT,
+    Fichas.CUOTA_ANT - IFNULL(PagosSV.CUOTA_PAGO,0) AS SALDO,
+    CUOTAS,
+    IFNULL(PagosSV.CUOTA_PAGO,0) AS CUOTA_PAGO,
+    Fichas.MORA_ANT,
+    IFNULL(PagosSV.MORA_PAGO,0) AS MORA_PAGO,
+    Pagas(IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,CUOTA,0) AS CUOTAS_PAGAS,
+    
+    (SELECT COUNT(*) FROM CambiosDeFecha WHERE
+        CambiosDeFecha.FECHA > DATE_ADD(
+            Fichas.VENCIMIENTO,
+            INTERVAL Pagas(
+                IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
+                CUOTA,0
+            ) MONTH
+        ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+	) AS CAMBIOS_DE_FECHA,
+    
+    LEAST((SELECT COUNT(*) FROM CambiosDeFecha WHERE
+        CambiosDeFecha.FECHA > DATE_ADD(
+            Fichas.VENCIMIENTO,
+            INTERVAL Pagas(
+                IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
+                CUOTA,1
+            ) MONTH
+        ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+	),5) AS CAMBIOS_DE_FECHA_EXACTO
+
+
+FROM
+
+    (SELECT *,TOTAL / CUOTA AS CUOTAS FROM Fichas) Fichas
+    
+LEFT JOIN(
+    SELECT
+        PagosSV.FICHA,
+        SUM(PagosSV.VALOR) AS CUOTA_PAGO,
+        SUM(PagosSV.MORA) AS MORA_PAGO,
+        SUM(PagosSV.SERV) AS SERV_PAGO
     FROM
-        Fichas
-    LEFT JOIN(
-        SELECT
-            PagosSV.FICHA,
-            SUM(PagosSV.VALOR) AS CUOTA_PAGO,
-            SUM(PagosSV.MORA) AS MORA_PAGO,
-            SUM(PagosSV.SERV) AS SERV_PAGO
-        FROM
-            PagosSV
-        WHERE
-            PagosSV.CONFIRMACION != 'INVALIDO'
-        GROUP BY
-            FICHA
-    ) PagosSV
-    ON
-        PagosSV.FICHA = Fichas.FICHA
+        PagosSV
     WHERE
-        Fichas.?? LIKE ?;`
+        PagosSV.CONFIRMACION != 'INVALIDO'
+    GROUP BY
+        FICHA
+) PagosSV
+ON
+    PagosSV.FICHA = Fichas.FICHA
+WHERE
+    Fichas.?? LIKE ?;`
         // HAVING
         //     SALDO > 0;
         , [MODO, CTE]);

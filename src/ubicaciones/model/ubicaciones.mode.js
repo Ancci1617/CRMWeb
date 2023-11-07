@@ -17,8 +17,14 @@ const insertarNuevaUbicacion = async ({ CALLE, LATITUD, LONGITUD, ID_VENTA = nul
     }
 }
 
+const insertarNuevaUbicacionWithConection = async ({ conexion, CALLE, LATITUD, LONGITUD, ID_VENTA = null }) => {
+    const [res] = await conexion.query(`
+    INSERT INTO UBICACIONESSV (CALLE,LATITUD,LONGITUD,ID_VENTA) VALUES (?);
+    `,[[CALLE,LATITUD,LONGITUD,ID_VENTA]])
+    return res
+}   
 
 
 
 
-module.exports = { insertarNuevaUbicacion };
+module.exports = { insertarNuevaUbicacion, insertarNuevaUbicacionWithConection };
