@@ -71,7 +71,7 @@ async function cargarPago(req, res) {
 
     const pago_obj = FICHA >= 50000 ?
         { CUOTA: DECLARADO_CUO, MORA: DECLARADO_MORA, SERV: DECLARADO_SERV } :
-        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO });
+        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO ,RANGO : req.user.RANGO});
 
     const submit_obj = Object.assign(pago_obj,
         {

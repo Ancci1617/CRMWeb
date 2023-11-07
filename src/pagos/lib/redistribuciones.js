@@ -1,11 +1,11 @@
 const { getFichasByCte } = require("../model/pagos.model");
-
-const redistribuirPagoBgm = async ({FICHA,COBRADO,DECLARADO_CUO,DECLARADO_COB}) => {
+const {getDoubt} = require("../../lib/doubt.js");
+const redistribuirPagoBgm = async ({FICHA,COBRADO,DECLARADO_CUO,DECLARADO_COB,RANGO}) => {
 
 
     const [ficha_data] = await getFichasByCte(FICHA, "FICHA");
 
-    const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") };
+    const ficha_data_deuda = { data: ficha_data, deuda: getDoubt(ficha_data, RANGO == "COBRADOR" || RANGO == "VENDEDOR") };
 
 
     const MORA = Math.min(ficha_data_deuda.deuda.mora, COBRADO);
