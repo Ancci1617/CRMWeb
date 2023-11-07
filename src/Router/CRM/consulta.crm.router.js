@@ -42,7 +42,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     }
 
     query_result.Clientes = await getClientes(cte);
-    query_result.Fichas = await getFichas(cte);
+    query_result.Fichas = await getFichas("CTE",cte);
 
     //Agregar vencidas,pagas,totales,atrasos;
     query_result.Fichas = query_result.Fichas.map(ficha => {
