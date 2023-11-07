@@ -1,7 +1,7 @@
 function getToday(){
-    // return new Date().toISOString().split("T")[0];
+    return new Date().toISOString().split("T")[0];
     
-    return "2023-11-11"  
+    // return "2023-11-11"  
 }
 
 function getVencidas(vencimiento, today, maximo = 6) {
@@ -30,7 +30,6 @@ function sumarMeses(fecha, meses) {
         nuevaFecha.mes += meses;
     };
 
-    console.log("nueva fecha",`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
     return new Date(`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
 
 }

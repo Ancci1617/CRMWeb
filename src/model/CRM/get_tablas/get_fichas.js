@@ -2,7 +2,7 @@
 
 const pool = require("../../connection-database.js");
 
-const getFichas = async (cte) => {
+const getFichas = async (campo,condicion) => {
 
     const [rows] = await pool.query(
 
@@ -10,6 +10,7 @@ const getFichas = async (cte) => {
         DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
         Fichas.FECHA as FECHA,
         Fichas.CTE,
+        Fichas.ARTICULOS,
         CONVERT(Fichas.FICHA,INTEGER) as FICHA,
         Fichas.Z,
         Fichas.TOTAL,
@@ -67,7 +68,17 @@ const getFichas = async (cte) => {
         
 		ROUND(Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) -  (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA,1) AS Atraso,
 
-		Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) - FLOOR( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA + 0.3)  as Atraso_evaluado
+		Vencidas(VencimientoEvaluado(Fichas.VENCIMIENTO,Fichas.PRIMER_PAGO,CURRENT_DATE),CURRENT_DATE,Fichas.TOTAL / Fichas.CUOTA) - FLOOR( (Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO,0)) / Fichas.CUOTA + 0.3)  as Atraso_evaluado,
+    
+        LEAST((SELECT COUNT(*) FROM CambiosDeFecha WHERE
+        CambiosDeFecha.FECHA > DATE_ADD(
+            Fichas.VENCIMIENTO,
+            INTERVAL Pagas(
+                IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
+                CUOTA,1
+            ) MONTH
+        ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+	    ),5) AS CAMBIOS_DE_FECHA_EXACTO    
     
     FROM
         Fichas
@@ -174,11 +185,11 @@ const getFichas = async (cte) => {
     ON
         pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
     WHERE
-        Fichas.CTE like ?
+        Fichas.?? like ?
     GROUP BY
         Fichas.FICHA 
     ORDER BY 
-        Fichas.FECHA;`, [cte]);
+        Fichas.FECHA;`, [campo,condicion]);
 
 
     if (rows.length > 0) {

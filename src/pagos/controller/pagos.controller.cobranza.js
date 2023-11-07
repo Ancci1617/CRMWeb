@@ -1,4 +1,4 @@
-const { getDoubt } = require("../../lib/doubt.js");
+const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
 const pagosModel = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
@@ -54,19 +54,49 @@ async function rendicionController(req, res) {
   res.json({ rendicion: 1 })
 }
 
-
-
-const getCobranzas = async (req, res) => {
-  let cobranzas = await getFichas("%");
-  for(let i = 0 ; i< cobranzas.length;i++){
-    delete cobranzas[i].FECHA_FORMAT
+const getCobranzasEasy = async (req, res) => {
+  let cobranzas = await getFichas("FICHA", "5____");
+  for (let i = 0; i < cobranzas.length; i++) {
+    delete cobranzas[i].FECHA_FORMAT;
   }
 
-  console.log("COB");
-  console.log(cobranzas[0]);
+  const cobranzas_final = cobranzas.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
+    const {
+      cuota: deuda_cuota,
+      servicio: deuda_serv,
+      mora: deuda_mora,
+      vencimiento_vigente, EsPrimerPago
+    } = getDebtEasy(ficha);
 
-  res.json(cobranzas)
+    return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
+  })
 
+  console.log(cobranzas_final.filter(ficha => ficha.FICHA == 50555)[0]);
+
+  res.json(cobranzas_final.filter(ficha => ficha.FICHA >= 50000));
+
+
+}
+
+const getCobranzas = async (req, res) => {
+  let cobranzas = await getFichas("FICHA", "____");
+  for (let i = 0; i < cobranzas.length; i++) {
+    delete cobranzas[i].FECHA_FORMAT
+    delete cobranzas[i].ARTICULOS
+  }
+
+  const cobranzas_final = cobranzas.map(ficha => {
+    const {
+      cuota: deuda_cuota,
+      servicio: deuda_serv,
+      mora: deuda_mora,
+      vencimiento_vigente, EsPrimerPago
+    } = getDoubt(ficha);
+
+    return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
+  })
+
+  res.json(cobranzas_final)
 }
 
 
@@ -74,5 +104,5 @@ const getCobranzas = async (req, res) => {
 
 
 
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController, getCobranzas };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController, getCobranzas, getCobranzasEasy };
 
