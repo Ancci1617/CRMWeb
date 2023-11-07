@@ -2,7 +2,7 @@
 <% const tieneUbicaciones = (LATITUD && LONGITUD) %>
 
 
-<li class="credito_por_cobrar">
+<li class="credito_por_cobrar <%= FICHA >= 50000 ? "prestamo" : "" %>">
   <div class="zona <%= !tieneUbicaciones ? "sin_coordenadas" : "" %>"><%= Z %></div>
   <div class="details">
     <span class="calle"><%= `(${FICHA}) ${CALLE}` %></span>
