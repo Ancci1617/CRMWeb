@@ -34,12 +34,25 @@ function sumarMeses(fecha, meses) {
 
 }
 
+function getLimitDates({ MES }) {
+    const date = new Date(MES);
+
+    const START_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    const END_DATE = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+    
+    START_DATE.setHours(-3, 0, 0, 0);
+    END_DATE.setHours(-3, 0, 0, 0);
+
+    return { START_DATE: START_DATE.toISOString(), END_DATE: END_DATE.toISOString() };
+}
+
+
 const dateDiff = (FECHA1,FECHA2) => {
     return (new Date(FECHA1).getTime() - new Date(FECHA2).getTime()) / 1000 / 60 / 60 / 24
 }
 
 module.exports = {
-    getToday,sumarMeses,getVencidas,dateDiff
+    getToday,sumarMeses,getVencidas,dateDiff,getLimitDates
 }
 
 
