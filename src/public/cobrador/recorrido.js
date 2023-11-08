@@ -10,7 +10,8 @@ const cargarHandler = async () => {
     const body = creditos.reduce((acumulado, credito, indice) => {
         return [...acumulado, { ORDEN_COBRANZA: indice, ID: credito.querySelector("input[name='ID']").value }]
     }, [])
-
+    console.log(body);
+    alert("n")
     const res = await fetch("/cobrador/recorrido", {
         method: 'POST',
         mode: 'cors',
@@ -84,7 +85,7 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
     let response = await cargarHandler();
     if (response.success) {
         alert(response.msg)
-        return window.location.href = `/cobrador/recorrido/${zona}`;
+        // return window.location.href = `/cobrador/recorrido/${zona}`;
     }
     alert(response.msg)
 
