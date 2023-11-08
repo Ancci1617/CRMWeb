@@ -1,13 +1,15 @@
 const { getToday } = require("../../lib/dates.js");
 const pool = require("../../model/connection-database.js");
 
-const ordenarRecorrido = async (body) => {
-    const sqlString = body.reduce((acummulator, obj) => {
+const ordenarRecorrido = async ({isEasyCash = false,orders}) => {
+    
+    const sqlString = orders.reduce((acummulator, obj) => {
         return `${acummulator} WHEN Fichas.ID = ${obj.ID} THEN ${obj.ORDEN_COBRANZA} `
     }, "");
+    const columna_ordenar = isEasyCash ? "ORDEN_EASY" : "ORDEN_COBRANZA";
 
     try {
-        const [result] = await pool.query(`UPDATE Fichas set ORDEN_COBRANZA = CASE ${sqlString} ELSE ORDEN_COBRANZA END `, [])
+        const [result] = await pool.query(`UPDATE Fichas set ${columna_ordenar} = CASE ${sqlString} ELSE ${columna_ordenar} END `, [])
         return { msg: "Recorrido cargado", success: true }
     } catch (error) {
         console.log("Error al cargar el orden del recorrido");
@@ -18,10 +20,10 @@ const ordenarRecorrido = async (body) => {
 
 }
 
-const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
+const getFichasPorCobrar = async ({ filter = { "true": true },isEasyCash = false }) => {
     let keys = Object.keys(filter).reduce((accumulator, column) => { accumulator = accumulator + " AND " + column + " = ?"; return accumulator }, "")
     let keys_sql = keys.substring(5, keys.length);
-
+    const columna_ordenar = isEasyCash ? "ORDEN_EASY" : "ORDEN_COBRANZA";
 
     const [fichas] = await pool.query(
         `SELECT
@@ -76,7 +78,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true } }) => {
         LEFT JOIN ClientesSV on Fichas.CTE = ClientesSV.CTE 
         WHERE
             ${keys_sql} AND Fichas.ESTADO = 'ACTIVO' AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = Fichas.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE  GROUP BY
-            Fichas.FICHA order by ORDEN_COBRANZA asc;`
+            Fichas.FICHA order by ${columna_ordenar} asc;`
         , [...Object.values(filter)]);
 
     if (fichas.length > 0) {
