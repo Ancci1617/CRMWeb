@@ -19,7 +19,6 @@ async function generarContactoCTE(CTE, Usuario, body, VENTA_ID = null) {
 
 async function generarContactoY(Y, Usuario, body) {
     let { CTEYZ, ZONA, TELEFONO, NOMBRE, CALLE, TIPO } = body;
-    if (!checkPhoneFormat(TELEFONO)) return
 
     const contactos = await getContactoByTelefono(TELEFONO);
     console.log("ES CLIENTE CONTACTO", contactos);
@@ -45,7 +44,6 @@ async function generarContactoY(Y, Usuario, body) {
 
 async function generarContactoZ(Z, Usuario, body) {
     const { CTEYZ, ZONA, TELEFONO, NOMBRE, CALLE, TIPO } = body;
-    if (!checkPhoneFormat(TELEFONO)) return
 
     const contactos = await getContactoByTelefono(TELEFONO);
 
