@@ -56,7 +56,7 @@ const formIniciarRecorrido = async (req, res) => {
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
 
     if (ZONA == "Easy") {
-        fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true } });
+        fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true },isEasyCash : true });
         fichas = fichas_data.filter(ficha => ficha.FICHA >= 50000).map(ficha => ({ ficha, deuda: getDebtEasy(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
     } else {
         fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { Z: ZONA } });
