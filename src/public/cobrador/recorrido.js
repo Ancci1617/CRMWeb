@@ -5,13 +5,12 @@ const desbloquear = document.querySelector(".btn__desbloquear");
 
 
 const cargarHandler = async () => {
-
-    const creditos = [...document.querySelectorAll(".credito_por_cobrar")]
+    const zona = new URLSearchParams(window.location.search).get("ZONA");
+    const creditos = [...document.querySelectorAll(".credito_por_cobrar")];
     const body = creditos.reduce((acumulado, credito, indice) => {
         return [...acumulado, { ORDEN_COBRANZA: indice, ID: credito.querySelector("input[name='ID']").value }]
-    }, [])
-    console.log(body);
-    alert("n")
+    }, []);
+
     const res = await fetch("/cobrador/recorrido", {
         method: 'POST',
         mode: 'cors',
@@ -20,8 +19,8 @@ const cargarHandler = async () => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(body)
-    })
+        body: JSON.stringify({isEasyCash : zona == "Easy",orders : body})
+    });
     const res_json = await res.json();
     return res_json;
 }
@@ -85,7 +84,7 @@ document.querySelector(".btn__iniciar_recorrido").addEventListener("click", asyn
     let response = await cargarHandler();
     if (response.success) {
         alert(response.msg)
-        // return window.location.href = `/cobrador/recorrido/${zona}`;
+        return window.location.href = `/cobrador/recorrido/${zona}`;
     }
     alert(response.msg)
 
