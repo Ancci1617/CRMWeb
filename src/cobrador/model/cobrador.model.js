@@ -1,8 +1,8 @@
 const { getToday } = require("../../lib/dates.js");
 const pool = require("../../model/connection-database.js");
 
-const ordenarRecorrido = async ({isEasyCash = false,orders}) => {
-    
+const ordenarRecorrido = async ({ isEasyCash = false, orders }) => {
+
     const sqlString = orders.reduce((acummulator, obj) => {
         return `${acummulator} WHEN Fichas.ID = ${obj.ID} THEN ${obj.ORDEN_COBRANZA} `
     }, "");
@@ -20,7 +20,7 @@ const ordenarRecorrido = async ({isEasyCash = false,orders}) => {
 
 }
 
-const getFichasPorCobrar = async ({ filter = { "true": true },isEasyCash = false }) => {
+const getFichasPorCobrar = async ({ filter = { "true": true }, isEasyCash = false }) => {
     let keys = Object.keys(filter).reduce((accumulator, column) => { accumulator = accumulator + " AND " + column + " = ?"; return accumulator }, "")
     let keys_sql = keys.substring(5, keys.length);
     const columna_ordenar = isEasyCash ? "ORDEN_EASY" : "ORDEN_COBRANZA";
@@ -126,4 +126,30 @@ const volverAlFinal = async ({ FICHA, ZONA, Usuario }) => {
 }
 
 
-module.exports = { getFichasPorCobrar, ordenarRecorrido, insertCambioDeFecha, volverAlFinal }
+const volverAlFinalEasy = async ({ FICHA, ZONA, Usuario }) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        let [res] = await connection.query(
+            `UPDATE Fichas SET ORDEN_EASY = ( SELECT MAX(ORDEN_EASY) + 1 FROM Fichas WHERE FICHA > 50000 ) WHERE FICHA = ?`, [FICHA]);
+        let [res2] = await connection.query(`
+        UPDATE Fichas F LEFT JOIN( SELECT Fichas.FICHA, ( ROW_NUMBER() OVER( ORDER BY ORDEN_EASY ASC )) - 1 AS ORDEN FROM Fichas WHERE ORDEN_EASY IS NOT NULL AND Fichas.FICHA > 50000 ) AUX ON AUX.FICHA = F.FICHA SET F.ORDEN_EASY = AUX.ORDEN WHERE ORDEN_EASY IS NOT NULL AND F.FICHA  >  50000 ORDER BY ORDEN_EASY ASC;
+        `, [])
+        let [res3] = await connection.query(
+            `INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR, FECHA, CODIGO_PAGO, CAMBIO_ORIGINAL) VALUES (?)`
+            , [[FICHA, null, Usuario, getToday(), null, null]])
+
+
+        await connection.commit();
+
+    } catch (error) {
+        console.log(error);
+        await connection.rollback();
+
+    } finally {
+        await connection.release();
+    }
+}
+
+module.exports = { getFichasPorCobrar, ordenarRecorrido, insertCambioDeFecha, volverAlFinal, volverAlFinalEasy }

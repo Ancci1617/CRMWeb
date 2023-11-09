@@ -82,7 +82,7 @@
 
       <input type="hidden" name="CTE" value="<%= CTE %>">
       <input type="hidden" name="FICHA" value="<%= FICHA %>">
-      <input type="hidden" name="ZONA" value="<%= Z %>">
+      <input type="hidden" name="ZONA" value="<%= Recorrido %>">
       <input type="hidden" name="EsRecorrido" value="<%= EsRecorrido %>">
 
     </div>
@@ -94,8 +94,8 @@
     <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
 
     <% if(EsRecorrido == 'true'){%>
-    <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Z}&FICHA=${FICHA}`%>">Mover al final</a>
-    <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Z}`%>">Ver recorrido</a>
+    <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Recorrido}&FICHA=${FICHA}`%>">Mover al final</a>
+    <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Recorrido}`%>">Ver recorrido</a>
     <% } %>
 
 </div>

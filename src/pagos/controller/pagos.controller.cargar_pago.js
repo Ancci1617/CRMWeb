@@ -16,7 +16,7 @@ const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 
 
 async function deudaCte(req, res) {
-    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false } = req.query;
+    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false,Recorrido } = req.query;
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
@@ -45,7 +45,7 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido,Recorrido });
 }
 
 
