@@ -17,7 +17,7 @@
 
   <div class="main__container">
     <header class="btn__container">
-      <a href="/cobrador/recorrido?ZONA=<%= fichas[0].ficha.Z %>" class="btn_header link">RECORRIDO</a>
+      <a href="/cobrador/recorrido?ZONA=<%= ZONA %>" class="btn_header link">RECORRIDO</a>
       <div class="lista_zonas">
         <% user.ZONAS.forEach(zona => { %>
         <a href="<%=`${zona}`%>" class="zona link"><%= zona %></a>

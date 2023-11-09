@@ -8,7 +8,7 @@ creditos.forEach(credito => {
         const FICHA = credito.querySelector("input[name='FICHA']").value;
         const CTE = credito.querySelector("input[name='CTE']").value;
         let a = document.createElement("a");
-        a.href = `/pagos/deuda_cte?CTE=${CTE}&FICHA_PRIMERA=${FICHA}&EsRecorrido=true`;
+        a.href = `/pagos/deuda_cte?CTE=${CTE}&FICHA_PRIMERA=${FICHA}&EsRecorrido=true&Recorrido=${ZONA}`;
         a.click();
     },true)
 })

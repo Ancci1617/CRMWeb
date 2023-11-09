@@ -50,11 +50,11 @@
     <% fichas.forEach(ficha => { %>
     <% if(ficha.data.FICHA <= 50000) {%>
 
-    <%- include(global.dir_partials + "/pagos/deuda_cte.ficha.ejs",{ficha}) %>
+    <%- include(global.dir_partials + "/pagos/deuda_cte.ficha.ejs",{ficha,Recorrido}) %>
 
     <% }else { %>
 
-    <%- include(global.dir_partials + "/pagos/deuda_cte.prestamo.ejs",{ficha}) %>
+    <%- include(global.dir_partials + "/pagos/deuda_cte.prestamo.ejs",{ficha,Recorrido}) %>
     <% } %>
     <% }); %>
 

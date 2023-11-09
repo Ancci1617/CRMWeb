@@ -11,8 +11,6 @@ Router.get("/:ZONA", hasPermission(USER_LISTADO),getListadoZona);
 Router.post("/finalizar_revisita",hasPermission(USER_LISTADO),resolucionRevisita);
 
 
-// Router.get("/deuda_cte_test",deudaCteTest);
-
 
 
 

@@ -16,7 +16,7 @@ const formOrdenarRecorrido = async (req, res) => {
     const { ZONA = "SZ" } = req.query;
 
     if (ZONA == "Easy") {
-        const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true } ,isEasyCash : true});
+        const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true }, isEasyCash: true });
         const fichas = fichas_data.filter(ficha => ficha.FICHA >= 50000).map(ficha => ({ ficha, deuda: getDebtEasy(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
 
         return res.render("cobrador/recorrido2.ejs", { fichas });
@@ -36,6 +36,7 @@ const formOrdenarRecorrido = async (req, res) => {
 
 const postCambiarFecha = async (req, res) => {
     const { FICHA, FECHA_COB, ZONA } = req.body;
+    
     await cobradorModel.insertCambioDeFecha({ FICHA, FECHA: FECHA_COB, COBRADOR: req.user.Usuario, TODAY: getToday() });
 
     res.redirect(`recorrido/${ZONA}`);
@@ -44,7 +45,11 @@ const postCambiarFecha = async (req, res) => {
 
 const postVolver = async (req, res) => {
     const { ZONA, FICHA } = req.query;
-    await cobradorModel.volverAlFinal({ FICHA, ZONA, Usuario: req.user.Usuario });
+    if (ZONA == "Easy") {
+        await cobradorModel.volverAlFinalEasy({ FICHA, ZONA, Usuario: req.user.Usuario });
+    } else {
+        await cobradorModel.volverAlFinal({ FICHA, ZONA, Usuario: req.user.Usuario });
+    }
     res.redirect(`/cobrador/recorrido/${ZONA}`);
 
 
@@ -56,16 +61,16 @@ const formIniciarRecorrido = async (req, res) => {
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
 
     if (ZONA == "Easy") {
-        fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true },isEasyCash : true });
+        fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true }, isEasyCash: true });
         fichas = fichas_data.filter(ficha => ficha.FICHA >= 50000).map(ficha => ({ ficha, deuda: getDebtEasy(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
     } else {
         fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { Z: ZONA } });
         fichas = fichas_data.map(ficha => ({ ficha, deuda: ficha.FICHA >= 50000 ? getDebtEasy(ficha) : getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
     }
 
-    
+
     fichas.splice(6, fichas.length);
-    res.render("cobrador/iniciar.ejs", { fichas, usuarios });
+    res.render("cobrador/iniciar.ejs", { fichas, usuarios, ZONA });
 }
 
 module.exports = { postOrdenarRecorrido, formOrdenarRecorrido, postCambiarFecha, postVolver, formIniciarRecorrido }
