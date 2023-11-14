@@ -108,8 +108,7 @@
           </div>
           
           
-          
-          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Fecha de venta",type : "date"  ,defaultValue : FECHA_VENTA , name : "FECHA_VENTA", required : true, max : today , min : treeDaysAgo}}) %>
+          <%- include(global.dir_partials + "/shared/input-box",{input : {details : "Fecha de venta",type : "date"  ,defaultValue : FECHA_VENTA , name : "FECHA_VENTA", required : true, max :  !hasPermission(permisos.VENTAS_ADMIN) ? today : "" , min : !hasPermission(permisos.VENTAS_ADMIN) ? treeDaysAgo : ""}}) %>
           
           <div class="input-box">
             <span class="details">Se hace responsable el vendedor?</span>

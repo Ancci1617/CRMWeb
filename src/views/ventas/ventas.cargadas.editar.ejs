@@ -43,12 +43,12 @@
           <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CALLE",required:true,details : "Calle",defaultValue : CALLE, placeholder : "Domicilio"}}) %>
 
           <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES",required:true,details : "Cruce 1",defaultValue : CRUCES, placeholder : "Cruce 1"}}) %>
-          
+
           <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "CRUCES2",required:true,details : "Cruce 2",defaultValue : CRUCES2, placeholder : "Cruce 2"}}) %>
 
           <%- include("../partials/Components/input-box.ejs",{input : {type : "number",name : "WHATSAPP",details : "Telefono",defaultValue : WHATSAPP, placeholder : "WHATSAPP"}}) %>
 
-          
+
           <div class="input-box">
             <span class="details">N° de documento</span>
             <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
@@ -59,10 +59,10 @@
             <select form="form_editar_venta" class="selector-cuotas" name="CUOTAS" required>
               <option value="3" <%= CUOTAS == 3 ? "selected" : null %>>3</option>
               <option value="6" <%= CUOTAS == 6 ? "selected" : null %>>6</option>
-              <option value="8"  <%= CUOTAS == 8 ? "selected" : null %>>8</option>
-              <option value="9"  <%= CUOTAS == 9 ? "selected" : null %>>9</option>
-              <option value="12"  <%= CUOTAS == 12 ? "selected" : null %>>12</option>
-              <option value="1"  <%= CUOTAS == 1 ? "selected" : null %>>1</option>
+              <option value="8" <%= CUOTAS == 8 ? "selected" : null %>>8</option>
+              <option value="9" <%= CUOTAS == 9 ? "selected" : null %>>9</option>
+              <option value="12" <%= CUOTAS == 12 ? "selected" : null %>>12</option>
+              <option value="1" <%= CUOTAS == 1 ? "selected" : null %>>1</option>
             </select>
           </div>
 
@@ -94,7 +94,7 @@
               <option value="2000" <%= SERV_UNIT == 2000 ? "selected" : "" %>>2000</option>
             </select>
           </div>
-          
+
 
           <div class="input-box">
             <span class="details">Anticipo</span>
@@ -149,7 +149,7 @@
           </div>
           <div class="input-box">
             <span class="details">Fecha de venta</span>
-            <input type="date"  name="FECHA_VENTA" value="<%= FECHA_VENTA %>" min="<%= treeDaysAgo %>" max="<%= today %>" >
+            <input type="date" name="FECHA_VENTA" value="<%= FECHA_VENTA %>" min="<%= !hasPermission(permisos.VENTAS_ADMIN) ? treeDaysAgo : "" %>" max="<%= !hasPermission(permisos.VENTAS_ADMIN) ? today : "" %>" />
           </div>
 
           <div class="input-box">
