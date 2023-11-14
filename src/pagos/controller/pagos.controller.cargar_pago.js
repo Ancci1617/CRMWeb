@@ -101,6 +101,7 @@ async function confirmarPago(req, res) {
 
     const { CODIGO, ORDEN } = req.query;
     try {
+
         const pago = await pagosModel.getPagoByCodigo(CODIGO);
         await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
 
