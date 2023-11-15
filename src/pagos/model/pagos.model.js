@@ -146,7 +146,7 @@ WHERE
         // HAVING
         //     SALDO > 0;
         , [MODO, CTE]);
-    console.log("fichas", fichas);
+
     if (fichas.length > 0) {
         return fichas;
     }

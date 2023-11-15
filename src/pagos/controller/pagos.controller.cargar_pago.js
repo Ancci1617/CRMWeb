@@ -1,5 +1,5 @@
 const pagosModel = require("../model/pagos.model.js");
-const { getToday } = require("../../lib/dates.js");
+const { getToday, dateDiff } = require("../../lib/dates.js");
 const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
@@ -16,7 +16,7 @@ const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 
 
 async function deudaCte(req, res) {
-    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false,Recorrido } = req.query;
+    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false, Recorrido } = req.query;
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
@@ -45,7 +45,7 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido,Recorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 
 
@@ -71,7 +71,7 @@ async function cargarPago(req, res) {
 
     const pago_obj = FICHA >= 50000 ?
         { CUOTA: DECLARADO_CUO, MORA: DECLARADO_MORA, SERV: DECLARADO_SERV } :
-        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO ,RANGO : req.user.RANGO});
+        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO, RANGO: req.user.RANGO });
 
     const submit_obj = Object.assign(pago_obj,
         {
@@ -103,8 +103,34 @@ async function confirmarPago(req, res) {
     try {
 
         const pago = await pagosModel.getPagoByCodigo(CODIGO);
-        await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
 
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:108 ~ confirmarPago ~ pago:", pago)
+
+        const fichas = await pagosModel.getFichasByCte(pago.CTE, "CTE");
+        const ficha = fichas.find(ficha => ficha.FICHA == pago.FICHA);
+
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:113 ~ confirmarPago ~ ficha:", ficha)
+        const deuda_real = getDebtEasy(ficha);
+
+        const deuda_pendiente = getDebtEasy(Object.assign({ ...ficha }, { CUOTA_PAGO: ficha.CUOTA_PAGO - pago.VALOR, SERV_PAGO: ficha.SERV_PAGO - pago.SERV, MORA_PAGO: ficha.MORA_PAGO - pago.MORA, SALDO: ficha.SALDO + pago.VALOR }));
+
+
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:115 ~ confirmarPago ~ deuda_pendiente:", deuda_pendiente)
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:115 ~ confirmarPago ~ deuda_real:", deuda_real)
+
+        const mora_unit = Math.max(Math.round(ficha.ARTICULOS * 0.01 / 100) * 100, 150);
+
+        const mora_ant = Math.min(dateDiff(deuda_real.vencimiento_vigente, deuda_pendiente.vencimiento_vigente) * mora_unit + Math.min(ficha.MORA_ANT,0) , ficha.MORA_PAGO );
+
+        
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:124 ~ confirmarPago ~ dateDiff(deuda_real.vencimiento_vigente, deuda_pendiente.vencimiento_vigente):", dateDiff(deuda_real.vencimiento_vigente, deuda_pendiente.vencimiento_vigente));
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:124 ~ confirmarPago ~ mora_ant:", mora_ant)
+        
+        const deuda_nueva = getDebtEasy(Object.assign({ ...ficha },{MORA_ANT : mora_ant}));
+        
+        console.log("🚀 ~ file: pagos.controller.cargar_pago.js:128 ~ confirmarPago ~ deuda_nueva:", deuda_nueva)
+
+        // await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
         res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
 
     } catch (error) {
