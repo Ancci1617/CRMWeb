@@ -1,5 +1,5 @@
 const pagosModel = require("../model/pagos.model.js");
-const { getToday } = require("../../lib/dates.js");
+const { getToday, dateDiff } = require("../../lib/dates.js");
 const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
@@ -11,12 +11,13 @@ const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.
 const { getArticulos, getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
 const { agregarMeses } = require("../lib/agregar_meses.js");
 const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
+const { generarSaldoAnteriorEasyCash, generarSaldoAnteriorBgm } = require("../lib/saldo_anterior.js");
 
 
 
 
 async function deudaCte(req, res) {
-    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false,Recorrido } = req.query;
+    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false, Recorrido } = req.query;
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
@@ -45,7 +46,7 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido,Recorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 
 
@@ -71,7 +72,7 @@ async function cargarPago(req, res) {
 
     const pago_obj = FICHA >= 50000 ?
         { CUOTA: DECLARADO_CUO, MORA: DECLARADO_MORA, SERV: DECLARADO_SERV } :
-        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO ,RANGO : req.user.RANGO});
+        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO, RANGO: req.user.RANGO });
 
     const submit_obj = Object.assign(pago_obj,
         {
@@ -101,9 +102,15 @@ async function confirmarPago(req, res) {
 
     const { CODIGO, ORDEN } = req.query;
     try {
-        const pago = await pagosModel.getPagoByCodigo(CODIGO);
-        await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
 
+        const pago = await pagosModel.getPagoByCodigo(CODIGO);
+        if (pago.FICHA > 50000) {
+            await generarSaldoAnteriorEasyCash(pago);
+        } else {
+            await generarSaldoAnteriorBgm(pago);
+        }
+
+        await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
         res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
 
     } catch (error) {

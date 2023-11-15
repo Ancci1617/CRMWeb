@@ -3,7 +3,7 @@ const pool = require("../../model/connection-database")
 const getPagosMP = async () => {
     try {
         const [pagos] = await pool.query(
-    `SELECT
+            `SELECT
     CTE,
     FICHA,
     MP_OPERACION,
@@ -77,10 +77,10 @@ const cargarPago = async ({
     return [];
 
 }
-    
+
 const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     const [fichas] = await pool.query(
-    `SELECT
+        `SELECT
     Fichas.FECHA AS FECHA_VENTA,
     Fichas.CTE,
     Fichas.PRIMER_PAGO,
@@ -146,7 +146,7 @@ WHERE
         // HAVING
         //     SALDO > 0;
         , [MODO, CTE]);
-    console.log("fichas", fichas);
+
     if (fichas.length > 0) {
         return fichas;
     }
@@ -366,9 +366,9 @@ const invalidarPago = async ({ CODIGO }) => {
 }
 
 
-const updateMoraYServicioAntBase = async () => {
+const updateMoraYServAnt = async ({ MORA_ANT, SERVICIO_ANT,FICHA }) => {
     const [update_result] = await pool.query(
-        "UPDATE PagosSV SET CONFIRMACION = ? WHERE CODIGO = ? ", [ESTADO, CODIGO]);
+        "UPDATE Fichas SET ? WHERE Ficha = ? ", [{ MORA_ANT, SERVICIO_ANT },FICHA]);
 
     if (update_result.length > 0) {
         return update_result;
@@ -414,4 +414,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServicioAntBase, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }
