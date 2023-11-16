@@ -95,7 +95,7 @@ const postEditarVenta = async (req, res) => {
 
     //Cargar imagen de frente y dorso a servidor
     if (req.files)
-        saveFileFromEntry(entries, req.body.CTE);
+        saveFileFromEntry(Object.entries(req.files), req.body.CTE);
 
 
     res.redirect(`/ventas/pasar_ventas?USUARIO=${venta_prev.USUARIO}&FECHA_VENTA=${venta_prev.FECHA_VENTA}`);
