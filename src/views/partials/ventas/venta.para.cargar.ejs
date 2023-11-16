@@ -33,7 +33,7 @@
 
   <div class="details_container ">
     <% if(hasPermission(permisos.DNI_USER)){ %>
-    <a href="/dnis/<%= CTE %>" target="_blank">Ver fotos</a>
+    <a href="/dnis/cargar_imagen/<%= CTE %>" target="_blank">Ver fotos</a>
     <% } %>
     <% if(LATITUD && LONGITUD) {%>
     <a href=<%=`https://www.google.com.ar/maps/search/${LATITUD},${LONGITUD}`%> target="_blank">Ver ubicacion</a>
@@ -41,6 +41,6 @@
   </div>
 
   <%  if(MODO == "EASY"){%>
-  <a href="/dnis/<%= GARANTE_CTE %>" target="_blank" class="nw">Ver fotos garante</a>
+  <a href="/dnis/cargar_imagen/<%= GARANTE_CTE %>" target="_blank" class="nw">Ver fotos garante</a>
   <% } %>
 </div>
