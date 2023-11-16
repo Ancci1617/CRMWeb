@@ -8,7 +8,7 @@ const pool = require("../../model/connection-database.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 const permisos = require("../../constants/permisos.js");
 const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
-const { getArticulos, getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
+const { getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
 const { agregarMeses } = require("../lib/agregar_meses.js");
 const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 const { generarSaldoAnteriorEasyCash, generarSaldoAnteriorBgm } = require("../lib/saldo_anterior.js");
@@ -22,13 +22,12 @@ async function deudaCte(req, res) {
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
     const fichas_data = await pagosModel.getFichasByCte(CTE);
-    const prestamos = await pagosModel.getPrestamosByCte(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const [cte_data] = await getClientes(CTE);
 
     const fichas = fichas_data.map(ficha => {
         if (ficha.FICHA >= 50000)
-            return { data: ficha, deuda: getDebtEasy(ficha) }
+            return { data: ficha, deuda: getDebtEasy(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
 
         return { data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
     });
@@ -46,7 +45,7 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 
 

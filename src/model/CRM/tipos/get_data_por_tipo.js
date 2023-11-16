@@ -3,29 +3,7 @@ const getClienteEnFichas = async (ficha) => {
     try {
 
         const [rows] = await pool.query(
-            `SELECT
-        CTE,
-        FICHA
-    FROM
-        Fichas
-    WHERE
-        Fichas.FICHA = ?
-    UNION
-    SELECT
-        CobranzasEC.CTE,
-        CobranzasEC.Prestamo
-    FROM
-        CobranzasEC
-    WHERE
-        Prestamo = ?
-    UNION
-    SELECT
-        VentasEC.CTE,
-        VentasEC.Prestamo
-    FROM
-        VentasEC
-    WHERE
-        Prestamo = ? LIMIT 1;`,
+            `SELECT CTE, FICHA FROM Fichas WHERE Fichas.FICHA = ? LIMIT 1;`,
             [ficha, ficha, ficha]);
         if (rows.length > 0) {
             return rows[0].CTE;
@@ -93,5 +71,5 @@ const getCteCte = async (cte) => {
 }
 
 
-module.exports = { getCteDni, getCteCalle, getCteFicha, getCteNombre, getCteTel, getCteCte ,getClienteEnFichas}
+module.exports = { getCteDni, getCteCalle, getCteFicha, getCteNombre, getCteTel, getCteCte, getClienteEnFichas }
 
