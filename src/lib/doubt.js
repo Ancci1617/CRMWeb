@@ -35,7 +35,7 @@ const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA }) => {
 }
 
 function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, AGREGAR_SERVICIO = false }) {
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false) {
 
     const { vencidas, pagas, atraso } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
 
@@ -48,7 +48,10 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 
     const mora = atraso <= 0 ? 0 : Math.max(mora_unit * dateDiff(getToday(), vencimiento_vigente) + MORA_ANT - MORA_PAGO, 0);
 
-    const servicio = atraso <= 0 ? 0 : Math.min(CAMBIOS_DE_FECHA_EXACTO * 1000, 5000) + SERVICIO_ANT - SERV_PAGO;
+    const servicio =
+        Math.max(
+            Math.min(CAMBIOS_DE_FECHA_EXACTO * 1000 + (!SERVICIO_HOY && COBRADOR ? 1000 : 0), 5000) + SERVICIO_ANT - SERV_PAGO
+        ,0);
 
 
 

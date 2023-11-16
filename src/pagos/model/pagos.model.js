@@ -80,7 +80,7 @@ const cargarPago = async ({
 
 const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     const [fichas] = await pool.query(
-        `SELECT
+`SELECT
     Fichas.FECHA AS FECHA_VENTA,
     Fichas.CTE,
     Fichas.PRIMER_PAGO,
@@ -119,7 +119,9 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
                 CUOTA,1
             ) MONTH
         ) AND CambiosDeFecha.FICHA = Fichas.FICHA
-	),5) AS CAMBIOS_DE_FECHA_EXACTO
+	),5) AS CAMBIOS_DE_FECHA_EXACTO,
+
+    EXISTS (SELECT 1 from CambiosDeFecha where CambiosDeFecha.FECHA = CURRENT_DATE and CambiosDeFecha.FICHA = Fichas.FICHA) as SERVICIO_HOY
 
 
 FROM

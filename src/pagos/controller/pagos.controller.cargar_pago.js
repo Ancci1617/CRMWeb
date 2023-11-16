@@ -8,7 +8,7 @@ const pool = require("../../model/connection-database.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 const permisos = require("../../constants/permisos.js");
 const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
-const { getArticulos, getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
+const { getArticulosString } = require("../../model/CRM/get_tablas/get_articulos.js");
 const { agregarMeses } = require("../lib/agregar_meses.js");
 const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 const { generarSaldoAnteriorEasyCash, generarSaldoAnteriorBgm } = require("../lib/saldo_anterior.js");
@@ -27,7 +27,7 @@ async function deudaCte(req, res) {
 
     const fichas = fichas_data.map(ficha => {
         if (ficha.FICHA >= 50000)
-            return { data: ficha, deuda: getDebtEasy(ficha) }
+            return { data: ficha, deuda: getDebtEasy(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
 
         return { data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
     });
