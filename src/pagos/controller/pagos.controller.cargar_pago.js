@@ -22,7 +22,6 @@ async function deudaCte(req, res) {
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
     const fichas_data = await pagosModel.getFichasByCte(CTE);
-    const prestamos = await pagosModel.getPrestamosByCte(CTE);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const [cte_data] = await getClientes(CTE);
 
@@ -46,7 +45,7 @@ async function deudaCte(req, res) {
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
 
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, prestamos, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 
 

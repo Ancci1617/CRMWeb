@@ -153,15 +153,7 @@ WHERE
 
     return [];
 }
-const getPrestamosByCte = async (CTE, MODO = "CTE") => {
-    const query = "SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Estatus`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`, `SERVICIOS PAGO`, CONVERT(`SERVICIOS`,INTEGER) AS `SERVICIOS`, CONVERT(`MORA`,INTEGER) AS `MORA`, `MORA UNIT`, `Vencidas`, CONVERT(`Deuda Cuo`,INTEGER) AS `DEUDA_CUO` FROM `CobranzasEC` WHERE ?? = ?  UNION SELECT `FECHA`, `CTE`, `Prestamo`, `Zona`, `Valor`, `Capital`, `Ant`, `Mes 0`, `Mes 1`, `Mes 2`, `Mes 3`, `Mes 4`, `Mes 5`, `Saldo Ant`, `Mes 6`, `Saldo Act`, CONVERT(`Cuota`,INTEGER) as `CUOTA`, `Cuo`, `Entregado`, `V`, `Fecha cobro`, `C De Fecha`, `Prox Fecha`, `SERVICIOS ANT`,`SERVICIOS PAGO`,`SERVICIOS`,  `MORA`, `MORA UNIT`, `Vencidas`, `Deuda Cuo` FROM `VentasEC` WHERE ?? = ?;"
 
-    const [prestamos] = await pool.query(
-        query, [MODO, CTE, MODO, CTE]
-    );
-
-    return prestamos
-}
 
 const insertCambioDeFecha = async ({ CTE, FICHA, FECHA_COB, COBRADOR, FECHA }) => {
     const [response] = await pool.query(
@@ -414,4 +406,4 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
 
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, getPrestamosByCte, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }
