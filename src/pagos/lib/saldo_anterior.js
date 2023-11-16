@@ -1,4 +1,5 @@
-const { getDoubt } = require("../../lib/doubt.js");
+const { dateDiff } = require("../../lib/dates.js");
+const { getDoubt ,getDebtEasy} = require("../../lib/doubt.js");
 const pagosModel = require("../model/pagos.model.js");
 
 const generarSaldoAnteriorEasyCash = async (pago) => {
