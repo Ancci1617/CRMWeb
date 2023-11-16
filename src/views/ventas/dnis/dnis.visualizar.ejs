@@ -23,8 +23,9 @@
             <div class="img-title">Rostro</div>
             <img class="imagen" src="/<%= CTE %>/CTE-<%= CTE %>-ROSTRO.jpg" alt="No encontrado">
             <div class="btn-container">
-                <input type="file" name="ROSTRO" accept="image/*" id="" required>
-                <input type="submit" class="btn-cargarimagen" value="Cargar">
+                <input type="file" name="ROSTRO" accept="image/*" id="" required />
+                <input type="submit" class="btn-cargarimagen" value="Cargar" />
+                <a class="btn-cargarimagen link" href="/dnis/eliminar_imagen?CTE=<%= CTE %>&IMAGEN=ROSTRO">Eliminar</a>
             </div>
         </form>
 
@@ -34,6 +35,7 @@
             <div class="btn-container">
                 <input type="file" name="FRENTE" accept="image/*" id="" required>
                 <input type="submit" class="btn-cargarimagen" value="Cargar">
+                <a class="btn-cargarimagen link" href="/dnis/eliminar_imagen?CTE=<%= CTE %>&IMAGEN=FRENTE">Eliminar</a>
             </div>
         </form>
 
@@ -43,6 +45,7 @@
             <div class="btn-container">
                 <input type="file" name="DORSO" accept="image/*" id="" required>
                 <input type="submit" class="btn-cargarimagen" value="Cargar">
+                <a class="btn-cargarimagen link" href="/dnis/eliminar_imagen?CTE=<%= CTE %>&IMAGEN=DORSO">Eliminar</a>
             </div>
         </form>
     </div>

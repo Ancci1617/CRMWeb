@@ -64,11 +64,14 @@
     position: relative;
     padding: 3px;
     background-color: #6998d1;
-    margin: .6rem;
+    margin: .4rem;
     width: 80%;
     border: none;
     outline: none;
+    color: whitesmoke;
+    text-align: center;
     border-radius: 9px;
+    cursor: pointer;
 }
 .btn-cargarimagen:hover{
     left: 2px;
