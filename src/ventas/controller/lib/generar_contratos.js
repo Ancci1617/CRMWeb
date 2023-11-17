@@ -24,7 +24,7 @@ const generarContratoEasyCash = (datos_credito, datos_cte) => {
     const { ARTICULOS: CAPITAL, FICHA: PRESTAMO } = datos_credito;
     const data = Object.assign(
         datos_credito, datos_cte,
-        { CAPITAL, PRESTAMO }
+        { CAPITAL, PRESTAMO,DIA_PAGO : new Date(datos_credito.VENCIMIENTO).getUTCDate() }
     );
 
 
