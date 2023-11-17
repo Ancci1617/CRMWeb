@@ -1,2 +1,3 @@
 /node_modules
 /.vscode
+/src/model/connection-object.js
