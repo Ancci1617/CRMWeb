@@ -8,7 +8,7 @@ Router.get("/cargar_prestamo/:cte",prestamosController.formCargarPrestamo);
 
 Router.post("/cargar_prestamo",prestamosController.postCargarPrestamo);
 
-
+Router.get("/generar_contrato",prestamosController.descargarContrato);
 
 // Router.get("/pasar_prestamos",)
 

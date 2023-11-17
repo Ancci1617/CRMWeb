@@ -173,9 +173,10 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
         const contacto_generado = await contactosModel.generarContactoCTEWithConection({ conexion: connection, CTE, TELEFONO: WHATSAPP, Usuario, VENTA_ID: responseInsertVentasCargadas.insertId });
         const ubicacion_generada = await ubicacionesModel.insertarNuevaUbicacionWithConection({ conexion: connection, CALLE, LATITUD, LONGITUD, ID_VENTA: responseInsertVentasCargadas.insertId });
 
-        await connection.query(`INSERT IGNORE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI,DOMICILIO_LABORAL) VALUES (?)`,
-            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL]])
-        await connection.query(`INSERT IGNORE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,
+        // En caso que el cliente exista, lo actualiza, si no existe lo inserta
+        await connection.query(`REPLACE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI,DOMICILIO_LABORAL,GARANTE_CTE) VALUES (?)`,
+            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL,GARANTE_CTE]])
+        await connection.query(`REPLACE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,
             [[GARANTE_CTE, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI]])
 
 

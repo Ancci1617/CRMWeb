@@ -28,6 +28,9 @@
       <a href="<%=`/ventas/borrar/${INDICE}`%>" class="invalidar_venta btn_invalidar_venta"><i class="fas fa-times"></i></a>
       <% }%>
       <% } %>
+      <% if(MODO == "EASY"){  %>
+        <a href="<%= `/ventas/prestamos/generar_contrato?ID=${INDICE}` %>" class=""><i class="fas fa-file-contract"></i></a>
+        <% } %>
     </div>
   </div>
 
