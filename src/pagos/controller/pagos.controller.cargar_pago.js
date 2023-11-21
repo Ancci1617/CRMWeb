@@ -80,7 +80,7 @@ async function cargarPago(req, res) {
             DECLARADO_COB: parseInt(DECLARADO_SERV) + parseInt(DECLARADO_MORA), DECLARADO_CUO, DECLARADO_SERV
         });
 
-    await pagosModel.cargarPago(submit_obj);
+    // await pagosModel.cargarPago(submit_obj);
 
 
     res.redirect(`/pagos/codigo_pago?CODIGO=${CODIGO}&EsRecorrido=${EsRecorrido}`);
