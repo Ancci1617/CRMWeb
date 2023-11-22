@@ -44,7 +44,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
     const mora_unit = Math.max(Math.round(CAPITAL * 0.01 / 100) * 100, 150);
-    
+
     console.log("🚀 ~ file: doubt.js:48 ~ VENCIMIENTO:", VENCIMIENTO)
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
@@ -54,7 +54,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     const servicio =
         Math.max(
             Math.min(CAMBIOS_DE_FECHA_EXACTO * 1000 + (!SERVICIO_HOY && COBRADOR ? 1000 : 0), 5000) + SERVICIO_ANT - SERV_PAGO
-        ,0);
+            , 0);
 
 
 
@@ -81,7 +81,6 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
     const { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA });
 
-
     //Deuda
     const deudaCuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
     const deuda_mora = Math.floor(Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0) / 100) * 100;
@@ -90,14 +89,15 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
     // let deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
-    let deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
+    let deuda_serv =  Math.max( SERVICIO_ANT - SERV_PAGO  + Math.min(atraso_eval,2) * SERV_UNIT, 0);
 
+    
     if (vencidas < CUOTAS && COBRADOR &&
         getToday() <= `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
         && !zonas_sin_servicio_cobranza.includes(Z) && !deuda_serv > 0
     ) {
         // deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
-        deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + (atraso_eval + 1) * SERV_UNIT, 0);
+        deuda_serv =  Math.max(SERVICIO_ANT - SERV_PAGO  + Math.min((atraso_eval + 1),2) * SERV_UNIT, 0);
 
     }
 
