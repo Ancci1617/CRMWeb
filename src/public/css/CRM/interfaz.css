@@ -164,6 +164,10 @@
     padding: 0 0 0 5px;
 
 }
+.title-editar:hover {
+    color: lightblue;
+    font-size: 1.25em;
+}
 
 @media screen and (max-width:500px) {
 

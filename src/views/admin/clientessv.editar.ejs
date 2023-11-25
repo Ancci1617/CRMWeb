@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Editar cliente</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% const {CTE,ZONA,NOMBRE,CALLE,CRUCES,CRUCES2,WHATSAPP,DNI,LATITUD,LONGITUD} = cte_data %>
+  <% const readOnlyPermission = !hasPermission(permisos.ADMIN_ADMIN) ? "readonly" : "" %>
+</head>
+
+<body>
+
+  <script>
+    window.onload = () => {
+      unableSpaces(document.querySelector("input[name='UBICACION']"));
+    }
+  </script>
+  <div class="container">
+    <div class="titles">
+      <div class="title">Editar cliente</div>
+      <div>
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM?CTE=<%= CTE %>">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/admin/editarCliente/<%= CTE %>" method="POST">
+        <div class="user-details">
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "number",defaultValue : CTE, details : "N° CTE" ,name : "CTE", properties : ["readonly"] ,required : true }
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : NOMBRE, details : "Apellido y nombre" ,name : "NOMBRE",pattern : "^[A-Z]+(\\s[A-Z]?[a-z]+)+$",required : true }
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : CALLE, details : "Domicilio" ,name : "CALLE" , required:true}
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : ZONA, details : "Zona" ,name : "ZONA" , required : true,pattern : "[A-Z]([A-Z]|[0-9])",maxlength : 2}
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : CRUCES, details : "Cruce 1" ,name : "CRUCES" }
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : CRUCES2, details : "Cruce 2" ,name : "CRUCES2" }
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : WHATSAPP, details : "Telefono" ,name : "WHATSAPP",pattern:"\\d*" ,maxlength : 10,minlength : 8}
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : DNI, details : "N° Documento" ,name : "DNI", pattern : "\\d+",required : true, minlength : 5, properties : [readOnlyPermission] }
+            }) %>
+
+          <%- include(global.dir_partials + "/shared/input-box",{input : {
+            type : "text",defaultValue : (!LATITUD || !LONGITUD) ? '' : `${LATITUD},${LONGITUD}` , details : "Ubicacion" ,name : "UBICACION" , pattern : "-\\d+\\.\\d+,-\\d+\.\\d+", required : true}
+            }) %>
+
+
+          <div class="button">
+            <input type="submit" value="Editar cliente"  class="button__input"/>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <script src="/js/lib/unable.spaces.js"></script>
+  <script src="/shared/setLoading.js"></script>
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/admin/editar.cliente.js"></script>
+
+</body>
+
+</html>

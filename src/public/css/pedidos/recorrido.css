@@ -99,14 +99,14 @@ background-color: #505050;
 
 
 
-.btn__container {
+.container--btn {
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
     gap: .5rem;
 }
 
-.btn__container .btn {
+.container--btn .btn {
     flex: 1;
     border: 1px solid black;
     border-radius: .5rem;

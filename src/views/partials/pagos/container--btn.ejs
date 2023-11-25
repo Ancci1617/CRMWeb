@@ -1,0 +1,13 @@
+<div class="container--btn">
+  <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
+  <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
+
+  <% if(hasPermission(permisos.ADMIN_ADMIN)){ %>
+  <a class="btn link" href="/admin//editarFicha/<%=FICHA%>">Editar ficha</a>
+  <%}  %>
+
+  <% if(EsRecorrido == 'true'){%>
+  <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Recorrido}&FICHA=${FICHA}`%>">Mover al final</a>
+  <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Recorrido}`%>">Ver recorrido</a>
+  <% } %>
+</div>

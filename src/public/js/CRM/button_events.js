@@ -35,7 +35,11 @@ function addBtnEvents() {
     })
     btn_pago?.addEventListener("click", () => { gotoLink(`pagos/deuda_cte?CTE=${getCteEvaluado()}`) });
     btn_prestamo?.addEventListener("click", e => gotoLink(`ventas/prestamos/cargar_prestamo/${getCteEvaluado()}`))
+    
+
 }
+
+
 
 
 

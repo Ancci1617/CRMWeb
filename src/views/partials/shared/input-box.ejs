@@ -3,5 +3,23 @@
 
 <div class="input-box <%= input.type == "hidden"? "hidden" : "" %>">
   <span class="details"><%= input.details %></span>
-  <input class="<%= input.classList?.join(" ") %>"  <%= `${input.required ? "required" : ''}` %> type="<%= input.type %>" placeholder="<%= input.placeholder %>" value="<%= input.defaultValue  %>" name="<%= input.name %>" <%= input.pattern? "pattern=" : ""%>  <%= input.properties?.join(" ") %>  <%=  input.step ? `step=${input.step}` : "" %> <%= input.max ? `max=${input.max}` : ""  %> <%= input.max ? `min=${input.min}` : ""  %> >
+
+  <input class="<%= input.classList?.join(" ") %>"  
+  <%= `${input.required ? "required" : ''}` %> 
+  type="<%= input.type %>" 
+  placeholder="<%= input.placeholder %>" 
+  value="<%= input.defaultValue  %>" 
+  name="<%= input.name %>" 
+  <%= input.pattern ? `pattern=${input.pattern}` : ""%>  
+  <%= input.properties?.join(" ") %>  
+  <%=  input.step ? `step=${input.step}` : "" %> 
+  <%= input.max ? `max=${input.max}` : ""  %> 
+  <%= input.maxlength ? `maxlength=${input.maxlength}` : ""  %> 
+  <%= input.min? `min=${input.min}` : ""  %>
+  <%= input.minlength? `minlength=${input.minlength}` : ""  %> />
+  
 </div>
+
+
+
+

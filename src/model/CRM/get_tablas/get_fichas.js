@@ -2,8 +2,7 @@
 
 const pool = require("../../connection-database.js");
 
-const getFichas = async (campo,condicion) => {
-
+const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE") => {
     const [rows] = await pool.query(
 
         `SELECT
@@ -184,11 +183,11 @@ const getFichas = async (campo,condicion) => {
     ON
         pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
     WHERE
-        Fichas.?? like ?
+        Fichas.??    ${criterio} ? AND ${criterio2} 
     GROUP BY
         Fichas.FICHA 
     ORDER BY 
-        Fichas.FECHA;`, [campo,condicion]);
+        Fichas.FECHA;`, [campo, condicion]);
 
 
     if (rows.length > 0) {

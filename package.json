@@ -26,6 +26,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pizzip": "^3.1.4",
-    "vcard-generator": "^0.0.7"
+    "vcard-generator": "^0.0.7",
+    "zod": "^3.22.4"
   }
 }

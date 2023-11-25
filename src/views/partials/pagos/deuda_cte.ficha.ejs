@@ -92,14 +92,8 @@
 
   </div>
 
-  <div class="btn__container">
-    <input type="submit" class="btn btn-cargar-pago" value="Cobrar" formaction="cargar_pago"></input>
-    <input type="submit" class="btn btn-cambiar-fecha" value="Cambio de fecha" formaction="/cobrador/cambiarFecha"></input>
-    <% if(EsRecorrido == 'true'){%>
-    <a class="btn btn-cambiar-fecha link" href="/cobrador/volver?<%=`ZONA=${Recorrido}&FICHA=${FICHA}`%>">Mover al final</a>
-    <a class="btn btn-cambiar-fecha link" href="<%=`/cobrador/recorrido/${Recorrido}`%>">Ver recorrido</a>
-    <% } %>
-  </div>
+  <%- include(global.dir_partials + "/pagos/container--btn.ejs",{EsRecorrido,FICHA,Recorrido}) %>
+
 
 
 

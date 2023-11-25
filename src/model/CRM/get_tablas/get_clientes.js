@@ -82,22 +82,18 @@ const getClientesAndLocation = async (cte) => {
         ClientesSV.CALLE,
         ClientesSV.CRUCES,
         ClientesSV.CRUCES2,
-        BaseCTE.TELEFONO AS WHATSAPP,
-        ClientesSV.DNI,
+        (SELECT BaseCTE.TELEFONO FROM BaseCTE WHERE BaseCTE.CTE = ClientesSV.CTE AND ID = (SELECT MAX(ID) from BaseCTE where BaseCTE.CTE = ClientesSV.CTE)) AS WHATSAPP,
+        ClientesSV.DNI, 
         MasterResumen.CALIF AS MASTER,
         NULL AS OBS,
-		UBICACIONESSV.LATITUD,UBICACIONESSV.LONGITUD
+		(SELECT UbicacionesSV.LATITUD FROM UbicacionesSV WHERE UbicacionesSV.CALLE = ClientesSV.CALLE AND ID_CALLE = (SELECT MAX(ID_CALLE) from UbicacionesSV where UbicacionesSV.CALLE = ClientesSV.CALLE)) AS LATITUD,
+		(SELECT UbicacionesSV.LONGITUD FROM UbicacionesSV WHERE UbicacionesSV.CALLE = ClientesSV.CALLE AND ID_CALLE = (SELECT MAX(ID_CALLE) from UbicacionesSV where UbicacionesSV.CALLE = ClientesSV.CALLE)) as LONGITUD
     FROM
         ClientesSV
-    LEFT JOIN (SELECT * FROM BaseCTE WHERE BaseCTE.VALIDACION = 'VALIDO') BaseCTE ON BaseCTE.CTE = ClientesSV.CTE
     LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE
-    LEFT JOIN UBICACIONESSV  on UBICACIONESSV.CALLE = ClientesSV.CALLE
     WHERE
         ClientesSV.CTE = ?
-    ORDER BY
-    BaseCTE.ID DESC,
-		UBICACIONESSV.ID_CALLE DESC
-    limit 1;`, [cte]);
+    limit 1;;`, [cte]);
 
 
     if (rows.length > 0) {
@@ -116,7 +112,7 @@ const getClientesYGarante = async (CTE) => {
     try {
 
         const [data] = await pool.query(
-    `SELECT
+            `SELECT
         ClientesSV.CTE,
         ClientesSV.ZONA,
         ClientesSV.NOMBRE,
@@ -143,7 +139,7 @@ const getClientesYGarante = async (CTE) => {
         return data
     } catch (error) {
         console.log("error al consultar listado de prestamo", error);
-        
+
 
     }
 

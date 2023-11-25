@@ -16,7 +16,7 @@ const cargarVentas = async (req, res) => {
     const { FECHA_VENTA, USUARIO } = req.query;
     const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA, USUARIO } });
     const aside = await getAside();
-    res.render("ventas/cargar_ventas/ventas.cargar.ejs", { aside, ventas, USUARIO, FECHA: FECHA_VENTA })
+    res.render("ventas/cargar_ventas/ventas.cargar.ejs", { aside, ventas, USUARIO, FECHA: FECHA_VENTA });
 }
 const confirmarVenta = async (req, res) => {
     const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
