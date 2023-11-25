@@ -45,14 +45,7 @@ async function generarSaldoAnteriorServicio(req, res) {
   res.json(resultado);
 }
 
-async function rendicionController(req, res) {
-  const cobranza = await pagosModel.getPagosByFechaYCob({ COB: "COBRADOR", FECHA: "2023-07-19" });
 
-
-
-
-  res.json({ rendicion: 1 })
-}
 
 const getCobranzasEasy = async (req, res) => {
   let cobranzas = await getFichas("FICHA", "5____");
@@ -79,7 +72,12 @@ const getCobranzasEasy = async (req, res) => {
 }
 
 const getCobranzas = async (req, res) => {
-  let cobranzas = await getFichas("FICHA", "____");
+  let cobranzas_primera_parte = await getFichas("FICHA", "5000", "<");
+  let cobranzas_segunda_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 50000");
+  let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte];
+
+
+
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
     delete cobranzas[i].ARTICULOS
@@ -104,5 +102,5 @@ const getCobranzas = async (req, res) => {
 
 
 
-module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, rendicionController, getCobranzas, getCobranzasEasy };
+module.exports = { cargarCobranza, redistribuirPago, generarSaldoAnteriorServicio, getCobranzas, getCobranzasEasy };
 
