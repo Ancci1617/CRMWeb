@@ -28,20 +28,20 @@ const insertarNuevaUbicacionWithConection = async ({ conexion, CALLE, LATITUD, L
 const getUbicacionByObject = async (data) => {
     const [res] = await pool.query(`
         SELECT
-            UbicacionesSV.CALLE,UbicacionesSV.LATITUD,UbicacionesSV.LONGITUD,UbicacionesSV.ID_CALLE,UbicacionesSV.ID_VENTA
+            UBICACIONESSV.CALLE,UBICACIONESSV.LATITUD,UBICACIONESSV.LONGITUD,UBICACIONESSV.ID_CALLE,UBICACIONESSV.ID_VENTA
         FROM
-            UbicacionesSV
+            UBICACIONESSV
         INNER JOIN(
             SELECT
             CALLE as C,
             MAX(ID_CALLE) AS maximo 
             FROM
-                UbicacionesSV
+                UBICACIONESSV
             GROUP BY
                 CALLE
         ) base_id
     ON
-        base_id.maximo = UbicacionesSV.ID_CALLE
+        base_id.maximo = UBICACIONESSV.ID_CALLE
     WHERE ?
     `, [data]);
     return res;
