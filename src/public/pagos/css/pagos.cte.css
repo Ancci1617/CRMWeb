@@ -18,8 +18,6 @@ body {
 
 .main__container {
     margin: auto;
-    /* display: inline-grid; */
-    /* gap: 1rem; */
     max-width: 620px;
     background-color: white;
 }
@@ -31,10 +29,15 @@ body {
     padding: 4px .8em;
     position: sticky;
     top: 3rem;
-    /* width: 100%; */
     z-index: 10;
 }
 
+.creditos__header .link-editar{
+    text-shadow: 1px 1px 1px gray;
+}
+.creditos__header .link-editar:hover{
+    color: green;
+}
 
 .creditos__header .CTE_CALLE {
     display: grid;
@@ -162,19 +165,15 @@ input[type="number"]::-webkit-outer-spin-button {
     max-width: 70%;
 }
 
-.btn__container {
+.container--btn {
     display: grid;
     grid-auto-flow: row;
     gap: .5em;
     text-align: center;
     grid-template-columns: 1fr 1fr;
-    /* grid-template-rows: 1fr 1fr; */
 }
 
-.btn-cargar-pago {
-    /* grid-column: span 2; */
-    /* order: 30; */
-}
+
 
 
 
@@ -202,9 +201,6 @@ input[type="number"]::-webkit-outer-spin-button {
     background-color: rgb(119, 249, 99);
 }
 
-.btn-reclamo {
-    background-color: rgb(253, 177, 177);
-}
 
 
 .deep_details {
@@ -232,8 +228,6 @@ input[type="number"]::-webkit-outer-spin-button {
     justify-content: space-between;
     position: sticky;
 
-    /* top: 0; */
-    /* background: white; */
 }
 
 .deep_details .header i {
@@ -253,7 +247,7 @@ tr,
 th {
     padding: 8px;
     overflow: hidden;
-    /* margin: auto; */
+
 }
 
 .table {

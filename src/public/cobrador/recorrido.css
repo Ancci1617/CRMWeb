@@ -19,7 +19,7 @@ body {
   padding: 8px 5px;
 }
 
-header.btn__container {
+header.container--btn {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin-bottom: .4rem;

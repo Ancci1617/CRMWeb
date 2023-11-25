@@ -38,17 +38,14 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false) {
 
     const { vencidas, pagas, atraso } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
-    console.log("🚀 ~ file: doubt.js:41 ~ { vencidas, pagas, atraso }:", { vencidas, pagas, atraso })
 
 
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
     const mora_unit = Math.max(Math.round(CAPITAL * 0.01 / 100) * 100, 150);
     
-    console.log("🚀 ~ file: doubt.js:48 ~ VENCIMIENTO:", VENCIMIENTO)
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
-    console.log("🚀 ~ file: doubt.js:51 ~ vencimiento_vigente:", vencimiento_vigente)
     const mora = atraso <= 0 ? 0 : Math.max(mora_unit * dateDiff(getToday(), vencimiento_vigente) + MORA_ANT - MORA_PAGO, 0);
 
     const servicio =
