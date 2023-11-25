@@ -21,13 +21,13 @@
 
 
     <section class="cobranzas">
-      <% if(payments.length > 0) {%>
       <header>
         <span class="cobrador_nombre"><%= MP_TITULAR.Usuario %></span>
         <span>Limite: $<%= MP_TITULAR.LIMITE_FACTURACION %></span>
         <span>Disponible: $<%= MP_TITULAR.LIMITE_FACTURACION - payments.reduce((acum,payment) => acum + payment.transaction_amount,0) %></span>
         <span class="cobranza_fecha"><%= MES %></span>
       </header>
+      <% if(payments.length > 0) {%>
 
       <div class="lista_de_ingresos">
         <% payments.forEach(payment => { %>
@@ -36,12 +36,7 @@
       </div>
 
       <% }else{ %>
-
-      <header>
-        <span class="cobrador_nombre">- - - -</span>
-        <span class="cobranza_fecha">- - - -</span>
-      </header>
-
+        <div>Sin pagos...</div>
       <%  } %>
     </section>
 
