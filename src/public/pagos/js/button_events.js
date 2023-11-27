@@ -95,9 +95,6 @@ pagos.forEach(pago => {
 form_redistribuir?.addEventListener("submit", e => {
     e.preventDefault();
     const [CUOTA, MORA, SERV] = [...form_redistribuir].map(inp => parseInt(inp.value));
-    console.log(CUOTA, MORA, SERV)
-    console.log("suma", CUOTA + MORA + SERV);
-    console.log("DINERO POR PAGO", dinero_recibido_por_pago);
     if (dinero_recibido_por_pago !== CUOTA + MORA + SERV) {
         if (!confirm("El valor del dinero ingresado es distinto, esto afecta a las rendiciones..")) {
             return

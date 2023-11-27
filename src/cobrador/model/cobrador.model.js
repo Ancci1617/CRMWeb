@@ -26,60 +26,76 @@ const getFichasPorCobrar = async ({ filter = { "true": true }, isEasyCash = fals
     const columna_ordenar = isEasyCash ? "ORDEN_EASY" : "ORDEN_COBRANZA";
 
     const [fichas] = await pool.query(
-        `SELECT
-            Fichas.FECHA AS FECHA_VENTA,
-            Fichas.CTE,
-            Fichas.PRIMER_PAGO,
-            Fichas.FICHA,
-            Fichas.Z,
-            Fichas.ID,
-            Fichas.VENCIMIENTO,
-            Fichas.TOTAL,
-            Fichas.SERVICIO_ANT,
-            Fichas.ARTICULOS,
-            ClientesSV.NOMBRE,
-            ClientesSV.CALLE,
-            ClientesSV.CRUCES,
-            ClientesSV.CRUCES2,
-            (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = Fichas.FICHA order by CambiosDeFecha.ID desc limit 1) as CAMBIO_DE_FECHA,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.SERV,0)),
-                0),
-                INTEGER
-            ) AS SERV_PAGO,
-            SERV_UNIT,
-            CUOTA,
-            CUOTA_ANT,
-            (SELECT LATITUD FROM UBICACIONESSV WHERE UBICACIONESSV.CALLE = ClientesSV.CALLE and VALIDACION = 'VALIDO' order by ID_CALLE DESC limit 1) as LATITUD,
-            (SELECT LONGITUD FROM UBICACIONESSV WHERE UBICACIONESSV.CALLE = ClientesSV.CALLE and VALIDACION = 'VALIDO'  order by ID_CALLE DESC limit 1) as LONGITUD,
-            Fichas.CUOTA_ANT - CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
-                0),
-                INTEGER
-            ) AS SALDO,
-            CONVERT(
-                Fichas.TOTAL / Fichas.CUOTA,
-                INTEGER
-            ) AS CUOTAS,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.VALOR,0)),
-                0),
-                INTEGER
-            ) AS CUOTA_PAGO,
-            Fichas.MORA_ANT,
-            CONVERT(
-                IFNULL(SUM(IF(PagosSV.CONFIRMACION != 'INVALIDO',PagosSV.MORA,0)),
-                0),
-                INTEGER
-            ) AS MORA_PAGO
-        FROM
-            Fichas
-        LEFT JOIN PagosSV ON PagosSV.FICHA = Fichas.FICHA 
-        LEFT JOIN ClientesSV on Fichas.CTE = ClientesSV.CTE 
+            `SELECT
+                Fichas.FECHA AS FECHA_VENTA,
+                Fichas.CTE,
+                Fichas.PRIMER_PAGO,
+                Fichas.FICHA,
+                Fichas.Z,
+                Fichas.ID,
+                Fichas.VENCIMIENTO,
+                Fichas.TOTAL,
+                Fichas.SERVICIO_ANT,
+                Fichas.ARTICULOS,
+                ClientesSV.NOMBRE,
+                ClientesSV.CALLE,
+                ClientesSV.CRUCES,
+                ClientesSV.CRUCES2,
+                CambiosDeFecha.CAMBIO as CAMBIO_DE_FECHA,
+                CONVERT(
+                    IFNULL(SUM(PagosSV.SERV),
+                    0),
+                    INTEGER
+                ) AS SERV_PAGO,
+                SERV_UNIT,
+                CUOTA,
+                CUOTA_ANT,
+                UBICACIONESSV.LATITUD as LATITUD,
+                UBICACIONESSV.LONGITUD as LONGITUD,
+                Fichas.CUOTA_ANT - CONVERT(
+                    IFNULL(SUM(PagosSV.VALOR),
+                    0),
+                    INTEGER
+                ) AS SALDO,
+                CONVERT(
+                    Fichas.TOTAL / Fichas.CUOTA,
+                    INTEGER
+                ) AS CUOTAS,
+                CONVERT(
+                    IFNULL(SUM(PagosSV.VALOR),
+                    0),
+                    INTEGER
+                ) AS CUOTA_PAGO,
+                Fichas.MORA_ANT,
+                CONVERT(
+                    IFNULL(SUM(PagosSV.MORA),
+                    0),
+                    INTEGER
+                ) AS MORA_PAGO
+            FROM
+                Fichas
+            LEFT JOIN (SELECT * from PagosSV where PagosSV.CONFIRMACION != 'INVALIDO') PagosSV ON PagosSV.FICHA = Fichas.FICHA 
+            LEFT JOIN ClientesSV on Fichas.CTE = ClientesSV.CTE 
+            LEFT JOIN (
+                SELECT 
+                * 
+                from CambiosDeFecha INNER JOIN 
+                (SELECT FICHA as FICHA_AUX,max(ID) AS ID_AUX
+                 from CambiosDeFecha where CAMBIO IS NOT NULL group by FICHA) AUX_ID 
+                on AUX_ID.ID_AUX = CambiosDeFecha.ID
+             ) CambiosDeFecha on CambiosDeFecha.FICHA = Fichas.FICHA
+    
+            LEFT JOIN (
+                SELECT UBICACIONESSV.CALLE,UBICACIONESSV.LATITUD,UBICACIONESSV.LONGITUD FROM UBICACIONESSV INNER JOIN (
+                    SELECT 
+                    UBICACIONESSV.CALLE,MAX(UBICACIONESSV.ID_CALLE) AUX_ID 
+                    FROM UBICACIONESSV GROUP BY UBICACIONESSV.CALLE
+                ) AUX_UBICACIONESSV ON AUX_UBICACIONESSV.AUX_ID = UBICACIONESSV.ID_CALLE
+           ) UBICACIONESSV ON UBICACIONESSV.CALLE = ClientesSV.CALLE
         WHERE
-            ${keys_sql} AND Fichas.ESTADO = 'ACTIVO' AND IFNULL( (SELECT CAMBIO FROM CambiosDeFecha where CambiosDeFecha.FICHA = Fichas.FICHA order by CambiosDeFecha.ID desc limit 1),TRUE) <= CURRENT_DATE  GROUP BY
-            Fichas.FICHA order by ${columna_ordenar} asc;`
-        , [...Object.values(filter)]);
+                ${keys_sql} AND Fichas.ESTADO = 'ACTIVO' AND IFNULL(CambiosDeFecha.CAMBIO,TRUE) <= CURRENT_DATE  GROUP BY
+        Fichas.FICHA order by ${columna_ordenar} asc;`, [...Object.values(filter)])
+
 
     if (fichas.length > 0) {
         return fichas;

@@ -4,7 +4,6 @@ const btn_submit = document.querySelectorAll("input[type='submit']");
 const creditos_arr = document.querySelectorAll(".credito");
 const check_mp = document.getElementsByName("ISMP")
 
-console.log("vinculado")
 
 const mpCheckHandler = async (e) => {
     const credito = e.target;
@@ -30,13 +29,13 @@ const mpCheckHandler = async (e) => {
 
         console.log(response);
         alert(response.msg);
-        
+
         if (response.success && !response.available) {
             return alert(`Valor del pago: ${response.data.net_worth}\nValores asociados: ${response.data.asociado.TOTAL} \nPagos asociados: 
                           ${response.data.asociado.CREDITOS.reduce((acum, cred) => (`${acum}\n Credito: ${cred.FICHA} Cobrado: ${cred.COBRADO}`), "")}`)
         }
 
-        if(!response.success && !confirm("Cargar pago igualmente?")){
+        if (!response.success && !confirm("Cargar pago igualmente?")) {
             return
         }
         return e.target.submit()
@@ -53,13 +52,20 @@ creditos_arr.forEach(credito => {
     const btn_submit = [...credito.querySelectorAll("input[type='submit']")];
 
     btn_submit.find(element => element.formAction.includes("cambiarFecha"))?.addEventListener("click", e => {
-        credito.COBRADO.required = false;
+
         credito.FECHA_COB.required = true;
+        (credito.COBRADO) && (credito.COBRADO.required = false);
+        (credito.DECLARADO_CUO) && (credito.DECLARADO_CUO.required = false);
+        (credito.DECLARADO_MORA) && (credito.DECLARADO_MORA.required = false);
+        (credito.DECLARADO_SERV) && (credito.DECLARADO_SERV.required = false);
         return
     })
     btn_submit.find(element => element.formAction.includes("cargar_pago"))?.addEventListener("click", e => {
-        credito.COBRADO.required = true;
         credito.FECHA_COB.required = false;
+        (credito.COBRADO) && (credito.COBRADO.required = true);
+        (credito.DECLARADO_CUO) && (credito.DECLARADO_CUO.required = true);
+        (credito.DECLARADO_MORA) && (credito.DECLARADO_MORA.required = true);
+        (credito.DECLARADO_SERV) && (credito.DECLARADO_SERV.required = true);
         return
     })
 

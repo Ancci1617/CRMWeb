@@ -9,7 +9,7 @@
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
- 
+
   <% const {FECHA_VENTA,CTE,FICHA,TOTAL,CUOTA,VENCIMIENTO,PRIMER_PAGO,CUOTA_ANT,SERVICIO_ANT,MORA_ANT,ARTICULOS,SERV_UNIT} = ficha_data %>
   <% const readOnlyPermission = !hasPermission(permisos.ADMIN_GERENCIA) ? "readonly" : "" %>
 </head>
@@ -90,7 +90,7 @@
   </div>
 
 
-
+  <script src="/admin/editar.ficha.js"></script>
 </body>
 
 </html>
