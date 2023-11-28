@@ -40,11 +40,14 @@ async function deudaCte(req, res) {
     //Por cada una de las fichas consulta el acumulado y un "reduce" con los nombres de los articulos
     for (let i = 0; i < fichas.length; i++) {
         fichas[i].acumulado = await pagosModel.getAcumuladoByCteFicha({ CTE: fichas[i].data.CTE, FICHA: fichas[i].data.FICHA });
+        fichas[i].acumulado_detalle = await pagosModel.getAcumuladoDetalle({ FICHA: fichas[i].data.FICHA });
         fichas[i].articulos_string = await getArticulosString(fichas[i].data.ARTICULOS.split(" "));
     }
+
+
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
-
+    console.log(fichas[0]);
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 

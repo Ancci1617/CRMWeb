@@ -80,7 +80,7 @@ const cargarPago = async ({
 
 const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     const [fichas] = await pool.query(
-`SELECT
+        `SELECT
     Fichas.FECHA AS FECHA_VENTA,
     Fichas.CTE,
     Fichas.PRIMER_PAGO,
@@ -118,7 +118,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
                 IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
                 CUOTA,1
             ) MONTH
-        ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+        ) AND CambiosDeFecha.FICHA = Fichas.FICHA AND OFICINA = 0 
 	),5) AS CAMBIOS_DE_FECHA_EXACTO,
 
     EXISTS (SELECT 1 from CambiosDeFecha where CambiosDeFecha.FECHA = CURRENT_DATE and CambiosDeFecha.FICHA = Fichas.FICHA) as SERVICIO_HOY
@@ -300,7 +300,7 @@ const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
 
 const updateDistribucionByCodigo = async ({ PROXIMO, SERV, MORA, CUOTA, CODIGO }) => {
     const connection = await pool.getConnection();
-    console.log({ PROXIMO, SERV, MORA, CUOTA, CODIGO });
+
     try {
         await connection.beginTransaction();
         const [update_result] = await connection.query(
@@ -360,9 +360,9 @@ const invalidarPago = async ({ CODIGO }) => {
 }
 
 
-const updateMoraYServAnt = async ({ MORA_ANT, SERVICIO_ANT,FICHA }) => {
+const updateMoraYServAnt = async ({ MORA_ANT, SERVICIO_ANT, FICHA }) => {
     const [update_result] = await pool.query(
-        "UPDATE Fichas SET ? WHERE Ficha = ? ", [{ MORA_ANT, SERVICIO_ANT },FICHA]);
+        "UPDATE Fichas SET ? WHERE Ficha = ? ", [{ MORA_ANT, SERVICIO_ANT }, FICHA]);
 
     if (update_result.length > 0) {
         return update_result;
@@ -404,8 +404,22 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
     }
 }
 
+const getAcumuladoDetalle = async (query) => {
+    try {
+        const [pagos] = await pool.query(
+            `SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR FROM PagosSVAcumulado WHERE ? 
+            UNION 
+            SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR From PagosSV WHERE ? order by FECHA`, [query, query]);
+
+        return pagos;
+
+    } catch (error) {
+        console.log("error", error);
+        return [];
+    }
+
+}
 
 
 
-
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle }

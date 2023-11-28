@@ -7,7 +7,6 @@ Router.get("/recorrido/:ZONA",cobradorController.formIniciarRecorrido);
 
 
 
-
 Router.post("/recorrido",cobradorController.postOrdenarRecorrido);
 Router.post("/cambiarFecha",cobradorController.postCambiarFecha);
 Router.get("/volver",cobradorController.postVolver);

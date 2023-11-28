@@ -35,11 +35,17 @@ const formOrdenarRecorrido = async (req, res) => {
 
 
 const postCambiarFecha = async (req, res) => {
-    const { FICHA, FECHA_COB, ZONA } = req.body;
-    
-    await cobradorModel.insertCambioDeFecha({ FICHA, FECHA: FECHA_COB, COBRADOR: req.user.Usuario, TODAY: getToday() });
+    const { FICHA, FECHA_COB, ZONA, EsRecorrido } = req.body;
 
-    res.redirect(`recorrido/${ZONA}`);
+    await cobradorModel.insertCambioDeFecha({
+        FICHA, FECHA: FECHA_COB,
+        COBRADOR: req.user.Usuario, TODAY: getToday(),
+        OFICINA: req.user.RANGO == "ADMIN"
+    });
+    if (EsRecorrido == "true")
+        return res.redirect(`recorrido/${ZONA}`);
+
+    res.redirect(`/CRM?CTE=F:${FICHA}`);
 }
 
 

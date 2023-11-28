@@ -8,6 +8,7 @@
 
 
 <form class="credito" method="POST" action="cargar_pago">
+  <%- include(`${global.dir_partials}/pagos/container--pagos.ejs`,{ pagos : ficha.acumulado_detalle,FICHA}) %>
   <div class="credito__header">
     <span>
       <i class="fas fa-exclamation-circle btn-detalles"></i> Credito: <%= FICHA %>

@@ -67,8 +67,9 @@
             type : "text",defaultValue : (!LATITUD || !LONGITUD) ? '' : `${LATITUD},${LONGITUD}` , details : "Ubicacion" ,name : "UBICACION" , pattern : "-\\d+\\.\\d+,-\\d+\.\\d+", required : true}
             }) %>
 
-
+          
           <div class="button">
+            <span class="detail--loading hidden">Cargando...</span>
             <input type="submit" value="Editar cliente"  class="button__input"/>
           </div>
 
@@ -77,9 +78,11 @@
       </form>
     </div>
   </div>
+  
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/js/lib/afip.js"></script>
   <script src="/js/lib/unable.spaces.js"></script>
   <script src="/shared/setLoading.js"></script>
-  <script src="/js/lib/fetch.helper.js"></script>
   <script src="/admin/editar.cliente.js"></script>
 
 </body>

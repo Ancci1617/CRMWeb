@@ -55,6 +55,7 @@ creditos_arr.forEach(credito => {
 
         credito.FECHA_COB.required = true;
         (credito.COBRADO) && (credito.COBRADO.required = false);
+        (credito.DECLARADO_COB) && (credito.DECLARADO_COB.required = false);
         (credito.DECLARADO_CUO) && (credito.DECLARADO_CUO.required = false);
         (credito.DECLARADO_MORA) && (credito.DECLARADO_MORA.required = false);
         (credito.DECLARADO_SERV) && (credito.DECLARADO_SERV.required = false);
@@ -63,6 +64,7 @@ creditos_arr.forEach(credito => {
     btn_submit.find(element => element.formAction.includes("cargar_pago"))?.addEventListener("click", e => {
         credito.FECHA_COB.required = false;
         (credito.COBRADO) && (credito.COBRADO.required = true);
+        (credito.DECLARADO_COB) && (credito.DECLARADO_COB.required = true);
         (credito.DECLARADO_CUO) && (credito.DECLARADO_CUO.required = true);
         (credito.DECLARADO_MORA) && (credito.DECLARADO_MORA.required = true);
         (credito.DECLARADO_SERV) && (credito.DECLARADO_SERV.required = true);

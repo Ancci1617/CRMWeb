@@ -13,6 +13,20 @@ groups.forEach(group => {
 })
 
 
+//Mostrar y ocultar detalles de los pagos
+const creditos = document.querySelectorAll(".credito");
+creditos.forEach(credito => {
+    const container__pagos = credito.querySelector(".container--pagos");
+    const btn_detalles = credito.querySelector(".btn-detalles");
+
+    btn_detalles.addEventListener("click", e => {
+        document.querySelectorAll(".container--pagos").forEach(container => container.classList.add("unshow"));
+        container__pagos.classList.remove("unshow");
+    });
+    container__pagos.querySelector(".container--pagos__header__close").addEventListener("click", e => {
+        container__pagos.classList.add("unshow");
+    });
+})
 
 
 

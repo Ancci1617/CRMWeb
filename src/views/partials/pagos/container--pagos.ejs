@@ -1,0 +1,29 @@
+<!-- Recibe pagos = [{Pagos}] -->
+
+<div class="container--pagos unshow">
+  <div class="container--pagos__header">
+    <span>Ficha: <%= FICHA %></span>
+    <i class="container--pagos__header__close">X</i>
+  </div>
+  <table class="container--pagos__table">
+    <thead>
+      <th>FECHA</th>
+      <th>CUOTA</th>
+      <th>SERV</th>
+      <th>MORA</th>
+      <th>COBRADOR</th>
+    </thead>
+    <tbody>
+      <% pagos.forEach(pago => { %>
+      <tr>
+        <td><%= pago.FECHA %></td>
+        <td><%= pago.VALOR %></td>
+        <td><%= pago.SERV %></td>
+        <td><%= pago.MORA %></td>
+        <td><%= pago.COBRADOR %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+</div>

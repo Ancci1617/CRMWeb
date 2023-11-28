@@ -67,7 +67,6 @@ pagos.forEach(pago => {
 
         dinero_recibido_por_pago = parseInt(pago.querySelector(".cuota").innerText) + parseInt(pago.querySelector(".mora").innerText) + parseInt(pago.querySelector(".servicio").innerText);
 
-        console.log("dinero recibido por pago en show", dinero_recibido_por_pago);
 
         try {
             form_redistribuir.PROXIMO.value = pago.querySelector(".proxima").innerText;

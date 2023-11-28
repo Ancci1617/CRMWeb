@@ -203,10 +203,10 @@ input[type="number"]::-webkit-outer-spin-button {
 
 
 
-.deep_details {
+.container--pagos {
     position: fixed;
     background-color: #fbfbfb;
-    border: 1px solid VAR(--dark_gray);
+    border: 1px solid var(--dark_gray);
     width: min(430px, 90%);
     max-height: 80vh;
     left: 0;
@@ -221,25 +221,30 @@ input[type="number"]::-webkit-outer-spin-button {
     gap: .9em;
     white-space: nowrap;
     transition: top .3s;
+    z-index: 20;
 }
 
-.deep_details .header {
+.container--pagos__header {
     display: flex;
     justify-content: space-between;
     position: sticky;
-
+    font-size: 1.5rem;
+    top: 0;
+    left: 0;
 }
 
-.deep_details .header i {
-    font-size: 1.4em;
+.container--pagos__header i {
+    font-size: .8em;
     color: var(--normal_brown);
 }
 
-.deep_details .header i:hover {
+.container--pagos__header i:hover {
     color: var(--dark_gray);
     cursor: pointer;
 }
-
+.unshow{
+    top: -100vh;
+}
 table,
 td,
 thead,
