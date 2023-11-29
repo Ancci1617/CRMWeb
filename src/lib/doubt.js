@@ -43,7 +43,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
     const mora_unit = Math.max(Math.round(CAPITAL * 0.01 / 100) * 100, 150);
-    
+
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
     const mora = atraso <= 0 ? 0 : Math.max(mora_unit * dateDiff(getToday(), vencimiento_vigente) + MORA_ANT - MORA_PAGO, 0);
@@ -67,7 +67,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 }
 
 function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FECHA_VENTA }, COBRADOR = false, Easy = false) {
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z }, COBRADOR = false, Easy = false) {
 
 
 
@@ -86,15 +86,15 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
     // let deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
-    let deuda_serv =  Math.max( SERVICIO_ANT - SERV_PAGO  + Math.min(atraso_eval,2) * SERV_UNIT, 0);
+    let deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + Math.min(atraso_eval, 2) * SERV_UNIT, 0);
 
-    
+
     if (vencidas < CUOTAS && COBRADOR &&
         getToday() <= `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
         && !zonas_sin_servicio_cobranza.includes(Z) && !deuda_serv > 0
     ) {
         // deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
-        deuda_serv =  Math.max(SERVICIO_ANT - SERV_PAGO  + Math.min((atraso_eval + 1),2) * SERV_UNIT, 0);
+        deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + Math.min((atraso_eval + 1), 2) * SERV_UNIT, 0);
 
     }
 
@@ -103,8 +103,9 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     //Si el cliente esta atrasado, el servicio ADICIONAL, Existe Si solo si la cuota de este mes no paga servicio
 
-
-    const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
+    const VENCIMIENTO_DATE = new Date(VENCIMIENTO);
+    const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(),VENCIMIENTO_DATE.getUTCMonth() + pagas,VENCIMIENTO_DATE.getDate()).toISOString().split("T")[0];
+    
 
     return {
         cuota: deudaCuota,
@@ -118,9 +119,4 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 }
 
 module.exports = { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy }
-
-
-
-
-
 

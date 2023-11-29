@@ -72,10 +72,18 @@ const getCobranzasEasy = async (req, res) => {
 }
 
 const getCobranzas = async (req, res) => {
-  let cobranzas_primera_parte = await getFichas("FICHA", "5000", "<");
-  let cobranzas_segunda_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 50000");
-  let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte];
-
+  let cobranzas_primera_parte = await getFichas("FICHA", "3000", "<");
+  console.log(1);
+  let cobranzas_segunda_parte = await getFichas("FICHA", "3000", ">=","Fichas.FICHA < 5000");
+  console.log(2);
+  let cobranzas_tercera_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 7000");
+  console.log(3);
+  let cobranzas_cuarta_parte = await getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 50000");
+  console.log(4);
+  
+  let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte,...cobranzas_tercera_parte,...cobranzas_cuarta_parte];
+  console.log("union",5);
+  
 
 
   for (let i = 0; i < cobranzas.length; i++) {
