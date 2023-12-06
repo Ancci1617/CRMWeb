@@ -25,7 +25,7 @@ const formOrdenarRecorrido = async (req, res) => {
     const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA } });
 
     let fichas = fichas_data.map(ficha => ({ ficha, deuda: ficha.FICHA >= 50000 ? getDebtEasy(ficha) : getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
-
+    
     //Aca filtrariamos las que corresponden que vallan para el local
     res.render("cobrador/recorrido2.ejs", { fichas });
 }

@@ -1,5 +1,7 @@
 const { getVencidas, getToday, sumarMeses, dateDiff } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
+const { ZONAS_EXCEPCIONES } = require("../constants/zonas_excepciones.js");
+
 
 const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     const HOY = new Date(getToday());
@@ -67,16 +69,13 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 }
 
 function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z }, COBRADOR = false, Easy = false) {
-
-
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z ,FICHA}, COBRADOR = false, Easy = false) {
 
 
     //AGREGAR ALGORITMO PARA COBRADOR
-    const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
 
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
-    const { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA });
+    let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA });
 
     //Deuda
     const deudaCuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
@@ -91,7 +90,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     if (vencidas < CUOTAS && COBRADOR &&
         getToday() <= `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
-        && !zonas_sin_servicio_cobranza.includes(Z) && !deuda_serv > 0
+        && !ZONAS_EXCEPCIONES.includes(Z) && !deuda_serv > 0
     ) {
         // deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
         deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + Math.min((atraso_eval + 1), 2) * SERV_UNIT, 0);
@@ -104,9 +103,10 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     //Si el cliente esta atrasado, el servicio ADICIONAL, Existe Si solo si la cuota de este mes no paga servicio
 
     const VENCIMIENTO_DATE = new Date(VENCIMIENTO);
-    const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(),VENCIMIENTO_DATE.getUTCMonth() + pagas,VENCIMIENTO_DATE.getDate()).toISOString().split("T")[0];
-    
+    const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(), VENCIMIENTO_DATE.getUTCMonth() + pagas, VENCIMIENTO_DATE.getUTCDate()).toISOString().split("T")[0];
 
+    //Si la ficha esta en las zonas de excepciones, la pone para cobrar
+    atraso_eval = (atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && dateDiff(getToday(), vencimiento_vigente) <= 2 ? 1 : atraso_eval;
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
