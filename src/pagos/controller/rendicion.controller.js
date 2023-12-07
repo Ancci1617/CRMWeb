@@ -9,7 +9,7 @@ async function cargarEfectivo(req, res) {
     const { ID, EFECTIVO = 0 } = req.body;
     try {
         const [efectivo] = await pool.query(
-            "UPDATE `PlanillasDeCobranza` SET EFECTIVO = ? WHERE ID = ? AND EDITABLE = 1", [EFECTIVO, ID]);
+            "UPDATE `PlanillasDeCobranza` SET EFECTIVO = ?,RECEPCION = ? WHERE ID = ? AND EDITABLE = 1", [EFECTIVO,req.user.Usuario, ID]);
 
     } catch (error) {
         console.log(error);
