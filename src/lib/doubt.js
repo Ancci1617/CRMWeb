@@ -106,7 +106,11 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(), VENCIMIENTO_DATE.getUTCMonth() + pagas, VENCIMIENTO_DATE.getUTCDate()).toISOString().split("T")[0];
 
     //Si la ficha esta en las zonas de excepciones, la pone para cobrar
-    atraso_eval = (atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && SALDO > 0 && dateDiff(getToday(), vencimiento_vigente) <= 2 ? 1 : atraso_eval;
+    const date_diff = dateDiff(getToday(), vencimiento_vigente);
+    atraso_eval = (atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && SALDO > 0 && 0 <= date_diff && date_diff <= 2 ? 1 : atraso_eval;
+
+    console.log({FICHA,vencimiento_vigente,dif : dateDiff(getToday(), vencimiento_vigente)})
+
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
