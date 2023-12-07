@@ -51,8 +51,8 @@ const cargarDevolucion = async (ficha, USUARIO) => {
         await cargarEvento(conexion, {
             USUARIO, ANTERIOR: JSON.stringify({ ESTADO: "ACTIVO" }),
             VIGENTE: JSON.stringify({ ESTADO: "DEVOLUCION" }),
-            PRIMARIA : ficha,
-            TIPO : "DEVOLUCION"
+            PRIMARIA: ficha,
+            TIPO: "DEVOLUCION"
         });
 
 
@@ -73,13 +73,30 @@ const cargarDevolucion = async (ficha, USUARIO) => {
 }
 
 
-const updateFichasSV = async (FICHA, body) => {
+const updateFichasSV = async (FICHA, body, USUARIO) => {
     const conexion = await pool.getConnection();
 
     try {
+        await conexion.beginTransaction();
+
+        const [ficha_data_prev] = await conexion.query(`
+            Select * from Fichas where Fichas.FICHA = ?;
+        `, [FICHA])
+
         const [res] = await conexion.query(`
-            UPDATE Fichas set ? where Fichas.FICHA = ?
+            UPDATE Fichas set ? where Fichas.FICHA = ?;
         `, [body, FICHA]);
+
+
+
+        await cargarEvento(conexion, {
+            ANTERIOR: JSON.stringify(ficha_data_prev[0]),
+            VIGENTE: JSON.stringify(body),
+            PRIMARIA: FICHA,
+            TIPO: "ACTUALIZA_FICHA",
+            USUARIO
+        })
+        await conexion.commit();
         return res
 
     } catch (error) {
