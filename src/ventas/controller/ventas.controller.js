@@ -20,7 +20,7 @@ const cargarVentas = async (req, res) => {
 }
 const confirmarVenta = async (req, res) => {
     const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
-    await ventasModel.confirmarVenta({ venta, ID_VENTA: venta.INDICE });
+    await ventasModel.confirmarVenta({ venta, ID_VENTA: venta.INDICE }, req.user.Usuario);
     res.redirect(req.headers.referer);
 }
 const borrarVenta = async (req, res) => {
@@ -75,7 +75,7 @@ const postCargarVenta = async (req, res) => {
 const formEditarVenta = async (req, res) => {
     const { venta } = res.locals;
     if (venta.MODO == "EASY")
-        return res.render("ventas/prestamo.cargado.editar.ejs", {venta});
+        return res.render("ventas/prestamo.cargado.editar.ejs", { venta });
 
     res.render("ventas/ventas.cargadas.editar.ejs", venta);
 }
@@ -88,7 +88,7 @@ const postEditarVenta = async (req, res) => {
     //Si antes no tenia anticipo y ahora si, que le genere el pago
     if (!venta_prev.ANTICIPO && ANTICIPO && ANTICIPO_MP == "NO")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA: ID });
-    
+
 
     //Edita la venta
     await ventasModel.updateVenta(req.body);

@@ -1,14 +1,14 @@
 const { getToday } = require("../../lib/dates.js");
+const pool = require("../../model/connection-database.js");
 
-const cargarEvento = async (conexion, { USUARIO, ANTERIOR, VIGENTE, PRIMARIA, FECHA = getToday() }) => {
+const cargarEvento = async (conexion = pool, { USUARIO, ANTERIOR, VIGENTE, PRIMARIA, FECHA = getToday() ,TIPO}) => {
 
 
     const res = await conexion.query(`
-        INSERT INTO Eventos (USUARIO, ANTERIOR, VIGENTE, PRIMARIA, TIEMPO, FECHA) VALUES (?)
-    `, [USUARIO, ANTERIOR, VIGENTE, PRIMARIA, FECHA,])
-    console.log("Insercion de evento ", res);
+        INSERT INTO Eventos (USUARIO, ANTERIOR, VIGENTE, PRIMARIA, FECHA,TIPO) VALUES (?)
+    `, [[USUARIO, ANTERIOR, VIGENTE, PRIMARIA, FECHA,TIPO]])
 
-    
+
 }
 
 

@@ -47,11 +47,13 @@ const cargarDevolucion = async (ficha, USUARIO) => {
         const [res] = await conexion.query(`
             UPDATE Fichas set ESTADO = 'DEVOLUCION' where Fichas.FICHA = ?
         `, [ficha]);
-        cargarEvento(conexion, {
+
+        await cargarEvento(conexion, {
             USUARIO, ANTERIOR: JSON.stringify({ ESTADO: "ACTIVO" }),
             VIGENTE: JSON.stringify({ ESTADO: "DEVOLUCION" }),
-            PRIMARIA : ficha
-        })
+            PRIMARIA : ficha,
+            TIPO : "DEVOLUCION"
+        });
 
 
         return res
