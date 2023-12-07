@@ -25,7 +25,7 @@
         <span class="cobrador_nombre"><%= MP_TITULAR.Usuario %></span>
         <span>Limite: $<%= MP_TITULAR.LIMITE_FACTURACION %></span>
         <span>Disponible: $<%= MP_TITULAR.LIMITE_FACTURACION - payments.reduce((acum,payment) => acum + payment.transaction_amount,0) %></span>
-        <span class="cobranza_fecha"><%= MES %></span>
+        <span class="cobranza_fecha"><%= MES || "Ver fechas" %></span>
       </header>
       <% if(payments.length > 0) {%>
 
