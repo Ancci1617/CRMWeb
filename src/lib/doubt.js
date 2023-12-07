@@ -109,7 +109,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     const date_diff = dateDiff(getToday(), vencimiento_vigente);
     atraso_eval = (atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && SALDO > 0 && -2 <= date_diff && date_diff <= 0 ? 1 : atraso_eval;
 
-    console.log({FICHA,vencimiento_vigente,dif : dateDiff(getToday(), vencimiento_vigente)})
+    // console.log({FICHA,vencimiento_vigente,dif : dateDiff(getToday(), vencimiento_vigente)})
 
     return {
         cuota: deudaCuota,
