@@ -12,6 +12,7 @@ const { getArticulosString } = require("../../model/CRM/get_tablas/get_articulos
 const { agregarMeses } = require("../lib/agregar_meses.js");
 const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 const { generarSaldoAnteriorEasyCash, generarSaldoAnteriorBgm } = require("../lib/saldo_anterior.js");
+const { cargarEvento } = require("../../shared/model/eventos.modeL.js");
 
 
 
@@ -113,6 +114,15 @@ async function confirmarPago(req, res) {
         }
 
         await pagosModel.updateEstadoPagoByCodigo({ filter: { CODIGO }, newState: { CONFIRMACION: "CONFIRMADO" } });
+
+        await cargarEvento(undefined, {
+            ANTERIOR: JSON.stringify({ CONFIRMACION: pago.CONFIRMACION }),
+            VIGENTE: JSON.stringify({ CONFIRMACION: "CONFIRMADO" }),
+            PRIMARIA: pago.FICHA,
+            TIPO: "CONFIRMACION",
+            USUARIO: req.user.Usuario
+        });
+
         res.redirect(`pasar_cobranza?COB=${pago.COBRADOR}&FECHA=${pago.FECHA}&ORDEN=${ORDEN}`);
 
     } catch (error) {

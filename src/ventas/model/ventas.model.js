@@ -1,7 +1,7 @@
 const pool = require("../../model/connection-database.js");
 const contactosModel = require("../../contactos/model/contactos.model.js");
 const ubicacionesModel = require("../../ubicaciones/model/ubicaciones.mode.js");
-
+const { cargarEvento } = require("../../shared/model/eventos.model.js");
 const getVentas = async ({ filter }) => {
     try {
         let keys = Object.keys(filter).reduce((accumulator, column) => { accumulator = accumulator + " AND " + column + " = ?"; return accumulator }, "")
@@ -175,7 +175,7 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
 
         // En caso que el cliente exista, lo actualiza, si no existe lo inserta
         await connection.query(`REPLACE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI,DOMICILIO_LABORAL,GARANTE_CTE) VALUES (?)`,
-            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL,GARANTE_CTE]])
+            [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL, GARANTE_CTE]])
         await connection.query(`REPLACE INTO ClientesSV (CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`,
             [[GARANTE_CTE, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI]])
 
@@ -257,11 +257,11 @@ const borrarVenta = async ({ ID_VENTA }) => {
         connection.release();
     }
 }
-const confirmarVenta = async ({ venta }) => {
-    const { CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2,
-        DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_DNI, MODO, GARANTE_CTE, DOMICILIO_LABORAL } = venta;
+const confirmarVenta = async ({ venta }, USUARIO) => {
+    const { CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, GARANTE_NOMBRE,
+        GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2,
+        GARANTE_DNI, MODO, GARANTE_CTE, DOMICILIO_LABORAL, ESTADO, FICHA } = venta;
     const connection = await pool.getConnection();
-
     try {
         await connection.beginTransaction();
 
@@ -277,6 +277,15 @@ const confirmarVenta = async ({ venta }) => {
         } else {
             await connection.query(`UPDATE ClientesSV set ? WHERE CTE = ?`, [{ NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI, DOMICILIO_LABORAL }, CTE])
         }
+
+        await cargarEvento(connection, {
+            ANTERIOR: JSON.stringify({ ESTADO }),
+            VIGENTE: JSON.stringify({ ESTADO: "ACTIVO" }),
+            PRIMARIA: FICHA,
+            TIPO: "CONFIRMACION",
+            USUARIO
+        });
+
 
 
         await connection.commit()

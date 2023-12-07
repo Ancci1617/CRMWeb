@@ -329,7 +329,7 @@ const updateEstadoPagoByCodigo = async ({ newState, filter }) => {
 
         const [update_result] = await pool.query
             (`UPDATE PagosSV SET ? WHERE ? `, [newState, filter]);
-
+        
         if (update_result.length > 0) {
             return update_result;
         }
