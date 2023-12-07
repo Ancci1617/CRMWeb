@@ -69,7 +69,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 }
 
 function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z ,FICHA}, COBRADOR = false, Easy = false) {
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FICHA }, COBRADOR = false, Easy = false) {
 
 
     //AGREGAR ALGORITMO PARA COBRADOR
@@ -107,9 +107,15 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     //Si la ficha esta en las zonas de excepciones, la pone para cobrar
     const date_diff = dateDiff(getToday(), vencimiento_vigente);
-    atraso_eval = (atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && SALDO > 0 && -2 <= date_diff && date_diff <= 0 ? 1 : atraso_eval;
+    atraso_eval =
+        ((atraso_eval == 0) && ZONAS_EXCEPCIONES.includes(Z) && SALDO > 0 && -2 <= date_diff && date_diff <= 0)
+            ||
+            (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
 
-    // console.log({FICHA,vencimiento_vigente,dif : dateDiff(getToday(), vencimiento_vigente)})
+
+
+
+    console.log({ FICHA, vencimiento_vigente, dif: dateDiff(getToday(), vencimiento_vigente),vencidas, totales : TOTAL / CUOTA})
 
     return {
         cuota: deudaCuota,
