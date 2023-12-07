@@ -42,7 +42,7 @@
       </div>
       <div>
         <div>Tel:<%= cte_data.WHATSAPP || "Sin telefono"%></div>
-        <% if(hasPermission(permisos.ADMIN_COB)){  %>
+        <% if(hasPermission(permisos.ADMIN_COB) && cte_data.CTE){  %>
         <a href="/admin/editarCliente/<%= cte_data.CTE %>" class="link link-editar">Editar cliente</a>
         <% } %>
       </div>
