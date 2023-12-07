@@ -2,6 +2,7 @@ const pool = require("../../model/connection-database")
 const { generarContactoCTEWithConection } = require("../../contactos/model/contactos.model.js");
 const { getClientesAndLocation } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { insertarNuevaUbicacionWithConection } = require("../../ubicaciones/model/ubicaciones.mode.js");
+const { cargarEvento } = require("../../shared/model/eventos.modeL.js");
 
 const updateClientesSV = async (CTE, { NOMBRE, CALLE, ZONA, CRUCES, CRUCES2, WHATSAPP, DNI, UBICACION, Usuario, LATITUD, LONGITUD }) => {
 
@@ -38,7 +39,7 @@ const updateClientesSV = async (CTE, { NOMBRE, CALLE, ZONA, CRUCES, CRUCES2, WHA
 }
 
 
-const cargarDevolucion = async (ficha) => {
+const cargarDevolucion = async (ficha, USUARIO) => {
     const conexion = await pool.getConnection();
 
     try {
@@ -46,6 +47,13 @@ const cargarDevolucion = async (ficha) => {
         const [res] = await conexion.query(`
             UPDATE Fichas set ESTADO = 'DEVOLUCION' where Fichas.FICHA = ?
         `, [ficha]);
+        cargarEvento(conexion, {
+            USUARIO, ANTERIOR: JSON.stringify({ ESTADO: "ACTIVO" }),
+            VIGENTE: JSON.stringify({ ESTADO: "DEVOLUCION" }),
+            PRIMARIA : ficha
+        })
+
+
         return res
 
     } catch (error) {
@@ -69,7 +77,7 @@ const updateFichasSV = async (FICHA, body) => {
     try {
         const [res] = await conexion.query(`
             UPDATE Fichas set ? where Fichas.FICHA = ?
-        `, [body,FICHA]);
+        `, [body, FICHA]);
         return res
 
     } catch (error) {

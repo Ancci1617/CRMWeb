@@ -39,7 +39,7 @@ const cargarDevolucion = async (req, res) => {
     const { FICHA } = req.params;
     try {
 
-        const sqlResponse = await adminModel.cargarDevolucion(FICHA);
+        const sqlResponse = await adminModel.cargarDevolucion(FICHA,req.user.Usuario);
 
 
         res.status(200).redirect(`/CRM?CTE=F:${FICHA}`);
