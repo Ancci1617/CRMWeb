@@ -48,7 +48,6 @@ async function deudaCte(req, res) {
 
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
-    console.log(fichas[0]);
     res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
 }
 
