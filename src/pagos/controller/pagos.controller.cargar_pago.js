@@ -12,7 +12,7 @@ const { getArticulosString } = require("../../model/CRM/get_tablas/get_articulos
 const { agregarMeses } = require("../lib/agregar_meses.js");
 const { redistribuirPagoBgm } = require("../lib/redistribuciones.js");
 const { generarSaldoAnteriorEasyCash, generarSaldoAnteriorBgm } = require("../lib/saldo_anterior.js");
-const { cargarEvento } = require("../../shared/model/eventos.modeL.js");
+const { cargarEvento } = require("../../shared/model/eventos.model.js");
 
 
 
