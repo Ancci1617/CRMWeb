@@ -18,7 +18,7 @@ input_filtro.addEventListener("change", async e => {
         if (row.innerHTML.includes(FILTRO))
             fragment.append(row);
     });
-    table__historial__body.append(fragment)
+    table__historial__body.append(fragment);
 });
 
 
