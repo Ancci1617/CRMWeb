@@ -329,7 +329,7 @@ const updateEstadoPagoByCodigo = async ({ newState, filter }) => {
 
         const [update_result] = await pool.query
             (`UPDATE PagosSV SET ? WHERE ? `, [newState, filter]);
-        
+
         if (update_result.length > 0) {
             return update_result;
         }
@@ -404,12 +404,12 @@ const updateSaldosAnterioresYServicios = async (FICHAS) => {
     }
 }
 
-const getAcumuladoDetalle = async (query) => {
+const getAcumuladoDetalle = async (query = { "true": true }) => {
     try {
         const [pagos] = await pool.query(
             `SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR FROM PagosSVAcumulado WHERE ? 
             UNION 
-            SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR From PagosSV WHERE ? order by FECHA`, [query, query]);
+            SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR From PagosSV WHERE ? AND PagosSV.CONFIRMACION != 'INVALIDO' order by FECHA`, [query, query]);
 
         return pagos;
 
