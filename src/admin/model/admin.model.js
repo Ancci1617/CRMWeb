@@ -2,7 +2,7 @@ const pool = require("../../model/connection-database")
 const { generarContactoCTEWithConection } = require("../../contactos/model/contactos.model.js");
 const { getClientesAndLocation } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { insertarNuevaUbicacionWithConection } = require("../../ubicaciones/model/ubicaciones.mode.js");
-const { cargarEvento } = require("../../shared/model/eventos.modeL.js");
+const { cargarEvento } = require("../../shared/model/eventos.model.js");
 
 const updateClientesSV = async (CTE, { NOMBRE, CALLE, ZONA, CRUCES, CRUCES2, WHATSAPP, DNI, UBICACION, Usuario, LATITUD, LONGITUD }) => {
 
