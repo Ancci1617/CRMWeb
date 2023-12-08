@@ -115,7 +115,6 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
 
 
-    console.log({ FICHA, vencimiento_vigente, dif: dateDiff(getToday(), vencimiento_vigente),vencidas, totales : TOTAL / CUOTA})
 
     return {
         cuota: deudaCuota,
