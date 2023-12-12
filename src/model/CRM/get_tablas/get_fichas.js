@@ -75,7 +75,7 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
                 IFNULL(CUOTA_PAGO,0) + TOTAL - CUOTA_ANT,
                 CUOTA,1
             ) MONTH
-        ) AND CambiosDeFecha.FICHA = Fichas.FICHA
+        ) AND CambiosDeFecha.FICHA = Fichas.FICHA AND OFICINA = 0
 	    ),5) AS CAMBIOS_DE_FECHA_EXACTO    
     
     FROM
