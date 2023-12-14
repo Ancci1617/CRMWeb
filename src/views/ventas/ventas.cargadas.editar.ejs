@@ -194,6 +194,9 @@
           </div>
 
           <input type="hidden" name="ID" value="<%= INDICE %>">
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LATITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO" , defaultValue : PRIMER_VENCIMIENTO } }) %>
 
           <!-- BOTONES DE SUBMIT -->
@@ -208,6 +211,9 @@
 
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
+  <script src="/js/lib/afip.js"></script>
+  <script src="/shared/setLoading.js"></script>
+  <script src="/shared/getLocation.js"></script>
   <script src="/js/ventas/cargar_venta.js"></script>
 
 </body>
