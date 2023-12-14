@@ -21,7 +21,7 @@ const formCargarVenta = async (req, res) => {
         required_images.dorso = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-DORSO.jpg`);
         required_images.rostro = !fs.existsSync(`../ImagenesDeClientes/${cte}/CTE-${cte}-ROSTRO.jpg`);
     }
-    res.render("ventas/Ventas.cargar.ejs", { cte_data, required_images });
+    res.render("ventas/ventas.cargar.ejs", { cte_data, required_images });
 
 }
 const postCargarVenta = async (req, res) => {
