@@ -72,7 +72,8 @@
 
           <div class="input-box">
             <span class="details">N° de documento</span>
-            <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
+            <% console.log("DNI",DNI,null) %>
+            <input type="number" placeholder="Numero de documento" value="<%= DNI %>" <%= !DNI ? "" : "readonly" %> name="DNI" required>
           </div>
 
           <div class="input-box">
@@ -108,11 +109,11 @@
             <span class="details">Servicio</span>
             <select class="" name="SERV_UNIT" required>
               <option value="" selected></option>
-              <option value="500">500</option>
-              <option value="750">750</option>
               <option value="1000">1000</option>
-              <option value="1500">1500</option>
               <option value="2000">2000</option>
+              <option value="3000">3000</option>
+              <option value="4000">4000</option>
+              <option value="5000">5000</option>
             </select>
           </div>
 
@@ -182,7 +183,7 @@
           </div>
 
           <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
-          
+
           <!-- IMAGENES -->
           <% if(required_images.frente){ %>
           <div class="input-box">

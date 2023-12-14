@@ -17,11 +17,11 @@ const zonas_sin_servicio_cobranza = ["T3", "T4", "P1", "P2", "D6", "D7", "D8"];
 
 
 const getServicio = (valor) => {
-    if (valor <= 5000) return 500;
-    if (valor <= 7500) return 750;
     if (valor <= 10000) return 1000;
-    if (valor <= 15000) return 1500;
-    return 2000;
+    if (valor <= 20000) return 2000;
+    if (valor <= 30000) return 3000;
+    if (valor <= 40000) return 4000;
+    return 5000;
 }
 const handleServicioDeCobranza = () => {
 
