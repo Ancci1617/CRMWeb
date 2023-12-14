@@ -27,6 +27,7 @@ const handleServicioDeCobranza = () => {
 
     const servicio = zonas_sin_servicio_cobranza.includes(form.ZONA.value) ? Math.max(getServicio(cuota.value), 1000) : getServicio(cuota.value);
     form.SERV_UNIT.value = servicio;
+
 }
 
 
@@ -77,9 +78,10 @@ const handlePrimerVencimiento = e => {
 
 };
 
+form.PRIMER_PAGO.addEventListener("change", handlePrimerVencimiento);
+form.VENCIMIENTO.addEventListener("change", handlePrimerVencimiento);
 
-
-ANTICIPO?.addEventListener("change", e => {
+ANTICIPO.addEventListener("change", e => {
 
     if (e.target.value > 0) {
         ANTICIPO_MP.required = true;
@@ -95,14 +97,15 @@ ANTICIPO?.addEventListener("change", e => {
 
 
 window.addEventListener("load", async e => {
+    cargarUbicacion();
 
-    navigator.geolocation.getCurrentPosition(handleLocationSuccess, handleLocationError, { enableHighAccuracy: true });
+
+
     evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
     evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
     evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });
 
-    console.log("EVALUATION DATA", evaluation_data);
 });
 
 async function autoCompletarPrecios() {
@@ -123,7 +126,7 @@ async function autoCompletarPrecios() {
     handleServicioDeCobranza();
 }
 
-function ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
+function ventaAprobada(responsable, Estatus, cuotas_para_entrega = 0, vendido, anticipo) {
     //TODO ESTE BLOQUE DE CODIGO TRANSFORMALO EN EL JSON DEL FORM
     //Transformar esto a consulta SQL
     const { sabana, master } = evaluation_data;
@@ -180,41 +183,62 @@ estatus_options.addEventListener("change", e => {
     input_estatus.removeAttribute("required")
     return input_block.classList.add("hidden");
 
-})
+});
 
-form.PRIMER_PAGO.addEventListener("change", handlePrimerVencimiento);
-form.VENCIMIENTO.addEventListener("change", handlePrimerVencimiento);
+
+
 
 //EVALUACION DE LA VENTA
-form.addEventListener("submit", e => {
+btn_submit.addEventListener("click", async e => {
     e.preventDefault();
+    if (!form.reportValidity()) return;
     if (form.TOTAL.value / form.CUOTA.value != form.CUOTAS.value) return alert("El total no es divisible por la cantidad de cuotas")
 
+    if (!form.LATITUD_VENDEDOR.value || !form.LONGITUD_VENDEDOR.value || !form.ACCURACY_VENDEDOR.value) {
+        setLoading(true)
+        await cargarUbicacion();
+        setLoading(false)
+    }
 
-    const responsable = document.getElementsByName("RESPONSABLE")[0].value;
-    const Estatus = document.getElementsByName("ESTATUS")[0].value;
-    const cuotas_para_entrega = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0].value;
-    const vendido = document.getElementsByName("TOTAL")[0].value;
-    const anticipo = document.getElementsByName("ANTICIPO")[0].value;
+
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    setLoading(true);
+    try {
+        const razon_social = await getRazonSocialDni(form.DNI.value);
+        const comparacion = razon_social.toUpperCase().split(" ").map(nombre => form.NOMBRE.value.toUpperCase().split(" ").includes(nombre));
+        const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
+
+        if (coincidencias < 2)
+            return alert(`El titular del DNI declarado es ${razon_social}\nEl nombre no coincide con ${form.NOMBRE.value}`)
+
+
+    } catch (error) {
+        alert(error);
+        return;
+    } finally {
+        setLoading(false);
+    }
+
+    const { RESPONSABLE, ESTATUS, CUOTAS_PARA_ENTREGA, TOTAL, ANTICIPO } = form;
     const aprobado = document.getElementsByName("APROBADO")[0];
-
     aprobado.value = "APROBADO";
-    const isAprobado = ventaAprobada(CTE, responsable, Estatus, cuotas_para_entrega, vendido, anticipo);
+    const isAprobado = ventaAprobada(RESPONSABLE.value, ESTATUS.value, CUOTAS_PARA_ENTREGA.value, TOTAL.value, ANTICIPO.value);
+
     if (isAprobado)
-        return e.target.submit();
+        return form.submit()
 
-    aprobado.value = "DESAPROBADO";
     if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?"))
-        return e.target.submit();
+        return e.target.submit()
 
 
-})
+});
 
 
 //AutoCompletado de los precios
-articulos.addEventListener("change", e => {
-    autoCompletarPrecios();
-});
+articulos.addEventListener("change", autoCompletarPrecios);
+
 document.querySelector(".selector-cuotas").addEventListener("change", e => {
     autoCompletarPrecios();
 })
@@ -224,20 +248,27 @@ ubicacion_cliente.addEventListener("keyup", e => {
     ubicacion_cliente.value = ubicacion_cliente.value.replaceAll(" ", "")
 });
 
-const handleLocationError = (error) => {
 
-    if (error.code == 1) {
-        alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
-        return location.href = "/crm"
+
+
+
+const cargarUbicacion = async () => {
+
+    try {
+        const { coords } = await getLocation();
+        const { latitude, longitude, accuracy } = coords;
+        document.querySelector("input[name='LATITUD_VENDEDOR']").value = latitude;
+        document.querySelector("input[name='LONGITUD_VENDEDOR']").value = longitude;
+        document.querySelector("input[name='ACCURACY_VENDEDOR']").value = accuracy;
+
+    } catch (error) {
+        if (error.code == 1) {
+            alert("No se puede cargar la venta, la ubicacion se encuentra desabilitada.");
+            return location.href = "/crm"
+        }
+        console.log("Error desconocido", error);
+        alert(`Error desconocido ${error}, CODE ${error.code} `);
     }
-    console.log("Error desconocido", error);
-    alert(`Error desconocido ${error}, CODE ${error.code} `);
-}
 
-const handleLocationSuccess = (location) => {
-    const { latitude, longitude, accuracy } = location.coords;
-    console.log(location.coords);
-    document.querySelector("input[name='LATITUD_VENDEDOR']").value = latitude;
-    document.querySelector("input[name='LONGITUD_VENDEDOR']").value = longitude;
-    document.querySelector("input[name='ACCURACY_VENDEDOR']").value = accuracy;
+
 }

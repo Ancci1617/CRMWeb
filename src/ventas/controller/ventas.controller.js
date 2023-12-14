@@ -9,6 +9,7 @@ const fs = require("fs");
 const pagosModel = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
 const { getRequiredImages } = require("./lib/required_images.js");
+const { getToday } = require("../../lib/dates.js");
 
 
 //Para admin
@@ -34,7 +35,7 @@ const borrarVenta = async (req, res) => {
 const formCargarVenta = async (req, res) => {
     const { cte } = req.params;
     const [cte_data] = await getClientesAndLocation(cte);
-    res.render("ventas/Ventas.cargar.ejs", { cte_data, required_images: getRequiredImages(cte) });
+    res.render("ventas/ventas.cargar.ejs", { cte_data, required_images: getRequiredImages(cte) });
 }
 
 
@@ -63,7 +64,7 @@ const postCargarVenta = async (req, res) => {
     if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
         await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
-    res.redirect("/CRM");
+    res.redirect(`/ventas/pasar_ventas?USUARIO=${USUARIO}&FECHA_VENTA=${getToday()}`);
 }
 
 

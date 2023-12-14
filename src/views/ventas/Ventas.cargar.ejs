@@ -37,7 +37,7 @@
 
           <div class="input-box">
             <span class="details">Ficha</span>
-            <input type="number" placeholder="Numero de ficha" name="FICHA" required>
+            <input type="number" placeholder="Numero de ficha" name="FICHA" max="9999" required>
           </div>
 
           <div class="input-box">
@@ -72,7 +72,7 @@
 
           <div class="input-box">
             <span class="details">N° de documento</span>
-            <input type="number" placeholder="Numero de documento" value="<%= DNI%>" name="DNI" required>
+            <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
           </div>
 
           <div class="input-box">
@@ -236,6 +236,9 @@
 
   <script src="/js/lib/fetch.helper.js"></script>
   <script src="/js/lib/file.weight.js"></script>
+  <script src="/js/lib/afip.js"></script>
+  <script src="/shared/setLoading.js"></script>
+  <script src="/shared/getLocation.js"></script>
   <script src="/js/ventas/cargar_venta.js"></script>
   <script src="/js/ventas/file_event_tag.js"></script>
 

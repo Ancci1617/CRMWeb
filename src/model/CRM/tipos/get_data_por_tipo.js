@@ -54,8 +54,10 @@ const getCteCalle = async (calle) => {
     return { CTE: -1 };
 }
 const getCteNombre = async (nombre) => {
+    let nombre_wildcard = "%" + nombre.trim().replaceAll(" ", "%") + "%"
+
     const [rows] = await pool.query(
-        `SELECT CTE,CALLE from ClientesSV where NOMBRE = ? LIMIT 1`, [nombre]);
+        `SELECT CTE,CALLE from ClientesSV where NOMBRE LIKE ? LIMIT 1`, [nombre_wildcard]);
     if (rows.length > 0) {
         return rows[0];
     }
