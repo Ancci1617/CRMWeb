@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- Created By CodingLab - www.codinglabweb.com -->
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <!---<title> Responsive Registration Form | CodingLab </title>--->
+  <title>Blanco Gusmar | Cargar venta</title>
+  <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <% var today=new Date().toISOString().substring(0,10) %>
+  <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
+  <% const {CTE,NOMBRE,ZONA,CALLE,CRUCES,CRUCES2,DNI,WHATSAPP,LATITUD,LONGITUD} = cte_data %>
+  <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
+  <% console.log(cte_data)%>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="titles">
+      <div class="title">Cargar venta</div>
+      <div>
+        <!-- <input class="btn-green btn-nuevo hidden" type="button" value="Cliente nuevo"> -->
+        <a class="btn-green btn-crm" type="button" value="volver" href="/CRM">CRM</a>
+      </div>
+    </div>
+    <div class="content">
+      <form action="/ventas/cargar_venta" method="POST" enctype="multipart/form-data" id="form_cargar_venta">
+
+        <div class="user-details">
+          <div class="input-box ">
+            <span class="details">Cliente</span>
+            <input type="text" readonly placeholder="Numero de cliente" value="<%= CTE? CTE : 0%>" name="CTE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Ficha</span>
+            <input type="number" placeholder="Numero de ficha" name="FICHA" max="9999" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Apellido y nombre</span>
+            <input type="text" placeholder="APELLIDO Nombre" value="<%= NOMBRE %>" name="NOMBRE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Zona</span>
+            <input type="text" placeholder="Zona" value="<%= ZONA   %>" oninput="this.value = this.value.toUpperCase()" name="ZONA" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Calle</span>
+            <input type="text" placeholder="Domicilio" value="<%= CALLE %>" name="CALLE" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cruce 1</span>
+            <input type="text" placeholder="Cruce 1" value="<%= CRUCES %>" name="CRUCES" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cruce 2</span>
+            <input type="text" placeholder="Cruce 2" value="<%= CRUCES2 %>" name="CRUCES2" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Telefono</span>
+            <input type="number" placeholder="Numero de telefono" value="<%= WHATSAPP  %>" name="WHATSAPP">
+          </div>
+
+          <div class="input-box">
+            <span class="details">N° de documento</span>
+            <input type="number" placeholder="Numero de documento" value="<%= DNI %>" name="DNI" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuotas</span>
+            <select form="form_cargar_venta" class="selector-cuotas" name="CUOTAS" required>
+              <option value="3">3</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="12">12</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Articulos</span>
+            <input type="text" placeholder="Articulos divididos por espacios" name="ARTICULOS" required>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Vta total</span>
+            <input type="number" placeholder="Suma de cuotas" name="TOTAL" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Cuota</span>
+            <input type="text" placeholder="Valor de cuota" name="CUOTA" required>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Servicio</span>
+            <select class="" name="SERV_UNIT" required>
+              <option value="" selected></option>
+              <option value="500">500</option>
+              <option value="750">750</option>
+              <option value="1000">1000</option>
+              <option value="1500">1500</option>
+              <option value="2000">2000</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Anticipo</span>
+            <input type="number" placeholder="Anticipo cobrado" name="ANTICIPO">
+          </div>
+<!--  -->
+          <%- include("../partials/Components/input-box-select.ejs",{input: {classListContainer : ["select_anticipo_container"],hidden : true,required : false,name : "ANTICIPO_MP",details: "Anticipo por MP?" , classList : ["select_anticipo"],options:[null,"NO","SI"]}}) %>
+
+          <div class="input-box">
+            <span class="details">Tipo</span>
+            <select class="" form="form_cargar_venta" name="TIPO" required>
+              <option value="Pedido">Pedido</option>
+              <option value="Revisita">Revisita</option>
+              <option value="Timbreo">Timbreo</option>
+              <option value="Local">Local</option>
+            </select>
+          </div>
+
+
+          <div class="input-box">
+            <span class="details">Estatus</span>
+            <select class="options-estatus" form="form_cargar_venta" name="ESTATUS" required>
+              <option value="Entregado">Entregado</option>
+              <option value="Con anticipo">Con anticipo</option>
+              <option value="Para entregar">Para entregar</option>
+              <option value="Prepago">Prepago</option>
+              <option value="Prepago entregado">Prepago entregado</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Primer pago</span>
+            <input type="date" placeholder="Primer fecha de pago" name="PRIMER_PAGO" min="<%= today %>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Dia de vencimiento <span class="detail_primer_vencimiento">()</span></span>
+            <select class="" name="VENCIMIENTO" required form="form_cargar_venta">
+              <option value="" selected></option>
+              <option value="4">4</option>
+              <option value="9">9</option>
+              <option value="14">14</option>
+              <option value="19">19</option>
+              <option value="24">24</option>
+              <option value="29">29</option>
+            </select>
+          </div>
+
+
+          <div class="input-box cuotas_para_entrega hidden">
+            <span class="details">Cuota de entrega</span>
+            <input type="number" placeholder="Cuotas pagas para la entrega" name="CUOTAS_PARA_ENTREGA">
+          </div>
+          <div class="input-box">
+            <span class="details">Fecha de venta</span>
+            <input type="date" placeholder="" name="FECHA_VENTA" value="<%= today %>" min="<%= treeDaysAgo %>" max="<%= today %>" required>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Se hace responsable el vendedor?</span>
+            <select class="options" name="RESPONSABLE" form="form_cargar_venta" required>
+              <option value="NO">NO</option>
+              <option value="SI">SI</option>
+            </select>
+          </div>
+
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "text",name : "ubicacion_cliente",details :"Ubicacion",required : true,pattern : "-\\d+\\.\\d+,-\\d+\\.\\d+",defaultValue : coords} }) %>
+          
+          <!-- IMAGENES -->
+          <% if(required_images.frente){ %>
+          <div class="input-box">
+            <span class="details">DNI Frente</span>
+            <label for="FRENTE">
+              <span class="IMG-FRENTE">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" value="DNI Frente" id="FRENTE" name="FRENTE" accept="image/*" required>
+            </label>
+          </div>
+          <% } %>
+
+          <% if(required_images.dorso){ %>
+          <div class="input-box">
+            <span class="details">DNI Dorso</span>
+            <label for="DORSO">
+              <span class="IMG-DORSO">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" id="DORSO" placeholder="APELLIDO Nombre" value="DNI Frente" name="DORSO" accept="image/*" required>
+            </label>
+          </div>
+          <% } %>
+
+          <% if(required_images.rostro){ %>
+          <div class="input-box">
+            <span class="details">ROSTRO</span>
+            <label for="ROSTRO">
+              <span class="IMG-ROSTRO">Sin foto cargada...</span>
+              <input type="file" class="inputfile-for-label" placeholder="APELLIDO Nombre" id="ROSTRO" value="DNI Frente" name="ROSTRO" accept="image/*" required>
+            </label>
+          </div>
+          <% } %>
+
+          <!-- input hidden  Venta Aprobada/Desaprobada -->
+          <div class="input-box hidden">
+            <input type="text" form="form_cargar_venta" value="APROBADO" name="APROBADO" required />
+          </div>
+
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LATITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
+          <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO"} }) %>
+
+          <!-- BOTONES DE SUBMIT -->
+          <div class="button">
+            <input type="submit" value="Registrar venta" class="button__input">
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/lib/fetch.helper.js"></script>
+  <script src="/js/lib/file.weight.js"></script>
+  <script src="/js/lib/afip.js"></script>
+  <script src="/shared/setLoading.js"></script>
+  <script src="/shared/getLocation.js"></script>
+  <script src="/js/ventas/cargar_venta.js"></script>
+  <script src="/js/ventas/file_event_tag.js"></script>
+
+</body>
+
+</html>
