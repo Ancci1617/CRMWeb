@@ -216,7 +216,7 @@ btn_submit.addEventListener("click", async e => {
         return form.submit()
 
     if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?"))
-        return e.target.submit()
+        return form.submit()
 
 
 });
