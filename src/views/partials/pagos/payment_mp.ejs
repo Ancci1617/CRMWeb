@@ -2,7 +2,6 @@
 <%  const total_asignado = payment.asociados.reduce((acumm,pago) => {return acumm + pago.MP + pago.SERV + pago.MORA + pago.VALOR },0) %>
 <% const sin_asignar = transaction_amount - total_asignado %>
 <% const estado = sin_asignar > 300 ? "sin_asignar" : (sin_asignar < -300 ? "exceso" : "asignado") %>
-<% console.log(date_created) %>
 
 <div class="<%= `payment ${estado}` %>">
   <% if(estado == "sin_asignar") { %><a href="<%= `/pagos/deuda_cte?CTE=0&N_OPERACION=${id}&TITULAR=${TITULAR}` %>" class="link"> <% } %>

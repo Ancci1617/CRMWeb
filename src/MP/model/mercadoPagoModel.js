@@ -11,7 +11,7 @@ const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE, filtered = false })
             return payments
         }
 
-        return raw_payments
+        return raw_payments;
 
     } catch (error) {
         console.log("ERROR AL BUSCAR PAGOS EN MP")

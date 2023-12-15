@@ -1,5 +1,4 @@
 const Router = require("express").Router();
-const permisos = require("../../constants/permisos.js");
 const mercadoPagoController = require("../controller/api.mp.controller.js");
 
 
