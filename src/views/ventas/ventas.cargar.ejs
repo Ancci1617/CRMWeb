@@ -72,10 +72,9 @@
 
           <div class="input-box">
             <span class="details">N° de documento</span>
-            <% console.log("DNI",DNI,null) %>
             <input type="number" placeholder="Numero de documento" value="<%= DNI %>" <%= !DNI ? "" : "readonly" %> name="DNI" required>
           </div>
-
+          
           <div class="input-box">
             <span class="details">Cuotas</span>
             <select form="form_cargar_venta" class="selector-cuotas" name="CUOTAS" required>

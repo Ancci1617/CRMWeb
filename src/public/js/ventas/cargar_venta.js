@@ -204,22 +204,8 @@ btn_submit.addEventListener("click", async e => {
     e.preventDefault();
     if (!form.reportValidity()) return;
 
-    setLoading(true);
-    try {
-        const razon_social = await getRazonSocialDni(form.DNI.value);
-        const comparacion = razon_social.toUpperCase().split(" ").map(nombre => form.NOMBRE.value.toUpperCase().split(" ").includes(nombre));
-        const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
-
-        if (coincidencias < 2)
-            return alert(`El titular del DNI declarado es ${razon_social}\nEl nombre no coincide con ${form.NOMBRE.value}`)
-
-
-    } catch (error) {
-        alert(error);
-        return;
-    } finally {
-        setLoading(false);
-    }
+    const { isSamePerson } = await handleDniNombre();
+    if(!isSamePerson) return;
 
     const { RESPONSABLE, ESTATUS, CUOTAS_PARA_ENTREGA, TOTAL, ANTICIPO } = form;
     const aprobado = document.getElementsByName("APROBADO")[0];
@@ -272,3 +258,34 @@ const cargarUbicacion = async () => {
 
 
 }
+
+const compareDni = async (dni, nombre) => {
+    setLoading(true);
+    try {
+        const razon_social = await getRazonSocialDni(dni);
+        const comparacion = razon_social.toUpperCase().split(" ").map(name_split => nombre.toUpperCase().split(" ").includes(name_split));
+        const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
+
+        return { isSamePerson: coincidencias >= 2, razon_social, coincidencias }
+
+    } catch (error) {
+        throw new Error(error);
+    } finally {
+        setLoading(false);
+    }
+}
+const handleDniNombre = async () => {
+
+    try {
+        if (!form.DNI.value || !form.NOMBRE.value) return;
+        const { isSamePerson, razon_social } = await compareDni(form.DNI.value, form.NOMBRE.value);
+        if (!isSamePerson) alert(`El Dni declarado pertenece a ${razon_social} \nNo coincide con el nombre ${form.NOMBRE.value}`)
+        return { isSamePerson }
+    } catch (error) {
+        alert(error);
+    }
+
+}
+
+form.DNI.addEventListener("change", handleDniNombre);
+form.NOMBRE.addEventListener("change", handleDniNombre);
