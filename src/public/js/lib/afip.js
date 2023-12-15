@@ -3,13 +3,14 @@ async function getRazonSocialDni(dni) {
     const response_cuit = await fetch(`https://afip.tangofactura.com/Index/GetCuitsPorDocumento/?NumeroDocumento=${dni}`);
     const response_cuit_json = await response_cuit.json();
 
-    if (response_cuit_json.error) {
+    if (response_cuit_json.error)
         throw new Error(response_cuit_json.error)
-    }
 
+    const cuits = response_cuit_json.data;
+    if (!cuits)
+        throw new Error("No existe el DNI");
 
     //cONSULTA EL CONTRIBUYENTE CON EL CUIT
-    const cuits = response_cuit_json.data;
     const response_contribuyente = await fetch(`https://afip.tangofactura.com/Index/GetContribuyente/?cuit=${cuits[0]}`);
     const response_contribuyente_json = await response_contribuyente.json();
 
