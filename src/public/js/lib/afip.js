@@ -1,18 +1,26 @@
-async function getRazonSocialDni(dni) {
+async function getRazonSocialDni(dni, EsCuit = false) {
+    console.log(dni, EsCuit)
     //Consulta el CUIT Con el Dni del parametros
-    const response_cuit = await fetch(`https://afip.tangofactura.com/Index/GetCuitsPorDocumento/?NumeroDocumento=${dni}`);
-    const response_cuit_json = await response_cuit.json();
+    let cuits = EsCuit ? [dni] : undefined;
+    if (!EsCuit) {
 
-    if (response_cuit_json.error)
-        throw new Error(response_cuit_json.error)
+        const response_cuit = await fetch(`https://afip.tangofactura.com/Index/GetCuitsPorDocumento/?NumeroDocumento=${dni}`);
+        const response_cuit_json = await response_cuit.json();
 
-    const cuits = response_cuit_json.data;
+        if (response_cuit_json.error)
+            throw new Error(response_cuit_json.error)
+
+        cuits = response_cuit_json.data;
+    }
+
+    console.log("cuits", cuits)
 
     if (!cuits)
         throw new Error("No existe el DNI");
-
+    console.log("cuits", cuits)
 
     //cONSULTA EL CONTRIBUYENTE CON EL CUIT
+    let nombre = "";
     for (let i = 0; i < cuits.length; i++) {
         const response_contribuyente = await fetch(`https://afip.tangofactura.com/Index/GetContribuyente/?cuit=${cuits[i]}`)
         const response_contribuyente_json = await response_contribuyente.json()
