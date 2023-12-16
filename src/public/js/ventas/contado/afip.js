@@ -12,7 +12,7 @@ const estatus_options = document.querySelector(".options-estatus");
 dni.addEventListener("change", async e => {
     const dni = e.target.value;
     if(dni > 0)
-        return nombre.value = await getRazonSocialDni(dni);    
+        return nombre.value = await getRazonSocialDni(dni,dni.length == 11);    
     return nombre.value = "";
 })
 

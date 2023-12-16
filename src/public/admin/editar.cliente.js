@@ -31,7 +31,7 @@ form.querySelector(".button__input").addEventListener("click", async e => {
 
     setLoading(true,[span__loading]);
     try {
-        const razon_social = await getRazonSocialDni(form.DNI.value);
+        const razon_social = await getRazonSocialDni(form.DNI.value, form.DNI.length == 11);
 
 
         const comparacion = razon_social.toUpperCase().split(" ").map(nombre => form.NOMBRE.value.toUpperCase().split(" ").includes(nombre));

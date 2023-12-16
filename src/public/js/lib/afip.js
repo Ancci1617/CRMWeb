@@ -13,11 +13,9 @@ async function getRazonSocialDni(dni, EsCuit = false) {
         cuits = response_cuit_json.data;
     }
 
-    console.log("cuits", cuits)
 
     if (!cuits)
         throw new Error("No existe el DNI");
-    console.log("cuits", cuits)
 
     //cONSULTA EL CONTRIBUYENTE CON EL CUIT
     let nombre = "";
