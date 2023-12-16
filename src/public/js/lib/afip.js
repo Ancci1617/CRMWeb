@@ -7,17 +7,24 @@ async function getRazonSocialDni(dni) {
         throw new Error(response_cuit_json.error)
 
     const cuits = response_cuit_json.data;
+
     if (!cuits)
         throw new Error("No existe el DNI");
 
-    //cONSULTA EL CONTRIBUYENTE CON EL CUIT
-    const response_contribuyente = await fetch(`https://afip.tangofactura.com/Index/GetContribuyente/?cuit=${cuits[0]}`);
-    const response_contribuyente_json = await response_contribuyente.json();
 
-    if (response_contribuyente_json.errorGetData == true || response_contribuyente_json.error)
-        throw new Error("No se pudo consultar la razon social")
+    //cONSULTA EL CONTRIBUYENTE CON EL CUIT
+    for (let i = 0; i < cuits.length; i++) {
+        const response_contribuyente = await fetch(`https://afip.tangofactura.com/Index/GetContribuyente/?cuit=${cuits[i]}`)
+        const response_contribuyente_json = await response_contribuyente.json()
+
+        if (response_contribuyente_json.errorGetData == true || response_contribuyente_json.error)
+            throw new Error("No se pudo consultar la razon social")
+
+        nombre = `${nombre} ${response_contribuyente_json.Contribuyente.nombre} ${i == cuits.length - 1 ? "" : "/"}`
+
+    }
     //=nomPropio de excel
-    const { nombre } = response_contribuyente_json.Contribuyente
+    // const { nombre } = response_contribuyente_json.Contribuyente
     const nombre_prop = nombre.toLocaleLowerCase().split(" ").map(word => word.replace(word.charAt(0), word.charAt(0).toUpperCase())).join(" ");
     return nombre_prop;
 
