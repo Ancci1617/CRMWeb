@@ -28,7 +28,9 @@ async function invalidarTelefonosDeCte(CTE) {
 }
 async function getContactosByFecha(TIPO, FECHA) {
     const eval = {
-        CTE: "SELECT concat(ZONA,'-',CTE,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO from BaseCTE WHERE DIA = ? and VALIDACION = 'VALIDO'",
+        CTE: `SELECT concat(ClientesSV.ZONA,'-',ClientesSV.CTE,'-',ClientesSV.NOMBRE,' ',ClientesSV.CALLE) AS CONTACTO,TELEFONO from BaseCTE
+        LEFT JOIN ClientesSV on ClientesSV.CTE = BaseCTE.CTE 
+        WHERE DIA = '2023-12-18' and VALIDACION = 'VALIDO' and TELEFONO != 0;`,
         Z: "SELECT CONCAT(ZONA,'-',Z,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO FROM `BaseZ` where VALIDACION = 'VALIDO' AND DIA = ?",
         Y: "SELECT CONCAT(ZONA,'-',Codigo,'-',Nombre,' ',Domicilio) AS CONTACTO,  TELEFONO FROM `BaseY` WHERE VALIDACION = 'VALIDO' and Dia  = ?;"
     };
@@ -116,7 +118,7 @@ async function invalidarTelefono(TELEFONO) {
 
 
 }
-async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO,VENTA_ID) {
+async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO, VENTA_ID) {
 
 
     const eval = {
@@ -131,7 +133,7 @@ async function insertContacto(TIPO, TELEFONO, DIA, CTEYZ, ZONA, NOMBRE, CALLE, U
             "(?,?,?,?,?,?,?,'VALIDO',1,1)"
     };
 
-    const [res] = await pool.query(eval[TIPO], [TELEFONO, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO, DIA,VENTA_ID]);
+    const [res] = await pool.query(eval[TIPO], [TELEFONO, CTEYZ, ZONA, NOMBRE, CALLE, USUARIO, DIA, VENTA_ID]);
     return res;
 
 
@@ -142,21 +144,21 @@ async function validarUltimoTelefonoByCte({ CTE }) {
     const [update_result] = await pool.query(
         "update BaseCTE set VALIDACION = 'VALIDO' where ID in (SELECT MAX(ID) as ID FROM `BaseCTE` WHERE CTE = ?);",
         [CTE]);
-        
-        return update_result;
+
+    return update_result;
 }
 
-async function borrarTelefonoByVentaId({ID}){
+async function borrarTelefonoByVentaId({ ID }) {
     console.log("POR BORRAR ", ID);
     const [delete_result] = await pool.query(
-        "DELETE FROM BaseCTE WHERE VENTA_ID = ?;",[ID]);
+        "DELETE FROM BaseCTE WHERE VENTA_ID = ?;", [ID]);
 
     return delete_result;
 }
 
-async function updateContactoDeVenta(ID,TELEFONO){
+async function updateContactoDeVenta(ID, TELEFONO) {
     const [update_result] = await pool.query(
-        "UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;",[TELEFONO,ID]);
+        "UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;", [TELEFONO, ID]);
 
     return update_result;
 }
@@ -165,7 +167,7 @@ async function updateContactoDeVenta(ID,TELEFONO){
 module.exports = {
     invalidarTelefonosDeCte, getNuevoY, getContactosByFecha, getFechasContactosByTipo,
     getContactosParaCampania, getGruposByCode, getContactosByGrupoAndTipo, getContactoByTelefono,
-    invalidarTelefono, insertContacto, updateContactoLlamado,validarUltimoTelefonoByCte,borrarTelefonoByVentaId,updateContactoDeVenta
+    invalidarTelefono, insertContacto, updateContactoLlamado, validarUltimoTelefonoByCte, borrarTelefonoByVentaId, updateContactoDeVenta
 };
 
 

@@ -78,7 +78,6 @@ Router.get("/contactos/VCF/:TIPO/:FECHA", isAdmin, async (req, res) => {
 
     const { TIPO, FECHA } = req.params;
     const contactos = await getContactosByFecha(TIPO, FECHA);
-
     //{CONTACTO : "A2-U8108",TELEFONO = 1124659963}
     let vcard_result = [];
     contactos.forEach(contacto => {
