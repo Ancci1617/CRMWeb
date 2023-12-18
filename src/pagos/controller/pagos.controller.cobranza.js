@@ -78,7 +78,7 @@ const getCobranzas = async (req, res) => {
   console.log(2);
   let cobranzas_tercera_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 7000");
   console.log(3);
-  let cobranzas_cuarta_parte = await getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 50000");
+  let cobranzas_cuarta_parte = await getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 20000");
   console.log(4);
   
   let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte,...cobranzas_tercera_parte,...cobranzas_cuarta_parte];
