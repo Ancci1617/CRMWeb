@@ -36,7 +36,7 @@
             }) %>
 
           <%- include(global.dir_partials + "/shared/input-box",{input : {
-            type : "text",defaultValue : NOMBRE, details : "Apellido y nombre" ,name : "NOMBRE",pattern : "^[A-Z]+(\\s[A-Z]?[a-z]+)+$",required : true }
+            type : "text",defaultValue : NOMBRE, details : "Apellido y nombre" ,name : "NOMBRE",minlength : 5,required : true }
             }) %>
 
           <%- include(global.dir_partials + "/shared/input-box",{input : {
