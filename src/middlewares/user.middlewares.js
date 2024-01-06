@@ -6,12 +6,13 @@
 
 const {getToday} = require("../lib/dates");
 const permisos = require("../constants/permisos.js");
+const meses = require("../constants/dates.js")
 
 const userView = (req,res,next) => {
     res.locals.user = req.user;
     res.locals.getToday = getToday;
     res.locals.permisos = permisos;
-    
+    res.locals.meses = meses;
 
     res.locals.hasPermission = (permiso) => {
         return req.user.PERMISOS.includes("*") ? true : req.user.PERMISOS.includes(permiso);

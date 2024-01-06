@@ -34,7 +34,7 @@ const agregarMeses = (fichas) => {
             ficha.acumulado.unshift(obj);
 
         }
-        while (new Date(acumulado[acumulado.length - 1].MES_ANIO) < new Date().setDate(-1)) {
+        while (new Date(acumulado[acumulado.length - 1].MES_ANIO) < new Date().setDate(-31)) {
             const fecha_aux = new Date(acumulado[acumulado.length - 1].MES_ANIO);
             const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() + 1);
             const [year, month] = mes_anio_date.toISOString().split("-");
