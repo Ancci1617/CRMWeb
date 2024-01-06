@@ -59,7 +59,7 @@ const getAtrasosEasyCash = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA })
 function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false) {
 
-    const { vencidas, pagas, atraso,atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
+    let { vencidas, pagas, atraso,atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
     console.log({ pagas });
 
     console.log({ atraso_eval });
@@ -77,7 +77,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
             Math.min(CAMBIOS_DE_FECHA_EXACTO * 1000 + (!SERVICIO_HOY && COBRADOR ? 1000 : 0), 5000) + SERVICIO_ANT - SERV_PAGO
             , 0);
 
-
+    atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
 
     return {
         cuota,
