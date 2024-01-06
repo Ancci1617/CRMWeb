@@ -30,7 +30,7 @@ async function getContactosByFecha(TIPO, FECHA) {
     const eval = {
         CTE: `SELECT concat(ClientesSV.ZONA,'-',ClientesSV.CTE,'-',ClientesSV.NOMBRE,' ',ClientesSV.CALLE) AS CONTACTO,TELEFONO from BaseCTE
         LEFT JOIN ClientesSV on ClientesSV.CTE = BaseCTE.CTE 
-        WHERE DIA = '2023-12-18' and VALIDACION = 'VALIDO' and TELEFONO != 0;`,
+        WHERE DIA = ? and VALIDACION = 'VALIDO' and TELEFONO != 0;`,
         Z: "SELECT CONCAT(ZONA,'-',Z,'-',NOMBRE,' ',CALLE) AS CONTACTO,TELEFONO FROM `BaseZ` where VALIDACION = 'VALIDO' AND DIA = ?",
         Y: "SELECT CONCAT(ZONA,'-',Codigo,'-',Nombre,' ',Domicilio) AS CONTACTO,  TELEFONO FROM `BaseY` WHERE VALIDACION = 'VALIDO' and Dia  = ?;"
     };
