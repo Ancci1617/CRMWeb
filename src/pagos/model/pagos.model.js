@@ -180,7 +180,7 @@ const getAcumuladoByCteFicha = async ({ CTE, FICHA }) => {
     FROM
         (
         SELECT
-            CONCAT(YEAR(PagosSVAcumulado.FECHA) ,'-', MONTH(PagosSVAcumulado.FECHA)) AS MES_ANIO,
+            CONCAT(YEAR(PagosSVAcumulado.FECHA) ,'-', LPAD(MONTH(PagosSVAcumulado.FECHA),2,'0')) AS MES_ANIO,
             MONTH(PagosSVAcumulado.FECHA) AS MES,
             SUM(VALOR) AS CUOTA,
             CONVERT(IFNULL(SUM(MORA),
@@ -218,7 +218,8 @@ const getAcumuladoByCteFicha = async ({ CTE, FICHA }) => {
         MES
     ) t
     GROUP BY
-        t.MES;`
+        t.MES
+    ORDER BY MES_ANIO;`
         , [CTE, FICHA, CTE, FICHA])
 
     if (pago_data.length > 0) {

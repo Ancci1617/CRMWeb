@@ -1,7 +1,7 @@
 const { getVencimientoValido } = require("../../lib/doubt");
 
 const agregarMeses = (fichas) => {
-
+    console.log(fichas[0].acumulado);
     fichas.forEach(ficha => {
 
         for (let i = 1; i < ficha.acumulado.length; i++) {
