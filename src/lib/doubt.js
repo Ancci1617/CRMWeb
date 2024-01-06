@@ -60,9 +60,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false) {
 
     let { vencidas, pagas, atraso,atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
-    console.log({ pagas });
 
-    console.log({ atraso_eval });
 
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
