@@ -4,21 +4,20 @@ const agregarMeses = (fichas) => {
     fichas.forEach(ficha => {
 
         for (let i = 1; i < ficha.acumulado.length; i++) {
-
+            // console.log({i});
             const auxiliar = new Date(ficha.acumulado[i - 1].MES_ANIO);
 
             if (new Date(ficha.acumulado[i].MES_ANIO).toISOString().split("T")[0]
                 !=
                 new Date(auxiliar.getUTCFullYear(), auxiliar.getUTCMonth() + 1).toISOString().split("T")[0]) {
 
-
                 const fecha_aux = new Date(ficha.acumulado[i - 1].MES_ANIO);
                 const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() + 1);
                 const [year, month] = mes_anio_date.toISOString().split("-");
                 ficha.acumulado.splice(i, 0, { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 });
-                i = i + 2;
+                // i = i + 2;
             }
-
+            // console.log({i});
         }
 
         //Agrega los 0 iniciales
@@ -35,9 +34,17 @@ const agregarMeses = (fichas) => {
             ficha.acumulado.unshift(obj);
 
         }
+        while (new Date(acumulado[acumulado.length - 1].MES_ANIO) < new Date().setDate(-1)) {
+            const fecha_aux = new Date(acumulado[acumulado.length - 1].MES_ANIO);
+            const mes_anio_date = new Date(fecha_aux.getUTCFullYear(), fecha_aux.getUTCMonth() + 1);
+            const [year, month] = mes_anio_date.toISOString().split("-");
+            const obj = { MES_ANIO: `${year}-${month}`, MES: parseInt(month), CUOTA: 0, MORA: 0, SERV: 0 };
+            ficha.acumulado.push(obj);
+        }
 
     })
 
+
 }
 
-module.exports = {agregarMeses}
+module.exports = { agregarMeses }
