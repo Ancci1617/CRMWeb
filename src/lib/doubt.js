@@ -36,11 +36,33 @@ const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA }) => {
 
 }
 
+
+const getAtrasosEasyCash = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA }) => {
+
+    const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(getToday()), CUOTAS);
+
+
+    const pagas =
+        Math.max(
+            Math.trunc((TOTAL - SALDO) / CUOTA * 100) / 100,
+            0);
+
+    const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
+    const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.05)), 0);
+
+
+    return { vencidas, pagas, atraso, atraso_eval }
+
+}
+
+
 function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, ATRASO, VENCIDAS, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false) {
 
-    const { vencidas, pagas, atraso } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
+    const { vencidas, pagas, atraso,atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO });
+    console.log({ pagas });
 
+    console.log({ atraso_eval });
 
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
@@ -48,7 +70,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 
     const vencimiento_vigente = sumarMeses(new Date(VENCIMIENTO), Math.floor(pagas)).toISOString().split("T")[0];
 
-    const mora = atraso <= 0 ? 0 : Math.max(mora_unit * dateDiff(getToday(), vencimiento_vigente) + MORA_ANT - MORA_PAGO, 0);
+    const mora = atraso_eval <= 0 ? 0 : Math.max(mora_unit * dateDiff(getToday(), vencimiento_vigente) + MORA_ANT - MORA_PAGO, 0);
 
     const servicio =
         Math.max(
@@ -63,7 +85,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
         vencidas,
         mora,
         atraso,
-        atraso_evaluado: atraso,
+        atraso_evaluado : atraso_eval,
         pagas, vencimiento_vigente, EsPrimerPago: false
     }
 }
