@@ -29,7 +29,6 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
 
 const updateVentaById = async (Venta, ANTICIPO_PREVIO) => {
     const { FICHA, ID, ANTICIPO_MP } = Venta;
-    console.log("venta", Venta);
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
