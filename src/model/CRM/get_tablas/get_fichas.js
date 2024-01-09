@@ -268,7 +268,218 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
 
 }
 
-module.exports = { getFichas };
+const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, ...criterios) => {
+
+    const criterio = criterios.join(" AND ");
+
+
+    const acumuladoStrings = [];
+    acumuladoStrings[0] = `acumulados as (
+        SELECT
+            PagosSVAcumulado.FICHA,
+            PagosSVAcumulado.CTE,
+            SUM(
+                CASE
+                    WHEN PagosSVAcumulado.FECHA <= DATE_SUB(LAST_DAY(CURRENT_DATE), INTERVAL 7 MONTH) 
+                    OR PagosSVAcumulado.FECHA = 'ANT' THEN 
+                    PagosSVAcumulado.VALOR
+                    ELSE 0
+                END
+            ) AS ANT,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES5,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES4,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES3,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES2,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES1,
+            SUM(
+                CASE 
+                    WHEN YEAR(FECHA) = YEAR(DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)) AND
+                    MONTH(FECHA) = MONTH(DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)) THEN VALOR
+                    ELSE NULL
+                END
+            ) AS MES0
+        FROM
+            PagosSVAcumulado
+        GROUP BY
+            CONCAT(FICHA, '-', CTE)
+    ),`;
+    acumuladoStrings[1] = `acumulados.ANT,
+    IFNULL(
+        acumulados.MES0,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 6 MONTH)),
+            0,
+            null
+        )
+    ) as MES0,
+    IFNULL(
+        acumulados.MES1,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH)),
+            0,
+            null
+        )
+    ) as MES1,
+    IFNULL(
+        acumulados.MES2,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 4 MONTH)),
+            0,
+            null
+        )
+    ) as MES2,
+    IFNULL(
+        acumulados.MES3,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH)),
+            0,
+            null
+        )
+    ) as MES3,
+    IFNULL(
+        acumulados.MES4,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH)),
+            0,
+            null
+        )
+    ) as MES4,
+    IFNULL(
+        acumulados.MES5,
+        IF(
+            Fichas.FECHA <= LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)),
+            0,
+            null
+        )
+    ) as MES5,`;
+    acumuladoStrings[2] = `LEFT JOIN acumulados ON acumulados.FICHA = Fichas.FICHA and acumulados.CTE = Fichas.CTE`;
+
+    const cambiosDeFechaStrings = [`
+        CambiosDeFecha as 
+            (
+                SELECT 
+                * 
+                from CambiosDeFecha INNER JOIN 
+                (SELECT FICHA as FICHA_AUX,max(ID) AS ID_AUX
+                 from CambiosDeFecha where CAMBIO IS NOT NULL group by FICHA) AUX_ID 
+                on AUX_ID.ID_AUX = CambiosDeFecha.ID
+             ),    
+    `,
+        `CambiosDeFecha.CAMBIO,`,
+        `LEFT JOIN CambiosDeFecha on CambiosDeFecha.FICHA = Fichas.FICHA`
+    ]
+
+
+    const [fichas] = await pool.query(`WITH 
+    ${withAcumulado ? acumuladoStrings[0] : ""}
+    ${withCambiosDeFecha ? cambiosDeFechaStrings[0] : ""}
+    pagos AS (
+        SELECT
+            PagosSV.CTE,
+            PagosSV.FICHA,
+            COALESCE(SUM(PagosSV.VALOR), 0) AS CUOTA_PAGO,
+            COALESCE(SUM(PagosSV.SERV), 0) as SERV_PAGO,
+            COALESCE(SUM(PagosSV.MORA), 0) as MORA_PAGO
+        FROM
+            PagosSV
+        WHERE
+            PagosSV.CONFIRMACION != 'INVALIDO'
+        GROUP BY
+            FICHA
+    )
+
+    SELECT
+        DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
+        Fichas.FECHA as FECHA,
+        Fichas.CTE,
+        Fichas.ARTICULOS,
+        CONVERT(Fichas.FICHA, INTEGER) as FICHA,
+        Fichas.Z,
+        Fichas.TOTAL,
+
+        ${withAcumulado ? acumuladoStrings[1] : ""}
+        ${withCambiosDeFecha ? cambiosDeFechaStrings[1] : ""}
+        
+
+        Fichas.CUOTA_ANT,
+        CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER) AS CUOTA_PAGO,
+        Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER) AS SALDO,
+        Fichas.CUOTA,
+        CONVERT(
+            Fichas.TOTAL / Fichas.CUOTA,
+            INTEGER
+        ) AS CUOTAS,
+        Fichas.ESTADO,
+        CONVERT(
+            ROUND(
+                (
+                    Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER)
+                ) /(
+                    SELECT
+                        LP.\`CUOTAS 6\`
+                    FROM
+                        LP
+                    WHERE
+                        LP.Art = '36'
+                    LIMIT
+                        1
+                ), 1
+            ), FLOAT
+        ) AS VU,
+        Fichas.VENCIMIENTO,
+        Fichas.PRIMER_PAGO,
+        Fichas.SERVICIO_ANT,
+        CONVERT(IFNULL(pagos.SERV_PAGO, 0), INTEGER) as SERV_PAGO,
+        Fichas.SERV_UNIT,
+        Fichas.MORA_ANT,
+        CONVERT(IFNULL(pagos.MORA_PAGO, 0), INTEGER) as MORA_PAGO
+    FROM
+        Fichas
+        LEFT JOIN pagos ON pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
+        ${withAcumulado ? acumuladoStrings[2] : ""}
+        ${withCambiosDeFecha ? cambiosDeFechaStrings[2] : ""}
+
+  WHERE
+    ${criterio ? criterio : ""} 
+GROUP BY
+    Fichas.FICHA 
+ORDER BY 
+    Fichas.FECHA;`);
+
+    return fichas;
+}
+
+module.exports = { getFichas, getFichasOptimized };
 
 
 

@@ -1,0 +1,52 @@
+<!-- 
+
+    SE DEBE IMPORTAR EL ARCHIVO informe.css de shared/ui para funcionar el archivo
+  <link rel="stylesheet" href="/shared/ui/informe.css">
+
+ -->
+
+<%const informeEjemplo = {
+
+    Cobradas : {
+        Objetivo : 45, /*Todas las fichas por cobrar donde FECHA_VENTA < este mes */
+        Resultado : 40, /*Todas las fichas del objetivo donde Fichas.CUOTA >= Math.max(Ficha.CUOTA,SALDO_ANTERIOR) */
+        Hoy : 5 /* Todas las fichas Cobradas hoy donde con el pago de hoy, sea el 0,9 del total cobrado */
+    },
+    Cobrado : {
+        Objetivo : 20000, /*Monto de CobradoCantidad.Objetivo SUMA(CUOTA_PAGO) / min(SALDO_ANTERIOR,CUOTA)*/
+        Resultado : 5000, /*Monto de CobradoCantidad.Resultado*/
+        Hoy : 2000 /* Monto de CobradoCantidad.Hoy de fichas que esten en el objetivo */
+    },
+    Atrasadas : {
+        Objetivo : 0, 
+        Resultado : 40, /*Todas las fichas del Objetivo, donde atraso_evaluado > 0*/
+        Hoy : 20 /* Las fichas para cobrar hoy */
+    },
+    Porcentaje : {
+        Objetivo : 0.9, /*Valor estatico*/
+        Resultado : 0.5, /*Todas las fichas del objetivo, sumo(CUOTA_PAGO)  / Cobrado.Objetivo*/
+        Hoy : 0.01 /* Cobrado.hoy / Cobrado.Objetivo */ 
+    }
+
+} %>
+
+<div class="container--informe">
+  <table class="container--informe__table">
+    <thead>
+      <th>Cobranzas</th>
+      <th>Objetivo</th>
+      <th>Resultado</th>
+      <th>Hoy</th>
+    </thead>
+    <tbody>
+      <% for(inf in informe) {  %>
+      <tr>
+        <td><%= inf %></td>
+        <td><%= informe[inf].Objetivo %></td>
+        <td><%= informe[inf].Resultado %></td>
+        <td><%= informe[inf].Hoy %></td>
+      </tr>
+      <% }%>
+    </tbody>
+  </table>
+</div>

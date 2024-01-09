@@ -7,6 +7,8 @@
   <title>Blanco Gusmar | Cobranza</title>
   <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
   <link rel="stylesheet" href="/cobrador/recorrido.css">
+  <link rel="stylesheet" href="/shared/ui/informe.css">
+
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 
 </head>
@@ -27,12 +29,30 @@
       </div>
     </header>
 
-    <ul class="lista_por_cobrar" id="sortable">
+    <% if(mostrarCobradores) {%>
+    <div class="lista--cobradores">
+      <% cobradores.forEach(cobrador => { %>
+      <a class="lista--cobradores__cobrador <%= COBRADOR == cobrador.Usuario ? "seleccionado" : "" %> link" href="?COBRADOR=<%= cobrador.Usuario %>"><%= cobrador.Usuario %></a>
+      <% }) %>
+    </div>
+    <%} %>
+    <% if(mostrarInforme){  %>
+    <%- include(`${global.dir_partials}/cobrador/informe.ejs`)%>
+    <%}%>
+
+
+  <% if(!mostrarInforme){ %>
+    <div class="flex-space_between title--por-cobrar">
+      Total: <%= fichas.length %>
+    </div>
+  <% } %>
+  
+  <ul class="lista_por_cobrar" id="sortable">
 
       <% fichas.forEach(ficha_data => { const {ficha,deuda} = ficha_data; %>
       <%- include(`${global.dir_partials}/cobrador/credito.por.cobrar.ejs`,{ficha, conCandado : true,conMapa: true}) %>
       <% }) %>
-      
+
     </ul>
 
   </div>

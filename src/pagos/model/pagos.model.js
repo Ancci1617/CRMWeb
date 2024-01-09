@@ -421,6 +421,14 @@ const getAcumuladoDetalle = async (query = { "true": true }) => {
 
 }
 
+const getPagos = async (...criteria) => {
+    const criteriaSql = criteria.join(" AND ");
+    console.log(criteriaSql);
+    const [pagos] = await pool.query(
+        `SELECT CTE, FICHA, VALOR, PROXIMO, MP, MP_TITULAR, MP_OPERACION, 
+        SERV, MORA, COBRADOR, FECHA, DECLARADO_CUO, DECLARADO_COB, CONFIRMACION, 
+        CODIGO, OBS, ID_VENTA, ID from PagosSV where ${criteriaSql}`);
+    return pagos;
+}
 
-
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle }
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle, getPagos }

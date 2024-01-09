@@ -25,10 +25,12 @@
       </div>
     </header>
 
+
+
     <ul class="lista_por_cobrar" id="sortable">
 
-      <% fichas.forEach(ficha_data => {
-        const {ficha} = ficha_data; %>
+      <% fichas.forEach(ficha_data => { const {ficha} = ficha_data %>
+        
       <%- include(`${global.dir_partials}/cobrador/credito.por.cobrar.ejs`,{ficha,conCandado : false,conMapa : true}) %>
       <% }) %>
     </ul>

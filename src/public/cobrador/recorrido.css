@@ -64,6 +64,22 @@ header .lista_zonas {
   background-color: lightblue;
 }
 
+.lista--cobradores{
+  margin-block: .8rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.lista--cobradores__cobrador{
+  color: black;
+  border: 1px solid lightgray;
+  text-align: center;
+  padding: 8px;
+  flex: 1;
+}
+.lista--cobradores__cobrador:hover,.lista--cobradores__cobrador.seleccionado{
+  background-color: #f2f2f2;
+}
+
 .lista_por_cobrar {
   display: grid;
   gap: 9px;
@@ -80,7 +96,11 @@ header .lista_zonas {
   border-radius: .7rem;
   position: relative;
 }
-
+.title--por-cobrar{
+  font-size: 1.3rem;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 3px ;
+}
 .credito_por_cobrar .icon {
   font-size: 1.2rem;
   width: 1.2rem;
