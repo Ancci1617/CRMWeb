@@ -12,13 +12,14 @@ const generarInformeCobranza = async (zonas, cobrador) => {
         const todayString = getToday();
         const dateReference = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1).toISOString().split("T")[0];
         const fichasRaw = await getFichasOptimized({ withAcumulado: false, withCambiosDeFecha: true },
-            [`Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO != 'DEVOLUCION'`, `Fichas.FICHA < 50000`],["SALDO > 0"]);
+            [`Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO != 'DEVOLUCION'`, `Fichas.FICHA < 50000`]);
 
         const fichasObjetivo = fichasRaw.filter(ficha => ficha.FECHA < dateReference);
 
         const fichasEnRecorrido = fichasRaw.reduce((acum, ficha) => {
             const { VENCIMIENTO_EVALUA } = getVencimientoValido({ PRIMER_PAGO: ficha.PRIMER_PAGO, VENCIMIENTO: ficha.VENCIMIENTO });
             const { atraso_eval } = getAtrasos({ CUOTAS : ficha.CUOTA, TOTAL : ficha.TOTAL, SALDO : ficha.SALDO, CUOTA : ficha.CUOTA  ,VENCIMIENTO_EVALUA});
+            console.log(ficha.FICHA, (atraso_eval > 0 && (ficha.CAMBIO || todayString) <= todayString ) )
             return acum + (atraso_eval > 0 && (ficha.CAMBIO || todayString) <= todayString )
         }, 0)
 
@@ -29,8 +30,7 @@ const generarInformeCobranza = async (zonas, cobrador) => {
             const { VENCIMIENTO_EVALUA } = getVencimientoValido({ PRIMER_PAGO: ficha.PRIMER_PAGO, VENCIMIENTO: ficha.VENCIMIENTO });
             const atrasos = getAtrasos({ CUOTA: ficha.CUOTA, CUOTAS: ficha.CUOTAS, SALDO: ficha.SALDO, TOTAL: ficha.TOTAL, VENCIMIENTO_EVALUA })
             const atrasadoYAbonoCuota = atrasos.atraso_eval > 0 && ficha.CUOTA_PAGO > 0;
-            const estaEnRecorrido = atrasos.atraso_eval > 0 && ficha.CAMBIO <= todayString;
-            return { ...ficha, ...atrasos, atrasadoYAbonoCuota, estaEnRecorrido };
+            return { ...ficha, ...atrasos, atrasadoYAbonoCuota };
         });
 
         const cobradas = fichas.filter(ficha => ficha.CUOTA_PAGO >= Math.min(ficha.CUOTA, ficha.CUOTA_ANT))
