@@ -64,7 +64,6 @@ const getCobranzasEasy = async (req, res) => {
     return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
   })
 
-  console.log(cobranzas_final.filter(ficha => ficha.FICHA == 50555)[0]);
 
   res.json(cobranzas_final.filter(ficha => ficha.FICHA >= 50000));
 

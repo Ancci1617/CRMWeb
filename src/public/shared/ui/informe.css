@@ -22,7 +22,9 @@
     border-top: 2px solid lightgray;
     max-width: 1050px;
 }
-
+.container--informe__table thead{
+    background-color: #f2f2f2;
+}
 .container--informe th{
     padding-bottom: .8em;
     font-weight: 500;

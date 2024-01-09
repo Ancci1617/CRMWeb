@@ -268,10 +268,10 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
 
 }
 
-const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, criteriosWhere,criteriosHaving) => {
+const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, criteriosWhere = [], criteriosHaving = []) => {
 
     const criterio = criteriosWhere.join(" AND ");
-
+    const criterioHaving = criteriosHaving.join(" AND ");
 
     const acumuladoStrings = [];
     acumuladoStrings[0] = `acumulados as (
@@ -466,14 +466,17 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
     FROM
         Fichas
         LEFT JOIN pagos ON pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
+        
         ${withAcumulado ? acumuladoStrings[2] : ""}
+
         ${withCambiosDeFecha ? cambiosDeFechaStrings[2] : ""}
-
-  WHERE
-    ${criterio ? criterio : ""} 
-
+    
+    WHERE ${criterio ?  criterio : ""} 
 GROUP BY
     Fichas.FICHA 
+
+    ${criterioHaving ? "HAVING " + criterioHaving : ""}
+
 ORDER BY 
     Fichas.FECHA;`);
 
