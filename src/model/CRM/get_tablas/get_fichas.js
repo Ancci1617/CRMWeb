@@ -268,9 +268,9 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
 
 }
 
-const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, ...criterios) => {
+const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, criteriosWhere,criteriosHaving) => {
 
-    const criterio = criterios.join(" AND ");
+    const criterio = criteriosWhere.join(" AND ");
 
 
     const acumuladoStrings = [];
@@ -471,6 +471,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
 
   WHERE
     ${criterio ? criterio : ""} 
+
 GROUP BY
     Fichas.FICHA 
 ORDER BY 

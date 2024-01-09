@@ -12,14 +12,13 @@ const generarInformeCobranza = async (zonas, cobrador) => {
         const todayString = getToday();
         const dateReference = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1).toISOString().split("T")[0];
         const fichasRaw = await getFichasOptimized({ withAcumulado: false, withCambiosDeFecha: true },
-            `Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO != 'DEVOLUCION'`, `Fichas.FICHA < 50000`);
+            [`Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO != 'DEVOLUCION'`, `Fichas.FICHA < 50000`]);
 
         const fichasObjetivo = fichasRaw.filter(ficha => ficha.FECHA < dateReference);
 
         const fichasEnRecorrido = fichasRaw.reduce((acum, ficha) => {
             const { VENCIMIENTO_EVALUA } = getVencimientoValido({ PRIMER_PAGO: ficha.PRIMER_PAGO, VENCIMIENTO: ficha.VENCIMIENTO });
             const { atraso_eval } = getAtrasos({ CUOTAS : ficha.CUOTA, TOTAL : ficha.TOTAL, SALDO : ficha.SALDO, CUOTA : ficha.CUOTA  ,VENCIMIENTO_EVALUA});
-
             return acum + (atraso_eval > 0 && (ficha.CAMBIO || todayString) <= todayString )
         }, 0)
 
