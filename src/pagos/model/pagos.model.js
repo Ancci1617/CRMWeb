@@ -4,21 +4,37 @@ const getPagosMP = async () => {
     try {
         const [pagos] = await pool.query(
             `SELECT
-    CTE,
-    FICHA,
-    MP_OPERACION,
-    VALOR,
-    SERV,
-    MORA,
-    MP,
-    MP_TITULAR,
-    COBRADOR
-FROM
-    PagosSV
-WHERE
-    CONFIRMACION != 'INVALIDO' AND MP_TITULAR IS NOT NULL AND MP_TITULAR != '' AND MP_OPERACION IS NOT NULL AND MP_OPERACION != ''
-ORDER BY
-    PagosSV.MP_OPERACION ASC`);
+            CTE,
+            FICHA,
+            MP_OPERACION,
+            VALOR,
+            SERV,
+            MORA,
+            MP,
+            MP_TITULAR,
+            COBRADOR
+        FROM
+            PagosSV
+        WHERE
+            CONFIRMACION != 'INVALIDO' AND MP_TITULAR IS NOT NULL AND MP_TITULAR != '' AND MP_OPERACION IS NOT NULL AND MP_OPERACION != ''
+        UNION 
+        SELECT 
+            CTE,
+            FICHA,
+            MP_OPERACION,
+            VALOR,
+            SERV,
+            MORA,
+            MP,
+            MP_TITULAR,
+            COBRADOR
+            from PagosSVAcumulado
+        WHERE
+            CONFIRMACION != 'INVALIDO' AND MP_TITULAR IS NOT NULL AND MP_TITULAR != '' AND MP_OPERACION IS NOT NULL AND MP_OPERACION != ''  
+        ORDER BY MP_OPERACION ASC
+    
+    
+    `);
 
         return pagos;
 
