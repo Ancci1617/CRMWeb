@@ -16,7 +16,7 @@ const generarInformeCobranza = async (zonas, cobrador) => {
 
         const fichasObjetivo = fichasRaw.filter(ficha => ficha.FECHA < dateReference);
 
-        const fichasEnRecorrido = fichasRaw.reduce((acum, ficha) => {
+        const fichasEnRecorrido = fichasRaw.filter(ficha => ficha.SALDO > 0).reduce((acum, ficha) => {
             const { VENCIMIENTO_EVALUA } = getVencimientoValido({ PRIMER_PAGO: ficha.PRIMER_PAGO, VENCIMIENTO: ficha.VENCIMIENTO });
             const { atraso_eval } = getAtrasos({ CUOTAS : ficha.CUOTA, TOTAL : ficha.TOTAL, SALDO : ficha.SALDO, CUOTA : ficha.CUOTA  ,VENCIMIENTO_EVALUA});
             return acum + (atraso_eval > 0 && (ficha.CAMBIO || todayString) <= todayString )
