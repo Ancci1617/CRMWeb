@@ -2,7 +2,9 @@ header.header--mp{
     display: block;
 }
 
-
+.header--mp > div{
+    column-gap: .5em;
+}
 .lista_de_ingresos {
 
     display: grid;
