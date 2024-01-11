@@ -21,11 +21,16 @@
 
 
     <section class="cobranzas">
-      <header>
-        <span class="cobrador_nombre"><%= MP_TITULAR.Usuario %></span>
-        <span>Limite: $<%= MP_TITULAR.LIMITE_FACTURACION %></span>
-        <span>Disponible: $<%= MP_TITULAR.LIMITE_FACTURACION - payments.reduce((acum,payment) => acum + payment.transaction_amount,0) %></span>
-        <span class="cobranza_fecha"><%= MES || "Ver fechas" %></span>
+      <header class="header--mp">
+        <div class="flex-space_between">
+          <span class="cobrador_nombre"><%= MP_TITULAR.Usuario %></span>
+          <span ><%= MP_TITULAR.ALIAS %></span>
+          <span class="cobranza_fecha"><%= MES || "Ver fechas" %></span>
+        </div>
+        <div class="flex-space_between">
+          <span>Limite: $<%= MP_TITULAR.LIMITE_FACTURACION %></span>
+          <span>Disponible: $<%= MP_TITULAR.LIMITE_FACTURACION - payments.reduce((acum,payment) => acum + payment.transaction_amount,0) %></span>
+        </div>
       </header>
       <% if(payments.length > 0) {%>
 
@@ -36,7 +41,7 @@
       </div>
 
       <% }else{ %>
-        <div>Sin pagos...</div>
+      <div>Sin pagos...</div>
       <%  } %>
     </section>
 

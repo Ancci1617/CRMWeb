@@ -1,3 +1,8 @@
+header.header--mp{
+    display: block;
+}
+
+
 .lista_de_ingresos {
 
     display: grid;
