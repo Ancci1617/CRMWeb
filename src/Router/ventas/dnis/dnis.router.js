@@ -4,7 +4,7 @@ const fs = require("fs/promises");
 const { saveFileFromEntry } = require("../../../lib/files");
 const { hasPermission } = require("../../../middlewares/permission.middleware.js");
 const permisos = require("../../../constants/permisos.js");
-const { getListadoDeNumerosDeClientes } = require("../../../shared/model/ClientesSV,model.js");
+const { getListadoDeNumerosDeClientes } = require("../../../shared/model/ClientesSV.model.js");
 
 
 Router.get("/", hasPermission(permisos.DNI_USER), async (req, res) => {

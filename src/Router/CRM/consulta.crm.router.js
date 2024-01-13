@@ -1,7 +1,7 @@
 const Router = require("express").Router();
 const pool = require("../../model/connection-database.js")
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes")
-const { getFichas } = require("../../model/CRM/get_tablas/get_fichas")
+const { getFichas, getFichasOptimized } = require("../../model/CRM/get_tablas/get_fichas")
 const { getCliente } = require("../../lib/get_cliente");
 const { getMasterBGM, getMasterEC, getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
@@ -42,9 +42,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     query_result.Clientes = await getClientes(cte);
 
 
-    const raw_fichas = await getFichas("CTE", cte);
-
-
+    const raw_fichas = await getFichasOptimized({withAcumulado : true,withCambiosDeFecha :true,withAtraso : true},[`Fichas.CTE = ${cte}`]);
 
     //Agregar vencidas,pagas,totales,atrasos;
     query_result.Fichas = raw_fichas.filter(ficha => ficha.FICHA < 50000).map(ficha => {

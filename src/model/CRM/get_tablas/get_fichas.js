@@ -268,7 +268,7 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
 
 }
 
-const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false }, criteriosWhere = [], criteriosHaving = []) => {
+const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = false, withAtraso = false }, criteriosWhere = [], criteriosHaving = []) => {
 
     const criterio = criteriosWhere.join(" AND ");
     const criterioHaving = criteriosHaving.join(" AND ");
@@ -383,7 +383,20 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         )
     ) as MES5,`;
     acumuladoStrings[2] = `LEFT JOIN acumulados ON acumulados.FICHA = Fichas.FICHA and acumulados.CTE = Fichas.CTE`;
-
+    const atrasoString = `ROUND(
+        Vencidas(
+            VencimientoEvaluado(
+                Fichas.VENCIMIENTO,
+                Fichas.PRIMER_PAGO,
+                CURRENT_DATE
+            ),
+            CURRENT_DATE,
+            Fichas.TOTAL / Fichas.CUOTA
+        ) - (
+            Fichas.TOTAL - Fichas.CUOTA_ANT + IFNULL(pagos.CUOTA_PAGO, 0)
+        ) / Fichas.CUOTA,
+        1
+    ) AS Atraso,`
     const cambiosDeFechaStrings = [`
         CambiosDeFecha as 
             (
@@ -395,7 +408,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
                 on AUX_ID.ID_AUX = CambiosDeFecha.ID
              ),    
     `,
-        `CambiosDeFecha.CAMBIO,`,
+        `CambiosDeFecha.CAMBIO as CDeFecha,`,
         `LEFT JOIN CambiosDeFecha on CambiosDeFecha.FICHA = Fichas.FICHA`
     ]
 
@@ -439,18 +452,19 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
             Fichas.TOTAL / Fichas.CUOTA,
             INTEGER
         ) AS CUOTAS,
+        ${withAtraso ? atrasoString : ""}
         Fichas.ESTADO,
         CONVERT(
             ROUND(
                 (
                     Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER)
-                ) /(
+                ) / (
                     SELECT
-                        LP.\`CUOTAS 6\`
+                        VU
                     FROM
-                        LP
+                        ValoresUnitarios
                     WHERE
-                        LP.Art = '36'
+                        MES = DATE_ADD(LAST_DAY(DATE_SUB(Fichas.FECHA,INTERVAL 1 MONTH)),INTERVAL 1 DAY)
                     LIMIT
                         1
                 ), 1
@@ -471,7 +485,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
 
         ${withCambiosDeFecha ? cambiosDeFechaStrings[2] : ""}
     
-    WHERE ${criterio ?  criterio : ""} 
+    WHERE ${criterio ? criterio : ""} 
 GROUP BY
     Fichas.FICHA 
 
@@ -479,7 +493,7 @@ GROUP BY
 
 ORDER BY 
     Fichas.FECHA;`);
-
+    console.log(fichas);
     return fichas;
 }
 
