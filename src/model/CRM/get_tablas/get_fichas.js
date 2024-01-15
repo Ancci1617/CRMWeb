@@ -149,13 +149,13 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
                 ROUND(
                     (
                         Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER)
-                    ) /(
+                    ) / (
                         SELECT
-                            LP.\`CUOTAS 6\`
+                            VU
                         FROM
-                            LP
+                            ValoresUnitarios
                         WHERE
-                            LP.Art = '36'
+                            MES = DATE_ADD(LAST_DAY(DATE_SUB(Fichas.FECHA,INTERVAL 1 MONTH)),INTERVAL 1 DAY)
                         LIMIT
                             1
                     ), 1
