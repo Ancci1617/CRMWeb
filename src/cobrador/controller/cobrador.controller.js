@@ -24,7 +24,7 @@ const formOrdenarRecorrido = async (req, res) => {
         const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true }, isEasyCash: true });
         const fichas = fichas_data.filter(ficha => ficha.FICHA >= 50000).map(ficha => ({ ficha, deuda: getDebtEasy(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
 
-        return res.render("cobrador/recorrido2.ejs", { fichas });
+        return res.render("cobrador/recorrido2.ejs", { fichas,mostrarCobradores });
     }
 
     const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA } });
