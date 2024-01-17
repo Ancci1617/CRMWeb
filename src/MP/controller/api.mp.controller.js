@@ -116,7 +116,7 @@ const getSaldoEnCuentas = async (req, res) => {
 
     }
 
-
+    console.log(result);
     res.json(result)
 }
 
