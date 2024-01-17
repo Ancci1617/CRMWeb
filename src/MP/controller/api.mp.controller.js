@@ -111,7 +111,7 @@ const getSaldoEnCuentas = async (req, res) => {
             ingresos, egresos,
             saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
             disponible: usuarios[i].LIMITE_FACTURACION - ingresos,
-
+            alias : usuarios[i].ALIAS
         })
 
     }
