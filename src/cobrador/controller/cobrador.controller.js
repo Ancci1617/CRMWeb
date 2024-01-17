@@ -18,6 +18,7 @@ const postOrdenarRecorrido = async (req, res) => {
 const formOrdenarRecorrido = async (req, res) => {
     const { ZONA = "SZ", COBRADOR } = req.query;
 
+    const mostrarCobradores = res.locals.hasPermission(permisos.RENDICION_ADMIN) && ZONA == "SZ";
 
     if (ZONA == "Easy") {
         const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true }, isEasyCash: true });
@@ -33,7 +34,6 @@ const formOrdenarRecorrido = async (req, res) => {
     const mostrarInforme = ZONA == "SZ" && COBRADOR;
     const cobradorUser = await getUserByUsuario(COBRADOR);
     const informe = mostrarInforme ? await generarInformeCobranza(JSON.parse(cobradorUser.ZONAS), COBRADOR) : null;
-    const mostrarCobradores = res.locals.hasPermission(permisos.RENDICION_ADMIN) && ZONA == "SZ";
     const cobradores = mostrarCobradores ? await getNombresDeUsuariosByRango("COBRADOR") : null;
 
     //Aca filtrariamos las que corresponden que vallan para el local
