@@ -19,19 +19,19 @@ const formOrdenarRecorrido = async (req, res) => {
     const { ZONA = "SZ", COBRADOR } = req.query;
 
     const mostrarCobradores = res.locals.hasPermission(permisos.RENDICION_ADMIN) && ZONA == "SZ";
+    const mostrarInforme = ZONA == "SZ" && COBRADOR;
 
     if (ZONA == "Easy") {
         const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "true": true }, isEasyCash: true });
         const fichas = fichas_data.filter(ficha => ficha.FICHA >= 50000).map(ficha => ({ ficha, deuda: getDebtEasy(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
 
-        return res.render("cobrador/recorrido2.ejs", { fichas,mostrarCobradores });
+        return res.render("cobrador/recorrido2.ejs", { fichas,mostrarCobradores,mostrarInforme });
     }
 
     const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA } });
     let fichas = fichas_data.map(ficha => ({ ficha, deuda: ficha.FICHA >= 50000 ? getDebtEasy(ficha) : getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
 
 
-    const mostrarInforme = ZONA == "SZ" && COBRADOR;
     const cobradorUser = await getUserByUsuario(COBRADOR);
     const informe = mostrarInforme ? await generarInformeCobranza(JSON.parse(cobradorUser.ZONAS), COBRADOR) : null;
     const cobradores = mostrarCobradores ? await getNombresDeUsuariosByRango("COBRADOR") : null;
