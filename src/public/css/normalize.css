@@ -4,7 +4,9 @@
     font-family: Verdana;
     box-sizing: border-box;
 }
-
+:root{
+    --light-blue : #3498db;
+}
 .page-container {
     display: flex;
     justify-content: center;
@@ -38,6 +40,7 @@ body {
     text-decoration: none;
     color: white;
 }
+
 .link {
     text-decoration: none;
     color: inherit;

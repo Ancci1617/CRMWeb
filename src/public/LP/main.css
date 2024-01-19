@@ -9,14 +9,16 @@ main {
     flex-direction: column  ;
     gap: .8em;
 }
-
+.container--title{
+    align-items: center;
+}
 .container--buscador {
     border: 1px solid lightgray;
     margin-bottom: 0;
     border-radius: .5rem;
     position:sticky;
     top: calc(48px + .5rem);
-    z-index: 20;
+    z-index: 40;
 }
 
 .container--informe{
@@ -38,8 +40,8 @@ main {
 .container--informe tr:hover > td{
     background: #f7f7f7;
 }
-.container--informe .editar,.btn--nuevo-producto{
-    color: #3498db;
+.text--light-blue{
+    color: var(--light-blue);
 }
 .container--informe .eliminar {
     color: #e74c3c;

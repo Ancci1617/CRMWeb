@@ -1,16 +1,15 @@
 const { getLP, editarProducto,agregarProductoDB ,eliminarProductoDB} = require("../model/precios.model");
 
-
+const {format} = require("date-fns");
 
 
 const formLp =  async (req, res) => {
 
     try {
         const LP = await getLP();
-        const p = LP[0];
-        console.log(p);
-        console.log(p.LAST_UPDATED.toISOString());
-        res.render("precios/main.ejs",{LP});
+        const LP_FORMATED = LP.map(producto => ({...producto,LAST_UPDATED : format(producto.LAST_UPDATED,"dd/MM HH:mm")}))
+                
+        res.render("precios/main.ejs",{LP : LP_FORMATED});
     } catch (error) {
         console.log(error);
         res.send("Error al renderizar lista de precios")

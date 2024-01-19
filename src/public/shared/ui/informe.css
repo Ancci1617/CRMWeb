@@ -23,8 +23,10 @@
 
 .container--informe__table * {
     padding: .5em;
-    border-top: 2px solid lightgray;
     max-width: 1050px;
+}
+.container--informe__table tr {
+    border-top: 2px solid lightgray;
 }
 .container--informe__table thead{
     background-color: #f2f2f2;

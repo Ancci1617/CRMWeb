@@ -8,23 +8,30 @@
 <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css"> -->
 
 <%- include(global.dir_partials + "/navigation/navigation-bar.ejs") %>
+<% const formatNumber = new Intl.NumberFormat("es-AR").format %>
+<% const format = (text) => text.replaceAll(/\d+/g,formatNumber) %>
 
 <main>
   <!-- <header>LP</header> -->
-  <h2>Productos hasta 6 cuotas</h2>
+  <div class="flex-space_between container--title">
+    <h2 id="title--6-cuotas">Productos hasta 6 cuotas</h2>
+    <a class="link text--light-blue" href="#title--prepagos">Ver prepagos</a>
+  </div>
   <%- include(global.dir_partials + "/buscador.ejs",{inputFunction : "searchProducts"}) %>
   <div class="flex-space_between">
     <div><input type="checkbox" autocomplete="off" onchange="toggleInvalidProducts(this.checked)" /> Productos sin precios</div>
-    <span class="link btn--nuevo-producto" onclick="toggleAddForm()">Agregar nuevo producto</span>
+    <span class="link btn--nuevo-producto text--light-blue" onclick="toggleAddForm()">Agregar nuevo producto</span>
   </div>
 
   <% const productos = LP.filter(producto => producto["CUOTAS_9"] == 0) %>
-  <%- include("./informe.ejs",{productos})  %>
+  <%- include("./informe.ejs",{productos,format})  %>
 
-
-  <h2>Prepagos</h2>
+  <div class="flex-space_between container--title">
+    <h2 id="title--prepagos">Prepagos</h2>
+    <a href="#title--6-cuotas" class="link text--light-blue">Ver en 6 cuotas</a>
+  </div>
   <% const prepagos = LP.filter(producto => producto["CUOTAS_9"] != 0 ) %>
-  <%- include("./informe.prepagos.ejs",{prepagos})  %>
+  <%- include("./informe.prepagos.ejs",{prepagos,format})  %>
 
 
 
@@ -132,11 +139,20 @@
       form.hasOwnProperty(key) ? form[key].value = art[key] : null);
     container.classList.remove("unshow");
   }
-  function toggleAddForm(){
+
+  function toggleAddForm() {
     document.querySelector("#container--form-agregar").classList.remove("unshow");
+  }
+
+  function handleDelete(e) {
+    const art = e.target.href 
+    if (!confirm("Estas apunto de eliminar ete articulo, ¿estas seguro?"))
+      return e.preventDefault()
+
   }
 
   window.addEventListener("load", e => {
     document.querySelector("#form--agregar").Art.readOnly = false;
+    document.querySelectorAll(".eliminar").forEach(element => element.addEventListener("click", handleDelete));
   })
 </script>
