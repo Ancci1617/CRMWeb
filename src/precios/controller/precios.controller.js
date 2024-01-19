@@ -9,6 +9,9 @@ const formLp = async (req, res) => {
         const LP = await getLP();
         const LP_FORMATED = LP.map(producto => ({ ...producto, LAST_UPDATED: format(producto.LAST_UPDATED, "dd/MM HH:mm") }))
 
+        console.log(LP[0])
+        console.log(LP[0].LAST_UPDATED)
+
         res.render("precios/main.ejs", { LP: LP_FORMATED });
     } catch (error) {
         console.log(error);
