@@ -109,7 +109,6 @@ const insertCambioDeFecha = async ({ FICHA, FECHA, COBRADOR, TODAY ,OFICINA = 0}
 
     try {
         const [res] = await pool.query(`INSERT INTO CambiosDeFecha (FICHA, CAMBIO, COBRADOR,FECHA,CAMBIO_ORIGINAL,OFICINA) VALUES (?,?,?,?,?,?) `, [FICHA, FECHA, COBRADOR, TODAY, FECHA,OFICINA]);
-        console.log("respuesta insertar cambio de fecha", res);
     } catch (error) {
         console.log(error);
     }

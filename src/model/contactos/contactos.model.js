@@ -149,7 +149,6 @@ async function validarUltimoTelefonoByCte({ CTE }) {
 }
 
 async function borrarTelefonoByVentaId({ ID }) {
-    console.log("POR BORRAR ", ID);
     const [delete_result] = await pool.query(
         "DELETE FROM BaseCTE WHERE VENTA_ID = ?;", [ID]);
 

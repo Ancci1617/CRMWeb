@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+
+
 .container--informe {
     display: grid;
     /* max-width: max(50%, 450px); */
@@ -28,6 +32,7 @@
 .container--informe th{
     padding-bottom: .8em;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .container--informe__table td,

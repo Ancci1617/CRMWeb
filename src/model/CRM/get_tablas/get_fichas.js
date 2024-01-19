@@ -493,7 +493,6 @@ GROUP BY
 
 ORDER BY 
     Fichas.FECHA;`);
-    console.log(fichas);
     return fichas;
 }
 

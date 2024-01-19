@@ -1,0 +1,142 @@
+<%- include(global.dir_partials + "/head.ejs",{styles : [
+  "/css/cargar_venta/ventas_form_generico.css",
+"/css/pedidos/pedidos.generales.css",
+"/shared/ui/informe.css",
+"/css/navigation/buscador.css",
+"/LP/main.css"],title : "LP"}) %>
+<!-- <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css" />
+<link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css"> -->
+
+<%- include(global.dir_partials + "/navigation/navigation-bar.ejs") %>
+
+<main>
+  <!-- <header>LP</header> -->
+  <h2>Productos hasta 6 cuotas</h2>
+  <%- include(global.dir_partials + "/buscador.ejs",{inputFunction : "searchProducts"}) %>
+  <div class="flex-space_between">
+    <div><input type="checkbox" autocomplete="off" onchange="toggleInvalidProducts(this.checked)" /> Productos sin precios</div>
+    <span class="link btn--nuevo-producto" onclick="toggleAddForm()">Agregar nuevo producto</span>
+  </div>
+
+  <% const productos = LP.filter(producto => producto["CUOTAS_9"] == 0) %>
+  <%- include("./informe.ejs",{productos})  %>
+
+
+  <h2>Prepagos</h2>
+  <% const prepagos = LP.filter(producto => producto["CUOTAS_9"] != 0 ) %>
+  <%- include("./informe.prepagos.ejs",{prepagos})  %>
+
+
+
+  <%const containerEditar = {id : "container--form-editar"}; 
+  const formEditar = {title : "Editar producto",
+  action : "/LP/editar_producto",
+  method : "POST",
+  id : "form--editar" };  
+ const inputs =  [{
+     type : "text",
+     details : "Art",
+     classList : [],
+     name : "Art",
+     placeholder : "Articulo",
+     required : true,
+     properties : ["readonly"]  
+  },{
+     type : "text",
+     details : "Descripcion",
+     classList : [],
+     name : "Producto",
+     placeholder : "Descripcion del producto",
+     required : true  
+  },{
+     type : "number",
+     details : "Al contado",
+     classList : [],
+     name : "CONTADO",
+     placeholder : "Precio al contado",
+     required : true
+  },{
+     type : "number",
+     details : "3 cuotas",
+     classList : [],
+     name : "CUOTAS_3",
+     placeholder : "Precio total en 3 cuotas",
+     required : true
+  },{
+     type : "number",
+     details : "6 cuotas",
+     classList : [],
+     name : "CUOTAS_6",
+     placeholder : "Precio total en 6 cuotas",
+     required : true
+  },{
+     type : "number",
+     details : "Anticipo (prepagos)",
+     classList : [],
+     name : "ANTICIPO"
+  },{
+     type : "number",
+     details : "9 cuotas",
+     classList : [],
+     name : "CUOTAS_9",
+     placeholder : "Precio total en 9 cuotas",
+     required : true
+  }] ;%>
+
+  <%- include(global.dir_partials + "/Components/absolute.form.ejs",{form : formEditar,inputs ,container : containerEditar}) %>
+
+
+
+  <% const containerAgregar = {id : "container--form-agregar"}; 
+  const formAgregar = {title : "Agregar producto",
+  action : "/LP/agregar_producto",
+  method : "POST",
+  id : "form--agregar" };%>
+  <%- include(global.dir_partials + "/Components/absolute.form.ejs",{inputs,form : formAgregar,container : containerAgregar}) %>
+
+
+</main>
+
+
+
+<%- include(global.dir_partials + "/foot.ejs",{scripts : ["/js/lib/form.hide.js"]}) %>
+
+<script>
+  function showAll() {
+    document.querySelectorAll("tr").forEach(tr =>
+      tr.classList.remove("hidden")
+    )
+  }
+
+  function searchProducts(searchValue) {
+    const tr_arr = document.querySelectorAll(".row--producto")
+    showAll();
+    tr_arr.forEach(tr => {
+      if (!tr.innerHTML.toLowerCase().includes(searchValue.toLowerCase())) {
+        tr.classList.add("hidden");
+      }
+    })
+  }
+
+  function toggleInvalidProducts(checked) {
+    const tr_arr = document.querySelectorAll(".producto--invalido");
+    tr_arr.forEach(tr => {
+      checked ? tr.classList.add("mostrar--invalido") : tr.classList.remove("mostrar--invalido");
+    })
+  }
+
+  function toggleEditForm(art) {
+    const [container, form] = document.querySelectorAll("#container--form-editar, #container--form-editar form");
+    const keys = Object.keys(art);
+    keys.forEach(key =>
+      form.hasOwnProperty(key) ? form[key].value = art[key] : null);
+    container.classList.remove("unshow");
+  }
+  function toggleAddForm(){
+    document.querySelector("#container--form-agregar").classList.remove("unshow");
+  }
+
+  window.addEventListener("load", e => {
+    document.querySelector("#form--agregar").Art.readOnly = false;
+  })
+</script>

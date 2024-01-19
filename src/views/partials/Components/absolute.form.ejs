@@ -13,7 +13,7 @@
 
         <% inputs.forEach(input => { %>
         <% if(input.type != "select"){ %>
-        <%- include("./input-box.ejs", { input } ) %>
+        <%- include(global.dir_partials + "/shared/input-box.ejs", { input } ) %>
         <% }else { %>
         <%- include("./input-box-select.ejs", { input } ) %>
         <% } %>

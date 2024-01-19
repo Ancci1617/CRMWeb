@@ -5,7 +5,7 @@ const getPrecioCuotas3 = async (articulo) => {
     
     const [precio] = await pool.query(
         "SELECT " +
-        "`CUOTAS 3` AS PRECIO" +
+        "`CUOTAS_3` AS PRECIO" +
         " FROM `LP` " +
         "WHERE `Art` = ? LIMIT 1;", [articulo]);
     if (precio.length > 0) {
@@ -19,7 +19,7 @@ const getPrecioCuotas6 = async (articulo) => {
     
     const [precio] = await pool.query(
         "SELECT " +
-        "`CUOTAS 6` AS PRECIO" +
+        "`CUOTAS_6` AS PRECIO" +
         " FROM `LP` " +
         "WHERE `Art` = ? LIMIT 1;", [articulo]);
     if (precio.length > 0) {
@@ -33,7 +33,7 @@ const getPrecioCuotas9 = async (articulo) => {
     
     const [precio] = await pool.query(
         "SELECT " +
-        "`CUOTAS 9` AS PRECIO" +
+        "`CUOTAS_9` AS PRECIO" +
         " FROM `LP` " +
         "WHERE `Art` = ? LIMIT 1;", [articulo]);
     if (precio.length > 0) {
@@ -47,7 +47,7 @@ const getPrecioCuotas12 = async (articulo) => {
     
     const [precio] = await pool.query(
         "SELECT " +
-        "`CUOTAS 12` AS PRECIO" +
+        "`CUOTAS_12` AS PRECIO" +
         " FROM `LP` " +
         "WHERE `Art` = ? LIMIT 1;", [articulo]);
     if (precio.length > 0) {

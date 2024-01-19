@@ -15,7 +15,6 @@ module.exports = {
 	},
 
 	isAdmin(req, res, next) {
-		console.log("isAdmin?");
 		if (req.user.RANGO === "ADMIN") {
 			return next();
 		}

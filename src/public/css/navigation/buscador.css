@@ -1,23 +1,22 @@
-.buscador__container{
+.container--buscador{
     background: white;
     padding: .2rem .2rem;
     gap: .4rem;
     margin-bottom: 1.1rem;
     display: flex;
-    flex-wrap: wrap;
+    font-size: 1.3rem;
 }
 
-.buscador__container > div {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    border-bottom: 1px solid lightgray;
+
+.container--buscador i{
+    display: grid;
+    place-items: center;
 }
-.buscador__container i::before{
-    font-size: 1.3rem;
+.container--buscador i::before{
     margin-left: 5px;
 }
-.buscador__container > div input[type="text"]{
+
+.container--buscador__input{
     flex:1;
     border-radius: .3rem;
     outline: none;
@@ -25,5 +24,4 @@
     border: none;
     font-size: 1rem;
     padding: .8em 8px;
-    /* display: inline-block; */
 }

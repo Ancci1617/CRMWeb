@@ -74,6 +74,9 @@ app.use("/dnis/",isLoggedIn,require("./Router/ventas/dnis/dnis.router.js"));
 app.use(require("./Router/pedidos/pedidos.router.js"));
 app.use(require("./Router/contactos/campania.router.js"));
 app.use(require("./Router/contactos/contactos.router.js"));
+
+app.use("/LP",require("./precios/routes/precios.routes.js"))
+
 app.use("/admin/",isLoggedIn,require("./admin/routes/admin.routes.js"));
 app.use("/mp/api/",isLoggedIn,require("./MP/Router/api.mp.routes.js"));
 app.use("/api/",isLoggedIn,require("./shared/Router/api.routes.js"));

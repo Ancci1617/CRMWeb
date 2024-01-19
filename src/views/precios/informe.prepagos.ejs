@@ -1,0 +1,48 @@
+<!-- 
+
+    SE DEBE IMPORTAR EL ARCHIVO informe.css de shared/ui para funcionar el archivo
+  <link rel="stylesheet" href="/shared/ui/informe.css">
+
+ -->
+
+
+<div class="container--informe">
+  <table class="container--informe__table">
+    <thead>
+      <tr>
+        <th>Art</th>
+        <th>Descripcion</th>
+        <th>Contado</th>
+        <th>3 Cuotas</th>
+        <th>6 Cuotas</th>
+        <th>9 Cuotas</th>
+        <th>Actualizado:</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% prepagos.forEach(producto =>{  %>
+      <tr class="nw row--producto <%= producto.ESVALIDO ? "" : "producto--invalido" %>">
+        <td><%= producto.Art %></td>
+        <td class="td--description"><%= producto.Producto %></td>
+        <td><%= producto.CONTADO %></td>
+        <td><%= producto["CUOTAS_3"]/3 + " = " + producto["CUOTAS_3"] %></td>
+        <td><%= producto.ANTICIPO + " + " + producto["CUOTAS_6"] + " = " + (producto.ANTICIPO + producto["CUOTAS_6"]) %></td>
+        <td><%= producto["CUOTAS_9"]/9 + " = " +  producto["CUOTAS_9"] %></td>
+        <td class="nw"><%= producto.LAST_UPDATED %></td>
+
+        <td class="link">
+          <span class="editar" onclick="(()=>{
+          const producto = JSON.parse('<%= JSON.stringify(producto) %>')        
+          toggleEditForm(producto)
+        })()">Editar</span>
+
+          <a class="link eliminar" href="/LP/eliminar/<%= producto.Art %>">Eliminar</a>
+        </td>
+      
+
+      </tr>
+      <% })%>
+    </tbody>
+  </table>
+</div>

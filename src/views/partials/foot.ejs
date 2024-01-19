@@ -1,0 +1,18 @@
+<% /*scripts : [{psth : ""}]*/ %>
+
+
+
+
+<%- include(global.dir_partials + "/links/nav.logic.ejs") %>
+
+
+
+<% scripts.forEach(path => { %>
+<script src="<%= path %>"></script>
+<% }) %>
+
+
+
+</body>
+
+</html>
