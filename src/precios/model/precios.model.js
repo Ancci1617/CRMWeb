@@ -23,8 +23,7 @@ FROM
 
 const editarProducto = async ({ Art, Producto, CONTADO, ANTICIPO, CUOTAS_3, CUOTAS_6, CUOTAS_9 }) => {
     const response = await pool.query(`UPDATE LP SET ? WHERE ?`, [{ Producto, CONTADO, ANTICIPO, CUOTAS_3, CUOTAS_6, CUOTAS_9 }, { Art }]);
-    console.log("EDICION DE ARTICULo", response);
-
+    return response
 }
 
 const agregarProductoDB = async ({ Art, Producto, CONTADO, ANTICIPO, CUOTAS_3, CUOTAS_6, CUOTAS_9 }) => {
