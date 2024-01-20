@@ -9,8 +9,6 @@ const formLp = async (req, res) => {
         const LP = await getLP();
         const LP_FORMATED = LP.map(producto => ({ ...producto, LAST_UPDATED: format(producto.LAST_UPDATED, "dd/MM HH:mm") }))
 
-        console.log(LP[0])
-        console.log(LP[0].LAST_UPDATED)
 
         res.render("precios/main.ejs", { LP: LP_FORMATED });
     } catch (error) {
@@ -33,7 +31,6 @@ const postEditarProducto = async (req, res) => {
 }
 
 const agregarProducto = async (req, res) => {
-    console.log(req.body)
     try {
         await agregarProductoDB(req.body)
         res.redirect("/LP");
