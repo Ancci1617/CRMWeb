@@ -1,5 +1,17 @@
 const z = require("zod");
 
+const productoSimpleSchema = z.object({
+    Art: z.string({ required_error: "El articulo es un campo obligatorio." }),
+
+    Producto: z.string({ required_error: "La descripcion del producto es un campo obligatorio." })
+
+})
+
+
+
+
+
+
 const productoSchema = z.object({
 
     Art: z.string({ required_error: "El articulo es un campo obligatorio." }),
@@ -28,4 +40,4 @@ const productoSchema = z.object({
 
 
 
-module.exports = {productoSchema}
+module.exports = {productoSchema,productoSimpleSchema}

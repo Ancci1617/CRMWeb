@@ -21,8 +21,9 @@ FROM
     return LP
 }
 
-const editarProducto = async ({ Art, Producto, CONTADO, ANTICIPO, CUOTAS_3, CUOTAS_6, CUOTAS_9 }) => {
-    const response = await pool.query(`UPDATE LP SET ? WHERE ?`, [{ Producto, CONTADO, ANTICIPO, CUOTAS_3, CUOTAS_6, CUOTAS_9 }, { Art }]);
+const editarProducto = async (body) => {
+    const {Art} = body;
+    const response = await pool.query(`UPDATE LP SET ? WHERE ?`, [body, { Art }]);
     return response
 }
 
@@ -37,11 +38,11 @@ const agregarProductoDB = async ({ Art, Producto, CONTADO, ANTICIPO, CUOTAS_3, C
 }
 
 const eliminarProductoDB = async (ART) => {
-    const response = await pool.query(`DELETE FROM LP where Art = ?`,[ART]);
+    const response = await pool.query(`DELETE FROM LP where Art = ?`, [ART]);
     return response;
 }
 
-module.exports = { getLP, editarProducto, agregarProductoDB ,eliminarProductoDB}
+module.exports = { getLP, editarProducto, agregarProductoDB, eliminarProductoDB }
 
 
 
