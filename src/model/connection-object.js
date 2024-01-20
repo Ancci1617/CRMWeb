@@ -12,7 +12,9 @@ const connection_data = {
 //      port: 3306,
 //      user: 'root',
 //      password: '',
-//      database: 'bgm_db'
+//      database: 'bgm_db',
+//      timezone : "+03:00"
+
 // }
 
 

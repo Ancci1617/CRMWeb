@@ -28,7 +28,7 @@
 .container--informe__table tr {
     border-top: 2px solid lightgray;
 }
-.container--informe__table thead{
+.container--informe__table th{
     background-color: #f2f2f2;
 }
 .container--informe th{

@@ -24,14 +24,18 @@ main {
 .container--informe{
     max-height: 80vh;
 }
-.container--informe__table td:nth-child(2){
+.container--informe__table td:nth-child(3),.container--informe__table th:nth-child(3){
     position: sticky;
     left: 0;
     max-width: 35vw;
-    background-color: white;
     overflow-x: auto;
     z-index: 10;
+    text-align: left;
 }
+.container--informe__table td{
+    background-color: white;
+}   
+
 .container--informe__table thead{
     position: sticky;
     top: 0;
