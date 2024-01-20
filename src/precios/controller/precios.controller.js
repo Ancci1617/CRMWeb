@@ -21,6 +21,7 @@ const formLp = async (req, res) => {
 const postEditarProducto = async (req, res) => {
     try {
         const response = await editarProducto(req.body);
+
         res.redirect("/LP");
     } catch (error) {
         console.log("error, no se pudo editar el producto", error);
@@ -30,14 +31,13 @@ const postEditarProducto = async (req, res) => {
 }
 
 const agregarProducto = async (req, res) => {
-    console.log(req.body)
     try {
         await agregarProductoDB(req.body)
         res.redirect("/LP");
     } catch (error) {
         console.log("error, no se pudo agregar el producto", error);
 
-        if(MysqlErrorCodes.ER_DUP_ENTRY == error.errno){
+        if (MysqlErrorCodes.ER_DUP_ENTRY == error.errno) {
             return res.send(`No fue posible añadir el producto. Ya existe un artículo con el número ${req.body.Art}`)
         }
 

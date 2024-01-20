@@ -10,6 +10,7 @@
 <%- include(global.dir_partials + "/navigation/navigation-bar.ejs") %>
 <% const formatNumber = new Intl.NumberFormat("es-AR").format %>
 <% const format = (text) => text.replaceAll(/\d+/g,formatNumber) %>
+<% const showDisabled = hasPermission(permisos.LP_GERENCIA) ? "" : "disabled" %>
 
 <main>
   <!-- <header>LP</header> -->
@@ -61,33 +62,38 @@
      classList : [],
      name : "CONTADO",
      placeholder : "Precio al contado",
-     required : true
+     required : true,
+     properties : [showDisabled]
   },{
      type : "number",
      details : "3 cuotas",
      classList : [],
      name : "CUOTAS_3",
      placeholder : "Precio total en 3 cuotas",
-     required : true
+     required : true,
+     properties : [showDisabled]
   },{
      type : "number",
      details : "6 cuotas",
      classList : [],
      name : "CUOTAS_6",
      placeholder : "Precio total en 6 cuotas",
-     required : true
+     required : true,
+     properties : [showDisabled]
   },{
      type : "number",
      details : "Anticipo (prepagos)",
      classList : [],
-     name : "ANTICIPO"
+     name : "ANTICIPO",
+     properties : [showDisabled]
   },{
      type : "number",
      details : "9 cuotas",
      classList : [],
      name : "CUOTAS_9",
      placeholder : "Precio total en 9 cuotas",
-     required : true
+     required : true,
+     properties : [showDisabled]
   }] ;%>
 
   <%- include(global.dir_partials + "/Components/absolute.form.ejs",{form : formEditar,inputs ,container : containerEditar}) %>

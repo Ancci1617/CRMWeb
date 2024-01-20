@@ -22,8 +22,7 @@ module.exports = {
     ADMIN_GERENCIA : "ADMIN_GERENCIA",
 
     LP_USER : "LP_USER",
-    LP_ADMIN : "LP_ADMIN"
-
-
+    LP_ADMIN : "LP_ADMIN",
+    LP_GERENCIA : "LP_GERENCIA"
 
 }
