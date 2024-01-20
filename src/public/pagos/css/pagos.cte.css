@@ -15,7 +15,9 @@ html,
 body {
     background-color: rgb(247, 247, 247);
 }
-
+.buscador__container{
+    display: flex;
+}
 .main__container {
     margin: auto;
     max-width: 620px;

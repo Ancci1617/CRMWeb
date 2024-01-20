@@ -4,7 +4,7 @@ const connection_data = {
     user: 'u970133903_BGMAdmin',
     password: 'RKfwnmPhW1!l',
     database: 'u970133903_BGMDB',
-    timezone : "00:00" //Aca va la hora GMT a la cual esta configurado el servidor
+    timezone : "+00:00" //Aca va la hora GMT a la cual esta configurado el servidor
 } 
 
 //LOCAL

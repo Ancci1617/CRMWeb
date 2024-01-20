@@ -19,13 +19,13 @@
   <main class="main__container">
 
     <form class="buscador__container" action="deuda_cte">
-      <div>
+      <div class="container--buscador">
         <%- include(`${global.dir_partials}/icons/search.ejs`) %>
-        <input type="text" class="buscador" name="FICHA_PRIMERA" placeholder="Buscar ficha" />
+        <input type="text" class="buscador container--buscador__input" name="FICHA_PRIMERA" placeholder="Buscar ficha" />
       </div>
-      <div>
+      <div class="container--buscador">
         <%- include(`${global.dir_partials}/icons/search.ejs`) %>
-        <input type="text" class="buscador" name="CTE" placeholder="Buscar cliente" />
+        <input type="text" class="buscador container--buscador__input" name="CTE" placeholder="Buscar cliente" />
       </div>
 
       <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
