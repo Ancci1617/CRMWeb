@@ -34,7 +34,7 @@
                 <% if(hasPermission(permisos.USER_LISTADO) ) {%><div class="dashboard-item"><a href="/listado">Listado</a></div><%}%> 
                 <% if(hasPermission(permisos.VENTAS_USER) ) {%><div class="dashboard-item"><a href="<%= `/ventas/pasar_ventas?USUARIO=${user.Usuario}&FECHA_VENTA=${getToday()}`%>">Ventas</a></div><%}%>    
                 <% if(hasPermission(permisos.RECORRIDO_ADMIN) ) {%><div class="dashboard-item"><a href="<%= `/cobrador/recorrido?${user.RANGO == "COBRADOR" ? `COBRADOR=${user.Usuario}` : ""}`%>">Recorridos</a></div><%}%>    
-                <% if(hasPermission(permisos.MP_ADMIN) ) {%><div class="dashboard-item"><a href="/mp/pagos_recibidos">Mercado pago</a></div><%}%>    
+                <% if(hasPermission([permisos.MP_ADMIN,permisos.MP_USER,permisos.MP_OWN_USER]) ) {%><div class="dashboard-item"><a href="/mp/pagos_recibidos">Mercado pago</a></div><%}%>    
                 <% if(hasPermission(permisos.LP_USER) ) {%><div class="dashboard-item"><a href="/LP">Precios BGM</a></div><%}%>    
             
             </div>
