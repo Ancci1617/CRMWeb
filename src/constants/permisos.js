@@ -15,7 +15,9 @@ module.exports = {
 
     RECORRIDO_ADMIN : "RECORRIDO_ADMIN",
 
-    MP_ADMIN : "MP_ADMIN",
+    MP_USER : "MP_USER", //Puede ver los pagos por mercado pago
+    MP_OWN_USER : "MP_OWN_USER", //Puede ver lOS PAGOS DE SU PROPIO mp
+    MP_ADMIN : "MP_ADMIN", //Puede cargar pagos por mercadopago
 
     ADMIN_COB : "ADMIN_COB",
     ADMIN_ADMIN : "ADMIN_ADMIN",
@@ -23,6 +25,8 @@ module.exports = {
 
     LP_USER : "LP_USER",
     LP_ADMIN : "LP_ADMIN",
-    LP_GERENCIA : "LP_GERENCIA"
+    LP_GERENCIA : "LP_GERENCIA",
+
+
 
 }

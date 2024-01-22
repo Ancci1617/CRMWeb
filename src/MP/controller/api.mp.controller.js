@@ -70,16 +70,12 @@ const postCheckMP = async (req, res) => {
 }
 
 const formController = async (req, res) => {
-    const aside = await getAside();
+    const { aside } = res.locals;
     const { MES, MP_TITULAR } = req.query;
-    const user = await getUserByUsuario(MP_TITULAR);
-
-    if (!MES || !MP_TITULAR) return res.render("MP/mp.list.ejs", { payments: [], aside, MP_TITULAR: user, MES });
-
-
     const { START_DATE, END_DATE } = getLimitDates({ MES })
+    
 
-
+    const user = await getUserByUsuario(MP_TITULAR);
     const payments = await mercadoPagoModel.getPayments({ MP_TOKEN: user.MP_TOKEN, START_DATE, END_DATE, filtered: true });
     const pagos_mp = await getPagosMP();
 
@@ -111,7 +107,7 @@ const getSaldoEnCuentas = async (req, res) => {
             ingresos, egresos,
             saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
             disponible: usuarios[i].LIMITE_FACTURACION - ingresos,
-            alias : usuarios[i].ALIAS
+            alias: usuarios[i].ALIAS
         })
 
     }

@@ -1,8 +1,8 @@
-const { getAsideMp } = require("../model/mercadoPagoModel.js");
 const { getToday } = require("../../lib/dates.js");
 const { getUsuariosWithMp } = require("../../model/auth/getUser.js");
 
-const getAside = async () => {
+const getAside = async (user) => {
+
     const today = new Date(getToday());
     const FECHAS = [
         new Date(today.getFullYear(), today.getUTCMonth(), 1).toISOString().substring(0, 7),
@@ -14,17 +14,14 @@ const getAside = async () => {
         new Date(today.getFullYear(), today.getUTCMonth() - 6, 1).toISOString().substring(0, 7)
     ]
 
+    const usuarios = !user ? await getUsuariosWithMp() : [user];
 
 
-
-    const usuarios = await getUsuariosWithMp();
 
     const aside = FECHAS.map(FECHA => {
         return {
             TITULO: FECHA,
             VINCULOS: usuarios.map(usuario => ({ INDICE: usuario.Usuario,MP_TITULAR : usuario.Usuario,MES : FECHA }))
-
-            // VINCULOS: ventas.filter(venta => venta.FECHA == FECHA).map(ventas => ventas.USUARIO)
         }
     });
     return aside
