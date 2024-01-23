@@ -10,8 +10,8 @@ const validateParamsNCTE = (req, res, next) => {
 const validateFicha = async (req, res, next) => {
     const { FICHA } = req.params;
     const { TOTAL, CUOTA, CUOTA_ANT } = req.body;
-    if (parseInt(TOTAL) % parseInt(CUOTA) != 0)
-        return res.status(400).send("El total no es divisible por el valor de la cuota")
+    // if (parseInt(TOTAL) % parseInt(CUOTA) != 0)
+    //     return res.status(400).send("El total no es divisible por el valor de la cuota")
 
     const [ficha_data] = await getFichas("FICHA", FICHA);
     const { ANT, MES0, MES1, MES2, MES3, MES4, MES5 } = ficha_data;
