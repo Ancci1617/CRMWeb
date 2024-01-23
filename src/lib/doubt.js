@@ -1,7 +1,7 @@
 const { getVencidas, getToday, sumarMeses, dateDiff } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
 const { ZONAS_EXCEPCIONES } = require("../constants/zonas_excepciones.js");
-
+const {truncar} = require("./format.js");
 
 const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     const HOY = new Date(getToday());
@@ -18,15 +18,18 @@ const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     return { EsPrimerPago, VENCIMIENTO_EVALUA }
 }
 
-const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA }) => {
+
+const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA, ANTICIPO }) => {
 
     const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(getToday()), CUOTAS);
 
-
-    const pagas =
-        Math.max(
-            Math.trunc((TOTAL - SALDO) / CUOTA * 10) / 10,
-            0);
+    const saldoRestante = ANTICIPO ? TOTAL - SALDO - ANTICIPO : TOTAL - SALDO;
+    const pagas = truncar(Math.max(
+        saldoRestante / CUOTA + Number(!!ANTICIPO),
+        0), 1);
+    // const pagas = Math.max(
+    //     Math.trunc((Number(!!ANTICIPO) + saldoRestante)  / CUOTA * 10) / 10,
+    //     0);
 
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
     const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
@@ -97,7 +100,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     //AGREGAR ALGORITMO PARA COBRADOR
 
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
-    let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA });
+    let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA, ANTICIPO });
 
     //Controla que en caso que existe UN VALOR de anticipo (es prepago)
     //El valor de cuota a cobrar no sea la cuota sino el anticipo
