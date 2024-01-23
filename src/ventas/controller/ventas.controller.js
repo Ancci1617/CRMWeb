@@ -48,21 +48,34 @@ const postCargarVenta = async (req, res) => {
     const { ANTICIPO = 0, FECHA_VENTA, FICHA, WHATSAPP: TELEFONO, PRIMER_PAGO, ANTICIPO_MP, ubicacion_cliente, CALLE } = req.body;
     const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
 
+
     //Asigna numero de cte nuevo si hace falta
-
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
-    const { insertId: ID_VENTA } = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO }); //x
-    if (ID_VENTA == "error") return res.send("Hubo un error al cargar las ventas.");
 
-    await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
+    try {
+        const ID_VENTA = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO });
+
+        await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
+        await generarContactoCTE(CTE, USUARIO, { TELEFONO }, ID_VENTA);
+
+        if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
+            await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
+
+
+
+
+
+    } catch (error) {
+        return res.send("Hubo un error al cargar las ventas.");
+
+    }
+
+
 
     if (req.files)
         saveFileFromEntry(Object.entries(req.files), CTE);
 
-    await generarContactoCTE(CTE, USUARIO, { TELEFONO }, ID_VENTA);
 
-    if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
-        await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
     res.redirect(`/ventas/pasar_ventas?USUARIO=${USUARIO}&FECHA_VENTA=${getToday()}`);
 }
@@ -102,8 +115,20 @@ const postEditarVenta = async (req, res) => {
     res.redirect(`/ventas/pasar_ventas?USUARIO=${venta_prev.USUARIO}&FECHA_VENTA=${venta_prev.FECHA_VENTA}`);
 }
 
+const consultarPrecios = async (req,res) => {
+    try {
+        //articulos : [], 
+        const precios = await ventasModel.getPrecio(req.body.articulos);
+
+        res.status(200).json(precios);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg : "Hubo un error al consultar los precios"})
+    }
+
+
+}
 
 
 
-
-module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta }
+module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta ,consultarPrecios}

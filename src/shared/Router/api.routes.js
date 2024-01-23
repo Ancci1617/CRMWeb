@@ -7,5 +7,4 @@ Router.get("/getCte",api_controller.getCte);
 Router.post("/getUbicacion",api_controller.getUbicacion);
 
 
-
 module.exports = Router

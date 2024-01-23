@@ -12,35 +12,7 @@ Router.post("/query_prepago_entrega", isLoggedIn, ventasController.getEntregaDeP
 
 
 
-Router.post("/query_precio", isLoggedIn, async (req, res) => {
 
-    const data = req.body;
-
-    const query_result = { total: 0, cuota: 0 };
-
-    for (let i = 0; i < data.articulos.length; i++) {
-
-        let respuesta = await getPrecio(data.articulos[i], data.cuotas);
-
-        if (respuesta.PRECIO == "no encontrado") {
-            query_result.total = "articulo " + data.articulos[i] + " no encontrado";
-            query_result.cuota = "articulo " + data.articulos[i] + " no encontrado";
-            break;
-        }
-
-
-        query_result.total += respuesta.PRECIO ? respuesta.PRECIO : 0;
-
-    }
-
-    if (typeof query_result.total !== "string") {
-        query_result.cuota = query_result.total / data.cuotas;
-    }
-
-
-    res.json(query_result);
-
-});
 
 Router.get("/ventas_cargadas", isLoggedIn, async (req, res) => {
 

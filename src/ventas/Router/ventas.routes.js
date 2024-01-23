@@ -7,7 +7,7 @@ const { validateSchema } = require("../../shared/middlewares/validateSchema.js")
 const ventasController = require("../controller/ventas.controller.js");
 const { isOwnSell, isOwnSellPost } = require("../middlewares/custom.permissions.js");
 const { ventaSchema } = require("../schema/venta.schema.js");
-
+const {checkFicha} = require("../middlewares/checkFicha.js");
 
 
 //Admin
@@ -20,9 +20,13 @@ Router.get("/cargar_venta/:cte", hasPermission(VENTAS_USER), ventasController.fo
 Router.post("/cargar_venta",
     hasPermission(VENTAS_USER),
     validateSchema(ventaSchema),
+    checkFicha,
     ventasController.postCargarVenta);
 
 
+
+
+Router.post("/precios",hasPermission(VENTAS_USER),ventasController.consultarPrecios); 
 
 
 //Editar

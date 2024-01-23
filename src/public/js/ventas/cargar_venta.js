@@ -3,7 +3,7 @@ const btn_nuevo = document.querySelector(".btn-nuevo");
 const btn_submit = document.querySelector(".button input");
 const form = document.querySelector("form");
 const articulos = document.getElementsByName("ARTICULOS")[0];
-const cuotas = document.getElementsByName("CUOTAS")[0];
+const cuotas = form.CUOTAS;
 const cuota = document.getElementsByName("CUOTA")[0];
 const estatus_options = document.querySelector(".options-estatus");
 const CTE = document.getElementsByName("CTE")[0].value;
@@ -100,8 +100,7 @@ window.addEventListener("load", async e => {
     cargarUbicacion();
 
 
-
-    evaluation_data.sabana = await fetchPost("/query_precio", { articulos: ["36"], cuotas: '6' });
+    [{CUOTAS_6 : evaluation_data.sabana}] = await fetchPost("/ventas/precios", { articulos: ["36"]});
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
     evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
     evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });
@@ -109,20 +108,34 @@ window.addEventListener("load", async e => {
 });
 
 async function autoCompletarPrecios() {
+    //Consulta http al servidor para conocer los precios de un articulo
+    const COLS = {
+        1: "CONTADO",
+        3: "CUOTAS_3",
+        6: "CUOTAS_6",
+        12: "CUOTAS_12",
+    }
+    const { TOTAL, CUOTAS : {value : CUOTAS},CUOTA } = form;
+    const articulos = form.ARTICULOS.value.trim().split(" ");
+    const query = { articulos };
 
-    const total = document.getElementsByName("TOTAL")[0];
-    const cuota = document.getElementsByName("CUOTA")[0];
+    const precios = await fetchPost("/ventas/precios", query);
+ 
+    let acum = 0;
+    for(const art of articulos){
+        const precio = precios.find(precio => precio.Art == art );
+        if(!precio) {
+            CUOTA.value = `Articulo ${art} no encontrado.`
+            TOTAL.value = ""
+            form.SERV_UNIT.selectedIndex = 0
+            return
+        }
 
-    //Enviar matriz de articulos al backend
-    const query = {
-        articulos: articulos.value.trim().split(" "),
-        cuotas: cuotas.value
-    };
-
-    const precios = await fetchPost("/query_precio", query)
-
-    cuota.value = precios.cuota;
-    total.value = precios.total;
+        const ValorTotal = precio[COLS[CUOTAS]];
+        acum += ValorTotal; 
+    }
+    TOTAL.value = acum;
+    CUOTA.value = acum / CUOTAS
     handleServicioDeCobranza();
 }
 
@@ -160,7 +173,7 @@ function ventaAprobada(responsable, Estatus, cuotas_para_entrega = 0, vendido, a
     if (anticipo >= cuota.value || Estatus.includes("Con anticipo")) disponible += 1;
 
     //Chequea si le da el disponible
-    if (vendido / sabana.total <= disponible) return true;
+    if (vendido / sabana <= disponible) return true;
 
 
     //Si no se cumplen las condiciones desaprobada 
@@ -169,19 +182,19 @@ function ventaAprobada(responsable, Estatus, cuotas_para_entrega = 0, vendido, a
 }
 
 
-
 estatus_options.addEventListener("change", e => {
-    const selected_options = e.target;
-    const selected_text = selected_options.options.item(selected_options.selectedIndex).innerText;
-    const input_block = document.querySelector(".input-box.cuotas_para_entrega");
-    const input_estatus = document.getElementsByName("CUOTAS_PARA_ENTREGA")[0];
-
-    if (selected_text.includes("Prepago")) {
-        input_estatus.setAttribute("required", "")
-        return input_block.classList.remove("hidden");
+    function showAndResetElement(container, show) {
+        const input = container.querySelector("input");
+        input.value = "";
+        show ? container.classList.remove("hidden") : container.classList.add("hidden");
+        show ? input.setAttribute("required", "") : input.removeAttribute("required");
     }
-    input_estatus.removeAttribute("required")
-    return input_block.classList.add("hidden");
+
+    const cuotasParaEntrega = document.querySelector(".cuotas_para_entrega");
+    const anticipoParaEntrega = document.querySelector(".anticipo_para_entrega");
+
+    showAndResetElement(cuotasParaEntrega, e.target.value == "Prepago")
+    showAndResetElement(anticipoParaEntrega, e.target.value == "Prepago")
 
 });
 
@@ -192,7 +205,6 @@ estatus_options.addEventListener("change", e => {
 btn_submit.addEventListener("click", async e => {
     e.preventDefault();
     if (!form.reportValidity()) return;
-    if (form.TOTAL.value / form.CUOTA.value != form.CUOTAS.value) return alert("El total no es divisible por la cantidad de cuotas")
 
     if (!form.LATITUD_VENDEDOR.value || !form.LONGITUD_VENDEDOR.value || !form.ACCURACY_VENDEDOR.value) {
         setLoading(true)
@@ -225,9 +237,8 @@ btn_submit.addEventListener("click", async e => {
 //AutoCompletado de los precios
 articulos.addEventListener("change", autoCompletarPrecios);
 
-document.querySelector(".selector-cuotas").addEventListener("change", e => {
-    autoCompletarPrecios();
-})
+document.querySelector(".selector-cuotas").addEventListener("change", e => autoCompletarPrecios())
+
 cuota.addEventListener("input", handleServicioDeCobranza);
 form.ZONA.addEventListener("input", handleServicioDeCobranza);
 ubicacion_cliente.addEventListener("keyup", e => {
@@ -262,8 +273,7 @@ const cargarUbicacion = async () => {
 const compareDni = async (dni, nombre) => {
     setLoading(true);
     try {
-        console.log(dni.length)
-        const razon_social = await getRazonSocialDni(dni,dni.length == 11);
+        const razon_social = await getRazonSocialDni(dni, dni.length == 11);
         const comparacion = razon_social.toUpperCase().split(" ").map(name_split => nombre.toUpperCase().split(" ").includes(name_split));
         const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
 
@@ -290,3 +300,5 @@ const handleDniNombre = async () => {
 
 form.DNI.addEventListener("change", handleDniNombre);
 form.NOMBRE.addEventListener("change", handleDniNombre);
+
+

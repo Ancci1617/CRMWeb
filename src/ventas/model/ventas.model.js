@@ -87,7 +87,7 @@ const getAsideVentas = async () => {
 
 const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
     const propiedadesDeVenta = ["CTE", "FICHA", "NOMBRE", "ZONA", "CALLE", "CRUCES", "CRUCES2", "WHATSAPP", "DNI", "CUOTAS", "ARTICULOS", "TOTAL", "CUOTA", "ANTICIPO", "TIPO", "ESTATUS", "PRIMER_PAGO", "VENCIMIENTO", "CUOTAS_PARA_ENTREGA", "FECHA_VENTA", "RESPONSABLE", "APROBADO", "USUARIO", "MODO", "LATITUD_VENDEDOR", "LONGITUD_VENDEDOR", "ACCURACY_VENDEDOR"];
-    const { NOMBRE, CALLE, CRUCES, CRUCES2, FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA, SERV_UNIT, PRIMER_VENCIMIENTO, DNI } = body;
+    const { NOMBRE, CALLE, CRUCES, CRUCES2, FICHA, ZONA, ARTICULOS, TOTAL, CUOTA, PRIMER_PAGO, FECHA_VENTA, SERV_UNIT, PRIMER_VENCIMIENTO, DNI, ANTICIPO_PREPAGO } = body;
 
     const objeto_venta = propiedadesDeVenta.reduce((obj, propiedad) => {
         obj[propiedad] = body[propiedad];
@@ -119,22 +119,23 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
             SERV_UNIT,
             ARTICULOS,
             ID_VENTA,
-            ESTADO
+            ESTADO,
+            ANTICIPO
         )
-        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId, "PENDIENTE"]]);
+        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId, "PENDIENTE", ANTICIPO_PREPAGO]]);
 
         await connection.query(`INSERT IGNORE INTO  ClientesSV(CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`, [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI]])
 
         await connection.commit()
 
-        return response;
+        return response.insertId;
     } catch (error) {
         console.log(error);
         await connection.rollback();
+        throw new Error("Error al cargar una venta", error)
     } finally {
         connection.release();
     }
-    return { insertId: "error" }
 }
 const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
     const { CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DOMICILIO_LABORAL, WHATSAPP, DNI, CAPITAL, CUOTAS, CUOTA, TOTAL, SERV_UNIT, PRIMER_PAGO, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, GARANTE_CTE, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO, APROBADO, VENCIMIENTO, CUOTAS_PARA_ENTREGA = 0, LATITUD_VENDEDOR = 0, LONGITUD_VENDEDOR = 0, ACCURACY_VENDEDOR = 0, ARTICULOS, GARANTE_DNI } = body;
@@ -297,7 +298,16 @@ const confirmarVenta = async ({ venta }, USUARIO) => {
     }
 }
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo }
+
+const getPrecio = async (ART) => {
+
+    const [precios] = await pool.query(`SELECT * FROM LP WHERE Art in (?)`,[ART]);
+    return precios
+        
+}
+
+
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo ,getPrecio}
 
 
 

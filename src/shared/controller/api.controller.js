@@ -18,14 +18,17 @@ const getCte = async (req, res) => {
 const getUbicacion = async (req, res) => {
     const { CALLE } = req.body;
     try {
-        const ubicacion = await getUbicacionByObject({CALLE});
-        res.status(200).json({ubicacion});
+        const ubicacion = await getUbicacionByObject({ CALLE });
+        res.status(200).json({ ubicacion });
     } catch (error) {
         console.log(error)
-        res.status(400).json({error : "Error al consultas la ubicacion de la calle"})        
+        res.status(400).json({ error: "Error al consultas la ubicacion de la calle" })
     }
 
 }
+
+
+
 
 
 module.exports = { getCte, getUbicacion }
