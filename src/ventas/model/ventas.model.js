@@ -21,7 +21,7 @@ const getVentas = async ({ filter }) => {
             DNI,
             Fichas.ARTICULOS,
             Fichas.TOTAL,
-            ANTICIPO,
+            VentasCargadas.ANTICIPO,
             Fichas.CUOTA,
             CUOTAS,
             TIPO,

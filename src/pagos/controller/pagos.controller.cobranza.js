@@ -33,7 +33,6 @@ async function generarSaldoAnteriorServicio(req, res) {
   const FICHAS = await pagosModel.getFichasByCte();
 
   const deudas = FICHAS.map(ficha => {
-    console.log(ficha)
     return { data: ficha, deuda: getDoubt(ficha) }
   });
   // const al_dia = deudas.filter(ficha => (ficha.deuda.atraso_evaluado === 0 && ficha.data.SERV_PAGO > 0));

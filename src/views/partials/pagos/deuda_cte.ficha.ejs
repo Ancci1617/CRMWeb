@@ -3,7 +3,7 @@
 
 
 <% const {vencimiento_vigente,cuota,servicio,mora,atraso,pagas,vencidas,EsPrimerPago} = ficha.deuda %>
-<% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT,CAMBIOS_DE_FECHA} = ficha.data %>
+<% const {CUOTA,PRIMER_PAGO,SALDO,FICHA,CTE,Z,FECHA_VENTA,VENCIMIENTO,ARTICULOS,CUOTAS,TOTAL,SERV_UNIT,CAMBIOS_DE_FECHA,ANTICIPO} = ficha.data %>
 
 
 <form class="credito" method="POST" action="cargar_pago">
@@ -26,7 +26,9 @@
     <div class="detail detail_group ">
       <div class="title detail important">
         <span class="detail__title">Total a cobrar:</span>
+        
         <span class="detail__data"><%= formatNumber((cuota || Math.min(CUOTA,SALDO)) + servicio + mora) %></span>
+
       </div>
       <div class="data hidden">
         <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Cuota:", data : formatNumber(cuota)}) %>
@@ -101,7 +103,7 @@
   <div class="details">
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta:", data : FECHA_VENTA}) %>
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento original:", data : VENCIMIENTO}) %>
-    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Venta:", data : `${formatNumber(CUOTAS)} x ${formatNumber(CUOTA)} = ${formatNumber(TOTAL)}`}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Venta:", data : `${ANTICIPO ? ANTICIPO + " + " : ""} ${formatNumber(CUOTAS)} x ${formatNumber(CUOTA)} = ${formatNumber(TOTAL)}`}) %>
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio unitario:", data : SERV_UNIT}) %>
 
   </div>

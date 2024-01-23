@@ -107,6 +107,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
     Fichas.SERVICIO_ANT,
     Fichas.ARTICULOS,
     PagosSV.SERV_PAGO,
+    Fichas.ANTICIPO,
     SERV_UNIT,
     CUOTA,
     CUOTA_ANT,
@@ -142,7 +143,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
 
 FROM
 
-    (SELECT *,ROUND(TOTAL / CUOTA,0) AS CUOTAS FROM Fichas) Fichas
+    (SELECT *,ROUND((TOTAL-ANTICIPO) / CUOTA,0) AS CUOTAS FROM Fichas) Fichas
     
 LEFT JOIN(
     SELECT
