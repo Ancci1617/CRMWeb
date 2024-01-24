@@ -79,8 +79,8 @@
           <div class="button">
             <input type="submit" class="button__input" value="Editar ficha" />
           </div>
-          <div class="button">
-            <a type="submit" class="button__input button__input--devolucion link" href="/admin/cargarDevolucion/<%= FICHA %>">Dar de baja</a>
+          <div class="button" style="margin-top: .5rem;">
+            <a type="submit" class="button__input button__input--devolucion link" href="/admin/cargarDevolucion/<%= FICHA %>" onclick="if(!confirm('¿Seguro que querés dar de baja esta ficha?')) event.preventDefault()">Dar de baja</a>
           </div>
 
         </div>
