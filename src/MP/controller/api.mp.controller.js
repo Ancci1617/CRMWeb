@@ -116,4 +116,34 @@ const getSaldoEnCuentas = async (req, res) => {
 }
 
 
-module.exports = { postCheckMP, formController, getSaldoEnCuentas }
+const getSaldoEnCuentasPorReporte = async (req, res) => {
+    const usuarios = await getUsuariosWithMp();
+    const begin_date = new Date().toISOString();
+    const end_date = new Date(new Date().setUTCDate(new Date().getUTCDate() + 1)).toISOString();
+
+    const [year, month] = getToday().split("-");
+    const { START_DATE, END_DATE } = getLimitDates({ MES: `${year}-${month}` });
+
+    let result = [];
+    for (let i = 0; i < usuarios.length; i++) {
+
+        const mp_data = await mercadoPagoModel.getPayments({ MP_TOKEN: usuarios[i].MP_TOKEN, START_DATE, END_DATE });
+
+        const ingresos = mp_data.results.filter(payment => !payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+        const egresos = mp_data.results.filter(payment => payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+        result.push({
+            titular: usuarios[i].Usuario,
+            limite: usuarios[i].LIMITE_FACTURACION,
+            saldo_ant: usuarios[i].MP_SALDO_ANT,
+            ingresos, egresos,
+            saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
+            disponible: usuarios[i].LIMITE_FACTURACION - ingresos,
+            alias: usuarios[i].ALIAS
+        })
+
+    }
+
+    res.json(result)
+}
+
+module.exports = { postCheckMP, formController, getSaldoEnCuentas,getSaldoEnCuentasPorReporte }

@@ -6,7 +6,7 @@ const mercadoPagoController = require("../controller/api.mp.controller.js");
 
 
 Router.post("/check_mp", hasPermission(permisos.PAGOS_USER),mercadoPagoController.postCheckMP);
-Router.get("/getSaldosMp",mercadoPagoController.getSaldoEnCuentas);
+Router.get("/getSaldosMp",mercadoPagoController.getSaldoEnCuentasPorReporte);
 
 
 
