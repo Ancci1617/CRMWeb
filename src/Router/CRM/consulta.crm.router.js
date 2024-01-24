@@ -42,7 +42,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     query_result.Clientes = await getClientes(cte);
 
 
-    const raw_fichas = await getFichasOptimized({withAcumulado : true,withCambiosDeFecha :true,withAtraso : true},[`Fichas.CTE = ${cte}`]);
+    const raw_fichas = await getFichas("CTE",cte)
 
     //Agregar vencidas,pagas,totales,atrasos;
     query_result.Fichas = raw_fichas.filter(ficha => ficha.FICHA < 50000).map(ficha => {
@@ -59,13 +59,16 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     });
 
     query_result.Prestamos = raw_fichas.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
-        const { FECHA_FORMAT, FICHA, Z, ANT, MES0, MES1, MES2, MES3, MES4, MES5,MES6,
+        const { FECHA_FORMAT, FICHA, Z, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6,
             CUOTA_ANT, SALDO, VENCIMIENTO,
-            CDeFecha, CUOTAS, ARTICULOS ,CUOTA_PAGO,CUOTA,ESTADO} = ficha;
+            CDeFecha, CUOTAS, ARTICULOS, CUOTA_PAGO, CUOTA, ESTADO } = ficha;
+
+
+        console.log(CDeFecha);
 
         const { vencimiento_vigente, servicio, mora, cuota } = getDebtEasy(ficha);
 
-        return { FECHA_FORMAT, FICHA, Z, ARTICULOS, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6,CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA,CUOTAS, VENCIMIENTO, vencimiento_vigente, CDeFecha, servicio, mora, cuota ,ESTADO };
+        return { FECHA_FORMAT, FICHA, Z, ARTICULOS, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, CUOTAS, VENCIMIENTO, vencimiento_vigente, CDeFecha, servicio, mora, cuota, ESTADO };
     });
 
 

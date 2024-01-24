@@ -400,9 +400,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
     const cambiosDeFechaStrings = [`
         CambiosDeFecha as 
             (
-                SELECT 
-                * 
-                from CambiosDeFecha INNER JOIN 
+                SELECT *  from CambiosDeFecha INNER JOIN 
                 (SELECT FICHA as FICHA_AUX,max(ID) AS ID_AUX
                  from CambiosDeFecha where CAMBIO IS NOT NULL group by FICHA) AUX_ID 
                 on AUX_ID.ID_AUX = CambiosDeFecha.ID
