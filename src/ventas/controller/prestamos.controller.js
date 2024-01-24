@@ -46,9 +46,9 @@ const formCargarPrestamo = async (req, res) => {
 const descargarContrato = async (req, res) => {
     //Indice de la venta
     const {ID} = req.query;
-    //Consulto el cliente de la venta
+    //REFORMAR Y USAR SOLO DATOS DE LA VENTA
     const [credito] = await getFichasByCte(ID,"ID_VENTA");
-    const [cliente] = await getClientesYGarante(credito.CTE);
+    const [cliente] = await getClientesYGarante(ID);
 
 
     //Genera el contrato
