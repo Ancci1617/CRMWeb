@@ -130,9 +130,8 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
 
         return response.insertId;
     } catch (error) {
-        console.log(error);
         await connection.rollback();
-        throw new Error("Error al cargar una venta", error)
+        throw error
     } finally {
         connection.release();
     }

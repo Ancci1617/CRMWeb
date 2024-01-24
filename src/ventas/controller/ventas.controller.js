@@ -61,13 +61,12 @@ const postCargarVenta = async (req, res) => {
         if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
             await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
-
-
-
-
     } catch (error) {
-        return res.send("Hubo un error al cargar las ventas.");
+        console.log(error);
+        if (error.code == "ER_DUP_ENTRY")
+            return res.send("La venta no pudo ser procesada debido a que el número de ficha ya ha sido utilizado.");
 
+        res.send("Se produjo un error al intentar procesar la venta.")
     }
 
 
@@ -115,7 +114,7 @@ const postEditarVenta = async (req, res) => {
     res.redirect(`/ventas/pasar_ventas?USUARIO=${venta_prev.USUARIO}&FECHA_VENTA=${venta_prev.FECHA_VENTA}`);
 }
 
-const consultarPrecios = async (req,res) => {
+const consultarPrecios = async (req, res) => {
     try {
         //articulos : [], 
         const precios = await ventasModel.getPrecio(req.body.articulos);
@@ -123,7 +122,7 @@ const consultarPrecios = async (req,res) => {
         res.status(200).json(precios);
     } catch (error) {
         console.log(error);
-        res.status(500).json({msg : "Hubo un error al consultar los precios"})
+        res.status(500).json({ msg: "Hubo un error al consultar los precios" })
     }
 
 
@@ -131,4 +130,4 @@ const consultarPrecios = async (req,res) => {
 
 
 
-module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta ,consultarPrecios}
+module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta, consultarPrecios }
