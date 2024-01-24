@@ -20,7 +20,7 @@
 
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : ficha.articulos_string, data : "",classList : ["articulos"]}) %>
     <% if(EsPrimerPago) {%>
-    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven:", data : PRIMER_PAGO || "primer pago"}) %>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven:", data : PRIMER_PAGO }) %>
     <% } %>
 
     <div class="detail detail_group ">
@@ -104,6 +104,9 @@
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Fecha de venta:", data : FECHA_VENTA}) %>
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Vencimiento original:", data : VENCIMIENTO}) %>
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Venta:", data : `${ANTICIPO ? ANTICIPO + " + " : ""} ${formatNumber(CUOTAS)} x ${formatNumber(CUOTA)} = ${formatNumber(TOTAL)}`}) %>
+    <% if(!EsPrimerPago) {%>
+    <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Primer Ven:", data : PRIMER_PAGO}) %>
+    <% } %>
     <%- include(`${global.dir_partials}/pagos/detail_row.ejs`,{title : "Servicio unitario:", data : SERV_UNIT}) %>
 
   </div>
