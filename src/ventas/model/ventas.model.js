@@ -311,7 +311,25 @@ const getPrecio = async (ART) => {
 }
 
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo, getPrecio }
+
+
+
+const getVentaCargada = async (ID) => {
+
+
+    const [venta] = await pool.query(
+        `SELECT
+                *
+            FROM
+                VentasCargadas
+            WHERE
+                INDICE = ?;`, [ID])
+
+    return venta
+
+}
+
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo, getPrecio, getVentaCargada }
 
 
 

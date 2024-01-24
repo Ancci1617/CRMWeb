@@ -45,23 +45,35 @@ const formCargarPrestamo = async (req, res) => {
 
 const descargarContrato = async (req, res) => {
     //Indice de la venta
-    const {ID} = req.query;
-    //REFORMAR Y USAR SOLO DATOS DE LA VENTA
-    const [credito] = await getFichasByCte(ID,"ID_VENTA");
-    const [cliente] = await getClientesYGarante(ID);
+    const { ID } = req.query;
+
+    try {
+        //Genera un contrado en el servidor con los datos de la venta cargada, se lo envia al cliente y luego lo elimina del servidor.
+        const [venta] = await ventasModel.getVentaCargada(ID);
+        if (!venta) return res.send("No se pudo encontrar la venta que se intenta descargar.");
 
 
-    //Genera el contrato
-    const contrato = generarContratoEasyCash(credito,cliente);
+        const contrato = generarContratoEasyCash(venta);
+        res.download(contrato, (err) => {
+            if (err) {
+                console.log("error al descargar word", err);
+                return res.send("El contrato no se pudo descargar");
+            }
+            //Elimina el archivo
+            fs.unlinkSync(contrato);
+        });
 
-    res.download(contrato, (err) => {
-        if (err) {
-            console.log("error al descargar word", err);
-            return res.send("El contrato no se pudo descargar");
-        }
-        //Elimina el archivo
-        fs.unlinkSync(contrato);
-    });
+
+
+    } catch (error) {
+        console.log(error);
+        return res.send("Hubo un error intentando generar el contrado")
+    }
+
+
+
+
+
 
 }
 

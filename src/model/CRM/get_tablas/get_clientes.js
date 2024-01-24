@@ -108,41 +108,11 @@ const getClientesAndLocation = async (cte) => {
 
 
 
-const getClientesYGarante = async (INDICE) => {
-    try {
-
-        const [data] = await pool.query(
-            `SELECT
-            CTE,
-            ZONA,
-            NOMBRE,
-            CALLE,
-            CRUCES,
-            CRUCES2,
-            WHATSAPP,
-            DNI,
-            GARANTE_CTE,
-            GARANTE_NOMBRE,
-            GARANTE_CALLE,
-            GARANTE_ZONA,
-            GARANTE_DNI,
-            GARANTE_CRUCES,
-            GARANTE_CRUCES2
-        FROM
-            VentasCargadas
-        WHERE
-            INDICE = ?;`, [INDICE])
-
-        return data
-    } catch (error) {
-        console.log("error al consultar listado de prestamo", error);
 
 
-    }
 
 
-}
 
-module.exports = { getClientes, getClientesFull, getClientesAndLocation, getClientesYGarante }
+module.exports = { getClientes, getClientesFull, getClientesAndLocation }
 
 
