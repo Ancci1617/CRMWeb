@@ -64,7 +64,7 @@ const postCargarVenta = async (req, res) => {
     } catch (error) {
         console.log(error);
         if (error.code == "ER_DUP_ENTRY")
-            return res.send("La venta no pudo ser procesada debido a que el número de ficha ya ha sido utilizado.");
+            return res.send(`La venta no pudo ser procesada debido a que el número de ficha ${FICHA} ya ha sido utilizado.`);
 
         res.send("Se produjo un error al intentar procesar la venta.")
     }
