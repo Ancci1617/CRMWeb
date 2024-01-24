@@ -108,44 +108,11 @@ const getClientesAndLocation = async (cte) => {
 
 
 
-const getClientesYGarante = async (CTE) => {
-    try {
-
-        const [data] = await pool.query(
-            `SELECT
-        ClientesSV.CTE,
-        ClientesSV.ZONA,
-        ClientesSV.NOMBRE,
-        ClientesSV.CALLE,
-        ClientesSV.CRUCES,
-        ClientesSV.CRUCES2,
-        (SELECT BaseCTE.TELEFONO FROM BaseCTE WHERE BaseCTE.CTE = ClientesSV.CTE AND ID = (SELECT MAX(ID) from BaseCTE where BaseCTE.CTE = ClientesSV.CTE)) AS WHATSAPP,
-        ClientesSV.DNI,
-        GARANTE.CTE as GARANTE_CTE,
-        GARANTE.NOMBRE AS GARANTE_NOMBRE,
-        GARANTE.CALLE AS GARANTE_CALLE,
-        GARANTE.ZONA AS GARANTE_ZONA,
-        GARANTE.DNI AS GARANTE_DNI,
-        GARANTE.CRUCES AS GARANTE_CRUCES,
-        GARANTE.CRUCES2 AS GARANTE_CRUCES2
-        FROM
-        ClientesSV
-        LEFT JOIN (
-            SELECT * FROM ClientesSV
-        ) GARANTE ON GARANTE.CTE = ClientesSV.GARANTE_CTE
-        WHERE
-        ClientesSV.CTE = ? ;`, [CTE])
-
-        return data
-    } catch (error) {
-        console.log("error al consultar listado de prestamo", error);
 
 
-    }
 
 
-}
 
-module.exports = { getClientes, getClientesFull, getClientesAndLocation, getClientesYGarante }
+module.exports = { getClientes, getClientesFull, getClientesAndLocation }
 
 

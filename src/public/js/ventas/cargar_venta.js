@@ -214,6 +214,8 @@ btn_submit.addEventListener("click", async e => {
 
     if (!form.reportValidity()) return;
 
+    handlePrimerVencimiento();
+
     const { isSamePerson } = await handleDniNombre();
     if (!isSamePerson) return;
 

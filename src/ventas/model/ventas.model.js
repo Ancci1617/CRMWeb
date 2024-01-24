@@ -100,29 +100,31 @@ const insertVenta = async ({ body }, { CTE, USUARIO, MODO }) => {
 
     const connection = await pool.getConnection()
     try {
+
+        await connection.beginTransaction();
+
+
         const [response] = await connection.query(
             `INSERT INTO VentasCargadas (??) VALUES (?);`
             , [KEYS, VALUES]);
-
-
         await connection.query(
             `INSERT INTO Fichas(
-            FECHA,
-            CTE,
-            FICHA,
-            Z,
-            TOTAL,
-            CUOTA,
-            VENCIMIENTO,
-            PRIMER_PAGO,
-            CUOTA_ANT,
-            SERV_UNIT,
-            ARTICULOS,
-            ID_VENTA,
-            ESTADO,
-            ANTICIPO
-        )
-        VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId, "PENDIENTE", ANTICIPO_PREPAGO]]);
+                FECHA,
+                CTE,
+                FICHA,
+                Z,
+                TOTAL,
+                CUOTA,
+                VENCIMIENTO,
+                PRIMER_PAGO,
+                CUOTA_ANT,
+                SERV_UNIT,
+                ARTICULOS,
+                ID_VENTA,
+                ESTADO,
+                ANTICIPO
+            )
+            VALUES(?)`, [[FECHA_VENTA, CTE, FICHA, ZONA, TOTAL, CUOTA, PRIMER_VENCIMIENTO, PRIMER_PAGO, TOTAL, SERV_UNIT, ARTICULOS, response.insertId, "PENDIENTE", ANTICIPO_PREPAGO]]);
 
         await connection.query(`INSERT IGNORE INTO  ClientesSV(CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI) VALUES (?)`, [[CTE, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, DNI]])
 
@@ -192,7 +194,7 @@ const insertPrestamo = async ({ body }, { Usuario, MODO }) => {
 
 }
 
-const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT, DOMICILIO_LABORAL, GARANTE_DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO }) => {
+const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, CUOTAS, ARTICULOS, TOTAL, CUOTA, ANTICIPO, ANTICIPO_MP, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, ubicacion_cliente, APROBADO, ID, PRIMER_VENCIMIENTO, SERV_UNIT, DOMICILIO_LABORAL, GARANTE_DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO, GARANTE_CTE }) => {
 
     const connection = await pool.getConnection();
     const [LATITUD = null, LONGITUD = null] = ubicacion_cliente.match('-\\d+\\.\\d+,-\\d+\\.\\d+') ? ubicacion_cliente.split(',') : [];
@@ -201,8 +203,11 @@ const updateVenta = async ({ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, W
         await connection.beginTransaction();
         const ANTICIPO_INT = parseInt(ANTICIPO || 0);
 
+
+
+
         //Actualiza la venta
-        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, ANTICIPO, DOMICILIO_LABORAL, GARANTE_DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO }, ID]);
+        await connection.query(`UPDATE VentasCargadas SET ? WHERE INDICE = ?`, [{ CTE, FICHA, NOMBRE, ZONA, CALLE, CRUCES, CRUCES2, WHATSAPP, DNI, ARTICULOS, TOTAL, CUOTA, CUOTAS, TIPO, ESTATUS, PRIMER_PAGO, VENCIMIENTO, CUOTAS_PARA_ENTREGA, FECHA_VENTA, RESPONSABLE, APROBADO, ANTICIPO, DOMICILIO_LABORAL, GARANTE_DNI, GARANTE_NOMBRE, GARANTE_ZONA, GARANTE_CALLE, GARANTE_CRUCES, GARANTE_CRUCES2, GARANTE_TELEFONO, GARANTE_CTE }, ID]);
 
         //Actualiza el contacto
         await connection.query(`UPDATE BaseCTE set TELEFONO = ? where VENTA_ID = ?;`, [WHATSAPP, ID])
@@ -300,13 +305,31 @@ const confirmarVenta = async ({ venta }, USUARIO) => {
 
 const getPrecio = async (ART) => {
 
-    const [precios] = await pool.query(`SELECT * FROM LP WHERE Art in (?)`,[ART]);
+    const [precios] = await pool.query(`SELECT * FROM LP WHERE Art in (?)`, [ART]);
     return precios
-        
+
 }
 
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo ,getPrecio}
+
+
+
+const getVentaCargada = async (ID) => {
+
+
+    const [venta] = await pool.query(
+        `SELECT
+                *
+            FROM
+                VentasCargadas
+            WHERE
+                INDICE = ?;`, [ID])
+
+    return venta
+
+}
+
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo, getPrecio, getVentaCargada }
 
 
 

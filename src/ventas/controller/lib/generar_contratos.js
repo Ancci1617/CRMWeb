@@ -7,7 +7,7 @@ const path = require("path");
 
 
 
-const generarContratoEasyCash = (datos_credito, datos_cte) => {
+const generarContratoEasyCash = (venta) => {
     const template = path.resolve("../DocumentosEasyCash/ContratoEasyCashModelo.docx");
     const contrato = path.resolve("../DocumentosEasyCash/ContratoEasyCash.docx");
 
@@ -21,11 +21,7 @@ const generarContratoEasyCash = (datos_credito, datos_cte) => {
 
 
     // Datos a reemplazar en el documento Word
-    const { ARTICULOS: CAPITAL, FICHA: PRESTAMO } = datos_credito;
-    const data = Object.assign(
-        datos_credito, datos_cte,
-        { CAPITAL, PRESTAMO,DIA_PAGO : new Date(datos_credito.VENCIMIENTO).getUTCDate() }
-    );
+    const data = Object.assign(venta, { DIA_PAGO: new Date(venta.VENCIMIENTO).getUTCDate()});
 
 
     try {
