@@ -21,16 +21,23 @@
   <div class="data_container">
 
     <div class="data_container__btn">
-      <% if(ESTADO == "PENDIENTE"){ %>
+      <% if(ESTADO == "PENDIENTE" || !ESTADO){ %>
+
+      <% if(ESTADO){  %>
       <a href="<%=`/ventas/editar/${INDICE}`%>"><i class="fas fa-edit"></i></a>
       <a href="<%=`/ventas/confirmar/${INDICE}`%>" class="btn_confirmar_venta"><i class="fas fa-check"></i></a>
-      <% if(hasPermission(permisos.VENTAS_GERENCIA)){ %>
+      <% } %>
+
+      <% if(hasPermission(permisos.VENTAS_GERENCIA) ){ %>
       <a href="<%=`/ventas/borrar/${INDICE}`%>" class="invalidar_venta btn_invalidar_venta"><i class="fas fa-times"></i></a>
       <% }%>
+
       <% } %>
+
       <% if(MODO == "EASY"){  %>
-        <a href="<%= `/ventas/prestamos/generar_contrato?ID=${INDICE}` %>" class=""><i class="fas fa-file-contract"></i></a>
-        <% } %>
+      <a href="<%= `/ventas/prestamos/generar_contrato?ID=${INDICE}` %>" class=""><i class="fas fa-file-contract"></i></a>
+      <% } %>
+
     </div>
   </div>
 
