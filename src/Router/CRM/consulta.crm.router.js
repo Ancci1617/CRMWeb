@@ -61,11 +61,11 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     query_result.Prestamos = raw_fichas.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
         const { FECHA_FORMAT, FICHA, Z, ANT, MES0, MES1, MES2, MES3, MES4, MES5,MES6,
             CUOTA_ANT, SALDO, VENCIMIENTO,
-            CDeFecha, CUOTAS, ARTICULOS ,CUOTA_PAGO,CUOTA} = ficha;
+            CDeFecha, CUOTAS, ARTICULOS ,CUOTA_PAGO,CUOTA,ESTADO} = ficha;
 
         const { vencimiento_vigente, servicio, mora, cuota } = getDebtEasy(ficha);
 
-        return { FECHA_FORMAT, FICHA, Z, ARTICULOS, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6,CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA,CUOTAS, VENCIMIENTO, vencimiento_vigente, CDeFecha, servicio, mora, cuota };
+        return { FECHA_FORMAT, FICHA, Z, ARTICULOS, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6,CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA,CUOTAS, VENCIMIENTO, vencimiento_vigente, CDeFecha, servicio, mora, cuota ,ESTADO };
     });
 
 

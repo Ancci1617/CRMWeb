@@ -62,7 +62,6 @@ const postCargarVenta = async (req, res) => {
             await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
     } catch (error) {
-        console.log(error);
         if (error.code == "ER_DUP_ENTRY")
             return res.send(`La venta no pudo ser procesada debido a que el número de ficha ${FICHA} ya ha sido utilizado.`);
 
