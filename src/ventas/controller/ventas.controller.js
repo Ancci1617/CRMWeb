@@ -87,6 +87,10 @@ const postCargarVenta = async (req, res) => {
 
 const formEditarVenta = async (req, res) => {
     const { venta } = res.locals;
+    if(!venta){
+        console.log("No existe la venta con el indice indicado");
+        return res.redirect("/ventas/pasar_ventas")
+    }
     if (venta.MODO == "EASY")
         return res.render("ventas/prestamo.cargado.editar.ejs", { venta });
 
