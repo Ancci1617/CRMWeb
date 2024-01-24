@@ -204,7 +204,6 @@ estatus_options.addEventListener("change", e => {
 //EVALUACION DE LA VENTA
 btn_submit.addEventListener("click", async e => {
     e.preventDefault();
-    if (!form.reportValidity()) return;
 
     if (!form.LATITUD_VENDEDOR.value || !form.LONGITUD_VENDEDOR.value || !form.ACCURACY_VENDEDOR.value) {
         setLoading(true)
@@ -213,7 +212,6 @@ btn_submit.addEventListener("click", async e => {
     }
 
 
-    e.preventDefault();
     if (!form.reportValidity()) return;
 
     const { isSamePerson } = await handleDniNombre();
@@ -227,8 +225,10 @@ btn_submit.addEventListener("click", async e => {
     if (isAprobado)
         return form.submit()
 
-    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?"))
+    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")){
+        aprobado.value = "DESAPROBADO";
         return form.submit()
+    }
 
 
 });
