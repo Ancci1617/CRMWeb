@@ -64,7 +64,6 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
             CDeFecha, CUOTAS, ARTICULOS, CUOTA_PAGO, CUOTA, ESTADO } = ficha;
 
 
-        console.log(CDeFecha);
 
         const { vencimiento_vigente, servicio, mora, cuota } = getDebtEasy(ficha);
 
