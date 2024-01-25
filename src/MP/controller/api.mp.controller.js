@@ -5,6 +5,10 @@ const { get_body } = require("../constants/fetch_body.js");
 const { getPagosMP } = require("../../pagos/model/pagos.model.js");
 const axios = require("axios");
 const { getLimitDates, getToday } = require("../../lib/dates.js");
+const { formatDates, getLimitDatesToday } = require("../lib/formatDates.js");
+const { createArrayFromCsv } = require("../lib/createArrayFromCsv.js");
+const { getSaldoEnCuenta } = require("../lib/obtenerSaldo.js");
+const { filtrarIngresosYEgresos } = require("../lib/filtrarIngresosYEgresos.js");
 
 const postCheckMP = async (req, res) => {
     const { N_OPERACION, MP_PORCENTAJE, MONTO_CTE, MP_TITULAR } = req.body;
@@ -73,7 +77,7 @@ const formController = async (req, res) => {
     const { aside } = res.locals;
     const { MES, MP_TITULAR } = req.query;
     const { START_DATE, END_DATE } = getLimitDates({ MES })
-    
+
 
     const user = await getUserByUsuario(MP_TITULAR);
     const payments = await mercadoPagoModel.getPayments({ MP_TOKEN: user.MP_TOKEN, START_DATE, END_DATE, filtered: true });
@@ -116,4 +120,67 @@ const getSaldoEnCuentas = async (req, res) => {
 }
 
 
-module.exports = { postCheckMP, formController, getSaldoEnCuentas }
+//retorna un resumen de los datos de todas las cuentas de MP
+const getSaldoEnCuentasPorReporte = async (req, res) => {
+    const usuarios = await getUsuariosWithMp();
+    const begin_date = formatDates(new Date().setUTCDate(new Date().getUTCDate() - 1));
+    const end_date = formatDates(new Date().setUTCDate(new Date().getUTCDate()));
+    const [year, month] = getToday().split("-");
+    const { START_DATE: START_DATE_MONTH, END_DATE: END_DATE_MONTH } = getLimitDates({ MES: `${year}-${month}` });
+    const { START_DATE, END_DATE } = getLimitDatesToday(getToday());
+
+
+    //Consulta, de cada usuario, su saldo,su ingreso y sus egresos + los datos de la tabla usuarios
+    //referidos a MP (ej: LIMITE_FACTURACION)
+    const result = await Promise.all(usuarios.map(async usuario => {
+        const { MP_TOKEN, Usuario: titular, ALIAS, LIMITE_FACTURACION } = usuario;
+        const data = { titular, ALIAS, LIMITE_FACTURACION, ingresos: 0, disponible: 0, saldo_act: 0 };
+
+        try {
+            const saldo_act = await getSaldoEnCuenta({ MP_TOKEN, begin_date, end_date })
+            const { results: pagos } = await mercadoPagoModel.getPayments({ MP_TOKEN, START_DATE, END_DATE })
+
+            //Si payment.payer_id existe es un egreso            
+            const net_changed_amount = pagos.reduce((acum, payment) => {
+                const { net_received_amount } = payment.transaction_details
+                const dif = Math.round(payment.payer_id ? (- net_received_amount) : net_received_amount)
+                return acum + dif;
+            }, 0);
+
+            const { results: informe_mensual } = await mercadoPagoModel.getPayments({ MP_TOKEN, START_DATE: START_DATE_MONTH, END_DATE: END_DATE_MONTH });
+
+
+            const { ingresos, egresos } = filtrarIngresosYEgresos(informe_mensual);
+
+
+            return Object.assign(data, { disponible: LIMITE_FACTURACION - ingresos, ingresos, egresos, saldo_act: saldo_act + net_changed_amount, error: null });
+        } catch (error) {
+            console.log("ERROR AL CONSULTAR SALDOS:");
+            console.log(titular);
+            console.log(data);
+            console.log(error);
+
+            if (error.msg) {
+                return Object.assign(data, { error: error.msg });
+            }
+
+            if (error.response && error.response.data.error == "report_conf_not_found") {
+                console.log("Error de no configurado")
+                return Object.assign(data, { error: "Reportes no configuradors" });
+            }
+            return Object.assign(data, { error: "Error desconocido" });
+
+        }
+
+
+
+    }))
+
+
+    res.json(result)
+
+
+
+}
+
+module.exports = { postCheckMP, formController, /*getSaldoEnCuentas,*/ getSaldoEnCuentasPorReporte }
