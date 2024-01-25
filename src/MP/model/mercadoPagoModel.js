@@ -1,7 +1,6 @@
 const { default: axios } = require("axios");
 const pool = require("../../model/connection-database.js");
 const { get_body } = require("../constants/fetch_body.js");
-var requestQuery = require("request");
 
 const getPayments = async ({ MP_TOKEN, START_DATE, END_DATE, filtered = false }) => {
     try {
