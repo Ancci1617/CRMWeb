@@ -1,12 +1,10 @@
 const { getUserByUsuario, getUsuariosWithMp } = require("../../model/auth/getUser.js");
 const mercadoPagoModel = require("../model/mercadoPagoModel.js");
-const { getAside } = require("../lib/aside.js");
 const { get_body } = require("../constants/fetch_body.js");
 const { getPagosMP } = require("../../pagos/model/pagos.model.js");
 const axios = require("axios");
 const { getLimitDates, getToday } = require("../../lib/dates.js");
 const { formatDates, getLimitDatesToday } = require("../lib/formatDates.js");
-const { createArrayFromCsv } = require("../lib/createArrayFromCsv.js");
 const { getSaldoEnCuenta } = require("../lib/obtenerSaldo.js");
 const { filtrarIngresosYEgresos } = require("../lib/filtrarIngresosYEgresos.js");
 
@@ -92,32 +90,32 @@ const formController = async (req, res) => {
     res.render("MP/mp.list.ejs", { payments, aside, MP_TITULAR: user, MES });
 }
 
-const getSaldoEnCuentas = async (req, res) => {
-    const usuarios = await getUsuariosWithMp();
-    const [year, month] = getToday().split("-");
-    const { START_DATE, END_DATE } = getLimitDates({ MES: `${year}-${month}` });
+// const getSaldoEnCuentas = async (req, res) => {
+//     const usuarios = await getUsuariosWithMp();
+//     const [year, month] = getToday().split("-");
+//     const { START_DATE, END_DATE } = getLimitDates({ MES: `${year}-${month}` });
 
-    let result = [];
-    for (let i = 0; i < usuarios.length; i++) {
+//     let result = [];
+//     for (let i = 0; i < usuarios.length; i++) {
 
-        const mp_data = await mercadoPagoModel.getPayments({ MP_TOKEN: usuarios[i].MP_TOKEN, START_DATE, END_DATE });
+//         const mp_data = await mercadoPagoModel.getPayments({ MP_TOKEN: usuarios[i].MP_TOKEN, START_DATE, END_DATE });
 
-        const ingresos = mp_data.results.filter(payment => !payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
-        const egresos = mp_data.results.filter(payment => payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
-        result.push({
-            titular: usuarios[i].Usuario,
-            limite: usuarios[i].LIMITE_FACTURACION,
-            saldo_ant: usuarios[i].MP_SALDO_ANT,
-            ingresos, egresos,
-            saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
-            disponible: usuarios[i].LIMITE_FACTURACION - ingresos,
-            alias: usuarios[i].ALIAS
-        })
+//         const ingresos = mp_data.results.filter(payment => !payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+//         const egresos = mp_data.results.filter(payment => payment.payer_id).reduce((acum, payment) => acum + Math.round(payment.transaction_details.net_received_amount), 0);
+//         result.push({
+//             titular: usuarios[i].Usuario,
+//             limite: usuarios[i].LIMITE_FACTURACION,
+//             saldo_ant: usuarios[i].MP_SALDO_ANT,
+//             ingresos, egresos,
+//             saldo_act: usuarios[i].MP_SALDO_ANT + ingresos - egresos,
+//             disponible: usuarios[i].LIMITE_FACTURACION - ingresos,
+//             alias: usuarios[i].ALIAS
+//         })
 
-    }
+//     }
 
-    res.json(result)
-}
+//     res.json(result)
+// }
 
 
 //retorna un resumen de los datos de todas las cuentas de MP
