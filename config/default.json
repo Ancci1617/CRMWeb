@@ -1,0 +1,12 @@
+{
+    "PORT" : 3000,
+    "CONNECTION_DATA" : {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "",
+        "database": "bgm_db",
+        "timezone" : "+03:00"
+    }
+
+}

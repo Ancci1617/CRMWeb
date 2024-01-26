@@ -10,7 +10,7 @@ const fileUpload = require('express-fileupload');
 const { isLoggedIn } = require('./lib/auth.js');
 const fs = require("fs");
 const https = require('https');
-
+const config = require("config")
 
 
 
@@ -93,7 +93,6 @@ app.use("/cobrador/",isLoggedIn,require("./cobrador/Router/cobrador.routes.js"))
 // app.use((req,res) => {res.send("default")})
 
 
-
 const privateKey = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.key'), 'utf8');
 const certificate = fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'blancogusmar.com.crt'), 'utf8');
 const credentials = { key: privateKey, cert: certificate, cr: [fs.readFileSync(path.join(__dirname, "..", "..", "certificados", 'SectigoRSADomainValidationSecureServerCA.crt'), 'utf8')] };
@@ -102,9 +101,9 @@ const credentials = { key: privateKey, cert: certificate, cr: [fs.readFileSync(p
 // Configurar rutas y middleware de Express aquí
 const httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(3000, () => {
+httpsServer.listen(config.get("PORT"), () => {
 
-    console.log('Server running on port, 3000');
+    console.log(`Server running on port, ${config.get("PORT")}`);
 
 });
 

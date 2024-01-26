@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.5.1",
+    "config": "^3.3.10",
     "connect-flash": "^0.1.1",
     "date-fns": "^3.2.0",
     "docxtemplater": "^3.42.1",
@@ -30,5 +31,8 @@
     "pizzip": "^3.1.4",
     "vcard-generator": "^0.0.7",
     "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
