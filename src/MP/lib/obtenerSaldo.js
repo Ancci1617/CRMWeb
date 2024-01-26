@@ -4,7 +4,6 @@ const { createArrayFromCsv } = require("./createArrayFromCsv");
 const getSaldoEnCuenta = async ({ MP_TOKEN, begin_date,end_date}) => {
 
     const generated_reports = await mercadoPagoModel.getReportes({ MP_TOKEN });
-    
     const report = generated_reports.find(rep =>
         rep.end_date.split("T")[0] == end_date.split("T")[0]
     )

@@ -128,11 +128,12 @@ const getSaldoEnCuentasPorReporte = async (req, res) => {
     const { START_DATE, END_DATE } = getLimitDatesToday(getToday());
 
 
+
     //Consulta, de cada usuario, su saldo,su ingreso y sus egresos + los datos de la tabla usuarios
     //referidos a MP (ej: LIMITE_FACTURACION)
     const result = await Promise.all(usuarios.map(async usuario => {
         const { MP_TOKEN, Usuario: titular, ALIAS, LIMITE_FACTURACION } = usuario;
-        const data = { titular, ALIAS, LIMITE_FACTURACION, ingresos: 0, disponible: 0, saldo_act: 0 };
+        const data = { titular, ALIAS, LIMITE_FACTURACION, ingresos: 0, disponible: 0, egresos:0,saldo_act: 0 };
 
         try {
             const saldo_act = await getSaldoEnCuenta({ MP_TOKEN, begin_date, end_date })
