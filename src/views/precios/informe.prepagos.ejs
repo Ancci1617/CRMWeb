@@ -25,7 +25,7 @@
       <tr class="nw row--producto <%= producto.ESVALIDO ? "" : "producto--invalido" %>">
         <td class="nw"><%= producto.LAST_UPDATED %></td>
         <td><%= producto.Art %></td>
-        <td class="td--description"><%= format(producto.Producto) %></td>
+        <td class="td--description"><%= producto.Producto %></td>
         <td><%= format(String(producto.CONTADO)) %></td>
         <td><%= format(producto["CUOTAS_3"]/3 + " = " + producto["CUOTAS_3"]) %></td>
         <td><%= format(producto.ANTICIPO + " + 6 x " + producto["CUOTAS_6"]/6 + " = " + (producto.ANTICIPO + producto["CUOTAS_6"])) %></td>
