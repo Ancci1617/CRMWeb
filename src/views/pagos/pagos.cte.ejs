@@ -33,19 +33,21 @@
       <input type="submit" hidden>
     </form>
 
-    <header class="creditos__header">
+    <header class="creditos__header"> 
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
-      <div class="CTE_CALLE">
-        <span class="zona"><%= cte_data.ZONA %></span>
-        <a href="/CRM?CTE=<%= cte_data.CTE %>" class="CTE link"><%= cte_data.CTE %></a>
-        <span class="CALLE"><%=cte_data.NOMBRE %></span>
-      </div>
-      <div>
-        <div>Tel:<%= cte_data.WHATSAPP || "Sin telefono"%></div>
-        <% if(hasPermission(permisos.ADMIN_COB) && cte_data.CTE){  %>
-        <a href="/admin/editarCliente/<%= cte_data.CTE %>" class="link link-editar">Editar cliente</a>
-        <% } %>
-      </div>
+      <div class="header--credito__container--datos">
+        <div class="CTE_CALLE">
+          <span class="zona"><%= cte_data.ZONA %></span>
+          <a href="/CRM?CTE=<%= cte_data.CTE %>" class="CTE link"><%= cte_data.CTE %></a>
+          <span class="CALLE"><%=cte_data.NOMBRE %></span>
+        </div>
+        <div>
+          <div>Tel:<%= cte_data.WHATSAPP || "Sin telefono"%></div>
+          <% if(hasPermission(permisos.ADMIN_COB) && cte_data.CTE){  %>
+            <a href="/admin/editarCliente/<%= cte_data.CTE %>" class="link link-editar">Editar cliente</a>
+            <% } %>
+          </div>
+        </fdiv>
     </header>
 
 

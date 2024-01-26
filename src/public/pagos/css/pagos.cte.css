@@ -17,6 +17,7 @@ body {
 }
 .buscador__container{
     display: flex;
+    flex-wrap: wrap;
 }
 .main__container {
     margin: auto;
@@ -25,6 +26,7 @@ body {
 }
 
 .creditos__header {
+    flex:1;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     background-color: #fdfdfd;
@@ -33,6 +35,8 @@ body {
     top: 3rem;
     z-index: 10;
 }
+
+
 
 .creditos__header .link-editar{
     text-shadow: 1px 1px 1px gray;
@@ -46,6 +50,12 @@ body {
     font-size: 1.1rem;
     white-space: nowrap;
 
+}
+.header--credito__container--datos{
+    display: flex;
+    grid-column: span 2;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .valor__servicio {
