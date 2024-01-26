@@ -1,0 +1,11 @@
+{
+    "PORT" : 3000,
+    "CONNECTION_DATA" : {
+        "host": "srv815.hstgr.io",
+        "port": 3306,
+        "user": "u970133903_BGMAdmin",
+        "password": "RKfwnmPhW1!l",
+        "database": "u970133903_BGMDB",
+        "timezone" : "+00:00"
+    }
+}
