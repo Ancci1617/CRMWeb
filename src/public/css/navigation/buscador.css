@@ -5,6 +5,8 @@
     margin-bottom: 1.1rem;
     display: flex;
     font-size: 1.3rem;
+    /* flex-wrap: wrap; */
+    flex: 1;
 }
 
 
