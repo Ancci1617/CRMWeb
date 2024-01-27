@@ -93,17 +93,18 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     }
 }
 
+//CALCULA LA DEUDA DE LA FICHA A DIA DE HOY, DONDE HOY = getToday()
 function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
     SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FICHA, ANTICIPO }, COBRADOR = false, Easy = false) {
 
 
-    //AGREGAR ALGORITMO PARA COBRADOR
-
+    //Busca vencimiento valido, entre vencimiento o primer pago Y CALCULA los atrasos
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
     let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA, ANTICIPO });
 
-    //Controla que en caso que existe UN VALOR de anticipo (es prepago)
-    //El valor de cuota a cobrar no sea la cuota sino el anticipo
+    /*calcula al deuda en cuota,servicio y mora
+    En caso que sea prepago calcula la deuda de cuota de la siguiente manera
+    1er Cuota = ANTICIPO DEL PREPAGO DE 2DA a ultima cuota, algoritmo normal*/
     const deudaCuota =
         vencidas <= 1 && ANTICIPO ?
             Math.max(ANTICIPO - CUOTA_PAGO, 0) :
@@ -113,15 +114,16 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
     const deuda_mora = Math.floor(Math.max(MORA_ANT - MORA_PAGO + Math.max(atraso_eval - 1, 0) * CUOTA * 0.1, 0) / 100) * 100;
 
-
-
-    //Si no le vencio este mes, agrega 1 servicio ( Esto despues de calcular la mora Q)
-    // let deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
     let deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + Math.min(atraso_eval, 2) * SERV_UNIT, 0);
 
+    //Vencimiento + meses * pagas = vencimiento vigente
+    const VENCIMIENTO_DATE = new Date(VENCIMIENTO);
+    const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(), VENCIMIENTO_DATE.getUTCMonth() + pagas, VENCIMIENTO_DATE.getUTCDate()).toISOString().split("T")[0];
 
+
+    //Si no vencio la cuota de este mes y es un cobrador el que consulta la deuda, agrega un servicio
     if (vencidas < CUOTAS && COBRADOR &&
-        getToday() <= `${VENCIMIENTO_EVALUA.split("-")[0]}-${getToday().split("-")[1]}-${VENCIMIENTO_EVALUA.split("-")[2]}`
+        getToday() <= vencimiento_vigente
         && !ZONAS_EXCEPCIONES.includes(Z) && !deuda_serv > 0
     ) {
         // deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
@@ -131,14 +133,11 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
 
 
-
-    //Si el cliente esta atrasado, el servicio ADICIONAL, Existe Si solo si la cuota de este mes no paga servicio
-
-    const VENCIMIENTO_DATE = new Date(VENCIMIENTO);
-    const vencimiento_vigente = new Date(VENCIMIENTO_DATE.getUTCFullYear(), VENCIMIENTO_DATE.getUTCMonth() + pagas, VENCIMIENTO_DATE.getUTCDate()).toISOString().split("T")[0];
-
-    //Si la ficha esta en las zonas de excepciones, la pone para cobrar
-    const date_diff = dateDiff(getToday(), vencimiento_vigente);
+    
+    /*
+    Si la ficha tiene todas las cuotas pagas(por redondeo) y todas la scuotas vencidas
+    pero aun tiene un saldo pendiente, siempre va a estar para cobrar
+    */
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
 
 
