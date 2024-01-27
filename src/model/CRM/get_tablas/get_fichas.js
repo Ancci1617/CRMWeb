@@ -86,6 +86,7 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
             Fichas.ARTICULOS,
             CONVERT(Fichas.FICHA, INTEGER) as FICHA,
             Fichas.Z,
+            Fichas.ANTICIPO,
             Fichas.TOTAL,
             acumulados.ANT,
             IFNULL(
@@ -437,6 +438,8 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         CONVERT(Fichas.FICHA, INTEGER) as FICHA,
         Fichas.Z,
         Fichas.TOTAL,
+        Fichas.ANTICIPO,
+
 
         ${withAcumulado ? acumuladoStrings[1] : ""}
         ${withCambiosDeFecha ? cambiosDeFechaStrings[1] : ""}
