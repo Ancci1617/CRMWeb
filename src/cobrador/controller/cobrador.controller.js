@@ -7,6 +7,7 @@ const { getToday } = require("../../lib/dates.js");
 const { generarInformeCobranza } = require("../lib/informe.js");
 const { getUserByUsuario } = require("../../model/auth/getUser.js");
 const permisos = require("../../constants/permisos.js");
+const c = require("config");
 
 
 
@@ -29,6 +30,8 @@ const formOrdenarRecorrido = async (req, res) => {
     }
 
     const fichas_data = await cobradorModel.getFichasPorCobrar({ filter: { "Z": ZONA } });
+    
+
     let fichas = fichas_data.map(ficha => ({ ficha, deuda: ficha.FICHA >= 50000 ? getDebtEasy(ficha) : getDoubt(ficha) })).filter(ficha => ficha.deuda.atraso_evaluado > 0);
 
 

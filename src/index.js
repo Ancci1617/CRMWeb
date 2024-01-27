@@ -104,7 +104,7 @@ const httpsServer = https.createServer(credentials, app);
 httpsServer.listen(config.get("PORT"), () => {
 
     console.log(`Server running on port, ${config.get("PORT")}`);
-
+    console.log(`Servidor activo en modo de ${config.get("MODO")}`);
 });
 
 

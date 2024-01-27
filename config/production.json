@@ -1,5 +1,6 @@
 {
     "PORT" : 3000,
+    "MODO" : "produccion",
     "CONNECTION_DATA" : {
         "host": "srv815.hstgr.io",
         "port": 3306,

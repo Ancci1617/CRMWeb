@@ -41,6 +41,7 @@ const getFichasPorCobrar = async ({ filter = { "true": true }, isEasyCash = fals
                 ClientesSV.CALLE,
                 ClientesSV.CRUCES,
                 ClientesSV.CRUCES2,
+                Fichas.ANTICIPO,
                 CambiosDeFecha.CAMBIO as CAMBIO_DE_FECHA,
                 CONVERT(
                     IFNULL(SUM(PagosSV.SERV),

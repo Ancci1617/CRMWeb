@@ -33,7 +33,7 @@ const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA, ANTICIPO 
 
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
     const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
-
+    
 
     return { vencidas, pagas, atraso, atraso_eval }
 
