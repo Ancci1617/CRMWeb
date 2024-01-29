@@ -6,6 +6,8 @@ const {truncar} = require("./format.js");
 const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     const HOY = new Date(getToday());
 
+    //Si las 2 cuotas estan vencidas, el valido se el vencimiento regular
+    //SINO el vencimineto es el primer_pago
     let EsPrimerPago = false;
     let VENCIMIENTO_EVALUA;
     if (Math.max(HOY - DAY, new Date(VENCIMIENTO), new Date(PRIMER_PAGO)) == HOY.getTime() - DAY) {

@@ -167,7 +167,7 @@
             <span class="details">Cuota de entrega</span>
             <input type="number" placeholder="Cuotas pagas para la entrega" name="CUOTAS_PARA_ENTREGA" />
           </div>
-          
+
           <div class="input-box anticipo_para_entrega hidden">
             <span class="details">Anticipo de entrega</span>
             <input type="number" placeholder="Anticipo para entregar el producto..." name="ANTICIPO_PREPAGO" />
@@ -240,14 +240,11 @@
     </div>
   </div>
 
-  <script src="/js/lib/fetch.helper.js"></script>
-  <script src="/js/lib/file.weight.js"></script>
-  <script src="/js/lib/afip.js"></script>
-  <script src="/shared/setLoading.js"></script>
-  <script src="/shared/getLocation.js"></script>
-  <script src="/js/ventas/cargar_venta.js"></script>
-  <script src="/js/ventas/file_event_tag.js"></script>
-
-</body>
-
-</html>
+  <%- include(global.dir_partials + "/foot.ejs",{scripts : {paths:
+    ["/js/lib/fetch.helper.js",
+    "/js/lib/file.weight.js",
+    "/js/lib/afip.js",
+    "/shared/setLoading.js",
+    "/shared/getLocation.js",
+    "/js/ventas/cargar_venta.js",
+    "/js/ventas/file_event_tag.js"]},nav : false}) %>

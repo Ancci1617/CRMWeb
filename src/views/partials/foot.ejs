@@ -1,13 +1,13 @@
 <% /*scripts : [{psth : ""}]*/ %>
 
 
-
-
+<% if(scripts.nav) {%>
 <%- include(global.dir_partials + "/links/nav.logic.ejs") %>
+<% } %>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 
-
-<% scripts.forEach(path => { %>
+<% scripts.paths.forEach(path => { %>
 <script src="<%= path %>"></script>
 <% }) %>
 

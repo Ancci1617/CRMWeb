@@ -31,7 +31,6 @@ const handleServicioDeCobranza = () => {
 }
 
 
-
 const cualEsPrimerVencimiento = (PRIMER_PAGO, dia) => {
     const dia_mill = (1000 * 60 * 60 * 24);
 
@@ -100,7 +99,7 @@ window.addEventListener("load", async e => {
     cargarUbicacion();
 
 
-    [{CUOTAS_6 : evaluation_data.sabana}] = await fetchPost("/ventas/precios", { articulos: ["36"]});
+    [{ CUOTAS_6: evaluation_data.sabana }] = await fetchPost("/ventas/precios", { articulos: ["36"] });
     evaluation_data.master = await fetchPost("/query_masterresumen", { CTE });
     evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
     evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });
@@ -113,29 +112,42 @@ async function autoCompletarPrecios() {
         1: "CONTADO",
         3: "CUOTAS_3",
         6: "CUOTAS_6",
-        12: "CUOTAS_12",
+        9: "CUOTAS_9",
     }
-    const { TOTAL, CUOTAS : {value : CUOTAS},CUOTA } = form;
+    const { TOTAL, CUOTAS: { value: CUOTAS }, CUOTA, ANTICIPO_PREPAGO, ESTATUS } = form;
     const articulos = form.ARTICULOS.value.trim().split(" ");
     const query = { articulos };
 
     const precios = await fetchPost("/ventas/precios", query);
- 
-    let acum = 0;
-    for(const art of articulos){
-        const precio = precios.find(precio => precio.Art == art );
-        if(!precio) {
+
+    let cuota = 0;
+    let anticipo = 0;
+
+    for (const art of articulos) {
+        const precio = precios.find(precio => precio.Art == art);
+        if (!precio) {
             CUOTA.value = `Articulo ${art} no encontrado.`
             TOTAL.value = ""
             form.SERV_UNIT.selectedIndex = 0
             return
         }
-
-        const ValorTotal = precio[COLS[CUOTAS]];
-        acum += ValorTotal; 
+        anticipo += precio.ANTICIPO
+        cuota += precio[COLS[CUOTAS]] / CUOTAS;
     }
-    TOTAL.value = acum;
-    CUOTA.value = acum / CUOTAS
+
+    TOTAL.value = (cuota * CUOTAS) + anticipo;
+    CUOTA.value = cuota;
+
+
+    const cuotasParaEntrega = document.querySelector(".cuotas_para_entrega");
+    const anticipoParaEntrega = document.querySelector(".anticipo_para_entrega");
+    showAndResetElement(cuotasParaEntrega, !!anticipo)
+    showAndResetElement(anticipoParaEntrega, !!anticipo)
+    form.ESTATUS.value = anticipo ? "Prepago" : "Entregado"
+    form.ANTICIPO_PREPAGO.value = anticipo
+
+
+
     handleServicioDeCobranza();
 }
 
@@ -181,22 +193,22 @@ function ventaAprobada(responsable, Estatus, cuotas_para_entrega = 0, vendido, a
 
 }
 
+function showAndResetElement(container, show) {
+    const input = container.querySelector("input");
+    input.value = "";
+    show ? container.classList.remove("hidden") : container.classList.add("hidden");
+    show ? input.setAttribute("required", "") : input.removeAttribute("required");
+}
+function handleShowPrepagoOptions(e) {
 
-estatus_options.addEventListener("change", e => {
-    function showAndResetElement(container, show) {
-        const input = container.querySelector("input");
-        input.value = "";
-        show ? container.classList.remove("hidden") : container.classList.add("hidden");
-        show ? input.setAttribute("required", "") : input.removeAttribute("required");
-    }
 
     const cuotasParaEntrega = document.querySelector(".cuotas_para_entrega");
     const anticipoParaEntrega = document.querySelector(".anticipo_para_entrega");
-
     showAndResetElement(cuotasParaEntrega, e.target.value == "Prepago")
     showAndResetElement(anticipoParaEntrega, e.target.value == "Prepago")
 
-});
+}
+estatus_options.addEventListener("change", handleShowPrepagoOptions);
 
 
 
@@ -227,7 +239,7 @@ btn_submit.addEventListener("click", async e => {
     if (isAprobado)
         return form.submit()
 
-    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")){
+    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")) {
         aprobado.value = "DESAPROBADO";
         return form.submit()
     }

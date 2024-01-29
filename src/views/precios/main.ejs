@@ -112,7 +112,7 @@
 
 
 
-<%- include(global.dir_partials + "/foot.ejs",{scripts : ["/js/lib/form.hide.js"]}) %>
+<%- include(global.dir_partials + "/foot.ejs",{scripts : {paths: ["/js/lib/form.hide.js"]},nav : true}) %>
 
 <script>
   function showAll() {
