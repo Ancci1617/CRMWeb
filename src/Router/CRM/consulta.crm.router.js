@@ -10,6 +10,7 @@ const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js")
 const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../../lib/doubt.js");
 const express = require("express");
 const path = require("path");
+const { getDisponible } = require("../../shared/lib/calificaciones.js");
 
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
@@ -73,7 +74,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     query_result.MasterBGM = await getMasterBGM(cte);
     query_result.MasterEC = await getMasterEC(cte);
-    query_result.Disponible = await getMasterResumen(cte);
+    query_result.Disponible = await getDisponible(cte);
     query_result.Domicilio = await getDomicilio(cte_data.CALLE);
 
     query_result.Domicilio = query_result.Domicilio.map(cliente => {
