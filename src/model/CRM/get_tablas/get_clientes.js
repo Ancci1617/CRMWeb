@@ -82,6 +82,7 @@ const getClientesAndLocation = async (cte) => {
         ClientesSV.CALLE,
         ClientesSV.CRUCES,
         ClientesSV.CRUCES2,
+        ClientesSV.EXCEPCION_DNI,
         (SELECT BaseCTE.TELEFONO FROM BaseCTE WHERE BaseCTE.CTE = ClientesSV.CTE AND ID = (SELECT MAX(ID) from BaseCTE where BaseCTE.CTE = ClientesSV.CTE)) AS WHATSAPP,
         ClientesSV.DNI, 
         MasterResumen.CALIF AS MASTER,
