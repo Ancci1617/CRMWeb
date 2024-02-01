@@ -26,18 +26,21 @@ const filtrarCodigosCte = (pagos) => {
 const formatPagosAcumulados = (pagos) => {
     const codigos = filtrarCodigosCte(pagos);
     const pagosFormated = [];
-    
+
     codigos.forEach(codigo => {
         const pagosFiltrados = pagos.filter(pago => pago.CTE + "-" + pago.FICHA == codigo);
-        
-        pagosFiltrados.reduce((pagadoAnt,pago) => {
-            const pagasAnt = Math.trunc(pagadoAnt / pago.Cuotas + 0,3)
 
-            const vencimientoValido = pagadoAnt ? pago.PRIMER_VENCIMIENTO : pago.VENCIMIENTO;//1
-            
+        pagosFiltrados.reduce((pagadoAnt, pago) => {
+            //1
+            const pagasAnt = Math.trunc(pagadoAnt / pago.Cuotas + 0, 3)
+
+            //2
+            const vencimientoValido = pagadoAnt ? pago.PRIMER_VENCIMIENTO : pago.VENCIMIENTO;
+
+            //3
 
             return pagadoAnt + pago.VALOR
-        },0)
+        }, 0)
 
     });
 
