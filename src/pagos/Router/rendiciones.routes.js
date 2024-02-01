@@ -1,7 +1,7 @@
 "use strict";
 
 const Router = require("express").Router();
-const { rendicionReceptor, generarRendicion, cargarEfectivo, updateEditable, cargarGasto, borrarGasto } = require("../controller/rendicion.controller.js")
+const { rendicionReceptor, cargarEfectivo, updateEditable, cargarGasto, borrarGasto } = require("../controller/rendicion.controller.js")
 const { hasPermission } = require("../../middlewares/permission.middleware.js");
 const permisos = require("../../constants/permisos.js");
 
