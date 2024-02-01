@@ -6,7 +6,7 @@ const UBICACION = document.querySelector("input[name='UBICACION']");
 const form = document.querySelector("form");
 
 CALLE.addEventListener("change", async e => {
-    setLoading(true,[span__loading]);
+    setLoading(true, [span__loading]);
     console.log(e.target.value);
     UBICACION.value = "";
 
@@ -19,7 +19,7 @@ CALLE.addEventListener("change", async e => {
         UBICACION.value = `${LATITUD},${LONGITUD}`;
     }
 
-    setLoading(false,[span__loading]);
+    setLoading(false, [span__loading]);
 })
 
 
@@ -27,23 +27,23 @@ CALLE.addEventListener("change", async e => {
 //Valida que el DNI corresponda a la persona
 form.querySelector(".button__input").addEventListener("click", async e => {
     e.preventDefault();
-    if(!form.reportValidity()) return;
+    if (!form.reportValidity()) return;
 
-    setLoading(true,[span__loading]);
+    setLoading(true, [span__loading]);
     try {
-        const razon_social = await getRazonSocialDni(form.DNI.value, form.DNI.length == 11);
+        if (!JSON.parse(document.querySelector("#EXCEPCION_DNI").value)) {
+            const razon_social = await getRazonSocialDni(form.DNI.value, form.DNI.length == 11);
 
+            const comparacion = razon_social.toUpperCase().split(" ").map(nombre => form.NOMBRE.value.toUpperCase().split(" ").includes(nombre));
+            const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
 
-        const comparacion = razon_social.toUpperCase().split(" ").map(nombre => form.NOMBRE.value.toUpperCase().split(" ").includes(nombre));
-        const coincidencias = comparacion.reduce((coincidencia, acum) => acum + coincidencia, 0);
-
-        if( coincidencias <= 1 && !confirm(`El Dni escrito es de : ${razon_social}\n no coincide con el nombre ${form.NOMBRE.value}\nCargar igualmente?`)) return;
-
+            if (coincidencias <= 1 && !confirm(`El Dni escrito es de : ${razon_social}\n no coincide con el nombre ${form.NOMBRE.value}\nCargar igualmente?`)) return;
+        }
     } catch (error) {
         alert(error);
         return;
     } finally {
-        setLoading(false,[span__loading]);
+        setLoading(false, [span__loading]);
     }
 
     form.submit();

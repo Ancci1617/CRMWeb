@@ -287,7 +287,6 @@ const cargarUbicacion = async () => {
 const compareDni = async (dni, nombre) => {
     setLoading(true);
     try {
-        console.log("no evalua el dni?",JSON.parse(document.querySelector("#evaluar_dni").value));
         if (JSON.parse(document.querySelector("#evaluar_dni").value)) return { isSamePerson: true }
 
         const razon_social = await getRazonSocialDni(dni, dni.length == 11);

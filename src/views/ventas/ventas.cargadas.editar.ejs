@@ -8,7 +8,7 @@
   <title>Blanco Gusmar | Editar venta</title>
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
+  <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css"/>
   <% var today=new Date().toISOString().substring(0,10) %>
   <% var treeDaysAgo = new Date(new Date().getTime() - 1000*60*60*24*2).toISOString().substring(0,10) %>
   <% const coords = LATITUD && LONGITUD ? `${LATITUD},${LONGITUD}` : null %>
@@ -203,6 +203,7 @@
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "LONGITUD_VENDEDOR"} }) %>
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "ACCURACY_VENDEDOR"} }) %>
           <%- include("../partials/Components/input-box.ejs",{input : {type : "hidden",name : "PRIMER_VENCIMIENTO" , defaultValue : PRIMER_VENCIMIENTO } }) %>
+          <input type="hidden" value="<%= Boolean(cte_data.EXCEPCION_DNI) %>" id="evaluar_dni"/>
 
           <!-- BOTONES DE SUBMIT -->
           <div class="button">

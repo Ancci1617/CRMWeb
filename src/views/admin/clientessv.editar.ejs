@@ -9,7 +9,7 @@
   <link rel="shortcut icon" href="/images/BGM.jpg" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form.css">
-  <% const {CTE,ZONA,NOMBRE,CALLE,CRUCES,CRUCES2,WHATSAPP,DNI,LATITUD,LONGITUD} = cte_data %>
+  <% const {CTE,ZONA,NOMBRE,CALLE,CRUCES,CRUCES2,WHATSAPP,DNI,LATITUD,LONGITUD,EXCEPCION_DNI} = cte_data %>
   <% const readOnlyPermission = !hasPermission(permisos.ADMIN_ADMIN) ? "readonly" : "" %>
 </head>
 
@@ -67,7 +67,7 @@
             type : "text",defaultValue : (!LATITUD || !LONGITUD) ? '' : `${LATITUD},${LONGITUD}` , details : "Ubicacion" ,name : "UBICACION" , pattern : "-\\d+\\.\\d+,-\\d+\.\\d+", required : true}
             }) %>
 
-          
+          <input type="hidden" value="<%= Boolean(EXCEPCION_DNI) %>" id="EXCEPCION_DNI"/>
           <div class="button">
             <span class="detail--loading hidden">Cargando...</span>
             <input type="submit" value="Editar cliente"  class="button__input"/>
