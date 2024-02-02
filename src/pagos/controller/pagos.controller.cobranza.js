@@ -68,28 +68,7 @@ const getCobranzasEasy = async (req, res) => {
 
 
 }
-/*
-async function obtenerCobranzas(rango) {
-  console.log(rango);
 
-  return await getFichas("FICHA", rango[0], rango[1], rango[2]);
-}
-
-console.log(1);
-let promesas = [
-  obtenerCobranzas(["3000", "<"]),
-  obtenerCobranzas(["3000", ">=", "Fichas.FICHA < 5000"]),
-  obtenerCobranzas(["5000", ">=", "Fichas.FICHA < 7000"]),
-  obtenerCobranzas(["7000", ">=", "Fichas.FICHA < 20000"])
-];
-
-let resultados = await Promise.all(promesas);
-
-let cobranzas = resultados.flat();
-console.log("union", 5);
-
-
-*/
 const getCobranzas = async (req, res) => {
   
   const promises = [
