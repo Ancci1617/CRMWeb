@@ -68,22 +68,39 @@ const getCobranzasEasy = async (req, res) => {
 
 
 }
+/*
+async function obtenerCobranzas(rango) {
+  console.log(rango);
 
+  return await getFichas("FICHA", rango[0], rango[1], rango[2]);
+}
+
+console.log(1);
+let promesas = [
+  obtenerCobranzas(["3000", "<"]),
+  obtenerCobranzas(["3000", ">=", "Fichas.FICHA < 5000"]),
+  obtenerCobranzas(["5000", ">=", "Fichas.FICHA < 7000"]),
+  obtenerCobranzas(["7000", ">=", "Fichas.FICHA < 20000"])
+];
+
+let resultados = await Promise.all(promesas);
+
+let cobranzas = resultados.flat();
+console.log("union", 5);
+
+
+*/
 const getCobranzas = async (req, res) => {
-  let cobranzas_primera_parte = await getFichas("FICHA", "3000", "<");
-  console.log(1);
-  let cobranzas_segunda_parte = await getFichas("FICHA", "3000", ">=","Fichas.FICHA < 5000");
-  console.log(2);
-  let cobranzas_tercera_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 7000");
-  console.log(3);
-  let cobranzas_cuarta_parte = await getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 20000");
-  console.log(4);
   
-  let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte,...cobranzas_tercera_parte,...cobranzas_cuarta_parte];
-  console.log("union",5);
-  
-
-
+  const promises = [
+    getFichas("FICHA","3000","<"),
+    getFichas("FICHA","3000",">=","Fichas.FICHA < 5000"),
+    getFichas("FICHA","5000",">=","Fichas.FICHA < 7000"),
+    getFichas("FICHA","7000",">=","Fichas.FICHA < 8000"),
+    getFichas("FICHA","8000",">=","Fichas.FICHA < 20000")
+  ]
+  console.log("Calculando cobranzas.");
+  const cobranzas = (await Promise.all(promises)).flat();
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
     delete cobranzas[i].ARTICULOS
