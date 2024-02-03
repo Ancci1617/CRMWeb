@@ -33,6 +33,11 @@ function sumarMeses(fecha, meses) {
     return new Date(`${nuevaFecha.anio}-${nuevaFecha.mes}-${nuevaFecha.dia}`);
 
 }
+const addMonth = (date,months) => {
+    const dateObj = new Date(date);
+    const dateMonthAdded = dateObj.setUTCMonth(dateObj.getUTCMonth() + months);
+    return new Date(dateMonthAdded);
+}
 
 function getLimitDates({ MES }) {
     const date = new Date(MES);
@@ -52,7 +57,7 @@ const dateDiff = (FECHA1,FECHA2) => {
 }
 
 module.exports = {
-    getToday,sumarMeses,getVencidas,dateDiff,getLimitDates
+    getToday,sumarMeses,getVencidas,dateDiff,getLimitDates,addMonth
 }
 
 
