@@ -17,8 +17,8 @@ const validateFicha = async (req, res, next) => {
     const { ANT, MES0, MES1, MES2, MES3, MES4, MES5 } = ficha_data;
     const CUOTA_ANT_CALCULADA = parseInt(TOTAL) - (ANT || 0) - (MES0 || 0) - (MES1 || 0) - (MES2 || 0) - (MES3 || 0) - (MES4 || 0) - (MES5 || 0);
 
-    // if (CUOTA_ANT != CUOTA_ANT_CALCULADA)
-    //     return res.status(400).send("El saldo anterior declarado no coincide con los pagos, el total del cliente");
+    if (CUOTA_ANT != CUOTA_ANT_CALCULADA)
+        return res.status(400).send("El saldo anterior declarado no coincide con los pagos, el total del cliente");
 
 
 
