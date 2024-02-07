@@ -11,7 +11,7 @@ const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../
 const express = require("express");
 const path = require("path");
 const { getDisponible } = require("../../shared/lib/calificaciones.js");
-
+const {} = require("../../shared/lib/calificacionesEasy.js")
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 

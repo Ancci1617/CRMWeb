@@ -11,15 +11,13 @@ const getMasterSummaryBefore2023 = async ({ cteList }) => {
 
 }
 
-const getPagosAcumulados = async ({ CTE }) => {
-    const [pagos] = await pool.query(`
-    SELECT pm.CTE,pm.FICHA,VALOR,pm.FECHA,SERV,MORA,bd.FECHA,
-    bd.Cuota,bd.PRIMER_VENCIMIENTO,bd.VENCIMIENTO,bd.ORIGINALES   
-    FROM pagossvmaster pm LEFT JOIN basedetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA WHERE pm.CTE = ?,;`,
-    [CTE]
+const getMasterSummary = async ({cteList}) => {
+    const [summary] = await pool.query(
+        `SELECT CTE,COUNT(*) AS CantCreditos from BaseDetalle where CTE in (?) group by CTE`,[cteList]
     )
-    return pagos
+    return summary
 }
 
-module.exports = { getMasterSummaryBefore2023 ,getPagosAcumulados}
+
+module.exports = { getMasterSummaryBefore2023,getMasterSummary}
 

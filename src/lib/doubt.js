@@ -157,5 +157,5 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     }
 }
 
-module.exports = { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy }
+module.exports = { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy ,getAtrasosEasyCash}
 
