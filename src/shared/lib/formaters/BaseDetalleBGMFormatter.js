@@ -3,11 +3,13 @@ const { FichasViejas } = require("../../constants/dates")
 
 
 const calcularBienAbonado = (ficha, pagos, Easy = false) => {
-    if (!Easy) {
+    
+    if (ficha.ESTADO != "ACTIVO") return false
+    
+    if (!Easy && ficha.FICHA < 50000) {
         const isFichaVieja = ficha.FECHA < FichasViejas
         if (isFichaVieja) return ficha.TEORICA <= 7
     }
-    if (ficha.ESTADO != "ACTIVO") return false
     //REFORMAR, ESTE CALCULO DEBERIA ESTAR ASOCIADO A EL FORMAT DE BASEDETALLE
     const { sumaVariableAtrasos, maxDiaDeAtrasos } = pagos.reduce((acum, pago) =>
 

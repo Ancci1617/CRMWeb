@@ -53,6 +53,7 @@ app.use(morgan(":method :url :status :response-time ms - :res[content-length] - 
 
 
 // Routes
+app.use("/api/",require("./shared/Router/api.routes.js"));
 app.use("/mp/api/",require("./MP/Router/api.mp.routes.js"));
 
 
@@ -79,7 +80,6 @@ app.use("/LP",require("./precios/routes/precios.routes.js"))
 
 app.use("/admin/",isLoggedIn,require("./admin/routes/admin.routes.js"));
 app.use("/mp/api/",isLoggedIn,require("./MP/Router/api.mp.routes.js"));
-app.use("/api/",isLoggedIn,require("./shared/Router/api.routes.js"));
 app.use("/mp/",isLoggedIn,require("./MP/Router/mp.routes.js"));
 app.use("/pagos/", isLoggedIn, require("./pagos/Router/pagos.routes.js"));
 app.use("/listado/", isLoggedIn, require("./listados/Router/listado.routes.js"));

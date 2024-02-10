@@ -2,6 +2,7 @@ const { getVencidas, getToday, sumarMeses, dateDiff } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
 const { ZONAS_EXCEPCIONES } = require("../constants/zonas_excepciones.js");
 const {truncar} = require("./format.js");
+const { round } = require("./numbers.js");
 
 const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     const HOY = new Date(getToday());
@@ -68,8 +69,8 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
-
-
+    const capitalTomado = (SALDO / TOTAL) * CAPITAL
+    const VALOR_UNITARIO = round(capitalTomado / 12000,2)
 
     const mora_unit = Math.max(Math.round(CAPITAL * 0.01 / 100) * 100, 150);
 
@@ -91,7 +92,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
         mora,
         atraso,
         atraso_evaluado: atraso_eval,
-        pagas, vencimiento_vigente, EsPrimerPago: false
+        pagas, vencimiento_vigente, EsPrimerPago: false,capitalTomado,VALOR_UNITARIO
     }
 }
 

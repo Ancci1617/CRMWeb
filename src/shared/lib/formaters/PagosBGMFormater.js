@@ -9,17 +9,16 @@ const { filtrarCodigosCte } = require("./helper/filtrarCodigosCte");
 
 
 const formatPagosAcumulados = (pagos) => {
-    console.log(pagos);
-    const redondeo = 0.3;
+    
     const codigos = filtrarCodigosCte(pagos);
-    console.log("Codigos",codigos);
-    const pagosFormated = [];   
+
+    const pagosFormated = [];
 
     codigos.forEach(codigo => {
         const pagosFiltrados = pagos.filter(pago => pago.CTE + "-" + pago.FICHA == codigo);
-
         //1
         pagosFiltrados.reduce((acum, pago) => {
+            const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3   
             const { pagadoAnt, pagasAnt } = acum;
 
             //Esta evaluacion se ejecuta en caso que pagasAnt <> pagas

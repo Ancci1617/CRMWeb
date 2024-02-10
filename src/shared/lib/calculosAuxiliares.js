@@ -1,3 +1,5 @@
+const { splitPrestamosFichas } = require("./fichas");
+
 const calcularPagas = (pagado, valorCuota, redondeo) => {
     return Math.trunc(pagado / valorCuota + redondeo);
 }
@@ -8,24 +10,40 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary,diasDe
     const ultBienAbonado = BaseDetalle[0].bienAbonado
     const anteUltBienAbonado = BaseDetalle[1]?.bienAbonado || false
     const ultimosBienAbonados = cantidadDeCreditos == 1 ? ultBienAbonado : ultBienAbonado && anteUltBienAbonado
+
+
     if (Z >= 0.5 || !ultimosBienAbonados) {
-        if (promedioDiasDeAtraso < diasDeAtrasoPorGrupo[0]) return 0
+        if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[0]) return 0
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[1]) return -1
         return -2
     }
 
     //0 y 0,5
-    if (Z >= 0.25 || cantidadDeCreditos == 1 || (Easy ? false : NUEVAS == 0)) {
-        if (promedioDiasDeAtraso < diasDeAtrasoPorGrupo[0]) return 1
+    if (Z > 0.25 || cantidadDeCreditos == 1 || (Easy ? false : NUEVAS == 0)) {
+        if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[0]) return 1
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[1]) return 0
         return -1
     }
     if (Z >= 0) {
-        if (promedioDiasDeAtraso < diasDeAtrasoPorGrupo[0]) return 2
+        if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[0]) return 2
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[1]) return 1
     }
     return 0
 }
 
+const calcularTomado = (fichasVigentes) => {
+    const { prestamos, fichas } = splitPrestamosFichas(fichasVigentes)
+    const {tomadoPrestamosEasy,tomadoPrestamosBGM} = prestamos.reduce((acum, prestamo) => ({
 
-module.exports = {calcularPagas,calcularIncremento}
+        tomadoPrestamosEasy : acum.tomadoPrestamosEasy + prestamo.capitalTomado,
+        tomadoPrestamosBGM : acum.tomadoPrestamosBGM + prestamo.VALOR_UNITARIO
+
+    }), { tomadoPrestamosEasy: 0, tomadoPrestamosBGM: 0 })
+
+    const tomadoFichasBGM = fichas.reduce((acum, ficha) => acum + ficha.VU, 0)
+    const tomadoFichasEasy = tomadoFichasBGM * 12000
+    return {tomadoFichasBGM,tomadoFichasEasy,tomadoPrestamosEasy,tomadoPrestamosBGM}
+
+}
+
+module.exports = {calcularPagas,calcularIncremento,calcularTomado}

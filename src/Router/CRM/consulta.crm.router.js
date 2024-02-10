@@ -10,8 +10,8 @@ const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js")
 const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../../lib/doubt.js");
 const express = require("express");
 const path = require("path");
-const { getDisponible } = require("../../shared/lib/calificaciones.js");
-const {} = require("../../shared/lib/calificacionesEasy.js")
+const { getDisponible, getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
+const { } = require("../../shared/lib/calificacionesEasy.js")
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 
@@ -43,7 +43,7 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     query_result.Clientes = await getClientes(cte);
 
 
-    const raw_fichas = await getFichas("CTE",cte)
+    const raw_fichas = await getFichas("CTE", cte)
 
     //Agregar vencidas,pagas,totales,atrasos;
     query_result.Fichas = raw_fichas.filter(ficha => ficha.FICHA < 50000).map(ficha => {
@@ -72,9 +72,10 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     });
 
 
-    query_result.MasterBGM = await getMasterBGM(cte);
-    query_result.MasterEC = await getMasterEC(cte);
-    query_result.Disponible = await getDisponible(cte);
+    query_result.MasterBGM = await getMasterBGM(cte)
+    query_result.MasterEC = await getMasterEC(cte)
+    const { disponibleFinalBgm, calificacion, disponibleFinalEasy } = await getCreditoDisponibleBgm(cte)
+    query_result.Disponible = [{ BGM : disponibleFinalBgm, CALIF : calificacion, CAPITAL : disponibleFinalEasy }]
     query_result.Domicilio = await getDomicilio(cte_data.CALLE);
 
     query_result.Domicilio = query_result.Domicilio.map(cliente => {
