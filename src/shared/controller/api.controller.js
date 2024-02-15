@@ -30,7 +30,7 @@ const getUbicacion = async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(400).json({ error: "Error al consultas la ubicacion de la calle" })
-    } ES
+    }
 
 }
 
@@ -40,9 +40,9 @@ const getCalificaciones = async (req, res) => {
         const cteRaw = JSON.parse(fs.readFileSync("C:/A - Blanco GusMar/1 - Actual GusMar/Master acceso directo/ListaDeClientes.json")).CLIENTES;
         // console.log("Consultando calificaciones...");
         // const cteRaw = [ 25333, 25353]
-        // const cte  = cteRaw.slice()
-        console.log(cteRaw.length);
-        const cte = cteRaw.slice(1000, 2000)
+        const cte  = cteRaw.slice(5000,10000)
+        // console.log(cteRaw.length);
+        // const cte = cteRaw
         // const calificaciones = await Promise.all(cte.map(async cte => {
         // }))
         console.log("Consulta Base detalle y pagos");

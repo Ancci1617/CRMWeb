@@ -11,5 +11,5 @@ module.exports.LIMITANTES = {
 
 module.exports.INICIALES = {
     BGM : 1,
-    EASY : 10000
+    EASY : 1
 }

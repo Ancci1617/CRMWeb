@@ -9,7 +9,7 @@ const { filtrarCodigosCte } = require("./helper/filtrarCodigosCte");
 
 
 const formatPagosAcumulados = (pagos) => {
-    
+
     const codigos = filtrarCodigosCte(pagos);
 
     const pagosFormated = [];
@@ -18,7 +18,7 @@ const formatPagosAcumulados = (pagos) => {
         const pagosFiltrados = pagos.filter(pago => pago.CTE + "-" + pago.FICHA == codigo);
         //1
         pagosFiltrados.reduce((acum, pago) => {
-            const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3   
+            const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3
             const { pagadoAnt, pagasAnt } = acum;
 
             //Esta evaluacion se ejecuta en caso que pagasAnt <> pagas
@@ -31,7 +31,13 @@ const formatPagosAcumulados = (pagos) => {
             const vencimientoVigente = addMonth(vencimientoValido, pagasAnt)
             const diasDeAtraso = Math.max(dateDiff(pago.FECHA, vencimientoVigente), 0)
             const cuotaAtrasada = diasDeAtraso >= 7
-            const variableAtraso = Number(cuotaAtrasada) / pago.ORIGINALES
+
+            const variableAtraso =
+                (Number(cuotaAtrasada) / pago.ORIGINALES) *
+                (pagas - pagasAnt) + Math.trunc((diasDeAtraso - (30 * (pagas - pagasAnt))) / 31) / pago.ORIGINALES
+                
+            // const variableAtraso = Number(cuotaAtrasada) / pago.ORIGINALES
+
             pagosFormated.push({ ...pago, pagadoAnt, vencimientoValido, pagas, vencimientoVigente, diasDeAtraso, cuotaAtrasada, variableAtraso })
 
 
@@ -42,4 +48,4 @@ const formatPagosAcumulados = (pagos) => {
 
     return pagosFormated
 }
-module.exports = {formatPagosAcumulados}
+module.exports = { formatPagosAcumulados }

@@ -1,17 +1,17 @@
 const Router = require("express").Router();
 const pool = require("../../model/connection-database.js")
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes")
-const { getFichas, getFichasOptimized } = require("../../model/CRM/get_tablas/get_fichas")
+const { getFichas } = require("../../model/CRM/get_tablas/get_fichas")
 const { getCliente } = require("../../lib/get_cliente");
-const { getMasterBGM, getMasterEC, getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
+const { getMasterBGM, getMasterEC } = require("../../model/CRM/get_tablas/get_master.js");
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
 const { isLoggedIn } = require("../../lib/auth");
 const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js");
 const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../../lib/doubt.js");
 const express = require("express");
 const path = require("path");
-const { getDisponible, getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
-const { } = require("../../shared/lib/calificacionesEasy.js")
+const { getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
+const { getBaseDetalle } = require("../../shared/model/cteData.js");
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 
@@ -71,11 +71,28 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
         return { FECHA_FORMAT, FICHA, Z, ARTICULOS, ANT, MES0, MES1, MES2, MES3, MES4, MES5, MES6, CUOTA_ANT, CUOTA_PAGO, SALDO, CUOTA, CUOTAS, VENCIMIENTO, vencimiento_vigente, CDeFecha, servicio, mora, cuota, ESTADO };
     });
 
+    // Mes, FECHA, FICHA, Z, VTA,
+    //     Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3,
+    //     CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, CUOTA,
+    //     PAGO_EN, VALOR_UNITARIO, ORIGINALE
 
-    query_result.MasterBGM = await getMasterBGM(cte)
-    query_result.MasterEC = await getMasterEC(cte)
+    const BaseDetalle = await getBaseDetalle({ CTE: cte })
+    query_result.MasterBGM = BaseDetalle.filter(ficha => ficha.FICHA <= 50000).map(ficha => {
+        const { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES } = ficha
+        return { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES }
+    })
+    query_result.MasterEC = BaseDetalle.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
+        const { FECHA, FICHA, Z, CAPITAL, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, ORIGINALES, ESTADO, VENCIMIENTO } = ficha
+        return { FECHA, FICHA, Z, CAPITAL, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, ORIGINALES, ESTADO, VENCIMIENTO }
+    })
+
+
+
+    // query_result.MasterBGM = await getMasterBGM(cte)
+    // query_result.MasterEC = await getMasterEC(cte)
+
     const { disponibleFinalBgm, calificacion, disponibleFinalEasy } = await getCreditoDisponibleBgm(cte)
-    query_result.Disponible = [{ BGM : disponibleFinalBgm, CALIF : calificacion, CAPITAL : disponibleFinalEasy }]
+    query_result.Disponible = [{ BGM: disponibleFinalBgm, CALIF: calificacion, CAPITAL: disponibleFinalEasy }]
     query_result.Domicilio = await getDomicilio(cte_data.CALLE);
 
     query_result.Domicilio = query_result.Domicilio.map(cliente => {

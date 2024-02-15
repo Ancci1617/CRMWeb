@@ -3,7 +3,7 @@ const pool = require("../../model/connection-database.js");
 const getMasterSummaryBefore2023 = async ({ cteList }) => {
 
     const [summary] = await pool.query(
-        `SELECT AVG(TEORICA) as PROMEDIO,MIN(TEORICA) as MINIMO,MAX(TEORICA) as MAXIMO FROM basedetalle where CTE in (?) and FECHA < '2022-12-01';`,
+        `SELECT AVG(TEORICA) as PROMEDIO,MIN(TEORICA) as MINIMO,MAX(TEORICA) as MAXIMO FROM BaseDetalle where CTE in (?) and FECHA < '2022-12-01';`,
         [cteList]
     )
 

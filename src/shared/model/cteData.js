@@ -6,18 +6,25 @@ const getBaseDetalle = async ({ CTE, Easy = false }) => {
         Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, 
         SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, 
         Mes, ORIGINALES, TEORICA, PRIMER_VENCIMIENTO, VENCIMIENTO,ESTADO,CAPITAL,CONCAT(CTE,'-',FICHA) as CODIGO  
-        FROM basedetalle WHERE CTE in (?) ${Easy ? "AND FICHA > 50000" : ""} order by FECHA desc`, [CTE])
-    return res
+        FROM BaseDetalle WHERE CTE in (?) ${Easy ? "AND FICHA > 50000" : ""} order by FECHA desc`, [CTE]);
+ 
+        
+
+    return res;
 }
 
 const getPagosAcumulados = async ({ CTE, Easy = false }) => {
 
     const [pagos] = await pool.query(`
-    SELECT pm.CTE,pm.FICHA,VALOR,pm.FECHA,SERV,MORA,
-    bd.CUOTA,bd.PRIMER_VENCIMIENTO,bd.VENCIMIENTO,bd.ORIGINALES,CONCAT(pm.CTE,'-',pm.FICHA) AS CODIGO  
+    SELECT pm.CTE,pm.FICHA,pm.VALOR,pm.FECHA,SERV,MORA,
+    coalesce(bd.CUOTA,f.CUOTA) as CUOTA,
+    COALESCE(bd.PRIMER_VENCIMIENTO,f.PRIMER_PAGO) as PRIMER_VENCIMIENTO,
+    COALESCE(bd.VENCIMIENTO,f.VENCIMIENTO) as VENCIMIENTO,
+    COALESCE(bd.ORIGINALES,f.TOTAL / f.CUOTA) as ORIGINALES,
+    CONCAT(pm.CTE,'-',pm.FICHA) AS CODIGO
     
-    FROM pagossvmaster pm LEFT JOIN basedetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA WHERE pm.CTE IN (?) 
-    ${Easy ? " AND pm.FICHA > 50000" : ''} AND bd.ESTADO = "ACTIVO";`, [CTE])
+    FROM PagosSVAcumulado pm LEFT JOIN BaseDetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA left join Fichas f on f.CTE = pm.CTE and f.FICHA = pm.FICHA WHERE pm.CTE IN (?) ${Easy ? " AND pm.FICHA > 50000" : ''} AND (bd.ESTADO = "ACTIVO" or bd.ESTADO is null) order by pm.FECHA;
+    `, [CTE])
 
     return pagos
 }

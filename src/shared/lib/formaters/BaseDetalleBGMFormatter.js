@@ -28,7 +28,7 @@ const calcularBienAbonado = (ficha, pagos, Easy = false) => {
 const formatBaseDetalle = (BaseDetalle, pagos,Easy) => {
     return BaseDetalle.map(ficha => {
         const pagosFicha = pagos.filter(pago => pago.CODIGO == ficha.CODIGO)
-        const bienAbonado = calcularBienAbonado(ficha, pagosFicha,Easy)
+        const bienAbonado = calcularBienAbonado({ESTADO : ficha.ESTADO,FICHA : ficha.FICHA,TEORIA : ficha.TEORIA}, pagosFicha,Easy)
         return { ...ficha, bienAbonado }
     });
 
