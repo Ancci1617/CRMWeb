@@ -7,7 +7,7 @@
         "user": "root",
         "password": "",
         "database": "bgm_db",
-        "timezone" : "+03:00"
+        "timezone" : "+00:00"
     }
 
 }

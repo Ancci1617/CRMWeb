@@ -1,7 +1,8 @@
 const { getVencidas, getToday, sumarMeses, dateDiff } = require("../lib/dates");
 const DAY = 1000 * 60 * 60 * 24;
 const { ZONAS_EXCEPCIONES } = require("../constants/zonas_excepciones.js");
-const {truncar} = require("./format.js");
+const { truncar } = require("./format.js");
+const { round } = require("./numbers.js");
 
 const getVencimientoValido = ({ VENCIMIENTO, PRIMER_PAGO }) => {
     const HOY = new Date(getToday());
@@ -35,7 +36,7 @@ const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA, ANTICIPO 
 
     const atraso = parseFloat(Math.max(vencidas - pagas, 0).toFixed(1));
     const atraso_eval = Math.max(Math.ceil(vencidas - (pagas + 0.3)), 0);
-    
+
 
     return { vencidas, pagas, atraso, atraso_eval }
 
@@ -68,8 +69,8 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
 
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
-
-
+    const capitalTomado = (SALDO / TOTAL) * CAPITAL
+    const VALOR_UNITARIO = round(capitalTomado / 12000, 2)
 
     const mora_unit = Math.max(Math.round(CAPITAL * 0.01 / 100) * 100, 150);
 
@@ -83,7 +84,9 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
             , 0);
 
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
+    const ratioCreditoVencido = vencidas / CUOTAS
 
+    
     return {
         cuota,
         servicio,
@@ -91,7 +94,9 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
         mora,
         atraso,
         atraso_evaluado: atraso_eval,
-        pagas, vencimiento_vigente, EsPrimerPago: false
+        pagas, vencimiento_vigente, EsPrimerPago: false, capitalTomado, VALOR_UNITARIO,
+        ratioCreditoVencido
+
     }
 }
 
@@ -135,17 +140,13 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
 
 
-    
+
     /*
     Si la ficha tiene todas las cuotas pagas(por redondeo) y todas la scuotas vencidas
     pero aun tiene un saldo pendiente, siempre va a estar para cobrar
     */
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
-
-
-
-
-
+    const ratioCreditoVencido = vencidas / CUOTAS
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
@@ -153,9 +154,11 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
         mora: deuda_mora,
         atraso,
         atraso_evaluado: atraso_eval,
-        pagas, vencimiento_vigente, EsPrimerPago
+        pagas, vencimiento_vigente, EsPrimerPago,
+        ratioCreditoVencido
     }
 }
 
-module.exports = { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy }
+
+module.exports = { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy, getAtrasosEasyCash }
 

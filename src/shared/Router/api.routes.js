@@ -1,10 +1,10 @@
 const Router = require("express").Router();
-const api_controller = require("../controller/api.controller.js");
+const apiController = require("../controller/api.controller.js");
 
 
 //req.query = ?CTE=8108
-Router.get("/getCte",api_controller.getCte);
-Router.post("/getUbicacion",api_controller.getUbicacion);
-
+Router.get("/getCte",apiController.getCte);
+Router.post("/getUbicacion",apiController.getUbicacion);
+Router.get("/getCalificaciones",apiController.getCalificaciones)
 
 module.exports = Router

@@ -440,7 +440,6 @@ const getAcumuladoDetalle = async (query = { "true": true }) => {
 
 const getPagos = async (...criteria) => {
     const criteriaSql = criteria.join(" AND ");
-    console.log(criteriaSql);
     const [pagos] = await pool.query(
         `SELECT CTE, FICHA, VALOR, PROXIMO, MP, MP_TITULAR, MP_OPERACION, 
         SERV, MORA, COBRADOR, FECHA, DECLARADO_CUO, DECLARADO_COB, CONFIRMACION, 
@@ -448,4 +447,5 @@ const getPagos = async (...criteria) => {
     return pagos;
 }
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle, getPagos }
+
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle, getPagos}

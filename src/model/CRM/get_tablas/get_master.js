@@ -2,10 +2,10 @@ const pool = require("../../connection-database.js");
 
 const getMasterBGM = async (cte) => {
     const [rows] = await pool.query(
-        "SELECT `Mes`,`FECHA`, `FICHA`, `Z`, `VTA`, " +
-        "`Atraso`, `Anticipo`, `CUOTA_1`, `CUOTA_2`, `CUOTA_3`, " +
-        "`CUOTA_4`, `CUOTA_5`, `Sal Ant`, `CUOTA_6`, `Sal Act`, `Cuota`, " +
-        "`PAGO_EN`, `Valor Unitario`,ORIGINALES FROM `BaseDetalle` WHERE cte = ? order by MES"
+        `SELECT Mes,FECHA, FICHA, Z, VTA, 
+         Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, 
+         CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, CUOTA, 
+         PAGO_EN, VALOR_UNITARIO,ORIGINALES FROM BaseDetalle WHERE cte = ? order by MES`
         , [cte]);
     if (rows.length > 0) {
         return rows;
