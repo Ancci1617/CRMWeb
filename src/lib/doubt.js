@@ -86,7 +86,7 @@ function getDebtEasy({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
     const ratioCreditoVencido = vencidas / CUOTAS
 
-    
+
     return {
         cuota,
         servicio,
@@ -108,6 +108,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     //Busca vencimiento valido, entre vencimiento o primer pago Y CALCULA los atrasos
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
     let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA, ANTICIPO });
+
 
     /*calcula al deuda en cuota,servicio y mora
     En caso que sea prepago calcula la deuda de cuota de la siguiente manera
@@ -145,8 +146,11 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     Si la ficha tiene todas las cuotas pagas(por redondeo) y todas la scuotas vencidas
     pero aun tiene un saldo pendiente, siempre va a estar para cobrar
     */
+
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
     const ratioCreditoVencido = vencidas / CUOTAS
+
+
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
