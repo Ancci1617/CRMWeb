@@ -62,10 +62,10 @@ LIMITANTE AFECTA AL LIMITE DE CREDITO
 */
 
 const calcularLimitante = (fichasVigentes, cteData, cantidadComprasCanceladas, cantidadDeCompras, BaseDetalle) => {
+    if (cteData.ES_CLAVO) return "CLAVAZO"
 
     const estaAtrasado = !!fichasVigentes.find(ficha => ficha.atraso_evaluado > 0);
     if (estaAtrasado) return "ATRASADO"
-    if (cteData.ES_CLAVO) return "CLAVAZO"
 
     if (cantidadComprasCanceladas / cantidadDeCompras >= 0.5) return "DEVOLUCIONES"
     if (BaseDetalle.length > 0) {
@@ -233,7 +233,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
 }
 
-getCreditoDisponibleBgm(9590).then(res => console.log(res))
+getCreditoDisponibleBgm(22481).then(res => console.log(res))
 
 
 
