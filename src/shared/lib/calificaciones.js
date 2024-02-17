@@ -163,6 +163,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
     if (!BaseDetalleFull.length) return { ...{ CTE }, ...calcularCLienteNuevo(fichasVigentesFull, cteData, tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy) }
     if (BaseDetalleEasy.length && !BaseDetalle.length) {
         const disponibleEasyCash = await getCreditoDisponibleEasy(CTE, BaseDetalleEasy, pagosFull, cteData, fichasVigentesFull, null, null, summary);
+        console.log(disponibleEasyCash);
         return {
             ...cteNuevoBgmObject,
             ...disponibleEasyCash,
@@ -233,7 +234,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
 }
 
-getCreditoDisponibleBgm(22481).then(res => console.log(res))
+getCreditoDisponibleBgm(14626).then(res => console.log(res))
 
 
 
