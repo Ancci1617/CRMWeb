@@ -439,7 +439,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         Fichas.Z,
         Fichas.TOTAL,
         Fichas.ANTICIPO,
-
+        Fichas.ARTICULOS as CAPITAL,
 
         ${withAcumulado ? acumuladoStrings[1] : ""}
         ${withCambiosDeFecha ? cambiosDeFechaStrings[1] : ""}

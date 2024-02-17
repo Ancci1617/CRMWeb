@@ -1,4 +1,4 @@
-const { sumarMeses } = require("../../lib/dates.js");
+
 const { round } = require("../../lib/numbers");
 const { FichasViejas } = require("../constants/dates.js");
 

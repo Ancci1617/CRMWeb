@@ -70,25 +70,22 @@ const getCobranzasEasy = async (req, res) => {
 }
 
 const getCobranzas = async (req, res) => {
-  let cobranzas_primera_parte = await getFichas("FICHA", "3000", "<");
-  console.log(1);
-  let cobranzas_segunda_parte = await getFichas("FICHA", "3000", ">=","Fichas.FICHA < 5000");
-  console.log(2);
-  let cobranzas_tercera_parte = await getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 7000");
-  console.log(3);
-  let cobranzas_cuarta_parte = await getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 20000");
-  console.log(4);
   
-  let cobranzas = [...cobranzas_primera_parte, ...cobranzas_segunda_parte,...cobranzas_tercera_parte,...cobranzas_cuarta_parte];
-  console.log("union",5);
-  
-
-
+  const promises = [
+    getFichas("FICHA","3000","<"),
+    getFichas("FICHA","3000",">=","Fichas.FICHA < 5000"),
+    getFichas("FICHA","5000",">=","Fichas.FICHA < 7000"),
+    getFichas("FICHA","7000",">=","Fichas.FICHA < 8000"),
+    getFichas("FICHA","8000",">=","Fichas.FICHA < 20000")
+  ]
+  console.log("Calculando cobranzas.");
+  const cobranzas = (await Promise.all(promises)).flat();
+  console.log("utiliza delete");
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
     delete cobranzas[i].ARTICULOS
   }
-
+  console.log("calcula deudas");
   const cobranzas_final = cobranzas.map(ficha => {
     const {
       cuota: deuda_cuota,
@@ -97,6 +94,7 @@ const getCobranzas = async (req, res) => {
       vencimiento_vigente, EsPrimerPago
     } = getDoubt(ficha);
 
+    console.log("Utiliza assign");
     return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
   })
 
