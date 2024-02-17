@@ -76,10 +76,10 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     //     CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, CUOTA,
     //     PAGO_EN, VALOR_UNITARIO, ORIGINALE
 
-    const BaseDetalle = await getBaseDetalle({ CTE: cte })
+    const BaseDetalle = await getBaseDetalle({ CTE: cte,orderBy : "FECHA",order : "asc" })
     query_result.MasterBGM = BaseDetalle.filter(ficha => ficha.FICHA <= 50000).map(ficha => {
-        const { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES } = ficha
-        return { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES }
+        const { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES,ESTADO } = ficha
+        return { Mes, FECHA, FICHA, Z, VTA, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, ORIGINALES,ESTADO }
     })
     query_result.MasterEC = BaseDetalle.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
         const { FECHA, FICHA, Z, CAPITAL, Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, SAL_ANT, CUOTA_6, SAL_ACT, Cuota, ORIGINALES, ESTADO, VENCIMIENTO } = ficha
