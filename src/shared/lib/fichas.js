@@ -8,7 +8,7 @@ const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCamb
     const fichasVigentes = fichasRaw.map(ficha => {
         return ficha.FICHA < 50000 ?
             { ...ficha, ...getDoubt(ficha) } :
-            { ...ficha, ...getDebtEasy(ficha) }
+            { ...ficha, CAPITAL : parseInt(ficha.CAPITAL),...getDebtEasy(ficha) }
     });
     return fichasVigentes
 }
