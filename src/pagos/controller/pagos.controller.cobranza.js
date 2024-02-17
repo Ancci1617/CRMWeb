@@ -80,11 +80,12 @@ const getCobranzas = async (req, res) => {
   ]
   console.log("Calculando cobranzas.");
   const cobranzas = (await Promise.all(promises)).flat();
+  console.log("utiliza delete");
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
     delete cobranzas[i].ARTICULOS
   }
-
+  console.log("calcula deudas");
   const cobranzas_final = cobranzas.map(ficha => {
     const {
       cuota: deuda_cuota,
@@ -93,6 +94,7 @@ const getCobranzas = async (req, res) => {
       vencimiento_vigente, EsPrimerPago
     } = getDoubt(ficha);
 
+    console.log("Utiliza assign");
     return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
   })
 

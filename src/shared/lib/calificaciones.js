@@ -12,6 +12,7 @@ const { calcularIncremento, calcularTomado, calcularZFinal } = require("./calcul
 const { getCreditoDisponibleEasy, getCreditoDisponibleEasyClienteNuevo } = require("./calificacionesEasy.js");
 const { getCreditoDisponibleBgmClienteNuevo } = require("./clientesNuevos.js");
 const { cteNuevoBgmObject } = require("../constants/nuevos.js");
+const { fichasAsBaseDetalle } = require("./formaters/FichasTerminadas.js");
 //Obtiene el Z inciial de la logica de las ventas < 2023
 const getZInicial = (cteSummary) => {
 
@@ -150,9 +151,8 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
     const { tomadoFichasBGM, tomadoPrestamosEasy, tomadoPrestamosBGM, tomadoFichasEasy } = calcularTomado(fichasVigentesFull)
 
-    const summary = generateSummaryBaseDetalle(BaseDetalleFull)
+    const summary = generateSummaryBaseDetalle([...BaseDetalleFull,...fichasAsBaseDetalle(fichasVigentesFull,pagosFull)])
     const limitante = calcularLimitante(fichasVigentesFull, cteData, summary.DEVOLUCIONES + summary.RETIRADAS, summary.CREDITOS_BGM, BaseDetalle)
-
 
 
     /*Si no tuvo nada, calcularClientesNuevos
@@ -221,6 +221,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
         incrementoEasy,
         limiteEasy,
         tomadoFichasBGM,
+        tomadoFichasEasy,
         tomadoPrestamosEasy,
         tomadoPrestamosBGM,
         disponibleEasyCash,
@@ -232,7 +233,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
 }
 
-getCreditoDisponibleBgm(26035).then(res => console.log(res))
+getCreditoDisponibleBgm(9590).then(res => console.log(res))
 
 
 
