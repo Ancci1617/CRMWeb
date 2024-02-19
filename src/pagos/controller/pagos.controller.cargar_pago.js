@@ -1,5 +1,5 @@
 const pagosModel = require("../model/pagos.model.js");
-const { getToday, dateDiff } = require("../../lib/dates.js");
+const { getToday } = require("../../lib/dates.js");
 const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
@@ -18,7 +18,7 @@ const { cargarEvento } = require("../../shared/model/eventos.model.js");
 
 
 async function deudaCte(req, res) {
-    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false, Recorrido } = req.query;
+    const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false, Recorrido, FECHA_EVALUAR } = req.query;
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
@@ -28,9 +28,9 @@ async function deudaCte(req, res) {
 
     const fichas = fichas_data.map(ficha => {
         if (ficha.FICHA >= 50000)
-            return { data: ficha, deuda: getDebtEasy(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
+            return { data: ficha, deuda: getDebtEasy(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR", FECHA_EVALUAR) }
 
-        return { data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR") }
+        return { data: ficha, deuda: getDoubt(ficha, req.user.RANGO == "COBRADOR" || req.user.RANGO == "VENDEDOR", FECHA_EVALUAR) }
     });
 
 
@@ -48,7 +48,7 @@ async function deudaCte(req, res) {
 
     //Fichas es un objeto, las propiedades modificadas dentro de la funcion son modificadas en el original
     agregarMeses(fichas);
-    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido });
+    res.render("pagos/pagos.cte.ejs", { fichas, cte_data, usuarios, N_OPERACION, TITULAR, EsRecorrido, Recorrido, FECHA_EVALUAR });
 }
 
 
@@ -65,7 +65,7 @@ async function deudaCte(req, res) {
 async function cargarPago(req, res) {
 
 
-    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS, DECLARADO_CUO = 0, DECLARADO_COB = 0, DECLARADO_SERV = 0, DECLARADO_MORA = 0, EsRecorrido } = req.body;
+    const { CTE, FICHA, MP_PORCENTAJE, N_OPERACION, MP_TITULAR, FECHA_COB, OBS, DECLARADO_CUO = 0, DECLARADO_COB = 0, DECLARADO_SERV = 0, DECLARADO_MORA = 0, EsRecorrido, FECHA_EVALUAR } = req.body;
 
     //Aca deberia ir un schema//
     const COBRADO = parseInt(req.body.COBRADO) || parseInt(DECLARADO_COB) + parseInt(DECLARADO_CUO);
@@ -74,14 +74,16 @@ async function cargarPago(req, res) {
 
     const pago_obj = FICHA >= 50000 ?
         { CUOTA: DECLARADO_CUO, MORA: DECLARADO_MORA, SERV: DECLARADO_SERV } :
-        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO, RANGO: req.user.RANGO });
+        await redistribuirPagoBgm({ FICHA, COBRADO, DECLARADO_COB, DECLARADO_CUO, RANGO: req.user.RANGO, FECHA_EVALUAR });
 
-    const submit_obj = Object.assign(pago_obj,
-        {
-            CTE, FICHA, PROXIMO: FECHA_COB, CODIGO, USUARIO: req.user.Usuario,
-            FECHA: getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
-            DECLARADO_COB: parseInt(DECLARADO_SERV) + parseInt(DECLARADO_MORA), DECLARADO_CUO, DECLARADO_SERV
-        });
+    const submit_obj = {
+        ...pago_obj,
+        
+        CTE, FICHA, PROXIMO: FECHA_COB, CODIGO, USUARIO: req.user.Usuario,
+        FECHA: FECHA_EVALUAR || getToday(), OBS, MP_PORCENTAJE, N_OPERACION, MP_TITULAR,
+        DECLARADO_COB: parseInt(DECLARADO_SERV) + parseInt(DECLARADO_MORA), DECLARADO_CUO, DECLARADO_SERV
+
+    };
 
     await pagosModel.cargarPago(submit_obj);
 

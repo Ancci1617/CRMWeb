@@ -35,6 +35,8 @@
       <% if(payments.length > 0) {%>
 
       <div class="lista_de_ingresos">
+        
+        
         <% payments.forEach(payment => { %>
         <%- include("../partials/pagos/payment_mp.ejs", {payment,TITULAR : MP_TITULAR.Usuario }) %>
         <%})%>

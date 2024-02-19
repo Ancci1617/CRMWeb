@@ -1,18 +1,15 @@
 const { getFichasByCte } = require("../model/pagos.model");
 const { getDoubt } = require("../../lib/doubt.js");
-const redistribuirPagoBgm = async ({ FICHA, COBRADO, DECLARADO_CUO, DECLARADO_COB, RANGO }) => {
+const redistribuirPagoBgm = async ({ FICHA, COBRADO, DECLARADO_CUO, DECLARADO_COB, RANGO, FECHA_EVALUAR }) => {
 
 
     const [ficha_data] = await getFichasByCte(FICHA, "FICHA");
 
-    const ficha = { data: ficha_data, deuda: getDoubt(ficha_data, RANGO == "COBRADOR" || RANGO == "VENDEDOR") };
-
-    console.log("🚀 ~ file: redistribuciones.js:10 ~ redistribuirPagoBgm ~ ficha:", ficha)
-    // console.log("Datos de la ficha ", ficha)
+    const ficha = { data: ficha_data, deuda: getDoubt(ficha_data, RANGO == "COBRADOR" || RANGO == "VENDEDOR", FECHA_EVALUAR) };
 
 
     let MORA = [0], SERV = [0], CUOTA = [0];
-    MORA[0] = Math.max(Math.min(ficha.deuda.mora, COBRADO),0);
+    MORA[0] = Math.max(Math.min(ficha.deuda.mora, COBRADO), 0);
     COBRADO -= MORA[0];
 
     for (let i = 0; i < ficha.deuda.atraso_evaluado; i++) {
@@ -33,8 +30,6 @@ const redistribuirPagoBgm = async ({ FICHA, COBRADO, DECLARADO_CUO, DECLARADO_CO
 
 
 
-
-    console.log({ MORA, SERV, CUOTA });
 
     return { MORA: sumarPagos(MORA), SERV: sumarPagos(SERV), CUOTA: sumarPagos(CUOTA), DECLARADO_COB: DECLARADO_COB || sumarPagos([...SERV, ...MORA]), DECLARADO_CUO: DECLARADO_CUO || CUOTA }
 }

@@ -2,15 +2,17 @@
 <%  const total_asignado = payment.asociados.reduce((acumm,pago) => {return acumm + pago.MP + pago.SERV + pago.MORA + pago.VALOR },0) %>
 <% const sin_asignar = transaction_amount - total_asignado %>
 <% const estado = sin_asignar > 300 ? "sin_asignar" : (sin_asignar < -300 ? "exceso" : "asignado") %>
+<% const timeOffSet = new Date().getTimezoneOffset() * 60 * 1000 %>
+<% const dateFormated = new Date(new Date(payment.date_created) - timeOffSet).toISOString().slice(0,10) %>
 
 <div class="<%= `payment ${estado}` %>">
-  <% if(estado == "sin_asignar") { %><a href="<%= `/pagos/deuda_cte?CTE=0&N_OPERACION=${id}&TITULAR=${TITULAR}` %>" class="link"> <% } %>
+  <% if(estado == "sin_asignar") { %><a href="<%= `/pagos/deuda_cte?CTE=0&N_OPERACION=${id}&TITULAR=${TITULAR}&FECHA_EVALUAR=${dateFormated}` %>" class="link"> <% } %>
 
 
     <div class="n_operacion flex-space_between"><%= id %> <span class="monto_transferencia">$<%= transaction_amount  %></span></div>
 
     <div>
-    <%= payer.identification ? 
+      <%= payer.identification ? 
     `${payer.identification.type} ${payer.identification.number == MP_TITULAR.CUIL ? "--" : payer.identification.number}` : `CUIL no encontrado`
     %>
     </div>

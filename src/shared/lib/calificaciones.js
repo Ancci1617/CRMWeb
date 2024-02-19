@@ -234,7 +234,8 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
 }
 
-getCreditoDisponibleBgm(14626).then(res => console.log(res))
+// getCreditoDisponibleBgm(14626).then(res => console.log(res))
+
 
 
 

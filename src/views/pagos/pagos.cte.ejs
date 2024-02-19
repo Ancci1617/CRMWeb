@@ -30,10 +30,11 @@
 
       <input type="hidden" name="N_OPERACION" value="<%= N_OPERACION  %>">
       <input type="hidden" name="TITULAR" value="<%= TITULAR  %>">
+      <input type="hidden" name="FECHA_EVALUAR" value="<%= FECHA_EVALUAR  %>">
       <input type="submit" hidden>
     </form>
 
-    <header class="creditos__header"> 
+    <header class="creditos__header">
       <h1 class="CTE_NOMBRE"><%= cte_data.CALLE  %></h1>
       <div class="header--credito__container--datos">
         <div class="CTE_CALLE">
@@ -44,9 +45,11 @@
         <div>
           <div>Tel:<%= cte_data.WHATSAPP || "Sin telefono"%></div>
           <% if(hasPermission(permisos.ADMIN_COB) && cte_data.CTE){  %>
-            <a href="/admin/editarCliente/<%= cte_data.CTE %>" class="link link-editar">Editar cliente</a>
-            <% } %>
-          </div>
+          <a href="/admin/editarCliente/<%= cte_data.CTE %>" class="link link-editar">Editar cliente</a>
+          <% } %>
+          <% if(FECHA_EVALUAR) {%> <div>Deuda al dia : <%= FECHA_EVALUAR %></div> <% } %>
+
+        </div>
         </fdiv>
     </header>
 
@@ -54,11 +57,11 @@
     <% fichas.forEach(ficha => { %>
     <% if(ficha.data.FICHA <= 50000) {%>
 
-    <%- include(global.dir_partials + "/pagos/deuda_cte.ficha.ejs",{ficha,Recorrido}) %>
+    <%- include(global.dir_partials + "/pagos/deuda_cte.ficha.ejs",{ficha,Recorrido,FECHA_EVALUAR}) %>
 
     <% }else { %>
 
-    <%- include(global.dir_partials + "/pagos/deuda_cte.prestamo.ejs",{ficha,Recorrido}) %>
+    <%- include(global.dir_partials + "/pagos/deuda_cte.prestamo.ejs",{ficha,Recorrido,FECHA_EVALUAR}) %>
     <% } %>
     <% }); %>
 
