@@ -53,7 +53,7 @@ const getPagoByCodigo = async (CODIGO) => {
     if (ficha_data.length > 0) {
         return ficha_data[0];
     }
-    return [];
+    return null;
 }
 
 
@@ -252,7 +252,9 @@ const getAcumuladoByCteFicha = async ({ CTE, FICHA }) => {
 const getFechasDePagosYCobradores = async () => {
 
     const [FECHAS] = await pool.query(
-        "SELECT DISTINCT COBRADOR,FECHA FROM `PagosSV` WHERE CONFIRMACION != 'INVALIDO' ORDER BY `PagosSV`.`FECHA` DESC;");
+        `SELECT DISTINCT COBRADOR,FECHA 
+        FROM (select COBRADOR,FECHA from PagosSV WHERE CONFIRMACION != 'INVALIDO' union select COBRADOR,FECHA from PagosSVAcumulado ) PagosSV
+         ORDER BY PagosSV.FECHA DESC;`);
 
 
     if (FECHAS.length > 0) {
@@ -297,13 +299,11 @@ const getPagosByFechaYCob = async ({ COB = "%", FECHA = "%", ORDEN }) => {
     ClientesSV.CALLE,
     ClientesSV.NOMBRE AS NOMBRE
     FROM
-        PagosSV
+        (SELECT * from PagosSV union select * from PagosSVAcumulado) PagosSV
     LEFT JOIN Fichas ON Fichas.FICHA = PagosSV.FICHA
     LEFT JOIN ClientesSV ON ClientesSV.CTE = PagosSV.CTE
     WHERE
         PagosSV.FECHA LIKE ? AND PagosSV.COBRADOR LIKE ? AND PagosSV.CONFIRMACION != 'INVALIDO'
-    GROUP BY
-        CODIGO
     ORDER BY
         CONFIRMACION,
         ??,
@@ -448,4 +448,4 @@ const getPagos = async (...criteria) => {
 }
 
 
-module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle, getPagos}
+module.exports = { cargarPago, getAcumuladoByCteFicha, getFechasDePagosYCobradores, getFichasByCte, getPagoByCodigo, getPagosByFechaYCob, insertCambioDeFecha, updateDistribucionByCodigo, updateEstadoPagoByCodigo, updateMoraYServAnt, updateSaldosAnterioresYServicios, invalidarPago, getPagosMP, getAcumuladoDetalle, getPagos }

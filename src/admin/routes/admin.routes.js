@@ -34,6 +34,10 @@ router.get("/cargarDevolucion/:FICHA",
     hasPermission(permisos.ADMIN_ADMIN),
     adminController.cargarDevolucion);
 
+router.get("/cargarRetirada/:FICHA",
+    hasPermission(permisos.ADMIN_ADMIN),
+    adminController.cargarRetirada);
+
 
 
 

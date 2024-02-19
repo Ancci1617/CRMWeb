@@ -1,5 +1,4 @@
 "use strict";
-const pagosModel = require("../../pagos/model/pagos.model.js");
 const cobradorModel = require("../model/cobrador.model.js");
 const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
@@ -7,7 +6,6 @@ const { getToday } = require("../../lib/dates.js");
 const { generarInformeCobranza } = require("../lib/informe.js");
 const { getUserByUsuario } = require("../../model/auth/getUser.js");
 const permisos = require("../../constants/permisos.js");
-const c = require("config");
 
 
 

@@ -108,6 +108,8 @@ async function confirmarPago(req, res) {
     try {
 
         const pago = await pagosModel.getPagoByCodigo(CODIGO);
+
+        if(!pago) return res.status(500).send("error, no se encontro el pago, o bien es de meses anteriores")
         if (pago.FICHA > 50000) {
             await generarSaldoAnteriorEasyCash(pago);
         } else {

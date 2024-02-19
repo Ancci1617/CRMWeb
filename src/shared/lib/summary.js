@@ -5,7 +5,6 @@ const { FichasViejas } = require("../constants/dates.js");
 
 
 const generateSummaryBaseDetalle = (BaseDetalle) => {
-
     if (!BaseDetalle.length) return { FICHAS: 0, RETIRADAS: 0, DEVOLUCIONES: 0 }
 
     const summary = BaseDetalle.reduce((acum, ficha) => {

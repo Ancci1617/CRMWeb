@@ -12,7 +12,7 @@ const generarInformeCobranza = async (zonas, cobrador) => {
         const todayString = getToday();
         const dateReference = new Date(today.getUTCFullYear(), today.getUTCMonth(), 1).toISOString().split("T")[0];
         const fichasRaw = await getFichasOptimized({ withAcumulado: false, withCambiosDeFecha: true },
-            [`Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO != 'DEVOLUCION'`, `Fichas.FICHA < 50000`]);
+            [`Fichas.Z in ('${zonas.join("','")}') `, `Fichas.ESTADO = 'ACTIVO'`, `Fichas.FICHA < 50000`]);
 
         const fichasObjetivo = fichasRaw.filter(ficha => ficha.FECHA < dateReference);
 

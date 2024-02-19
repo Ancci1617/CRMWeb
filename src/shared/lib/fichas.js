@@ -7,8 +7,8 @@ const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCamb
     const fichasRaw = await getFichasOptimized(options, [`Fichas.CTE in (${Array.isArray(CTE) ? CTE.join(",") : CTE})`]);
     const fichasVigentes = fichasRaw.map(ficha => {
         return ficha.FICHA < 50000 ?
-            { ...ficha, ...getDoubt(ficha) } :
-            { ...ficha, CAPITAL : parseInt(ficha.CAPITAL),...getDebtEasy(ficha) }
+            { ...ficha,VALOR_UNITARIO : ficha.VU, ...getDoubt(ficha) } :
+            { ...ficha,CAPITAL : parseInt(ficha.CAPITAL),...getDebtEasy(ficha) }
     });
     return fichasVigentes
 }

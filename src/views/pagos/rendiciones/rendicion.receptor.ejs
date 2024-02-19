@@ -120,10 +120,11 @@
 
       <%- include("../../partials/pagos/rendicion.detalle.ejs",pagos) %>
 
-      <% }else{ %>
+      <% }else {%>
       <header>
         <span class="cobrador_nombre">Sin rendicion: </span>
         <span class="cobranza_fecha">. . . .</span>
+        <div><a href=<%=`/pagos/pasar_cobranza?COB=${COB}&FECHA=${FECHA}` %>>Ir a pagos</a></div>
       </header>
       <%}%>
 
@@ -134,9 +135,9 @@
 
 
   <%- include("../../partials/links/nav.logic.ejs") %>
-  <script src="/js/lib/form.hide.js"></script>
-  <script src="/pagos/js/button_events.js"></script>
-  <script src="/pagos/js/aside.js"></script>
+      <script src="/js/lib/form.hide.js"></script>
+      <script src="/pagos/js/button_events.js"></script>
+      <script src="/pagos/js/aside.js"></script>
 
 </body>
 

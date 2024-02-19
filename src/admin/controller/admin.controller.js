@@ -34,12 +34,27 @@ const editarClientePost = async (req, res) => {
 
 
 }
+const cargarRetirada = async (req,res) => {
+    const { FICHA } = req.params;
 
+    try {
+
+        const sqlResponse = await adminModel.updateEstado(FICHA,req.user.Usuario,"RETIRADO");
+
+    
+        res.status(200).redirect(`/CRM?CTE=F:${FICHA}`);
+
+    } catch (error) {   
+        console.log(error);
+        res.status(404).send("No se pudo cargar la retirada")
+    }
+
+}
 const cargarDevolucion = async (req, res) => {
     const { FICHA } = req.params;
     try {
 
-        const sqlResponse = await adminModel.cargarDevolucion(FICHA,req.user.Usuario);
+        const sqlResponse = await adminModel.updateEstado(FICHA,req.user.Usuario,"DEVOLUCION");
 
     
         res.status(200).redirect(`/CRM?CTE=F:${FICHA}`);
@@ -82,7 +97,7 @@ const editarFichaPost = async (req, res) => {
 
 
 
-module.exports = { editarClienteForm, editarClientePost, editarFichaForm, cargarDevolucion, editarFichaPost }
+module.exports = { editarClienteForm, editarClientePost, editarFichaForm, cargarDevolucion, editarFichaPost,cargarRetirada }
 
 
 

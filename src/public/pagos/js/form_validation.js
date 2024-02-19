@@ -27,7 +27,7 @@ const mpCheckHandler = async (e) => {
         })
         const response = await sv_response.json();
 
-        console.log(response);
+
         alert(response.msg);
 
         if (response.success && !response.available) {

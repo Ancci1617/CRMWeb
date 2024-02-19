@@ -1,5 +1,4 @@
 "use strict";
-const { hasPermission } = require("../../middlewares/permission.middleware.js");
 const pool = require("../../model/connection-database.js");
 const  pagosModel  = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");

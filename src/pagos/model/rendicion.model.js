@@ -33,9 +33,7 @@ module.exports = {
                 Pa.FECHA,
                 Pa.COBRADOR
             FROM
-                PagosSV Pa
-            WHERE
-                Pa.CONFIRMACION != 'INVALIDO' 
+                (select * from PagosSV where CONFIRMACION != 'INVALIDO' union select * from PagosSVAcumulado) Pa
             GROUP BY
                 Pa.FECHA,
                 Pa.COBRADOR

@@ -39,18 +39,18 @@ const updateClientesSV = async (CTE, { NOMBRE, CALLE, ZONA, CRUCES, CRUCES2, WHA
 }
 
 
-const cargarDevolucion = async (ficha, USUARIO) => {
+const updateEstado = async (ficha, USUARIO, ESTADO) => {
     const conexion = await pool.getConnection();
 
     try {
 
         const [res] = await conexion.query(`
-            UPDATE Fichas set ESTADO = 'DEVOLUCION' where Fichas.FICHA = ?
-        `, [ficha]);
+            UPDATE Fichas set ESTADO = ? where Fichas.FICHA = ?
+        `, [ESTADO, ficha]);
 
         await cargarEvento(conexion, {
             USUARIO, ANTERIOR: JSON.stringify({ ESTADO: "ACTIVO" }),
-            VIGENTE: JSON.stringify({ ESTADO: "DEVOLUCION" }),
+            VIGENTE: JSON.stringify({ ESTADO }),
             PRIMARIA: ficha,
             TIPO: "DEVOLUCION"
         });
@@ -61,7 +61,6 @@ const cargarDevolucion = async (ficha, USUARIO) => {
     } catch (error) {
         await conexion.rollback();
 
-        console.log(error)
 
         throw new Error(error)
 
@@ -113,4 +112,4 @@ const updateFichasSV = async (FICHA, body, USUARIO) => {
 
 }
 
-module.exports = { updateClientesSV, cargarDevolucion, updateFichasSV }
+module.exports = { updateClientesSV, updateEstado, updateFichasSV }
