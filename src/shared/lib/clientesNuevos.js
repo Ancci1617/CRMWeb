@@ -1,5 +1,6 @@
 const { round } = require("../../lib/numbers")
-const { INICIALES, LIMITANTES } = require("../constants/limitantes")
+const {  LIMITANTES } = require("../constants/limitantes")
+const { INICIALES } = require("../constants/nuevos")
 
 
 const getCreditoDisponibleEasyClienteNuevo = (limitante, tomadoFichasEasy, tomadoPrestamosEasy) => {

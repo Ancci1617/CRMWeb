@@ -9,7 +9,3 @@ module.exports.LIMITANTES = {
 }
 
 
-module.exports.INICIALES = {
-    BGM : 1,
-    EASY : 1
-}

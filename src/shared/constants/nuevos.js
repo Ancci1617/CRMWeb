@@ -1,4 +1,9 @@
-const { INICIALES } = require("../constants/limitantes.js")
+
+
+const INICIALES = {
+    BGM : 1,
+    EASY : 1
+}
 
 const cteNuevoBgmObject = {
     ZInicial: 0,
@@ -26,4 +31,4 @@ const cteNuevoBgmObject = {
 }
 
 
-module.exports = { cteNuevoBgmObject }
+module.exports = { cteNuevoBgmObject ,INICIALES}
