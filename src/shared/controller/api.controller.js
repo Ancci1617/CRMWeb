@@ -45,17 +45,17 @@ const getCalificaciones = async (req, res) => {
         // const cte = cteRaw
         // const calificaciones = await Promise.all(cte.map(async cte => {
         // }))
-        console.log("Consulta Base detalle y pagos");
+        // console.log("Consulta Base detalle y pagos");
         const { BaseDetalle, pagos } = await getEvaluationData(cte, formatBaseDetalle, formatPagosAcumulados)
-        console.log("Consulta datos demograficos del cliente");
+        // console.log("Consulta datos demograficos del cliente");
         const cteDataArr = await getCliente({ CTE: cte })
-        console.log("Consulta fichas vigentes");
+        // console.log("Consulta fichas vigentes");
         const fichasVigentes = await getFichasVigentes(cte);
 
-        console.log({ BaseDetalle: BaseDetalle.length })
-        console.log({ pagos: pagos.length })
+        // console.log({ BaseDetalle: BaseDetalle.length })
+        // console.log({ pagos: pagos.length })
 
-        console.log("por calcular disponible");
+        // console.log("por calcular disponible");
         const disponibles = await Promise.all(cte.map(async CTE => {
             const cteDataCte = cteDataArr.filter(cteData => cteData.CTE == CTE)
             const fichasVigentesCte = fichasVigentes.filter(ficha => ficha.CTE == CTE)
@@ -64,7 +64,7 @@ const getCalificaciones = async (req, res) => {
             const disponible = await getCreditoDisponibleBgm(CTE, BaseDetalleCte, PagosCte, cteDataCte, fichasVigentesCte)
             return disponible
         }))
-        console.log("Disponibles listos, enviando al cliente", disponibles.length);
+        // console.log("Disponibles listos, enviando al cliente", disponibles.length);
         // const fichas = await getFichasVigentesPorLote([cte[0],cte[1]])
         // const pagos = await getPagosAcumulados({CTE : cte})
 

@@ -138,7 +138,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
     /*FETCH DATA (PUEDEN SER PARAMETROS) */
     const [cteData] = cteDataParam || await getCliente({ CTE })
 
-    if (!cteData) throw new Error(`El cliente ${CTE} no existe`)
+    if (!cteData) return cteNuevoBgmObject;
 
     const fichasVigentesFull = fichasVigentesParam || await getFichasVigentes(CTE)
 

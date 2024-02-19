@@ -7,13 +7,14 @@ const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
 const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar,
     getPedidosActivos, getPedidosTerminados, updatePedidoByID, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
 const { getToday } = require("../../lib/dates");
+const { getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
 
 
 
 //MIS_PEDIDOS
 Router.get("/pedidos/", isAdminOrVendedor, (req, res) => {
     // const data = { title: "Pedidos", items: ["Mis pedidos", "Proximos", "Acumulados"], links: ["/pedidos/mis_pedidos", "/pedidos/proximos_pedidos", "/pedidos/mis_pedidos/acumulados"] };
-    const data = { title: "Pedidos", items: ["Mis pedidos","Proximos"], links: ["/pedidos/mis_pedidos","/pedidos/mis_pedidos/proximos"] };
+    const data = { title: "Pedidos", items: ["Mis pedidos", "Proximos"], links: ["/pedidos/mis_pedidos", "/pedidos/mis_pedidos/proximos"] };
     res.render("list-items.ejs", { data });
 });
 
@@ -76,8 +77,9 @@ Router.get("/pedidos/recorrido/detalle", isAdminOrVendedor, async (req, res) => 
 
     //Carga todas las ofertas disponibles de los pedidos
     for (let i = 0; i < pedidos.length; i++) {
-        const Disponible = await getMasterResumen(pedidos[i].CTE || 0);
-        cte_data.Disponibles.set(pedidos[i], Disponible[0]);
+        const { disponibleFinalBgm: BGM, calificacion: CALIF, disponibleEasyCash: CAPITAL } =
+            await getCreditoDisponibleBgm(pedidos[i].CTE || 0);
+        cte_data.Disponibles.set(pedidos[i], { BGM, CALIF, CAPITAL });
     }
 
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN"]);

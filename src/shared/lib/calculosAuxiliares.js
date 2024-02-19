@@ -1,5 +1,5 @@
 const { splitPrestamosFichas } = require("./fichas");
-
+const {cteNuevoBgmObject} = require("../constants/nuevos.js")
 const calcularPagas = (pagado, valorCuota, redondeo) => {
     return Math.trunc(pagado / valorCuota + redondeo);
 }
@@ -54,7 +54,6 @@ const calcularZFinal = (ZInicial, cantidadDeCreditosViejos, cantidadDeCreditosTo
     return sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos) || 0
 
 }
-
 
 
 
