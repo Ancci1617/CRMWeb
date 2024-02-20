@@ -95,9 +95,21 @@ const editarFichaPost = async (req, res) => {
     }
 }
 
+const cargarClavo = async (req,res) => {
+    const {CTE} = req.params
+    const {OBS} = req.body
 
+    try {
+        await adminModel.cargarClavoDb({CTE ,OBS})
+        res.status(200).redirect(`/CRM?CTE=${CTE}`)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg : "No se pudo cargar el clavo"})
+    }
 
-module.exports = { editarClienteForm, editarClientePost, editarFichaForm, cargarDevolucion, editarFichaPost,cargarRetirada }
+}
+
+module.exports = { editarClienteForm, editarClientePost, editarFichaForm, cargarDevolucion, editarFichaPost,cargarRetirada ,cargarClavo}
 
 
 

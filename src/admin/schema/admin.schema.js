@@ -33,10 +33,12 @@ const fichasSchema = z.object({
 })
 
 
+const clavoSchema = z.object({
+    OBS : z.string({required_error : "La observacion es obligatoria para cargar un clavo"})
+})
 
 
-
-module.exports = { clienteSchema, fichasSchema }
+module.exports = { clienteSchema, fichasSchema,clavoSchema }
 
 
 

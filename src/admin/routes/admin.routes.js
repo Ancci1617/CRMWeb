@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const adminController = require("../controller/admin.controller.js");
 const { validateSchema } = require("../../shared/middlewares/validateSchema.js");
-const { clienteSchema, fichasSchema } = require("../schema/admin.schema.js");
+const { clienteSchema, fichasSchema, clavoSchema } = require("../schema/admin.schema.js");
 const { validateParamsNCTE, validateFicha } = require("../middlewares/admin.data.validation.js");
 const { destructurarUbicacion } = require("../../ubicaciones/middleware/ubicaciones.middleware.js");
 const { hasPermission } = require("../../middlewares/permission.middleware.js");
@@ -19,6 +19,12 @@ router.post("/editarCliente/:cte",
     validateSchema(clienteSchema),
     destructurarUbicacion,
     adminController.editarClientePost);
+router.post("/cargarClavo/:CTE",
+    hasPermission(permisos.ADMIN_ADMIN),
+    validateParamsNCTE,
+    validateSchema(clavoSchema),
+    adminController.cargarClavo)
+
 
 router.get("/editarFicha/:FICHA",
     hasPermission(permisos.ADMIN_COB),

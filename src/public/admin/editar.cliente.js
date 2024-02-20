@@ -12,7 +12,7 @@ CALLE.addEventListener("change", async e => {
 
     const raw_location = await fetch(`/api/getUbicacion`, getFetchPostBody({ CALLE: e.target.value }));
     const location = await raw_location.json();
-    console.log(location)
+
 
     if (!location.error && location.ubicacion.length > 0) {
         const { LATITUD, LONGITUD } = location.ubicacion[0];
@@ -49,6 +49,22 @@ form.querySelector(".button__input").addEventListener("click", async e => {
     form.submit();
 
 })
+
+
+const handleClavo = (e, form) => {
+    e.preventDefault()
+    const OBS = prompt("Motivo del clavo");
+
+    if (OBS == null) return
+
+    if (!OBS.trim()) return alert("El motivo no puede estar vacio")
+
+    form.OBS.value = OBS
+    form.submit()
+
+}
+
+
 
 
 

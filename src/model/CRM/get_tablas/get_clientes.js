@@ -15,7 +15,7 @@ const getClientes = async (cte) => {
         (SELECT BaseCTE.TELEFONO FROM BaseCTE WHERE cte = ? AND ID = (SELECT MAX(ID) from BaseCTE where CTE = ?)) AS WHATSAPP,
         ClientesSV.DNI,
         MasterResumen.CALIF AS MASTER,
-        NULL AS OBS
+        ClientesSV.OBS AS OBS
     FROM
         ClientesSV
     LEFT JOIN MasterResumen	 ON MasterResumen.Cliente = ClientesSV.CTE

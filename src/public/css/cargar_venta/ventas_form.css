@@ -29,7 +29,7 @@ body {
 }
 
 .container .titles {
-  
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -73,7 +73,9 @@ form .input-box span.details {
   margin-bottom: 5px;
 }
 
-.user-details .input-box input,.user-details .input-box select,label {
+.user-details .input-box input,
+.user-details .input-box select,
+label {
   height: 45px;
   width: 100%;
   outline: none;
@@ -84,33 +86,37 @@ form .input-box span.details {
   border-bottom-width: 2px;
   transition: all 0.3s ease;
 }
-label{
+
+label {
   display: inline-block;
   position: relative;
 }
-.hidden{
+
+.hidden {
   display: none;
 }
-.user-details .input-box input:valid ,
-.user-details .input-box select:valid{
+
+.user-details .input-box input:valid,
+.user-details .input-box select:valid {
   border-color: #18ab29;
-} 
-.user-details .input-box input:invalid ,
-.user-details .input-box select:invalid{
+}
+
+.user-details .input-box input:invalid,
+.user-details .input-box select:invalid {
   border-color: rgb(247, 27, 27);
 }
 
 .button {
-  height: 45px;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
+
 }
 
 
 .button .button__input {
-  height: 100%;
+
+  height: 45px;
   width: 100%;
-  margin-bottom: 35px;
   border-radius: 5px;
   display: inline-block;
   border: none;
@@ -124,19 +130,20 @@ label{
   text-decoration: none;
 }
 
-.button .button__input--devolucion{
+.button .button__input--devolucion {
   background: rgb(69, 93, 187);
-} 
-.button .button__input--retirada{
-  background: rgb(248, 62, 62);
-} 
+}
 
-.button input[type='submit']:disabled{
+.button .button__input--retirada {
+  background: rgb(248, 62, 62);
+}
+
+.button input[type='submit']:disabled {
   opacity: .5;
 }
 
 
-.user-details .input-box .inputfile-for-label{
+.user-details .input-box .inputfile-for-label {
   position: absolute;
   height: 5px;
   width: 5px;

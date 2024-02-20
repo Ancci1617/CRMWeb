@@ -38,6 +38,10 @@ const updateClientesSV = async (CTE, { NOMBRE, CALLE, ZONA, CRUCES, CRUCES2, WHA
 
 }
 
+const cargarClavoDb = async ({CTE,OBS}) => {
+    const [res] = await pool.query(`UPDATE ClientesSV set ES_CLAVO = true,OBS=? WHERE CTE = ?`,[OBS,CTE])
+    return res
+}
 
 const updateEstado = async (ficha, USUARIO, ESTADO) => {
     const conexion = await pool.getConnection();
@@ -112,4 +116,4 @@ const updateFichasSV = async (FICHA, body, USUARIO) => {
 
 }
 
-module.exports = { updateClientesSV, updateEstado, updateFichasSV }
+module.exports = { updateClientesSV, updateEstado, updateFichasSV ,cargarClavoDb}
