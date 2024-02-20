@@ -69,7 +69,7 @@ function getDebtEasy({ VENCIMIENTO , CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO
 
     let { vencidas, pagas, atraso, atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO,FECHA_EVALUAR });
 
-
+        
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
     const capitalTomado = (SALDO / TOTAL) * CAPITAL

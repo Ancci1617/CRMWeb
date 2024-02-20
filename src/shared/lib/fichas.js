@@ -5,9 +5,10 @@ const { getDebtEasy, getDoubt } = require("../../lib/doubt.js")
 
 const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCambiosDeFecha: false, withAtraso: false }) => {
     const fichasRaw = await getFichasOptimized(options, [`Fichas.CTE in (${Array.isArray(CTE) ? CTE.join(",") : CTE})`]);
+    
     const fichasVigentes = fichasRaw.map(ficha => {
-        return ficha.FICHA < 50000 ?
-            { ...ficha,VALOR_UNITARIO : ficha.VU, ...getDoubt(ficha) } :
+        return ficha.FICHA <= 50000 ?
+            { ...ficha,CAPITAL : 0,VALOR_UNITARIO : ficha.VU, ...getDoubt(ficha) } :
             { ...ficha,CAPITAL : parseInt(ficha.CAPITAL),...getDebtEasy(ficha) }
     });
     return fichasVigentes

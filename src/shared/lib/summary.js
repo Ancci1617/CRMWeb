@@ -11,6 +11,7 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
 
 
         const { TEORICA, bienAbonado, FECHA, ESTADO, CAPITAL, VALOR_UNITARIO, FICHA } = ficha;
+
         const esDev = ESTADO == "DEVOLUCION"
         const esRet = ESTADO == "RETIRADO" || ESTADO == "REFI"
         // const esRefi = ESTADO == "REFI"
@@ -23,6 +24,7 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
             
         const isVieja = FECHA < FichasViejas
         const esPrestamo = FICHA >= 50000
+
         return {
             ...acum,
             ...{

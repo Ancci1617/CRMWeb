@@ -8,9 +8,11 @@ const calcularPagas = (pagado, valorCuota, redondeo) => {
 const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasDeAtrasoPorGrupo = [7, 14], Easy) => {
 
     const { FICHAS: cantidadDeCreditos, NUEVAS } = summary
-    const ultBienAbonado = BaseDetalle[0].bienAbonado
+    const ultBienAbonado = BaseDetalle[0]?.bienAbonado
     const anteUltBienAbonado = BaseDetalle[1]?.bienAbonado || false
     const ultimosBienAbonados = cantidadDeCreditos == 1 ? ultBienAbonado : ultBienAbonado && anteUltBienAbonado
+    
+
 
     if (Z >= 0.5 || !ultimosBienAbonados) {
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[0]) return 0

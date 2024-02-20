@@ -77,7 +77,7 @@ Router.get("/pedidos/recorrido/detalle", isAdminOrVendedor, async (req, res) => 
 
     //Carga todas las ofertas disponibles de los pedidos
     for (let i = 0; i < pedidos.length; i++) {
-        const { disponibleFinalBgm: BGM, calificacion: CALIF, disponibleEasyCash: CAPITAL } =
+        const { disponibleFinalBgm: BGM, calificacion: CALIF, disponibleFinalEasy: CAPITAL } =
             await getCreditoDisponibleBgm(pedidos[i].CTE || 0);
         cte_data.Disponibles.set(pedidos[i], { BGM, CALIF, CAPITAL });
     }
