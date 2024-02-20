@@ -47,12 +47,13 @@ async function generarSaldoAnteriorServicio(req, res) {
 
 
 const getCobranzasEasy = async (req, res) => {
+  console.log("Consulta cobranzas EasyCash");
   let cobranzas = await getFichas("FICHA", "5____");
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT;
   }
-
-  const cobranzas_final = cobranzas.filter(ficha => ficha.FICHA >= 50000).map(ficha => {
+  console.log("calcula deuda");
+  const cobranzas_final = cobranzas.map(ficha => {
     const {
       cuota: deuda_cuota,
       servicio: deuda_serv,
@@ -60,23 +61,23 @@ const getCobranzasEasy = async (req, res) => {
       vencimiento_vigente, EsPrimerPago
     } = getDebtEasy(ficha);
 
-    return Object.assign(ficha, { deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago });
+    return { ...ficha, deuda_cuota, deuda_serv, deuda_mora, vencimiento_vigente, EsPrimerPago };
   })
 
 
-  res.json(cobranzas_final.filter(ficha => ficha.FICHA >= 50000));
+  res.json(cobranzas_final);
 
 
 }
 
 const getCobranzas = async (req, res) => {
-  
+
   const promises = [
-    getFichas("FICHA","3000","<"),
-    getFichas("FICHA","3000",">=","Fichas.FICHA < 5000"),
-    getFichas("FICHA","5000",">=","Fichas.FICHA < 7000"),
-    getFichas("FICHA","7000",">=","Fichas.FICHA < 8000"),
-    getFichas("FICHA","8000",">=","Fichas.FICHA < 20000")
+    getFichas("FICHA", "3000", "<"),
+    getFichas("FICHA", "3000", ">=", "Fichas.FICHA < 5000"),
+    getFichas("FICHA", "5000", ">=", "Fichas.FICHA < 7000"),
+    getFichas("FICHA", "7000", ">=", "Fichas.FICHA < 8000"),
+    getFichas("FICHA", "8000", ">=", "Fichas.FICHA < 20000")
   ]
   console.log("Calculando cobranzas.");
   const cobranzas = (await Promise.all(promises)).flat();
