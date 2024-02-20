@@ -94,7 +94,7 @@ const cargarPago = async ({
 
 }
 
-const getFichasByCte = async (CTE = "%", MODO = "CTE") => {
+const getFichasByCte = async (CTE = "%", MODO = "CTE", filtrarTerminadas = false) => {
     const [fichas] = await pool.query(
         `SELECT
     Fichas.FECHA AS FECHA_VENTA,
@@ -161,10 +161,9 @@ LEFT JOIN(
 ON
     PagosSV.FICHA = Fichas.FICHA
 WHERE
-    Fichas.?? LIKE ?;`
-        // HAVING
-        //     SALDO > 0;
-        , [MODO, CTE]);
+    Fichas.?? LIKE ?
+${filtrarTerminadas ? 'HAVING SALDO > 0' : ''};`
+    , [MODO, CTE]);
 
     if (fichas.length > 0) {
         return fichas;

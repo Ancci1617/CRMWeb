@@ -96,7 +96,7 @@ const getCreditoDisponibleEasy = async (CTE, BaseDetalleParam, pagosParam, CTE_D
     const disponible = calcularDisponible(ZFinal, BaseDetalleSummary)
 
     const incremento = calcularIncremento(ZFinal, BaseDetalle, promedioDiasDeAtraso, BaseDetalleSummary)
-    console.log("incremento Easy",incremento);
+
     const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalle)
 
     const limite = calcularLimite(limitante, disponible, incremento, BaseDetalleSummary.MAXIMO_TOMADO_CAPITAL)

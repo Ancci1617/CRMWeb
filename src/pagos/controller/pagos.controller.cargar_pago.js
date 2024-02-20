@@ -16,13 +16,12 @@ const { cargarEvento } = require("../../shared/model/eventos.model.js");
 
 
 
-
 async function deudaCte(req, res) {
     const { FICHA_PRIMERA, N_OPERACION, TITULAR, EsRecorrido = false, Recorrido, FECHA_EVALUAR } = req.query;
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
-    const fichas_data = await pagosModel.getFichasByCte(CTE);
+    const fichas_data = await pagosModel.getFichasByCte(CTE,undefined,EsRecorrido);
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const [cte_data] = await getClientes(CTE);
 
