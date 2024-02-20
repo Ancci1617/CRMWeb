@@ -245,9 +245,8 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
                         AND OFICINA = 0
                 ),
                 5
-            ) AS CAMBIOS_DE_FECHA_EXACTO,
-            Fichas.ARTICULOS
-        FROM
+            ) AS CAMBIOS_DE_FECHA_EXACTO
+                    FROM
             Fichas
             LEFT JOIN acumulados ON acumulados.FICHA = Fichas.FICHA
             and acumulados.CTE = Fichas.CTE

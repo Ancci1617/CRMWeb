@@ -84,7 +84,6 @@ const getCobranzas = async (req, res) => {
 
   for (let i = 0; i < cobranzas.length; i++) {
     delete cobranzas[i].FECHA_FORMAT
-    delete cobranzas[i].ARTICULOS
   }
   console.log("calcula deudas");
   const cobranzas_final = cobranzas.map(ficha => {
