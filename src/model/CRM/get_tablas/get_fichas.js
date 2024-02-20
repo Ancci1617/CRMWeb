@@ -62,7 +62,7 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
             FROM
                 PagosSVAcumulado
             GROUP BY
-                CONCAT(FICHA, '-', CTE)
+                CTE,FICHA
         ),
         
         pagos AS (
@@ -332,7 +332,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         FROM
             PagosSVAcumulado
         GROUP BY
-            CONCAT(FICHA, '-', CTE)
+            CTE,FICHA
     ),`;
     acumuladoStrings[1] = `acumulados.ANT,
     IFNULL(
