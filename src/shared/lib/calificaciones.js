@@ -122,7 +122,7 @@ const calcularCLienteNuevo = (fichasVigentes, cteData, tomadoFichasBGM, tomadoFi
         tomadoFichasBGM,
         tomadoPrestamosEasy,
         tomadoPrestamosBGM,
-        calificacion: "Nuevo",
+        calificacion: limitante == "CLAVAZO" ? limitante : "Nuevo",
         limite: disponibleBgm,
         limiteEasy: disponibleEasy,
         disponible: disponibleBgm,
@@ -235,7 +235,7 @@ async function getCreditoDisponibleBgm(CTE, BaseDetalleParam, pagosParam, cteDat
 
 }
 
-// getCreditoDisponibleBgm(14000).then(res => console.log(res))
+// getCreditoDisponibleBgm(6468).then(res => console.log(res))
 
 
 
