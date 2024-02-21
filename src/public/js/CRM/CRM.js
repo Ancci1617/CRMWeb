@@ -23,7 +23,7 @@ input_busqueda.addEventListener("keypress", e => {
 
 
 
-btn_evaluar.addEventListener("click", evaluarCliente);
+btn_evaluar.addEventListener("click", () => evaluarCliente());
 
 
 
