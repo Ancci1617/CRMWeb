@@ -26,4 +26,12 @@
 }
 
 
-
+.tabla-domicilio td:nth-child(3){
+    color: #157915;
+    font-weight: 800;
+    cursor:  pointer;
+}
+.tabla-domicilio td:nth-child(3):hover{
+    color: whitesmoke;
+    background-color: #157915;
+}

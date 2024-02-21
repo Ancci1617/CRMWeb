@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="content">
-      <form action="/admin/editarCliente/<%= CTE %>" method="POST">
+      <form method="POST">
         <div class="user-details">
 
           <%- include(global.dir_partials + "/shared/input-box",{input : {
@@ -67,25 +67,27 @@
             type : "text",defaultValue : (!LATITUD || !LONGITUD) ? '' : `${LATITUD},${LONGITUD}` , details : "Ubicacion" ,name : "UBICACION" , pattern : "-\\d+\\.\\d+,-\\d+\.\\d+", required : true}
             }) %>
 
-          <input type="hidden" value="<%= Boolean(EXCEPCION_DNI) %>" id="EXCEPCION_DNI" />
-          <div class="button">
-            <span class="detail--loading hidden">Cargando...</span>
-            <input type="submit" value="Editar cliente" class="button__input" />
-          </div>
-
-        </div>
-
-      </form>
-      <form action="/admin/cargarClavo/<%= CTE %>" method="post">
-        <div class="button">
-
-          <input type="submit" value="Volver clavo" class="button__input button__input--retirada" onclick="handleClavo(event,this.form)" />
-        </div>
         <%- include(global.dir_partials + "/shared/input-box",{input : {
             type : "hidden" ,name : "OBS" , required:true}
           }) %>
 
+          <input type="hidden" value="<%= Boolean(EXCEPCION_DNI) %>" id="EXCEPCION_DNI" />
+          <div class="button">
+            <span class="detail--loading hidden">Cargando...</span>
+            <input formaction="/admin/editarCliente/<%= CTE %>" type="submit" value="Editar cliente" class="button__input" />
+          </div>
+
+          <div class="button">
+            <input formaction="/admin/cargarClavo/<%= CTE %>"  type="submit" value="Volver clavo" class="button__input button__input--retirada" onclick="handleClavo(event,this.form)" />
+          </div>
+        
+        </div>
+
+
       </form>
+
+
+
     </div>
   </div>
 
@@ -94,7 +96,7 @@
   <script src="/js/lib/unable.spaces.js"></script>
   <script src="/shared/setLoading.js"></script>
   <script src="/admin/editar.cliente.js"></script>
-  
+
 </body>
 
 </html>

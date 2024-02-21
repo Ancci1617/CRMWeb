@@ -6,11 +6,12 @@ const table_master_bgm = document.querySelector(".tabla_master_bgm tbody");
 const table_master_ec = document.querySelector(".tabla-masterec tbody");
 const table_domicilio = document.querySelector(".tabla-domicilio tbody");
 const img_cte = document.querySelector(".img-cte");
+const selection = document.querySelector(".custom-selectbox-select");
 
 var btn_evaluar = document.querySelector(".btn-evaluar");
 var input_busqueda = document.querySelector(".inputtext-busqueda");
 
-img_cte.addEventListener("click",e =>{
+img_cte.addEventListener("click", e => {
     img_cte.classList.toggle("img-zoom");
     img_cte.classList.toggle("img-cte");
 });
@@ -104,10 +105,16 @@ function getType(data) {
     return ["Cte", data];
 
 }
-async function evaluarCliente() {
+async function evaluarCliente(CTE) {
+
+    //Si se evia un parametro se evalua ese parametro
+    if (CTE) {
+        input_busqueda.value = CTE;
+        selection.value = 0
+    }
+
     //Variables de scope
     let Data = input_busqueda.value;
-    let selection = document.querySelector(".custom-selectbox-select");
     let tipo_de_dato = selection.options.item(selection.selectedIndex).innerText;
 
 
@@ -150,6 +157,7 @@ async function evaluarCliente() {
         ofertas[2].innerText = query_response.Disponible[0].CALIF;
     }
 
+    setAsideEventsListeners()
     img_cte.src = `/${query_response.Clientes[0].CTE}/CTE-${query_response.Clientes[0].CTE}-ROSTRO.jpg`;
 
 }

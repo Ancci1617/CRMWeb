@@ -52,15 +52,16 @@ form.querySelector(".button__input").addEventListener("click", async e => {
 
 
 const handleClavo = (e, form) => {
-    e.preventDefault()
+
     const OBS = prompt("Motivo del clavo");
 
-    if (OBS == null) return
+    if (OBS == null) return e.preventDefault()
 
-    if (!OBS.trim()) return alert("El motivo no puede estar vacio")
-
+    if (!OBS.trim()) {
+        e.preventDefault()
+        alert("El motivo no puede estar vacio")
+    }
     form.OBS.value = OBS
-    form.submit()
 
 }
 

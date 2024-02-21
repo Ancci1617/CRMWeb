@@ -98,7 +98,7 @@ const editarFichaPost = async (req, res) => {
 const cargarClavo = async (req,res) => {
     const {CTE} = req.params
     const {OBS} = req.body
-
+    // console.log(req.body)
     try {
         await adminModel.cargarClavoDb({CTE ,OBS})
         res.status(200).redirect(`/CRM?CTE=${CTE}`)
