@@ -1,11 +1,13 @@
-const { splitPrestamosFichas } = require("./fichas");
-const {cteNuevoBgmObject} = require("../constants/nuevos.js")
+const { round } = require("../../../lib/numbers.js");
+
+
+
 const calcularPagas = (pagado, valorCuota, redondeo) => {
     return Math.trunc(pagado / valorCuota + redondeo);
 }
 
 //El summary debe ser el summary de la BaseDetalle recibida
-const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasDeAtrasoPorGrupo = [7, 14], Easy) => {
+const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasDeAtrasoPorGrupo = [7, 14], Easy = false) => {
 
     const { FICHAS: cantidadDeCreditos, NUEVAS } = summary
     const ultBienAbonado = BaseDetalle[0]?.bienAbonado
@@ -33,31 +35,40 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
     return 0
 }
 
-const calcularTomado = (fichasVigentes) => {
-    const { prestamos, fichas } = splitPrestamosFichas(fichasVigentes)
-    const { tomadoPrestamosEasy, tomadoPrestamosBGM } = prestamos.reduce((acum, prestamo) => ({
+const calcularTomado = ({fichasVigentesEasy,fichasVigentesBgm}) => {
+    const { tomadoPrestamosEasy, tomadoPrestamosBGM } = fichasVigentesEasy.reduce((acum, prestamo) => ({
 
         tomadoPrestamosEasy: Math.max(acum.tomadoPrestamosEasy + prestamo.capitalTomado,0),
         tomadoPrestamosBGM: acum.tomadoPrestamosBGM + prestamo.VALOR_UNITARIO
 
     }), { tomadoPrestamosEasy: 0, tomadoPrestamosBGM: 0 })
 
-    const tomadoFichasBGM = fichas.reduce((acum, ficha) => acum + ficha.VU, 0)
+    const tomadoFichasBGM = fichasVigentesBgm.reduce((acum, ficha) => acum + ficha.VU, 0)
     const tomadoFichasEasy = tomadoFichasBGM * 12000
     return { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosEasy, tomadoPrestamosBGM }
 
 }
 
 const calcularZFinal = (ZInicial, cantidadDeCreditosViejos, cantidadDeCreditosTotales, pagos, ratioCreditosActivos) => {
-
+    
     const variableAtrasoAnt = parseFloat((ZInicial * cantidadDeCreditosViejos).toFixed(2))
     const sumVariableDeAtraso = variableAtrasoAnt + pagos.reduce((acum, pago) => acum + pago.variableAtraso, 0)
-
-    return sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos) || 0
+    
+    const ZFinal = round(sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos),2);
+    return !ZFinal || ZFinal == Infinity ? 0 : ZFinal
 
 }
 
 
+const getZInicial = (cteSummary) => {
+    if (!cteSummary.VIEJAS) return 0
 
+    const { PROMEDIO, MINIMO, MAXIMO } = cteSummary;
+    if (PROMEDIO < 7 && MINIMO < 7 && MAXIMO < 7.1) return 0.15
+    if (PROMEDIO < 7.1 && MINIMO < 7.1 && MAXIMO < 8) return 0.4
+    if (PROMEDIO < 9.1 && MINIMO < 8.1 && MAXIMO < 12) return 0.55
+    return 0.7
 
-module.exports = { calcularPagas, calcularIncremento, calcularTomado, calcularZFinal }
+}
+
+module.exports = { calcularPagas, calcularIncremento, calcularTomado, calcularZFinal ,getZInicial}

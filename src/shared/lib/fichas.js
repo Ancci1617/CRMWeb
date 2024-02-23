@@ -5,7 +5,9 @@ const { getDebtEasy, getDoubt } = require("../../lib/doubt.js")
 
 const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCambiosDeFecha: false, withAtraso: false }) => {
     const fichasRaw = await getFichasOptimized(options, [`Fichas.CTE in (${Array.isArray(CTE) ? CTE.join(",") : CTE})`]);
-    
+
+    //Hacer que retorne un bojeto con propiedad termiandas y vigentes? para ahorras FichasAsBaseDetalle,quizas retorna el ratio de credito vencido
+
     const fichasVigentes = fichasRaw.map(ficha => {
         return ficha.FICHA <= 50000 ?
             { ...ficha,CAPITAL : 0,VALOR_UNITARIO : ficha.VU, ...getDoubt(ficha) } :
@@ -13,6 +15,8 @@ const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCamb
     });
     return fichasVigentes
 }
+
+
 // const getFichasVigentesPorLote = async (cteList, options = { withAcumulado: false, withCambiosDeFecha: false, withAtraso: false }) => {
 //     const fichasRaw = await getFichasOptimized(options, [`Fichas.CTE in (${cteList.join(",")})`]);
 //     const fichasVigentes = fichasRaw.map(ficha => { return ficha.FICHA < 50000 ? { ...ficha, ...getDoubt(ficha) } : { ...ficha, ...getDebtEasy(ficha) } });

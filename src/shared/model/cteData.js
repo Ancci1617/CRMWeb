@@ -1,14 +1,18 @@
 const pool = require("../../model/connection-database")
 
-const getBaseDetalle = async ({ CTE, Easy = false ,orderBy = "FECHA" ,order = "asc"}) => {
+
+//Toda la base detalle de el array de clientes EXCEPTO las que son devolucion de EasyCash
+const getBaseDetalle = async ({ CTE, Easy = false, orderBy = "FECHA", order = "asc", filterDevEasyCash = false }) => {
     const [res] = await pool.query(
         `SELECT FECHA, CTE, FICHA, Z, VTA, 
         Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, 
         SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, 
         Mes, ORIGINALES, TEORICA, PRIMER_VENCIMIENTO, VENCIMIENTO,ESTADO,CAPITAL,CONCAT(CTE,'-',FICHA) as CODIGO  
-        FROM BaseDetalle WHERE CTE in (?) ${Easy ? "AND FICHA > 50000" : ""} order by ${orderBy} ${order}`, [CTE]);
- 
-        
+        FROM BaseDetalle WHERE CTE in (?) 
+        ${filterDevEasyCash ? " AND (ESTADO != 'DEVOLUCION' OR FICHA <= 50000) " : ""} 
+        ${Easy ? "AND FICHA > 50000" : ""} order by ${orderBy} ${order}`, [CTE]);
+
+
 
     return res;
 }
@@ -23,7 +27,7 @@ const getPagosAcumulados = async ({ CTE, Easy = false }) => {
     COALESCE(bd.ORIGINALES,f.TOTAL / f.CUOTA) as ORIGINALES,
     CONCAT(pm.CTE,'-',pm.FICHA) AS CODIGO
     
-    FROM PagosSVAcumulado pm LEFT JOIN BaseDetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA left join Fichas f on f.CTE = pm.CTE and f.FICHA = pm.FICHA WHERE pm.CTE IN (?) ${Easy ? " AND pm.FICHA > 50000" : ''} AND (bd.ESTADO = "ACTIVO" or bd.ESTADO is null) order by pm.FECHA;
+    FROM PagosSVAcumulado pm LEFT JOIN BaseDetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA left join Fichas f on f.CTE = pm.CTE and f.FICHA = pm.FICHA WHERE pm.CTE IN (?) ${Easy ? " AND pm.FICHA > 50000" : ''} AND (bd.ESTADO = "ACTIVO" or bd.ESTADO is null) order by CODIGO,pm.FECHA;
     `, [CTE])
 
     return pagos

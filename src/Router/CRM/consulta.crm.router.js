@@ -3,15 +3,14 @@ const pool = require("../../model/connection-database.js")
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes")
 const { getFichas } = require("../../model/CRM/get_tablas/get_fichas")
 const { getCliente } = require("../../lib/get_cliente");
-const { getMasterBGM, getMasterEC } = require("../../model/CRM/get_tablas/get_master.js");
 const { getDomicilio } = require("../../model/CRM/get_tablas/get_domicilio.js");
 const { isLoggedIn } = require("../../lib/auth");
 const { guardar_respuesta_crm } = require("../../model/CRM/guardar-consulta.js");
 const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../../lib/doubt.js");
 const express = require("express");
 const path = require("path");
-const { getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
 const { getBaseDetalle } = require("../../shared/model/cteData.js");
+const { getMaster } = require("../../shared/calificaciones/calcularCalificaciones.js");
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 
@@ -91,8 +90,9 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     // query_result.MasterBGM = await getMasterBGM(cte)
     // query_result.MasterEC = await getMasterEC(cte)
 
-    const { disponibleFinalBgm, calificacion, disponibleFinalEasy } = await getCreditoDisponibleBgm(cte)
-    query_result.Disponible = [{ BGM: disponibleFinalBgm, CALIF: calificacion, CAPITAL: disponibleFinalEasy }]
+    const { disponibleFinalBgm, calificacionBgm , disponibleFinalEasy } = await getMaster(cte)
+
+    query_result.Disponible = [{ BGM: disponibleFinalBgm, CALIF: calificacionBgm, CAPITAL: disponibleFinalEasy }]
     query_result.Domicilio = await getDomicilio(cte_data.CALLE);
 
     query_result.Domicilio = query_result.Domicilio.map(cliente => {
