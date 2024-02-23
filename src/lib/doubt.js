@@ -45,9 +45,9 @@ const getAtrasos = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA, ANTICIPO,
 }
 
 
-const getAtrasosEasyCash = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA,FECHA_EVALUAR }) => {
+const getAtrasosEasyCash = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA, FECHA_EVALUAR }) => {
 
-    const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date( FECHA_EVALUAR || getToday()), CUOTAS);
+    const vencidas = getVencidas(new Date(VENCIMIENTO_EVALUA), new Date(FECHA_EVALUAR || getToday()), CUOTAS);
 
 
     const pagas =
@@ -64,12 +64,12 @@ const getAtrasosEasyCash = ({ VENCIMIENTO_EVALUA, CUOTAS, TOTAL, SALDO, CUOTA,FE
 }
 
 
-function getDebtEasy({ VENCIMIENTO , CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false,FECHA_EVALUAR) {
+function getDebtEasy({ VENCIMIENTO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
+    SERVICIO_ANT, SERV_PAGO, MORA_ANT, MORA_PAGO, Z, ARTICULOS: CAPITAL, CAMBIOS_DE_FECHA_EXACTO, SERVICIO_HOY }, COBRADOR = false, FECHA_EVALUAR) {
 
-    let { vencidas, pagas, atraso, atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO,FECHA_EVALUAR });
+    let { vencidas, pagas, atraso, atraso_eval } = getAtrasosEasyCash({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA: VENCIMIENTO, FECHA_EVALUAR });
 
-        
+
     const cuota = Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO, 0);
 
     const capitalTomado = (SALDO / TOTAL) * CAPITAL
@@ -105,12 +105,12 @@ function getDebtEasy({ VENCIMIENTO , CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO
 
 //CALCULA LA DEUDA DE LA FICHA A DIA DE HOY, DONDE HOY = getToday()
 function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, CUOTA_PAGO, SALDO,
-    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FICHA, ANTICIPO}, COBRADOR = false, FECHA_EVALUAR) {
+    SERVICIO_ANT, SERV_PAGO, SERV_UNIT, MORA_ANT, MORA_PAGO, Z, FICHA, ANTICIPO }, COBRADOR = false, FECHA_EVALUAR) {
 
 
     //Busca vencimiento valido, entre vencimiento o primer pago Y CALCULA los atrasos
     const { VENCIMIENTO_EVALUA, EsPrimerPago } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO, FECHA_EVALUAR });
-    let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA, ANTICIPO,FECHA_EVALUAR });
+    let { vencidas, pagas, atraso, atraso_eval } = getAtrasos({ CUOTA, CUOTAS, SALDO, TOTAL, VENCIMIENTO_EVALUA, ANTICIPO, FECHA_EVALUAR });
 
 
     /*calcula al deuda en cuota,servicio y mora
@@ -133,9 +133,7 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
 
 
     //Si no vencio la cuota de este mes y es un cobrador el que consulta la deuda, agrega un servicio
-    if (vencidas < CUOTAS && COBRADOR &&
-        getToday() <= vencimiento_vigente
-        && !ZONAS_EXCEPCIONES.includes(Z) && !deuda_serv > 0
+    if (vencidas < CUOTAS && COBRADOR && getToday() <= vencimiento_vigente && !deuda_serv > 0
     ) {
         // deuda_serv = FECHA_VENTA < '2022-12-01' ? 0 : Math.max(SERVICIO_ANT - SERV_PAGO + atraso_eval * SERV_UNIT, 0);
         deuda_serv = Math.max(SERVICIO_ANT - SERV_PAGO + Math.min((atraso_eval + 1), 2) * SERV_UNIT, 0);
