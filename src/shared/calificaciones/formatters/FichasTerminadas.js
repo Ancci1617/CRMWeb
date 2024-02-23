@@ -1,6 +1,6 @@
 const { dateDiff, getToday } = require("../../../lib/dates.js")
 const { round } = require("../../../lib/numbers.js")
-const { calcularBienAbonado } = require("./helper/calcularBienAbonado.js")
+const { calcularBienAbonado } = require("../lib/calcularBienAbonado.js")
 
 
 const calcularTeorica = ({FECHA}) => {

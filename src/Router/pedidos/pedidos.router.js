@@ -1,13 +1,12 @@
 "use strict";
 const Router = require("express").Router();
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes");
-const { getMasterResumen } = require("../../model/CRM/get_tablas/get_master.js");
-const { isLoggedIn, isNotLoggedIn, isAdmin, isAdminOrVendedor } = require("../../lib/auth");
+const {  isAdmin, isAdminOrVendedor } = require("../../lib/auth");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers");
 const { insertPedido, getPedidosByFiltros, updateOrdersAndEstadoById, updatePedidosCerrar, getPedidoByID, updatePedidosReprogramar,
     getPedidosActivos, getPedidosTerminados, updatePedidoByID, getPedidosProximos } = require("../../model/pedidos/pedidos.model");
 const { getToday } = require("../../lib/dates");
-const { getCreditoDisponibleBgm } = require("../../shared/lib/calificaciones.js");
+const { getMaster } = require("../../shared/calificaciones/calcularCalificaciones.js");
 
 
 
@@ -78,7 +77,7 @@ Router.get("/pedidos/recorrido/detalle", isAdminOrVendedor, async (req, res) => 
     //Carga todas las ofertas disponibles de los pedidos
     for (let i = 0; i < pedidos.length; i++) {
         const { disponibleFinalBgm: BGM, calificacion: CALIF, disponibleFinalEasy: CAPITAL } =
-            await getCreditoDisponibleBgm(pedidos[i].CTE || 0);
+            await getMaster(pedidos[i].CTE || 0);
         cte_data.Disponibles.set(pedidos[i], { BGM, CALIF, CAPITAL });
     }
 

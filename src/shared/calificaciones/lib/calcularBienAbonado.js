@@ -1,15 +1,15 @@
 
-const { FichasViejas } = require("../../../constants/dates.js");
+const { FECHA_LIMITE_COMPRA_VIEJA } = require("../../constants/dates.js");
 
 
-const calcularBienAbonado = (ficha, pagos, Easy = false) => {
-    
+const calcularBienAbonado = (ficha, pagos) => {
+    const isFichaVieja = ficha.FECHA < FECHA_LIMITE_COMPRA_VIEJA
+
+
     if (ficha.ESTADO != "ACTIVO") return false
-    
-    if (!Easy && ficha.FICHA < 50000) {
-        const isFichaVieja = ficha.FECHA < FichasViejas
-        if (isFichaVieja) return ficha.TEORICA <= 7
-    }
+
+    if (ficha.FICHA < 50000 && isFichaVieja) return ficha.TEORICA <= 7
+
     //REFORMAR, ESTE CALCULO DEBERIA ESTAR ASOCIADO A EL FORMAT DE BASEDETALLE
     const { sumaVariableAtrasos, maxDiaDeAtrasos } = pagos.reduce((acum, pago) =>
 
@@ -21,7 +21,7 @@ const calcularBienAbonado = (ficha, pagos, Easy = false) => {
         , { sumaVariableAtrasos: 0, maxDiaDeAtrasos: 0 })
     return sumaVariableAtrasos < 0.5 && maxDiaDeAtrasos < 30
 }
-module.exports = {calcularBienAbonado}
+module.exports = { calcularBienAbonado }
 
 
 

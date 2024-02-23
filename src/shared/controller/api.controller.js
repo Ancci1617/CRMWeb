@@ -1,13 +1,10 @@
 const { getUbicacionByObject } = require("../../ubicaciones/model/ubicaciones.mode.js");
 const { getRequiredImages } = require("../../ventas/controller/lib/required_images.js");
-const { getCreditoDisponibleBgm } = require("../lib/calificaciones.js");
-const { getCliente } = require("../model/cteData.js")
-const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js")
-const fs = require("fs");
-const { getEvaluationData } = require("../lib/getEvaluationData.js");
-const { formatPagosAcumulados } = require("../lib/formaters/PagosBGMFormater.js");
-const { formatBaseDetalle } = require("../lib/formaters/BaseDetalleBGMFormatter.js");
-const { getFichasVigentes } = require("../lib/fichas.js");
+const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
+const {getListadoDeClientes} = require("../MysqlTable/model/clientes.js");
+const {  getMaster, getMasterPorLote } = require("../calificaciones/calcularCalificaciones.js");
+
+
 const getCte = async (req, res) => {
     const [cte_data] = await getClientes(req.query.CTE);
 
@@ -34,54 +31,52 @@ const getUbicacion = async (req, res) => {
 
 }
 
-const getCalificaciones = async (req, res) => {
+const getCalificaciones = async (req,res) => {
+    
     try {
-
-        const cteRaw = JSON.parse(fs.readFileSync("C:/A - Blanco GusMar/1 - Actual GusMar/Master acceso directo/ListaDeClientes.json")).CLIENTES;
-        // console.log("Consultando calificaciones...");
-        // const cteRaw = [ 25333, 25353]
-        const cte  = cteRaw.slice(5000,10000)
-        // console.log(cteRaw.length);
-        // const cte = cteRaw
-        // const calificaciones = await Promise.all(cte.map(async cte => {
-        // }))
-        // console.log("Consulta Base detalle y pagos");
-        const { BaseDetalle, pagos } = await getEvaluationData(cte, formatBaseDetalle, formatPagosAcumulados)
-        // console.log("Consulta datos demograficos del cliente");
-        const cteDataArr = await getCliente({ CTE: cte })
-        // console.log("Consulta fichas vigentes");
-        const fichasVigentes = await getFichasVigentes(cte);
-
-        // console.log({ BaseDetalle: BaseDetalle.length })
-        // console.log({ pagos: pagos.length })
-
-        // console.log("por calcular disponible");
-        const disponibles = await Promise.all(cte.map(async CTE => {
-            const cteDataCte = cteDataArr.filter(cteData => cteData.CTE == CTE)
-            const fichasVigentesCte = fichasVigentes.filter(ficha => ficha.CTE == CTE)
-            const BaseDetalleCte = BaseDetalle.filter(ficha => ficha.CTE == CTE)
-            const PagosCte = pagos.filter(pago => pago.CTE == CTE)
-            const disponible = await getCreditoDisponibleBgm(CTE, BaseDetalleCte, PagosCte, cteDataCte, fichasVigentesCte)
-            return disponible
-        }))
-        // console.log("Disponibles listos, enviando al cliente", disponibles.length);
-        // const fichas = await getFichasVigentesPorLote([cte[0],cte[1]])
-        // const pagos = await getPagosAcumulados({CTE : cte})
+        console.log(1);
+        // const listaDeClientes = (await getListadoDeClientes()).slice(0,5000)
+        const listaDeClientes = await getListadoDeClientes()
+        console.log("clientes por evaluar calificaciones",listaDeClientes.length);
+        console.log(2);
+        // const listado = listaDeClientes.slice(0,5000)
+        console.log(3);
+        
 
 
+        const calificaciones = await getMasterPorLote(listaDeClientes)
+        
+        res.status(200).json(calificaciones)
 
-        // console.log("POR ENVIAR AL CLIENTE", calificaciones);
-        // res.status(200).json(calificaciones)
-        res.status(200).json(disponibles)
     } catch (error) {
         console.log(error);
-        res.status(400).json({ error: "No se pudo consultar las calificaciones de los clientes" })
+        res.status(500).json({error : true,msg : "No se pudo obtener el resultado"})
     }
+
+
 
 }
 
 
-module.exports = { getCte, getUbicacion, getCalificaciones }
+
+
+const getCalificacion = async (req,res) => {
+    const {CTE} = req.params
+    try {
+        const disponible = await getMaster(CTE);
+
+        res.status(200).json({
+            BGM  :  disponible.disponibleFinalBgm,
+            CAPITAL : disponible.disponibleFinalEasy,
+            CALIF : disponible.calificacionBgm
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({error : true,msg : "Error al consultas las calificaciones"})
+    }
+}
+module.exports = { getCte, getUbicacion, getCalificaciones ,getCalificacion}
 
 
 
