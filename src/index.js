@@ -52,6 +52,10 @@ morgan.token('user', function (req, res) { return req.user ? req.user.Usuario : 
 app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
 
 
+/*Rutas de eventos */
+require("./contactos/routes/events.routes.js")
+
+
 // Routes
 app.use("/api/",require("./shared/Router/api.routes.js"));
 app.use("/mp/api/",require("./MP/Router/api.mp.routes.js"));

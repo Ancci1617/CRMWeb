@@ -10,6 +10,7 @@ const pagosModel = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
 const { getRequiredImages } = require("./lib/required_images.js");
 const { getToday } = require("../../lib/dates.js");
+const emitter = require("../../shared/EventNotifier/emitter.js");
 
 
 //Para admin
@@ -53,13 +54,17 @@ const postCargarVenta = async (req, res) => {
     const CTE = req.body.CTE == 0 ? await getNuevoNumeroDeCte() : req.body.CTE;
 
     try {
+
         const ID_VENTA = await ventasModel.insertVenta({ body: req.body }, { CTE, MODO: "BGM", USUARIO });
 
         await insertarNuevaUbicacion({ CALLE, LATITUD, LONGITUD, ID_VENTA })
         await generarContactoCTE(CTE, USUARIO, { TELEFONO }, ID_VENTA);
 
+
         if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
             await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
+
+        emitter.emit("ventaCargada",{...req.body,CTE,ID_VENTA})
 
     } catch (error) {
         console.log(error);
@@ -87,8 +92,8 @@ const postCargarVenta = async (req, res) => {
 
 const formEditarVenta = async (req, res) => {
     const { venta } = res.locals;
-    
-    if(!venta){
+
+    if (!venta) {
         console.log("No existe la venta con el indice indicado");
         return res.redirect("/ventas/pasar_ventas")
     }
@@ -96,7 +101,7 @@ const formEditarVenta = async (req, res) => {
     if (venta.MODO == "EASY")
         return res.render("ventas/prestamo.cargado.editar.ejs", { venta });
 
-    res.render("ventas/ventas.cargadas.editar.ejs", Object.assign(venta,{cte_data}));
+    res.render("ventas/ventas.cargadas.editar.ejs", Object.assign(venta, { cte_data }));
 }
 
 const postEditarVenta = async (req, res) => {
