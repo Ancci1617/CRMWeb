@@ -16,7 +16,11 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
 
     const { fichas: fichasVigentesBgm, prestamos: fichasVigentesEasy } = splitPrestamosFichas(fichasVigentes)
     const { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy } = calcularTomado({ fichasVigentesBgm, fichasVigentesEasy })
-    const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasAsBaseDetalle(fichasVigentes, Pagos)])
+    
+    const fichasVigentesAsBaseDetalle = fichasAsBaseDetalle(fichasVigentes,Pagos)
+
+    const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasVigentesAsBaseDetalle])
+    
     const { fichas: BaseDetalleBgm, prestamos: BaseDetalleEasy } = splitPrestamosFichas(BaseDetalle)
 
     //Intentar traer desde getFichasVigentes
@@ -32,7 +36,7 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     const easy = calcularMasterEasy({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleEasy, promedioDiasDeAtraso, fichasVigentesEasy, tomadoPrestamosEasy, tomadoFichasEasy, ZFinal })
 
 
-    const bgm = calcularMasterBgm({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleBgm, promedioDiasDeAtraso, fichasVigentesBgm, tomadoPrestamosBGM, tomadoFichasBGM, ZFinal, limiteEasy: easy.limite })
+    const bgm = calcularMasterBgm({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleBgm : [...BaseDetalleBgm,...fichasVigentesAsBaseDetalle], promedioDiasDeAtraso, fichasVigentesBgm, tomadoPrestamosBGM, tomadoFichasBGM, ZFinal, limiteEasy: easy.limite })
 
 
 
@@ -80,7 +84,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-getMaster(21730).then(res => console.log("respuesta con solid", res))
+getMaster(20343).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {

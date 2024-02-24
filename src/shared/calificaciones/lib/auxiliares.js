@@ -69,6 +69,7 @@ const calcularZFinal = (ZInicial, cantidadDeCreditosViejos, cantidadDeCreditosTo
 
 
 const getZInicial = (cteSummary) => {
+
     if (!cteSummary.VIEJAS) return 0
 
     const { PROMEDIO, MINIMO, MAXIMO } = cteSummary;

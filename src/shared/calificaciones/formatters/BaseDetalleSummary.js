@@ -32,9 +32,11 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
 
         return {
             ...acum,
-            ...{
-                MAXIMO_TOMADO: bienAbonado ? Math.max(VALOR_UNITARIO, MAXIMO_TOMADO) : MAXIMO_TOMADO,
+            ...esPrestamo && {
                 MAXIMO_TOMADO_CAPITAL: bienAbonado ? Math.max(CAPITAL, MAXIMO_TOMADO_CAPITAL) : MAXIMO_TOMADO_CAPITAL,
+            },
+            ...!esPrestamo && {
+                MAXIMO_TOMADO: bienAbonado ? Math.max(VALOR_UNITARIO, MAXIMO_TOMADO) : MAXIMO_TOMADO,
                 VIEJAS: VIEJAS + Number(esVieja),
                 NUEVAS: NUEVAS + Number(!esVieja),
                 DEVOLUCIONES: DEVOLUCIONES + Number(esDev),

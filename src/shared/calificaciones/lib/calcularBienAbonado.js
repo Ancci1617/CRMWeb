@@ -4,7 +4,7 @@ const { FECHA_LIMITE_COMPRA_VIEJA } = require("../../constants/dates.js");
 
 const calcularBienAbonado = (ficha, pagos) => {
     const isFichaVieja = ficha.FECHA < FECHA_LIMITE_COMPRA_VIEJA
-
+    
 
     if (ficha.ESTADO != "ACTIVO") return false
 

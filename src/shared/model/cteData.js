@@ -27,7 +27,7 @@ const getPagosAcumulados = async ({ CTE, Easy = false }) => {
     COALESCE(bd.ORIGINALES,f.TOTAL / f.CUOTA) as ORIGINALES,
     CONCAT(pm.CTE,'-',pm.FICHA) AS CODIGO
     
-    FROM PagosSVAcumulado pm LEFT JOIN BaseDetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA left join Fichas f on f.CTE = pm.CTE and f.FICHA = pm.FICHA WHERE pm.CTE IN (?) ${Easy ? " AND pm.FICHA > 50000" : ''} AND (bd.ESTADO = "ACTIVO" or bd.ESTADO is null) order by CODIGO,pm.FECHA;
+    FROM (SELECT * from PagosSV union select * from PagosSVAcumulado) pm LEFT JOIN BaseDetalle bd on pm.CTE = bd.CTE and pm.FICHA = bd.FICHA left join Fichas f on f.CTE = pm.CTE and f.FICHA = pm.FICHA WHERE pm.CTE IN (?) ${Easy ? " AND pm.FICHA > 50000" : ''} AND (bd.ESTADO = "ACTIVO" or bd.ESTADO is null) order by CODIGO,pm.FECHA;
     `, [CTE])
 
     return pagos

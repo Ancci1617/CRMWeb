@@ -97,7 +97,6 @@ const calcularMasterBgm = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDe
     }
 
 
-
     /*Genera la calificacion del cliente */
     const disponible = calcularDisponible(ZFinal, BaseDetalleResumen)
 
