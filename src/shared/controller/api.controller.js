@@ -62,8 +62,10 @@ const getCalificaciones = async (req,res) => {
 
 const getCalificacion = async (req,res) => {
     const {CTE} = req.params
+    const {EXCEPCIONES} = req.body
+
     try {
-        const disponible = await getMaster(CTE);
+        const disponible = await getMaster(CTE,EXCEPCIONES);
 
         res.status(200).json({
             BGM  :  disponible.disponibleFinalBgm,

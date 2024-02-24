@@ -10,13 +10,13 @@ const { cteNuevoDisponibles } = require("./constants/nuevos.js")
 
 
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
-    
+
 
     if (!fichasVigentes.length && !BaseDetalle.length) return cteNuevoDisponibles //Si es cliente pero no hay ningun dato que evaluar
-    
+
 
     const { fichas: fichasVigentesBgm, prestamos: fichasVigentesEasy } = splitPrestamosFichas(fichasVigentes)
-    const { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy } = calcularTomado({fichasVigentesBgm,fichasVigentesEasy})
+    const { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy } = calcularTomado({ fichasVigentesBgm, fichasVigentesEasy })
     const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasAsBaseDetalle(fichasVigentes, Pagos)])
     const { fichas: BaseDetalleBgm, prestamos: BaseDetalleEasy } = splitPrestamosFichas(BaseDetalle)
 
@@ -65,18 +65,22 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
 
 }
 
-const getMaster = async (CTE) => {
+//Calcula la calificacion del cliente, puede no tener en cuenta fichas en las fichas vigentes para simular
+//disponubles anteriores
+const getMaster = async (CTE, EXCEPCIONES) => {
 
     const [cteData] = await getCliente({ CTE })
     if (!cteData) return cteNuevoDisponibles //Si nunca existieron datos de ese cliente, enviar disponibles por defecto
-    
+
     /*Consulto los datos para la evaluacion */
-    const fichasVigentes = await getFichasVigentes(CTE)
+    const fichasVigentes = await getFichasVigentes(CTE, undefined,EXCEPCIONES)
     const { BaseDetalle, pagos: Pagos } = await getEvaluationData(CTE)
     const disponible = getDisponibles({ BaseDetalle, cteData, Pagos, fichasVigentes })
 
     return { CTE, ...disponible }
 }
+
+
 
 
 getMaster(24631).then(res => console.log("respuesta con solid", res))
@@ -88,12 +92,12 @@ const getMasterPorLote = async (listOfCte) => {
     // const listOfCte = listOfCteRaw.slice(0, 1000);
     console.log("A");
     const cteDataArr = await getCliente({ CTE: listOfCte })
-    
+
     const fichasVigentesArr = await getFichasVigentes(listOfCte);
-    
-    
+
+
     const { BaseDetalle: BaseDetalleArr, pagos: PagosArr } = await getEvaluationData(listOfCte)
-    
+
     const createItArr = (datos) => {
         const indice = {};
         datos.forEach((elemento) => {
@@ -106,15 +110,15 @@ const getMasterPorLote = async (listOfCte) => {
         return indice;
     }
     console.time("genera indices")
-    
+
     const cteDataIT = createItArr(cteDataArr)
     const fichasVigentesIT = createItArr(fichasVigentesArr)
     const BaseDetalleIT = createItArr(BaseDetalleArr)
     const PagosIT = createItArr(PagosArr)
-    
+
     console.timeEnd("genera indices")
 
-    
+
     console.time("calificaciones")
     const disponibles = await Promise.all(listOfCte.map(async CTE => {
 
@@ -125,7 +129,7 @@ const getMasterPorLote = async (listOfCte) => {
 
         const disponibles = getDisponibles({ BaseDetalle, cteData, fichasVigentes, Pagos })
 
-        return {CTE,...disponibles}
+        return { CTE, ...disponibles }
 
     }))
 

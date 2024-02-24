@@ -99,8 +99,8 @@ window.addEventListener("load", async e => {
     cargarUbicacion();
 
 
-    [{ CUOTAS_6: evaluation_data.sabana }] = await fetchPost("/ventas/precios", { articulos: ["36"] });
-    evaluation_data.master = await fetch(`/api/getDisponible/${CTE}`).then(res => res.json());
+    [{ CUOTAS_6: evaluation_data.sabana }] = await fetchPost("/ventas/precios",  { articulos: ["36"] } );
+    evaluation_data.master = await fetchPost(`/api/getDisponible/${CTE}`,form.FICHA.value ? {EXCEPCIONES : [form.FICHA.value]} : undefined);
     console.log(evaluation_data.master);
     evaluation_data.prepagos["9"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 9 });
     evaluation_data.prepagos["12"] = await fetchPost("/query_prepago_entrega", { calificacion: evaluation_data.master.CALIF, cuotas: 12 });

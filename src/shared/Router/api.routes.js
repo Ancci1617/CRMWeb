@@ -6,7 +6,7 @@ const apiController = require("../controller/api.controller.js");
 Router.get("/getCte",apiController.getCte);
 Router.post("/getUbicacion",apiController.getUbicacion);
 Router.get("/getCalificaciones",apiController.getCalificaciones);
-Router.get("/getDisponible/:CTE",apiController.getCalificacion);
+Router.post("/getDisponible/:CTE",apiController.getCalificacion);
 
 
 module.exports = Router
