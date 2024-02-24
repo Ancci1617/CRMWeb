@@ -10,8 +10,7 @@ const { cteNuevoDisponibles } = require("./constants/nuevos.js")
 
 
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
-
-
+    
     if (!fichasVigentes.length && !BaseDetalle.length) return cteNuevoDisponibles //Si es cliente pero no hay ningun dato que evaluar
 
 
@@ -81,7 +80,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-// getMaster(24631).then(res => console.log("respuesta con solid", res))
+getMaster(21730).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {

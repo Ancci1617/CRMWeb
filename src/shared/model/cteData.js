@@ -21,7 +21,7 @@ const getPagosAcumulados = async ({ CTE, Easy = false }) => {
 
     const [pagos] = await pool.query(`
     SELECT pm.CTE,pm.FICHA,pm.VALOR,pm.FECHA,SERV,MORA,
-    coalesce(bd.CUOTA,f.CUOTA) as CUOTA,
+    COALESCE(bd.CUOTA,f.CUOTA) as CUOTA,
     COALESCE(bd.PRIMER_VENCIMIENTO,f.PRIMER_PAGO) as PRIMER_VENCIMIENTO,
     COALESCE(bd.VENCIMIENTO,f.VENCIMIENTO) as VENCIMIENTO,
     COALESCE(bd.ORIGINALES,f.TOTAL / f.CUOTA) as ORIGINALES,

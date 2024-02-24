@@ -13,7 +13,7 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
     const ultBienAbonado = BaseDetalle[0]?.bienAbonado
     const anteUltBienAbonado = BaseDetalle[1]?.bienAbonado || false
     const ultimosBienAbonados = cantidadDeCreditos == 1 ? ultBienAbonado : ultBienAbonado && anteUltBienAbonado
-    
+
 
 
     if (Z >= 0.5 || !ultimosBienAbonados) {
@@ -35,10 +35,10 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
     return 0
 }
 
-const calcularTomado = ({fichasVigentesEasy,fichasVigentesBgm}) => {
+const calcularTomado = ({ fichasVigentesEasy, fichasVigentesBgm }) => {
     const { tomadoPrestamosEasy, tomadoPrestamosBGM } = fichasVigentesEasy.reduce((acum, prestamo) => ({
 
-        tomadoPrestamosEasy: Math.max(acum.tomadoPrestamosEasy + prestamo.capitalTomado,0),
+        tomadoPrestamosEasy: Math.max(acum.tomadoPrestamosEasy + prestamo.capitalTomado, 0),
         tomadoPrestamosBGM: acum.tomadoPrestamosBGM + prestamo.VALOR_UNITARIO
 
     }), { tomadoPrestamosEasy: 0, tomadoPrestamosBGM: 0 })
@@ -50,11 +50,19 @@ const calcularTomado = ({fichasVigentesEasy,fichasVigentesBgm}) => {
 }
 
 const calcularZFinal = (ZInicial, cantidadDeCreditosViejos, cantidadDeCreditosTotales, pagos, ratioCreditosActivos) => {
-    
+
+
+
     const variableAtrasoAnt = parseFloat((ZInicial * cantidadDeCreditosViejos).toFixed(2))
+
+
+
     const sumVariableDeAtraso = variableAtrasoAnt + pagos.reduce((acum, pago) => acum + pago.variableAtraso, 0)
-    
-    const ZFinal = round(sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos),2);
+
+
+
+    const ZFinal = round(sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos), 2);
+
     return !ZFinal || ZFinal == Infinity ? 0 : ZFinal
 
 }
@@ -71,4 +79,4 @@ const getZInicial = (cteSummary) => {
 
 }
 
-module.exports = { calcularPagas, calcularIncremento, calcularTomado, calcularZFinal ,getZInicial}
+module.exports = { calcularPagas, calcularIncremento, calcularTomado, calcularZFinal, getZInicial }

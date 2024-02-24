@@ -5,12 +5,13 @@ const { formatPagosAcumulados } = require("../formatters/PagosBGMFormater.js")
 
 
 const getEvaluationData = async (CTE) => {
-    const BaseDetalleRaw = await getBaseDetalle({ CTE,filterDevEasyCash : true })
+    const BaseDetalleRaw = await getBaseDetalle({ CTE,filterDevEasyCash : true,order : "desc" })
 
     // console.log("Base detalle consultada");
     const PagosRaw = await getPagosAcumulados({CTE})
     console.time("pagos format")
     // console.log("Pagos consultados");
+
     const pagos = formatPagosAcumulados(PagosRaw)
     console.timeEnd("pagos format")
      
