@@ -30,7 +30,7 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
         const { MAXIMO, MINIMO, SUMA_TEORICA,
             MAXIMO_TOMADO, MINIMO_TOMADO, ACUM_VU,
             VIEJAS, NUEVAS, DEVOLUCIONES, RETIRADAS,
-            VALIDAS, MAXIMO_TOMADO_CAPITAL, MINIMO_TOMADO_CAPITAL, ACUM_CAPITAL, CREDITOS_BGM, CREDITOS_EASY } = acum;
+            VALIDAS, MAXIMO_TOMADO_CAPITAL, MINIMO_TOMADO_CAPITAL, ACUM_CAPITAL, CREDITOS_BGM, CREDITOS_EASY,CREDITOS_BGM_TOTALES } = acum;
 
         const esVieja = FECHA < FECHA_LIMITE_COMPRA_VIEJA
         const esPrestamo = FICHA >= 50000
@@ -47,6 +47,7 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
                 MAXIMO_TOMADO: bienAbonado ? Math.max(VALOR_UNITARIO, MAXIMO_TOMADO) : MAXIMO_TOMADO,
                 DEVOLUCIONES: DEVOLUCIONES + Number(esDev),
                 RETIRADAS: RETIRADAS + Number(esRet),
+                CREDITOS_BGM_TOTALES : CREDITOS_BGM_TOTALES +  Number(!esPrestamo)
             },
             ...esValida && {
                 VIEJAS: VIEJAS + Number(esVieja),
@@ -79,6 +80,7 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
         MINIMO_TOMADO_CAPITAL: Infinity,
         CREDITOS_EASY: 0,
         CREDITOS_BGM: 0,
+        CREDITOS_BGM_TOTALES : 0
     })
 
     //SUSTITUYA si no encontro ningun valor que sirva por los valores iniciales

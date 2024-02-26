@@ -39,6 +39,7 @@ const calcularLimitante = (fichasVigentes, cteData, cantidadComprasCanceladas, c
     if (estaAtrasado) return "ATRASADO"
 
     if (cantidadComprasCanceladas / cantidadDeCompras > 0.5) return "DEVOLUCIONES"
+    
     if (BaseDetalle.length > 0) {
         const ultEstado = BaseDetalle[0].ESTADO
         const anteUltEstado = BaseDetalle[1]?.ESTADO
@@ -110,7 +111,7 @@ const calcularMasterBgm = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDe
     const incremento = calcularIncremento(ZFinal, BaseDetalleBgm, promedioDiasDeAtraso, { NUEVAS: BaseDetalleResumen.NUEVAS, FICHAS: BaseDetalleResumen.CREDITOS_BGM })
 
     //Ver si se puede sacar afuera de la funcion
-    const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalleResumen.DEVOLUCIONES + BaseDetalleResumen.RETIRADAS, BaseDetalleResumen.CREDITOS_BGM, BaseDetalleBgm)
+    const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalleResumen.DEVOLUCIONES + BaseDetalleResumen.RETIRADAS, BaseDetalleResumen.CREDITOS_BGM_TOTALES, BaseDetalleBgm)
 
 
     const limite = calcularLimite(limitante, disponible, incremento,ZFinal)
