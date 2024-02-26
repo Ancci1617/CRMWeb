@@ -455,31 +455,26 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         ) AS CUOTAS,
         ${withAtraso ? atrasoString : ""}
         Fichas.ESTADO,
-        CONVERT(
+    
+        CAST(
             ROUND(
                 (
                     Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER)
-                ) / (
-                    SELECT
-                        VU
-                    FROM
-                        ValoresUnitarios
-                    WHERE
-                        MES = DATE_ADD(LAST_DAY(DATE_SUB(Fichas.FECHA,INTERVAL 1 MONTH)),INTERVAL 1 DAY)
-                    LIMIT
-                        1
-                ), 1
-            ), FLOAT
+                ) / ValoresUnitarios.VU, 1
+            ) AS  FLOAT
         ) AS VU,
+        CAST(ROUND(Fichas.TOTAL / ValoresUnitarios.VU ,2) AS FLOAT) as VALOR_UNITARIO_ORIGINAL,
         Fichas.VENCIMIENTO,
         Fichas.PRIMER_PAGO,
         Fichas.SERVICIO_ANT,
         CONVERT(IFNULL(pagos.SERV_PAGO, 0), INTEGER) as SERV_PAGO,
         Fichas.SERV_UNIT,
         Fichas.MORA_ANT,
-        CONVERT(IFNULL(pagos.MORA_PAGO, 0), INTEGER) as MORA_PAGO
+        CONVERT(IFNULL(pagos.MORA_PAGO, 0), INTEGER) as MORA_PAGO,
+        ValoresUnitarios.VU as VALOR_UNITARIO_UNIDAD
     FROM
         Fichas
+        LEFT JOIN ValoresUnitarios ON ValoresUnitarios.MES = DATE_FORMAT(Fichas.FECHA,"%Y-%m-01")  
         LEFT JOIN pagos ON pagos.FICHA = Fichas.FICHA AND pagos.CTE = Fichas.CTE
         
         ${withAcumulado ? acumuladoStrings[2] : ""}

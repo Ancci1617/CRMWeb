@@ -9,25 +9,26 @@ const { calcularPagas } = require("../lib/auxiliares.js");
 
 
 const formatPagosAcumulados = (pagos) => {
-    
+
     const pagosFormated = [];
 
-    
-    pagos.reduce((acum,pago) => {
-        if(acum.filtradoAnt != pago.CODIGO){
+
+    pagos.reduce((acum, pago) => {
+
+        if (acum.filtradoAnt != pago.CODIGO) {
             acum.pagasAnt = 0;
             acum.pagadoAnt = 0;
             acum.filtradoAnt = pago.CODIGO;
         }
 
-        const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3
+        const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3;
         const { pagadoAnt, pagasAnt } = acum;
-        
+
         //Esta evaluacion se ejecuta en caso que pagasAnt <> pagas
         const pagado = pagadoAnt + pago.VALOR;
         const pagas = calcularPagas(pagado, pago.CUOTA, redondeo);
 
-        if (pagas == pagasAnt) return { pagasAnt, pagadoAnt: pagado,filtradoAnt : pago.CODIGO };
+        if (pagas == pagasAnt) return { pagasAnt, pagadoAnt: pagado, filtradoAnt: pago.CODIGO };
 
         const vencimientoValido = pagasAnt ? pago.VENCIMIENTO : pago.PRIMER_VENCIMIENTO
         const vencimientoVigente = addMonth(vencimientoValido, pagasAnt)
@@ -37,15 +38,15 @@ const formatPagosAcumulados = (pagos) => {
         const variableAtraso =
             (Number(cuotaAtrasada) / pago.ORIGINALES) *
             (pagas - pagasAnt) + Math.trunc((diasDeAtraso - (30 * (pagas - pagasAnt))) / 31) / pago.ORIGINALES
-            
+
         // const variableAtraso = Number(cuotaAtrasada) / pago.ORIGINALES
 
         pagosFormated.push({ ...pago, pagadoAnt, vencimientoValido, pagas, vencimientoVigente, diasDeAtraso, cuotaAtrasada, variableAtraso })
 
-        
-        return { pagasAnt: pagas, pagadoAnt: pagado,filtradoAnt : pago.CODIGO }
-        
-    },{ pagadoAnt: 0, pagasAnt: 0,filtradoAnt : "" })
+
+        return { pagasAnt: pagas, pagadoAnt: pagado, filtradoAnt: pago.CODIGO }
+
+    }, { pagadoAnt: 0, pagasAnt: 0, filtradoAnt: "" })
 
 
     // codigos.forEach(codigo => {
@@ -55,7 +56,7 @@ const formatPagosAcumulados = (pagos) => {
     //     pagosFiltrados.reduce((acum, pago) => { 
     //         const redondeo = pago.FICHA > 50000 ? 0.1 : 0.3
     //         const { pagadoAnt, pagasAnt } = acum;
-            
+
     //         //Esta evaluacion se ejecuta en caso que pagasAnt <> pagas
     //         const pagado = pagadoAnt + pago.VALOR;
     //         const pagas = calcularPagas(pagado, pago.CUOTA, redondeo);
@@ -70,12 +71,12 @@ const formatPagosAcumulados = (pagos) => {
     //         const variableAtraso =
     //             (Number(cuotaAtrasada) / pago.ORIGINALES) *
     //             (pagas - pagasAnt) + Math.trunc((diasDeAtraso - (30 * (pagas - pagasAnt))) / 31) / pago.ORIGINALES
-                
+
     //         // const variableAtraso = Number(cuotaAtrasada) / pago.ORIGINALES
 
     //         pagosFormated.push({ ...pago, pagadoAnt, vencimientoValido, pagas, vencimientoVigente, diasDeAtraso, cuotaAtrasada, variableAtraso })
 
-            
+
     //         return { pagasAnt: pagas, pagadoAnt: pagado }
     //     }, { pagadoAnt: 0, pagasAnt: 0 })
 

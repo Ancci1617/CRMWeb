@@ -43,7 +43,7 @@ const calcularTomado = ({ fichasVigentesEasy, fichasVigentesBgm }) => {
 
     }), { tomadoPrestamosEasy: 0, tomadoPrestamosBGM: 0 })
 
-    const tomadoFichasBGM = fichasVigentesBgm.reduce((acum, ficha) => acum + ficha.VU, 0)
+    const tomadoFichasBGM = fichasVigentesBgm.reduce((acum, ficha) => acum + ficha.VALOR_UNITARIO, 0)
     const tomadoFichasEasy = tomadoFichasBGM * 12000
     return { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosEasy, tomadoPrestamosBGM }
 

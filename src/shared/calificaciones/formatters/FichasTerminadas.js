@@ -21,7 +21,7 @@ const fichasAsBaseDetalle = (fichas, pagos) => {
         const TEORICA = calcularTeorica({FECHA : ficha.FECHA})
         const bienAbonado = calcularBienAbonado({ ESTADO: ficha.ESTADO, FICHA: ficha.FICHA, TEORICA }, pagosFicha)
         
-        return { ...ficha,TEORICA, bienAbonado }
+        return { ...ficha,TEORICA, bienAbonado,VALOR_UNITARIO : ficha.VALOR_UNITARIO_ORIGINAL }
     });
 }
 

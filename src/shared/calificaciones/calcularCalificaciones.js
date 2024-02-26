@@ -16,11 +16,11 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
 
     const { fichas: fichasVigentesBgm, prestamos: fichasVigentesEasy } = splitPrestamosFichas(fichasVigentes)
     const { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy } = calcularTomado({ fichasVigentesBgm, fichasVigentesEasy })
-    
+    // console.log({tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy});
     const fichasVigentesAsBaseDetalle = fichasAsBaseDetalle(fichasVigentes,Pagos)
 
     const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasVigentesAsBaseDetalle])
-    
+
     const { fichas: BaseDetalleBgm, prestamos: BaseDetalleEasy } = splitPrestamosFichas(BaseDetalle)
 
     //Intentar traer desde getFichasVigentes
@@ -77,14 +77,16 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 
     /*Consulto los datos para la evaluacion */
     const fichasVigentes = await getFichasVigentes(CTE, undefined,EXCEPCIONES)
+    // console.log({fichasVigentes});
+    
     const { BaseDetalle, pagos: Pagos } = await getEvaluationData(CTE)
     const disponible = getDisponibles({ BaseDetalle, cteData, Pagos, fichasVigentes })
-
+    
     return { CTE, ...disponible }
 }
 
 
-getMaster(20343).then(res => console.log("respuesta con solid", res))
+getMaster(10689).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {
