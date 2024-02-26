@@ -93,8 +93,8 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
         ...summary,
         PROMEDIO: summary.SUMA_TEORICA / summary.VIEJAS,
         FICHAS: BaseDetalle.length,
-        PROMEDIO_TOMADO: round(summary.ACUM_VU / creditosValidos, 2),
-        PROMEDIO_TOMADO_CAPITAL: round(summary.ACUM_CAPITAL / creditosValidos || 0, 2)
+        PROMEDIO_TOMADO: round(summary.ACUM_VU / summary.CREDITOS_BGM, 2),
+        PROMEDIO_TOMADO_CAPITAL: round(summary.ACUM_CAPITAL / summary.CREDITOS_EASY || 0, 2)
     }
 
 

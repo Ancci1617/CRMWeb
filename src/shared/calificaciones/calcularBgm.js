@@ -58,13 +58,13 @@ const calcularLimite = (limitante, disponible, incremento,ZFinal) => {
 
 }
 
-const calcularCalificacion = (ZFinal, limitante, disponible) => {
+const calcularCalificacion = (ZFinal, limitante, limite) => {
     if (limitante == "CLAVAZO") return "CLAVAZO"
     if (limitante == "DEVOLUCIONES") return "NO VENDER"
-    if (ZFinal <= 0.25) return disponible + " Muy Bien"
-    if (ZFinal <= 0.5) return disponible + " Bien"
-    if (ZFinal <= 0.8) return disponible + " Mal"
-    return disponible + " NO VENDER"
+    if (ZFinal <= 0.25) return limite + " A"
+    if (ZFinal <= 0.5) return limite + " B"
+    if (ZFinal <= 0.8) return limite + " C"
+    return limite + " D"
 }
 
 const calcularCalificacionCteNuevo = (limitante) => {
@@ -119,7 +119,7 @@ const calcularMasterBgm = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDe
 
     const disponibleFinal = calcularDisponibleFinal(limite, limiteEasy, tomadoFichasBGM, tomadoPrestamosBGM)
 
-    const calificacion = calcularCalificacion(ZFinal, limitante, disponible)
+    const calificacion = calcularCalificacion(ZFinal, limitante, limite)
 
 
     return {
