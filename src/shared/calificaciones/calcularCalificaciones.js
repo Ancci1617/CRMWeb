@@ -12,11 +12,11 @@ const { cteNuevoDisponibles } = require("./constants/nuevos.js")
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     
     if (!fichasVigentes.length && !BaseDetalle.length) return cteNuevoDisponibles //Si es cliente pero no hay ningun dato que evaluar
-
+    // console.log({BaseDetalle,Pagos,fichasVigentes,cteData})
 
     const { fichas: fichasVigentesBgm, prestamos: fichasVigentesEasy } = splitPrestamosFichas(fichasVigentes)
     const { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy } = calcularTomado({ fichasVigentesBgm, fichasVigentesEasy })
-    // console.log({tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosBGM, tomadoPrestamosEasy});
+
     const fichasVigentesAsBaseDetalle = fichasAsBaseDetalle(fichasVigentes,Pagos)
 
     const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasVigentesAsBaseDetalle])
@@ -90,7 +90,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-getMaster(22651).then(res => console.log("respuesta con solid", res))
+getMaster(1615).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {
@@ -133,6 +133,12 @@ const getMasterPorLote = async (listOfCte) => {
         const fichasVigentes = fichasVigentesIT[CTE] || [];
         const BaseDetalle = BaseDetalleIT[CTE] || [];
         const Pagos = PagosIT[CTE] || [];
+
+
+
+        // if(CTE == 1615){
+        //     console.log({BaseDetalle,Pagos,fichasVigentes,cteData});
+        // }
 
         const disponibles = getDisponibles({ BaseDetalle, cteData, fichasVigentes, Pagos })
 

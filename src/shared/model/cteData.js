@@ -7,7 +7,7 @@ const getBaseDetalle = async ({ CTE, Easy = false, orderBy = "FECHA", order = "a
         `SELECT FECHA, CTE, FICHA, Z, VTA, 
         Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, 
         SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, 
-        Mes, ORIGINALES, TEORICA, PRIMER_VENCIMIENTO, VENCIMIENTO,ESTADO,CAPITAL,CONCAT(CTE,'-',FICHA) as CODIGO  
+        Mes, ORIGINALES, (PAGO_EN - ORIGINALES + 6) AS TEORICA, PRIMER_VENCIMIENTO, VENCIMIENTO,ESTADO,CAPITAL,CONCAT(CTE,'-',FICHA) as CODIGO  
         FROM BaseDetalle WHERE CTE in (?) 
         ${filterDevEasyCash ? " AND (ESTADO != 'DEVOLUCION' OR FICHA <= 50000) " : ""} 
         ${Easy ? "AND FICHA > 50000" : ""} order by ${orderBy} ${order}`, [CTE]);
