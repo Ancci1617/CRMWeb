@@ -17,11 +17,16 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
 
         const { TEORICA, bienAbonado, FECHA, ESTADO, CAPITAL, VALOR_UNITARIO, FICHA } = ficha;
 
+        
+        if(ESTADO == "NO VALIDA") return acum
+
         const esDev = ESTADO == "DEVOLUCION"
         const esRet = ESTADO == "RETIRADO" || ESTADO == "REFI"
         // const esRefi = ESTADO == "REFI"
         /*POR SACAR LAS REFIS DE LA DIVISON PARA CALCULAR EL ZFINAL EASYCASH */
         const esValida = ESTADO == "ACTIVO"
+        
+
         const { MAXIMO, MINIMO, SUMA_TEORICA,
             MAXIMO_TOMADO, MINIMO_TOMADO, ACUM_VU,
             VIEJAS, NUEVAS, DEVOLUCIONES, RETIRADAS,
@@ -32,8 +37,11 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
 
         return {
             ...acum,
-            ...esPrestamo && {
+
+
+            ...esPrestamo && esValida && {
                 MAXIMO_TOMADO_CAPITAL: bienAbonado ? Math.max(CAPITAL, MAXIMO_TOMADO_CAPITAL) : MAXIMO_TOMADO_CAPITAL,
+                MINIMO_TOMADO_CAPITAL: esPrestamo ? Math.min(CAPITAL, MINIMO_TOMADO_CAPITAL) : MINIMO_TOMADO_CAPITAL
             },
             ...!esPrestamo && {
                 MAXIMO_TOMADO: bienAbonado ? Math.max(VALOR_UNITARIO, MAXIMO_TOMADO) : MAXIMO_TOMADO,
@@ -46,7 +54,6 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
                 ACUM_VU: ACUM_VU + VALOR_UNITARIO,
                 ACUM_CAPITAL: ACUM_CAPITAL + CAPITAL,
                 MINIMO_TOMADO: Math.min(VALOR_UNITARIO, MINIMO_TOMADO),
-                MINIMO_TOMADO_CAPITAL: esPrestamo ? Math.min(CAPITAL, MINIMO_TOMADO_CAPITAL) : MINIMO_TOMADO_CAPITAL,
                 VALIDAS: VALIDAS + 1,
                 CREDITOS_BGM: CREDITOS_BGM + Number(!esPrestamo),
                 CREDITOS_EASY: CREDITOS_EASY + Number(esPrestamo)
@@ -55,7 +62,6 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
                 MINIMO: Math.min(MINIMO, TEORICA),
                 MAXIMO: Math.max(MAXIMO, TEORICA),
                 SUMA_TEORICA: SUMA_TEORICA + TEORICA
-
             }
 
         }

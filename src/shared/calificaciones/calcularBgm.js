@@ -21,7 +21,7 @@ const calcularDisponible = (ZFinal, BaseDetalleSummary) => {
     if (ZFinal <= 0.5)
         return PROMEDIO_TOMADO
 
-    //1 MAL -> 1 ¿SABANA C/A?
+    //1 MAL -> 1
     if (ZFinal <= 0.8)
         return Math.min(1, PROMEDIO_TOMADO)
 
@@ -38,7 +38,7 @@ const calcularLimitante = (fichasVigentes, cteData, cantidadComprasCanceladas, c
     const estaAtrasado = !!fichasVigentes.find(ficha => ficha.atraso_evaluado > 0);
     if (estaAtrasado) return "ATRASADO"
 
-    if (cantidadComprasCanceladas / cantidadDeCompras >= 0.5) return "DEVOLUCIONES"
+    if (cantidadComprasCanceladas / cantidadDeCompras > 0.5) return "DEVOLUCIONES"
     if (BaseDetalle.length > 0) {
         const ultEstado = BaseDetalle[0].ESTADO
         const anteUltEstado = BaseDetalle[1]?.ESTADO
@@ -48,9 +48,13 @@ const calcularLimitante = (fichasVigentes, cteData, cantidadComprasCanceladas, c
     return null
 }
 
-const calcularLimite = (limitante, disponible, incremento) => {
+const calcularLimite = (limitante, disponible, incremento,ZFinal) => {
     if (limitante) return LIMITANTES[limitante];
+
+    if(ZFinal <= 0.5)  return round(Math.min(Math.max(disponible + incremento, 1), 7), 2)
+
     return round(Math.min(Math.max(disponible + incremento, 0), 7), 2)
+
 }
 
 const calcularCalificacion = (ZFinal, limitante, disponible) => {
@@ -69,10 +73,12 @@ const calcularCalificacionCteNuevo = (limitante) => {
 
 const calcularDisponibleFinal = (limiteBgm, limiteEasy, tomadoFichasBGM, tomadoPrestamosBGM) => {
 
-
     const limiteEasyBGM = round(limiteEasy / 12000, 2)
+    
     const vuAdicionalesPorEasyCash = Math.max(tomadoPrestamosBGM > 0 ? limiteEasyBGM - tomadoPrestamosBGM : 0, 0)
+
     return round(Math.max(limiteBgm - tomadoFichasBGM + vuAdicionalesPorEasyCash, 0), 1)
+    
 }
 
 
@@ -107,7 +113,7 @@ const calcularMasterBgm = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDe
     const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalleResumen.DEVOLUCIONES + BaseDetalleResumen.RETIRADAS, BaseDetalleResumen.CREDITOS_BGM, BaseDetalleBgm)
 
 
-    const limite = calcularLimite(limitante, disponible, incremento)
+    const limite = calcularLimite(limitante, disponible, incremento,ZFinal)
 
 
     const disponibleFinal = calcularDisponibleFinal(limite, limiteEasy, tomadoFichasBGM, tomadoPrestamosBGM)

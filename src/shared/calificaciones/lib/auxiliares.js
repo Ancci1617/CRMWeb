@@ -76,7 +76,7 @@ const getZInicial = (cteSummary) => {
     if (PROMEDIO < 7 && MINIMO < 7 && MAXIMO < 7.1) return 0.15
     if (PROMEDIO < 7.1 && MINIMO < 7.1 && MAXIMO < 8) return 0.4
     if (PROMEDIO < 9.1 && MINIMO < 8.1 && MAXIMO < 12) return 0.55
-    return 0.7
+    return 0.55
 
 }
 

@@ -183,10 +183,10 @@ function ventaAprobada(responsable, Estatus, cuotas_para_entrega = 0, vendido, a
 
 
     //AUMENTA EL DISPONIBLE, Si es con anticipo
-    if (anticipo >= cuota.value || Estatus.includes("Con anticipo")) disponible += 1;
+    // if (anticipo >= cuota.value || Estatus.includes("Con anticipo")) disponible += 1;
 
     //Chequea si le da el disponible
-    if (vendido / sabana <= disponible) return true;
+    if ((vendido-anticipo) / sabana <= disponible) return true;
 
 
     //Si no se cumplen las condiciones desaprobada 
