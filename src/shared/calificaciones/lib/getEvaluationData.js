@@ -5,7 +5,7 @@ const { formatPagosAcumulados } = require("../formatters/PagosBGMFormater.js")
 
 
 const getEvaluationData = async (CTE) => {
-    const BaseDetalleRaw = await getBaseDetalle({ CTE,filterDevEasyCash : true,order : "desc" })
+    const BaseDetalleRaw = await getBaseDetalle({ CTE,filterDevEasyCash : true,order : "desc" ,filterInvalidas :true})
     
  
 
