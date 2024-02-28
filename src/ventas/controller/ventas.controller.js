@@ -5,21 +5,52 @@ const { getNuevoNumeroDeCte } = require("../../model/ventas/ventas.query.js");
 const { insertarNuevaUbicacion } = require("../../ubicaciones/model/ubicaciones.mode.js");
 const ventasModel = require("../model/ventas.model.js");
 const { getAside } = require("./lib/aside.js");
-const fs = require("fs");
 const pagosModel = require("../../pagos/model/pagos.model.js");
 const { generarContactoCTE } = require("../../lib/contactos.js");
 const { getRequiredImages } = require("./lib/required_images.js");
 const { getToday } = require("../../lib/dates.js");
+const { splitPrestamosFichas } = require("../../lib/fichas.js");
+const { generarResumenDeVentas } = require("./lib/resumenVentas.js")
+
 const emitter = require("../../shared/EventNotifier/emitter.js");
 
 
+const verVentasGeneral = async (req, res) => {
+    const { FECHA_VENTA } = req.query
+    try {
+        const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA } })
+        const aside = await getAside()
+
+        // res.render("ventas/ventas.cargadas.vendedores.ejs", { vendedores, fechas });
+        const { fichas, prestamos } = splitPrestamosFichas(ventas);
+        const resumenFichas = generarResumenDeVentas(fichas)
+
+        const resumenPrestamos = generarResumenDeVentas(prestamos)
+        
+        const USUARIOS = [...new Set(fichas.map(ficha => ficha.USUARIO))]
+
+        res.render("ventas/ventas.generales.ejs", { fichas, prestamos, aside, FECHA_VENTA, resumenFichas, resumenPrestamos ,USUARIOS})
+
+
+    } catch (error) {
+        console.log(error);
+        res.send("error al consultar las ventas")
+    }
+}
+
 //Para admin
-const cargarVentas = async (req, res) => {
+const verVentas = async (req, res) => {
     const { FECHA_VENTA, USUARIO } = req.query;
+
+    if (USUARIO == "General") return verVentasGeneral(req, res)
+
     const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA, USUARIO } });
     const aside = await getAside();
-    res.render("ventas/cargar_ventas/ventas.cargar.ejs", { aside, ventas, USUARIO, FECHA: FECHA_VENTA });
+
+
+    res.render("ventas/ventas.detalle.ejs", { aside, ventas, USUARIO, FECHA: FECHA_VENTA });
 }
+
 const confirmarVenta = async (req, res) => {
     const [venta] = await ventasModel.getVentas({ filter: { INDICE: req.params.INDICE } });
     await ventasModel.confirmarVenta({ venta, ID_VENTA: venta.INDICE }, req.user.Usuario);
@@ -40,7 +71,17 @@ const formCargarVenta = async (req, res) => {
 }
 
 
+const cambiarAprobacion = (ESTADO) => async (req, res) => {
 
+    const { ID } = req.params
+    try {
+        const [venta] = await ventasModel.updateAprobacionVenta(ID,req.user.Usuario ,ESTADO);
+        return res.redirect(`/ventas/pasar_ventas?USUARIO=General&FECHA_VENTA=${venta.FECHA_VENTA}`)
+    } catch (error) {
+        console.log(error);
+        res.send("Hubo un erro al aprobar la venta")
+    }
+}
 
 
 
@@ -64,7 +105,7 @@ const postCargarVenta = async (req, res) => {
         if (ANTICIPO > 0 && ANTICIPO_MP != "SI")
             await pagosModel.cargarPago({ CODIGO: getRandomCode(5), CTE, CUOTA: ANTICIPO, DECLARADO_CUO: ANTICIPO, FECHA: FECHA_VENTA, FICHA, OBS: "Anticipo", USUARIO, PROXIMO: PRIMER_PAGO, ID_VENTA });
 
-        emitter.emit("ventaCargada",{...req.body,CTE,ID_VENTA})
+        emitter.emit("ventaCargada", { ...req.body, CTE, ID_VENTA })
 
     } catch (error) {
         console.log(error);
@@ -140,5 +181,24 @@ const consultarPrecios = async (req, res) => {
 }
 
 
+// const ventasCargadasGeneral = async (req, res) => {
+//     const { FECHA_VENTA } = req.query
+//     try {
+//         const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA } })
+//         const aside = await getAside()
 
-module.exports = { cargarVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta, consultarPrecios }
+
+//         // res.render("ventas/ventas.cargadas.vendedores.ejs", { vendedores, fechas });
+//         res.render("ventas/ventas.generales.ejs",{aside})
+
+
+//     } catch (error) {
+//         console.log(error);
+//         res.send("error al consultar las ventas")
+//     }
+
+// }
+
+module.exports = {
+    verVentas, formEditarVenta, formCargarVenta, postCargarVenta, postEditarVenta, borrarVenta, confirmarVenta, consultarPrecios, cambiarAprobacion
+}

@@ -5,11 +5,13 @@ function formatPorcentaje(texto) {
 function truncar(expression,decimales) {
     return Math.trunc(expression * 10 * decimales) / 10 * decimales
 }
+
+
+
 module.exports = {
 
     formatPorcentaje
 ,truncar
-
 }
 
 

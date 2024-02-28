@@ -1,42 +1,45 @@
-<%- include(global.dir_partials + "/head.ejs",{styles : [
+<!DOCTYPE html>
+<html lang="en">
+
+
+<%- include(global.dir_partials + "/head.ejs",{options : {styles : [
   "/css/cargar_venta/ventas_form_generico.css",
 "/css/pedidos/pedidos.generales.css",
 "/shared/ui/informe.css",
 "/css/navigation/buscador.css",
-"/LP/main.css"],title : "LP"}) %>
+"/LP/main.css"],title : "LP",useTailwind : false}}) %>
 <!-- <link rel="stylesheet" href="/css/pedidos/pedidos.generales.css" />
 <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css"> -->
 
 <%- include(global.dir_partials + "/navigation/navigation-bar.ejs") %>
-<% const formatNumber = new Intl.NumberFormat("es-AR").format %>
-<% const format = (text) => text.replaceAll(/\d+/g,formatNumber) %>
 <% const showDisabled = hasPermission(permisos.LP_GERENCIA) ? "" : "disabled" %>
 
-<main>
-  <!-- <header>LP</header> -->
-  <div class="flex-space_between container--title">
-    <h2 id="title--6-cuotas">Productos hasta 6 cuotas</h2>
-    <a class="link text--light-blue" href="#title--prepagos">Ver prepagos</a>
-  </div>
-  <%- include(global.dir_partials + "/buscador.ejs",{inputFunction : "searchProducts"}) %>
-  <div class="flex-space_between">
-    <div><input type="checkbox" autocomplete="off" onchange="toggleInvalidProducts(this.checked)" /> Productos sin precios</div>
-    <span class="link btn--nuevo-producto text--light-blue" onclick="toggleAddForm()">Agregar nuevo producto</span>
-  </div>
+<body>
+  <main>
+    <!-- <header>LP</header> -->
+    <div class="flex-space_between container--title">
+      <h2 id="title--6-cuotas">Productos hasta 6 cuotas</h2>
+      <a class="link text--light-blue" href="#title--prepagos">Ver prepagos</a>
+    </div>
+    <%- include(global.dir_partials + "/buscador.ejs",{inputFunction : "searchProducts"}) %>
+    <div class="flex-space_between">
+      <div><input type="checkbox" autocomplete="off" onchange="toggleInvalidProducts(this.checked)" /> Productos sin precios</div>
+      <span class="link btn--nuevo-producto text--light-blue" onclick="toggleAddForm()">Agregar nuevo producto</span>
+    </div>
 
-  <% const productos = LP.filter(producto => producto["CUOTAS_9"] == 0) %>
-  <%- include("./informe.ejs",{productos,format})  %>
+    <% const productos = LP.filter(producto => producto["CUOTAS_9"] == 0) %>
+    <%- include("./informe.ejs",{productos,format : formatNumber})  %>
 
-  <div class="flex-space_between container--title">
-    <h2 id="title--prepagos">Prepagos</h2>
-    <a href="#title--6-cuotas" class="link text--light-blue">Ver en 6 cuotas</a>
-  </div>
-  <% const prepagos = LP.filter(producto => producto["CUOTAS_9"] != 0 ) %>
-  <%- include("./informe.prepagos.ejs",{prepagos,format})  %>
+    <div class="flex-space_between container--title">
+      <h2 id="title--prepagos">Prepagos</h2>
+      <a href="#title--6-cuotas" class="link text--light-blue">Ver en 6 cuotas</a>
+    </div>
+    <% const prepagos = LP.filter(producto => producto["CUOTAS_9"] != 0 ) %>
+    <%- include("./informe.prepagos.ejs",{prepagos,format : formatNumber})  %>
 
 
 
-  <%const containerEditar = {id : "container--form-editar"}; 
+    <%const containerEditar = {id : "container--form-editar"}; 
   const formEditar = {title : "Editar producto",
   action : "/LP/editar_producto",
   method : "POST",
@@ -96,69 +99,77 @@
      properties : [showDisabled]
   }] ;%>
 
-  <%- include(global.dir_partials + "/Components/absolute.form.ejs",{form : formEditar,inputs ,container : containerEditar}) %>
+    <%- include(global.dir_partials + "/Components/absolute.form.ejs",{form : formEditar,inputs ,container : containerEditar}) %>
 
 
 
-  <% const containerAgregar = {id : "container--form-agregar"}; 
+    <% const containerAgregar = {id : "container--form-agregar"}; 
   const formAgregar = {title : "Agregar producto",
   action : "/LP/agregar_producto",
   method : "POST",
   id : "form--agregar" };%>
-  <%- include(global.dir_partials + "/Components/absolute.form.ejs",{inputs,form : formAgregar,container : containerAgregar}) %>
+    <%- include(global.dir_partials + "/Components/absolute.form.ejs",{inputs,form : formAgregar,container : containerAgregar}) %>
 
 
-</main>
+  </main>
 
 
 
+
+  <script>
+    function showAll() {
+      document.querySelectorAll("tr").forEach(tr =>
+        tr.classList.remove("hidden")
+      )
+    }
+
+    function searchProducts(searchValue) {
+      const tr_arr = document.querySelectorAll(".row--producto")
+      showAll();
+      tr_arr.forEach(tr => {
+        if (!tr.innerHTML.toLowerCase().includes(searchValue.toLowerCase())) {
+          tr.classList.add("hidden");
+        }
+      })
+    }
+
+    function toggleInvalidProducts(checked) {
+      const tr_arr = document.querySelectorAll(".producto--invalido");
+      tr_arr.forEach(tr => {
+        checked ? tr.classList.add("mostrar--invalido") : tr.classList.remove("mostrar--invalido");
+      })
+    }
+
+    function toggleEditForm(art) {
+      const [container, form] = document.querySelectorAll("#container--form-editar, #container--form-editar form");
+      const keys = Object.keys(art);
+      keys.forEach(key =>
+        form.hasOwnProperty(key) ? form[key].value = art[key] : null);
+      container.classList.remove("unshow");
+    }
+
+    function toggleAddForm() {
+      document.querySelector("#container--form-agregar").classList.remove("unshow");
+    }
+
+    function handleDelete(e) {
+      const art = e.target.href
+      if (!confirm("Estas apunto de eliminar ete articulo, ¿estas seguro?"))
+        return e.preventDefault()
+
+    }
+
+    window.addEventListener("load", e => {
+      document.querySelector("#form--agregar").Art.readOnly = false;
+      document.querySelectorAll(".eliminar").forEach(element => element.addEventListener("click", handleDelete));
+    })
+  </script>
+
+
+
+
+
+</body>
 <%- include(global.dir_partials + "/foot.ejs",{scripts : {paths: ["/js/lib/form.hide.js"]},nav : true}) %>
 
-<script>
-  function showAll() {
-    document.querySelectorAll("tr").forEach(tr =>
-      tr.classList.remove("hidden")
-    )
-  }
-
-  function searchProducts(searchValue) {
-    const tr_arr = document.querySelectorAll(".row--producto")
-    showAll();
-    tr_arr.forEach(tr => {
-      if (!tr.innerHTML.toLowerCase().includes(searchValue.toLowerCase())) {
-        tr.classList.add("hidden");
-      }
-    })
-  }
-
-  function toggleInvalidProducts(checked) {
-    const tr_arr = document.querySelectorAll(".producto--invalido");
-    tr_arr.forEach(tr => {
-      checked ? tr.classList.add("mostrar--invalido") : tr.classList.remove("mostrar--invalido");
-    })
-  }
-
-  function toggleEditForm(art) {
-    const [container, form] = document.querySelectorAll("#container--form-editar, #container--form-editar form");
-    const keys = Object.keys(art);
-    keys.forEach(key =>
-      form.hasOwnProperty(key) ? form[key].value = art[key] : null);
-    container.classList.remove("unshow");
-  }
-
-  function toggleAddForm() {
-    document.querySelector("#container--form-agregar").classList.remove("unshow");
-  }
-
-  function handleDelete(e) {
-    const art = e.target.href 
-    if (!confirm("Estas apunto de eliminar ete articulo, ¿estas seguro?"))
-      return e.preventDefault()
-
-  }
-
-  window.addEventListener("load", e => {
-    document.querySelector("#form--agregar").Art.readOnly = false;
-    document.querySelectorAll(".eliminar").forEach(element => element.addEventListener("click", handleDelete));
-  })
-</script>
+</html>

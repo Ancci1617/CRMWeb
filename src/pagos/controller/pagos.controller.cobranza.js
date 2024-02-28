@@ -2,24 +2,20 @@ const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const pool = require("../../model/connection-database.js");
 const pagosModel = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
-const { getFichas } = require("../../model/CRM/get_tablas/get_fichas.js")
+const { getFichas } = require("../../model/CRM/get_tablas/get_fichas.js");
+const { getAside } = require("../lib/aside.js");
 
 async function cargarCobranza(req, res) {
   const { FECHA = "", COB = "", ORDEN = "Z" } = req.query;
-  const data = await pagosModel.getFechasDePagosYCobradores();
-  const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
-  const render_links = FECHAS.map(fecha_evaluada => {
-    return {
-      FECHA: fecha_evaluada,
-      COBRADORES: data.filter(obj => obj.FECHA == fecha_evaluada).map(obj => obj.COBRADOR)
-    }
-  });
+
+  const aside = await getAside()
+
 
   const pagos = await pagosModel.getPagosByFechaYCob({ COB, FECHA, ORDEN });
   const total_cobrado = pagos.reduce((accumulator, pago) => accumulator + pago.SERV + pago.CUOTA + pago.MORA, 0);
   const rendicion = await getRendicion({ COB, FECHA });
 
-  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside: render_links, pagos, total_cobrado, ORDEN, rendicion });
+  res.render("pagos/pagos.cargar_cobranzas.ejs", { aside, pagos, total_cobrado, ORDEN, rendicion });
 }
 
 async function redistribuirPago(req, res) {

@@ -1,0 +1,109 @@
+:root {
+    --aside-left: 170px;
+}
+
+ul {
+    list-style: none;
+}
+
+
+
+
+.aside {
+    position: fixed;
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    gap: .4rem;
+    left: 0;
+    width: var(--aside-left);
+    height: calc(100vh - 3rem);
+    box-shadow: 1px 0 1px gray;
+    padding: .5em;
+    font-family: 'Roboto', sans-serif;
+    background-color: white;
+    transition: left .1s;
+    z-index: 100;
+}
+
+.aside__header {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.aside__header i {
+    cursor: pointer;
+    display: none;
+}
+
+.aside__header i:hover {
+    color: var(--dark_gray);
+}
+
+.aside .ul__fechas {
+    display: flex;
+    flex-direction: column;
+    gap: .3em;
+    padding: 7px;
+}
+
+.ul__cobradores {
+    display: none;
+}
+
+ul .ul__cobradores li {
+    margin-bottom: .4rem;
+}
+
+ul .li__fecha:hover>.ul__cobradores {
+    display: block;
+}
+
+
+.container--main-content {
+    padding: .5rem;
+    padding-left: calc(var(--aside-left) + 1rem);
+
+}
+
+@media screen and (max-width:580px) {
+
+    .li__fecha.show_aside_li__fecha>.ul__cobradores {
+        display: block;
+    }
+
+    .aside {
+        left: calc(var(--aside-left) * -1);
+    }
+
+    .show_aside {
+        left: 0;
+    }
+
+    .aside__header i {
+        display: inline-block;
+    }
+
+    .container--main-content {
+        padding-left: 15px;
+    }
+
+
+
+    /*BOTONE QUE MUESTRA EL ASIDE*/
+    .btn--mostrar-aside {
+        border: 1px solid #ccc;
+        background-color: #f0f0f0;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        border-radius: 5px;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .btn--mostrar-aside:hover {
+        color: #009100;
+        background-color: #e0e0e0;
+    }
+
+}

@@ -5,19 +5,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blanco Gusmar | Ventas</title>
-  <%- include("../../partials/links/normalize-fa-nav.styles.ejs") %>
+  <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
   <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
   <link rel="stylesheet" href="/css/ventas/ventas.cargar.css">
-
+  <link rel="stylesheet" href="/shared/ui/aside.css"/>
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
-  <%- include("../../partials/navigation/navigation-bar.ejs")  %>
 
-  <main class="main__container">
-    <%- include("../../partials/navigation/aside_cobranzas.ejs",{TITULO : "Ventas",aside} ) %>
+
+<body>
+  <%- include("../partials/navigation/navigation-bar.ejs")  %>
+
+  <main>
+    <%- include("../partials/navigation/aside.ejs",{TITULO : "Ventas",aside,url : "/ventas/pasar_ventas"} ) %>
+
+    
 
 
     <section class="cobranzas">
@@ -25,13 +29,13 @@
       <header>
         <span class="cobrador_nombre"><%= USUARIO %></span>
         <!-- <span class="cobrador_total"><%= //user.RANGO == "ADMIN" ? `Total : ${total_cobrado}` : "" %></span> -->
-        <span class="cobranza_fecha"><%= FECHA %></span>
+        <span class="cobranza_fecha btn--mostrar-aside"><%= FECHA %></span>
       </header>
 
       <div class="lista_de_pagos lista_de_ventas">
         <!-- TRANSFORMAR EL FOREACH DE VENTAS -->
         <% ventas.forEach(venta => { %>
-        <%- include("../../partials/ventas/venta.para.cargar.ejs", {venta}) %>
+        <%- include("../partials/ventas/venta.para.cargar.ejs", {venta}) %>
         <%})%>
       </div>
 
@@ -39,7 +43,7 @@
 
       <header>
         <span class="cobrador_nombre">Sin ventas</span>
-        <span class="cobranza_fecha">- - - -</span>
+        <span class="btn--mostrar-aside">- - - -</span>
       </header>
 
       <%  } %>
@@ -49,8 +53,8 @@
 
 
 
-  <%- include("../../partials/links/nav.logic.ejs") %>
-  <script src="/pagos/js/aside.js"></script>
+  <%- include("../partials/links/nav.logic.ejs") %>
+  <script src="/shared/ui/aside.js"></script>
   <script src="/pagos/js/button_events.js"></script>
   <script src="/js/ventas/button_events.js"></script>
 

@@ -11,7 +11,7 @@ const { isLoggedIn } = require('./lib/auth.js');
 const fs = require("fs");
 const https = require('https');
 const config = require("config")
-
+const {setFormaters} = require("./middlewares/formaters.js");
 
 
 //Set Variables;
@@ -45,12 +45,12 @@ app.use(express.json());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(setFormaters);
 app.use(userView);
 require("./lib/passport.lib");
 
 morgan.token('user', function (req, res) { return req.user ? req.user.Usuario : "WL" });
 app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
-
 
 /*Rutas de eventos */
 require("./contactos/routes/events.routes.js")
@@ -68,7 +68,6 @@ app.use(require("./Router/main.router"));
 app.use(require("./Router/CRM/consulta.crm.router"));
 app.use(require("./Router/ventas/ventas.router"))
 app.use("/ventas/prestamos",require("./ventas/Router/ventas.easy.routes.js"));
-app.use(require("./Router/ventas/ventas.archivos.js"))
 app.use(require("./Router/get.router"));
 app.use(require("./Router/mercaderia/planillas.sobrecarga.js"));
 app.use(require("./Router/mercaderia/planillas.router.js"));

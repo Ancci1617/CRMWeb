@@ -1,5 +1,6 @@
 const { calcularTomado, getZInicial, calcularZFinal } = require("./lib/auxiliares.js")
-const { getFichasVigentes, splitPrestamosFichas } = require("../lib/fichas.js")
+const { getFichasVigentes  } = require("../lib/fichas.js")
+const {splitPrestamosFichas} = require("../../lib/fichas.js") 
 const { fichasAsBaseDetalle } = require("./formatters/FichasTerminadas.js")
 const { getEvaluationData } = require("./lib/getEvaluationData.js")
 const { generateSummaryBaseDetalle } = require("./formatters/BaseDetalleSummary.js")
@@ -90,7 +91,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-getMaster(1615).then(res => console.log("respuesta con solid", res))
+// getMaster(1615).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {

@@ -20,8 +20,9 @@ const getAside = async (user) => {
 
     const aside = FECHAS.map(FECHA => {
         return {
-            TITULO: FECHA,
-            VINCULOS: usuarios.map(usuario => ({ INDICE: usuario.Usuario,MP_TITULAR : usuario.Usuario,MES : FECHA }))
+            titulo: FECHA,
+            // VINCULOS: usuarios.map(usuario => ({ titulo : usuario, INDICE: usuario.Usuario,MP_TITULAR : usuario.Usuario,MES : FECHA }))
+            VINCULOS: usuarios.map(usuario => ({ titulo : usuario.Usuario,MP_TITULAR : usuario.Usuario,MES : FECHA }))
         }
     });
     return aside

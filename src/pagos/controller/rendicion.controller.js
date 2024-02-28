@@ -1,5 +1,6 @@
 "use strict";
 const pool = require("../../model/connection-database.js");
+const { getAside } = require("../lib/aside.js");
 const  pagosModel  = require("../model/pagos.model.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 
@@ -52,14 +53,7 @@ async function rendicionReceptor(req, res) {
 
     const { FECHA = "", COB = "" } = req.query;
 
-    const data = await pagosModel.getFechasDePagosYCobradores();
-    const FECHAS = [...new Set(data.map(obj => obj.FECHA))];
-    const render_links = FECHAS.map(fecha_evaluada => {
-        return {
-            FECHA: fecha_evaluada,
-            COBRADORES: data.filter(obj => obj.FECHA == fecha_evaluada).map(obj => obj.COBRADOR)
-        }
-    });
+    const aside = await getAside()
 
     if (!(res.locals.hasPermission(res.locals.permisos.RENDICION_ADMIN) || req.user.Usuario == COB || COB == "")) {
         return res.send("No tenes permiso para acceder a esta funcionalidad.");
@@ -71,7 +65,8 @@ async function rendicionReceptor(req, res) {
         "SELECT * from Gastos where ID_RENDICION = (SELECT ID FROM PlanillasDeCobranza WHERE FECHA = ? and COB = ?);", [FECHA, COB]);
 
     const pagos = await pagosModel.getPagosByFechaYCob({ FECHA, COB, ORDEN: "ID" });
-    res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside: render_links, rendicion, gastos, FECHA, COB, pagos });
+
+    res.render("pagos/rendiciones/rendicion.receptor.ejs", { aside, rendicion, gastos, FECHA, COB, pagos });
 }
 
 async function generarRendicion(req, res) {

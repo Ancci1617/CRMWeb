@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
   <link rel="stylesheet" href="/pagos/css/rendicion.css">
   <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+  <link rel="stylesheet" href="/shared/ui/aside.css" />
   <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
 </head>
 
@@ -17,23 +18,9 @@
 
   <main class="main__container">
 
-    <aside class="aside">
-      <div class="aside__header"><i class="fas fa-arrow-left"></i> Cobranzas</div>
-      <ul class="ul__fechas">
-        <% aside.forEach(link => { %>
-        <li class="li__fecha">
-          <span><%= link.FECHA %></span>
-          <ul class="ul__cobradores">
-            <% link.COBRADORES.forEach(cobrador =>{ %>
-            <li><a href="?COB=<%=cobrador%>&FECHA=<%=link.FECHA%>"><%= cobrador %></a></li>
-            <% })%>
-          </ul>
-        </li>
-        <%}) %>
-      </ul>
-    </aside>
+    <%- include("../../partials/navigation/aside.ejs",{url: "/rendicion/rendicion_receptor",TITULO : "Cobranzas",aside}) %>
 
-
+    
     <section class="cobranzas">
       <% if(rendicion != null) { %>
 
@@ -41,7 +28,7 @@
         <header>
           <span class="cobrador_nombre"><%= rendicion.COB %></span>
           <span class="cobrador_total">Total : <%= rendicion.TOTAL_COBRADO %></span>
-          <span class="cobranza_fecha"><%= rendicion.FECHA %></span>
+          <span class="btn--mostrar-aside"><%= rendicion.FECHA %></span>
         </header>
         <div class="rendicion_details">
 
@@ -123,7 +110,7 @@
       <% }else {%>
       <header>
         <span class="cobrador_nombre">Sin rendicion: </span>
-        <span class="cobranza_fecha">. . . .</span>
+        <span class="btn--mostrar-aside">. . . .</span>
         <div><a href=<%=`/pagos/pasar_cobranza?COB=${COB}&FECHA=${FECHA}` %>>Ir a pagos</a></div>
       </header>
       <%}%>
@@ -135,9 +122,9 @@
 
 
   <%- include("../../partials/links/nav.logic.ejs") %>
-      <script src="/js/lib/form.hide.js"></script>
-      <script src="/pagos/js/button_events.js"></script>
-      <script src="/pagos/js/aside.js"></script>
+      <!-- <script src="/js/lib/form.hide.js"></script> -->
+      <!-- <script src="/pagos/js/button_events.js"></script> -->
+      <script src="/shared/ui/aside.js"></script>
 
 </body>
 
