@@ -1,24 +1,29 @@
 <% 
-/* styles  : [{path : ""}],
-   title : "un string"
+/* RECIBE:
+   useTailwindcss : boolean
+   styles ["LINKS"],
+   title : "STRING"
 */
 %>
-
-<!DOCTYPE html>
-<html lang="en">
+<% const {useFontAwesome,useTailwind,title,styles} = options %>
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blanco Gusmar | <%= title %></title>
   <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
-  
+
+
+  <% if(useTailwind) { %>
+  <link rel="stylesheet" href="/shared/tailwindcss/output.css" />
+  <% } %>
+
+  <%if(useFontAwesome) {%> <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script> <% } %>
+
   <% styles.forEach(path => { %>
-    <link rel="stylesheet" href="<%= path %>">
+  <link rel="stylesheet" href="<%= path %>">
   <% }) %>
+
   <!-- <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script> -->
 
 </head>
-
-<body>
-

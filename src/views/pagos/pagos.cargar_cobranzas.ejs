@@ -8,6 +8,7 @@
       <%- include("../partials/links/normalize-fa-nav.styles.ejs") %>
       <link rel="stylesheet" href="/pagos/css/pagos.cargar_cobranza.css">
       <link rel="stylesheet" href="/css/cargar_venta/ventas_form_generico.css">
+      <link rel="stylesheet" href="/shared/ui/aside.css">
       <script src="https://kit.fontawesome.com/b03be97bbd.js" crossorigin="anonymous"></script>
     </head>
 
@@ -57,22 +58,8 @@
 
         <%- include("../partials/Components/absolute.form.ejs",{form ,inputs,container}  ) %>
 
+        <%- include("../partials/navigation/aside.ejs",{url : "/pagos/pasar_cobranza",TITULO : "Cobranzas",aside}) %>
 
-        <aside class="aside">
-          <div class="aside__header"><i class="fas fa-arrow-left"></i> Cobranzas</div>
-          <ul class="ul__fechas">
-            <% aside.forEach(link => { %>
-            <li class="li__fecha">
-              <span><%= link.FECHA %></span>
-              <ul class="ul__cobradores">
-                <% link.COBRADORES.forEach(cobrador =>{ %>
-                <li><a href="?COB=<%=cobrador%>&FECHA=<%=link.FECHA%>"><%= cobrador %></a></li>
-                <% })%>
-              </ul>
-            </li>
-            <%}) %>
-          </ul>
-        </aside>
 
 
         <section class="cobranzas">
@@ -80,7 +67,7 @@
           <header>
             <span class="cobrador_nombre"><%= pagos[0].COBRADOR %></span>
             <span class="cobrador_total"><%= user.RANGO == "ADMIN" ? `Total : ${total_cobrado}` : "" %></span>
-            <span class="cobranza_fecha"><%= pagos[0].FECHA %></span>
+            <span class="btn--mostrar-aside"><%= pagos[0].FECHA %></span>
           </header>
           <form class="orden__container flex-space_between" method="GET" action="/pagos/pasar_cobranza">
             <div>
@@ -107,7 +94,7 @@
           <% }else{ %>
           <header>
             <span class="cobrador_nombre">Sin evaluar</span>
-            <span class="cobranza_fecha">- - - -</span>
+            <span class="btn--mostrar-aside">- - - -</span>
           </header>
           <%  } %>
         </section>
@@ -118,7 +105,7 @@
 
       <%- include("../partials/links/nav.logic.ejs") %>
       <script src="/js/lib/form.hide.js"></script>
-      <script src="/pagos/js/aside.js"></script>
+      <script src="/shared/ui/aside.js"></script>
       <script src="/pagos/js/button_events.js"></script>
 
     </body>

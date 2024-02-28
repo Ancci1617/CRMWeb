@@ -8,7 +8,7 @@ module.exports = {
     RENDICION_USER : "RENDICION_USER", //Puede ver los montos de su rendicion y la rendicion de efectivo propia.
     RENDICION_ADMIN : "RENDICION_ADMIN", //Puede ver todas las rendiciones y montos y modificar efectivos.
     
-    VENTAS_USER : "VENTAS_USER",
+    VENTAS_USER : "VENTAS_USER", //Cargar ventas.
     VENTAS_ADMIN : "VENTAS_ADMIN",
     VENTAS_GERENCIA : "VENTAS_GERENCIA",
     DNI_USER : "DNI_USER",

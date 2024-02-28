@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("../partials/head.ejs",{
+    options : {
+    useTailwind : true,
+    styles : ["/shared/ui/aside.css","/css/ventas/ventas.generales.css"],
+    title : "Generales",
+    useFontAwesome : true
+}
+
+}) %>
+
+
+
+<body class="bg-white">
+  <%- include("../partials/navigation/navigation-bar.ejs") %>
+  <main>
+    <%- include("../partials/navigation/aside.ejs",{TITULO : "Ventas",aside,url : "/ventas/pasar_ventas" }) %>
+
+    <section class="container--main-content ">
+      <header class="flex justify-between text-2xl mb-3 gap-x-3 gap-y-1.5 flex-wrap items-center">
+        <span class="whitespace-nowrap">Ventas generales</span>
+        <span class="btn--mostrar-aside select-none  "><%= formatDate(FECHA_VENTA) %></span>
+      </header>
+
+      <div class="mb-3">
+        <div>Total : <%= formatNumber(String(resumenFichas.TOTAL)) %></div>
+        <div>Ventas : <%= fichas.length %></div>
+
+
+        <% USUARIOS.forEach(usuario => { %>
+          <div><%= usuario %> : <%= formatNumber(String(resumenFichas.VENDEDORES[usuario])) %></div>
+        <% }) %>
+
+      </div>
+      
+      <%- include("./partials/tabla.ventas.generales.ejs",{ventas : fichas}) %>
+      
+      <div class="mb-3">
+        <div>Total : <%= formatNumber(String(resumenPrestamos.COLOCADO)) %></div>
+        <div>Ventas : <%= prestamos.length %></div>
+      </div>
+
+      <%- include("./partials/tabla.ventas.generales.ejs",{ventas : prestamos}) %>
+
+
+    </section>
+
+  </main>
+  <script src="/shared/ui/aside.js"></script>
+  <script src="/js/navigation/navigation.js"></script>
+</body>
+
+
+
+
+</html>

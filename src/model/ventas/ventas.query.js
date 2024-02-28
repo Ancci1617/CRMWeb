@@ -26,10 +26,10 @@ async function getVendedoresConVentas(dia) {
 async function getVentasDelDia(dia, usuario) {
 
     const [ventas] = await pool.query(
-        "SELECT `CTE`, `FICHA`, `ZONA`, `NOMBRE`, " +
-        "`CALLE`,`WHATSAPP`,`DNI`,`ARTICULOS`,`CUOTAS`,`CUOTA`,`TOTAL`, " +
-        "`VENCIMIENTO`,`PRIMER_PAGO`,`APROBADO`, `RESPONSABLE`,`INDICE` " +
-        "FROM VentasCargadas WHERE `FECHA_VENTA` = " +
+        "SELECT CTE, FICHA, ZONA, NOMBRE, " +
+        "CALLE,WHATSAPP,DNI,ARTICULOS,CUOTAS,CUOTA,TOTAL, " +
+        "VENCIMIENTO,PRIMER_PAGO,APROBADO, RESPONSABLE,INDICE " +
+        "FROM VentasCargadas WHERE FECHA_VENTA = " +
         "? AND USUARIO = ? AND VISIBLE = 1  AND (MODO != 'CONTADO' or MODO IS NULL) ORDER BY FICHA", [dia, usuario])
 
     if (ventas.length > 0) {
@@ -102,22 +102,7 @@ async function getNuevoNumeroDeCte() {
 }
 
 
-async function getVentasDelDiaGeneral(fecha) {
 
-    const [ventas] = await pool.query(
-        "SELECT `APROBADO`,`CTE`, `FICHA`, `ZONA`, `NOMBRE`, `CALLE`, " +
-        "`WHATSAPP`, `DNI`, `ARTICULOS`, `ANTICIPO`, `CUOTAS`, " +
-        "`CUOTA`,`TOTAL`,`VENCIMIENTO`, `PRIMER_PAGO`, `TIPO`, " +
-        "`ESTATUS`,  `RESPONSABLE` FROM `VentasCargadas` " +
-        "where FECHA_VENTA = ? AND VISIBLE = 1 AND (MODO != 'CONTADO' or MODO IS NULL) ORDER BY FICHA"
-        , [fecha])
-
-    if (ventas.length > 0) {
-        return ventas;
-    }
-
-    return [];
-}
 
 async function getVentasContado(fecha) {
 
@@ -156,7 +141,7 @@ async function deleteVentasContado(ID) {
 module.exports = {
     getVentasDelDia, borrarVentasDelDia,
     getVentasVendedores, getVendedores,
-    getFechaDeVentas, getVentasDelDiaGeneral,
+    getFechaDeVentas,
     getVendedoresConVentas, getNuevoNumeroDeCte,
     getVentasContado, getFechaDeVentasContado, deleteVentasContado,
     getVentaById

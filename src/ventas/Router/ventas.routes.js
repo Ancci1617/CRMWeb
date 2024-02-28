@@ -9,9 +9,16 @@ const { isOwnSell, isOwnSellPost } = require("../middlewares/custom.permissions.
 const { ventaSchema } = require("../schema/venta.schema.js");
 const {checkFicha} = require("../middlewares/checkFicha.js");
 
+    
+
+
+// Router.get("/ventas_cargadas_general",hasPermission(VENTAS_USER),ventasController.ventasCargadasGeneral);
 
 //Admin
-Router.get("/pasar_ventas", hasPermission(VENTAS_USER), ventasController.cargarVentas);
+Router.get("/pasar_ventas", hasPermission(VENTAS_USER), ventasController.verVentas);
+Router.get("/aprobar/:ID",hasPermission(VENTAS_ADMIN),ventasController.cambiarAprobacion("APROBADO"))
+Router.get("/desaprobar/:ID",hasPermission(VENTAS_ADMIN),ventasController.cambiarAprobacion("DESAPROBADO"))
+
 
 //Cargar
 Router.get("/cargar_venta/:cte", hasPermission(VENTAS_USER), ventasController.formCargarVenta);

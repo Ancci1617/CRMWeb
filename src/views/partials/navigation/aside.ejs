@@ -1,0 +1,51 @@
+<% /*
+Recibe : {
+    TITULO : string,
+    url : "/ventas/ventas_cargadas",
+    aside : [{
+        link : {titulo : string,VINCULOS : [
+          {
+            titulo : "vinculo 1",params : {COB:"Nahuel",FECHA_VENTA : "2024-01-01"}
+          },
+          {
+            titulo : "vinculo 2",params : {COB:"Gustado","FECHA_VENTA" : "2024-01-02"}
+          }]
+            
+
+    },{
+        link : {titulo : string,VINCULOS : ["vinculo 1","vinculo 2","vinculo 3"]}
+    }]
+    
+
+}
+*/ %>
+
+
+<aside class="aside">
+  <div class="aside__header"><i class="fas fa-arrow-left btn--cerrar-aside"></i> <%= TITULO %></div>
+  <ul class="ul__fechas">
+    <% aside.forEach(link => { %>
+    <% const {titulo} = link %>
+
+    <li class="li__fecha">
+
+      <span><%= titulo %></span>
+
+      <ul class="ul__cobradores">
+
+        <% link.VINCULOS.forEach(vinculo =>{ %>
+
+        <% const entries = Object.entries(vinculo) %>
+        <% const linkString = entries.slice(1,entries.length).map(e => e.join("=")).join("&") %>
+      
+
+        <li><a href="<%= url %>?<%= linkString %>"><%= vinculo.titulo %></a></li>
+
+        <% })%>
+
+      </ul>
+
+    </li>
+    <%}) %>
+  </ul>
+</aside>

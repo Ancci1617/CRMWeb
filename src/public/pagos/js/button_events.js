@@ -2,9 +2,7 @@
 const form_redistribuir = document.getElementById("form_redistribuir_pago");
 const form__container = document.getElementById("form__container");
 const pagos = document.querySelectorAll(".pago");
-const span_fecha = document.querySelector(".cobranza_fecha");
-const aside = document.querySelector("aside");
-const aside_i = document.querySelector(".aside__header i");
+
 const section_ordenar = document.querySelector(".section_ordenar");
 const borrar_gasto = document.querySelectorAll(".gastos-detalle .borrar_gasto");
 const cargar_gasto = document.querySelectorAll(".gastos-detalle .cargar_gasto");
@@ -28,7 +26,7 @@ if (section_ordenar) {
 }
 
 
-const CLASS_SHOW_ASIDE = "show_aside";
+
 const monthMap = {
     "ene": 0,
     "feb": 1,
@@ -43,16 +41,7 @@ const monthMap = {
     "nov": 10,
     "dic": 11
 };
-if (aside_i) {
-    aside_i.addEventListener("click", e => {
-        aside.classList.toggle(CLASS_SHOW_ASIDE);
-    })
-}
-if (span_fecha) {
-    span_fecha.addEventListener("click", e => {
-        aside.classList.toggle(CLASS_SHOW_ASIDE);
-    })
-}
+
 
 var dinero_recibido_por_pago = 0;
 pagos.forEach(pago => {

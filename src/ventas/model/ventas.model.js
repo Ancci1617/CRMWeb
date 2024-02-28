@@ -51,6 +51,7 @@ const getVentas = async ({ filter }) => {
             VentasCargadas.GARANTE_CRUCES,
             VentasCargadas.GARANTE_CRUCES2,
             VentasCargadas.GARANTE_TELEFONO,
+            VentasCargadas.EVALUADO_POR,
             Fichas.VENCIMIENTO as PRIMER_VENCIMIENTO,
             DOMICILIO_LABORAL
         FROM
@@ -58,7 +59,7 @@ const getVentas = async ({ filter }) => {
         LEFT JOIN UBICACIONESSV ON UBICACIONESSV.ID_VENTA = VentasCargadas.INDICE
 		LEFT JOIN Fichas ON Fichas.ID_VENTA = VentasCargadas.INDICE
         WHERE 
-        ${keys_sql} AND Visible = 1`
+        ${keys_sql} AND Visible = 1 ORDER BY VentasCargadas.Usuario,VentasCargadas.FICHA`
             , [...Object.values(filter)]);
 
         //REFORMAR CON ESTO
@@ -74,9 +75,11 @@ const getVentas = async ({ filter }) => {
 
 const getAsideVentas = async () => {
     try {
-        const [ventas] = await pool.query("SELECT DISTINCT USUARIO,FECHA_VENTA as FECHA FROM VentasCargadas where VISIBLE = 1 order by FECHA_VENTA DESC");
-        // "SELECT DISTINCT COBRADOR,FECHA FROM `PagosSV` WHERE CONFIRMACION != 'INVALIDO' ORDER BY `PagosSV`.`FECHA` DESC;";
-        return ventas;
+        const [asideData] = await pool.query(`
+        SELECT DISTINCT USUARIO,FECHA_VENTA as FECHA 
+        FROM VentasCargadas where VISIBLE = 1 order by FECHA_VENTA DESC`);
+
+        return asideData;
 
 
     } catch (error) {
@@ -329,7 +332,13 @@ const getVentaCargada = async (ID) => {
 
 }
 
-module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo, getPrecio, getVentaCargada }
+const updateAprobacionVenta = async (ID,Usuario,APROBACION) => {
+    await pool.query(`UPDATE VentasCargadas SET APROBADO = ?,EVALUADO_POR = ? WHERE INDICE = ?`,[APROBACION,Usuario,ID])
+    const [venta] = await pool.query(`SELECT * from VentasCargadas where INDICE = ?`,[ID])
+    return venta
+}
+
+module.exports = { getAsideVentas, getVentas, insertVenta, updateVenta, borrarVenta, confirmarVenta, insertPrestamo, getPrecio, getVentaCargada ,updateAprobacionVenta}
 
 
 
