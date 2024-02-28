@@ -2,13 +2,14 @@ const pool = require("../../model/connection-database")
 
 
 //Toda la base detalle de el array de clientes EXCEPTO las que son devolucion de EasyCash
-const getBaseDetalle = async ({ CTE, Easy = false, orderBy = "FECHA", order = "asc", filterDevEasyCash = false }) => {
+const getBaseDetalle = async ({ CTE, Easy = false, orderBy = "FECHA", order = "asc", filterDevEasyCash = false ,filterInvalidas = false}) => {
     const [res] = await pool.query(
         `SELECT FECHA, CTE, FICHA, Z, VTA, 
         Atraso, Anticipo, CUOTA_1, CUOTA_2, CUOTA_3, CUOTA_4, CUOTA_5, 
         SAL_ANT, CUOTA_6, SAL_ACT, Cuota, PAGO_EN, VALOR_UNITARIO, 
         Mes, ORIGINALES, (PAGO_EN - ORIGINALES + 6) AS TEORICA, PRIMER_VENCIMIENTO, VENCIMIENTO,ESTADO,CAPITAL,CONCAT(CTE,'-',FICHA) as CODIGO  
         FROM BaseDetalle WHERE CTE in (?) 
+        ${filterInvalidas ? " AND ESTADO != 'NO VALIDA' " : ""} 
         ${filterDevEasyCash ? " AND (ESTADO != 'DEVOLUCION' OR FICHA <= 50000) " : ""} 
         ${Easy ? "AND FICHA > 50000" : ""} order by ${orderBy} ${order}`, [CTE]);
 
