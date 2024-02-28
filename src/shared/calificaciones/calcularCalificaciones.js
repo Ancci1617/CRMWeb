@@ -7,12 +7,16 @@ const { generateSummaryBaseDetalle } = require("./formatters/BaseDetalleSummary.
 const { getCliente } = require("../model/cteData.js")
 const { calcularMasterBgm } = require("./calcularBgm.js")
 const { calcularMasterEasy } = require("./calcularEasy.js")
-const { cteNuevoDisponibles } = require("./constants/nuevos.js")
+const { cteNuevoDisponibles,cteNuevoClavo } = require("./constants/nuevos.js")
 
 
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     
-    if (!fichasVigentes.length && !BaseDetalle.length) return cteNuevoDisponibles //Si es cliente pero no hay ningun dato que evaluar
+    if (!fichasVigentes.length && !BaseDetalle.length) {
+        if(cteData.ES_CLAVO) return cteNuevoClavo
+        return cteNuevoDisponibles
+    
+    } //Si es cliente pero no hay ningun dato que evaluar
     // console.log({BaseDetalle,Pagos,fichasVigentes,cteData})
 
     const { fichas: fichasVigentesBgm, prestamos: fichasVigentesEasy } = splitPrestamosFichas(fichasVigentes)

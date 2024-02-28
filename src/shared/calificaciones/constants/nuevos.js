@@ -33,7 +33,12 @@ const cteNuevoDisponibles = {
     disponibleFinalEasy: INICIALES.EASY
 
 }
-
+const cteNuevoClavo = {
+    ...cteNuevoDisponibles,
+    calificacionBgm : "CLAVAZO",
+    disponibleFinalBgm : 0,
+    disponibleFinalEasy : 0
+}
 const cteNuevoBgm = {
     disponible: INICIALES.BGM,
     incremento: 0,
@@ -51,4 +56,4 @@ const cteNuevoEasy = {
 }
 
 
-module.exports = { cteNuevoDisponibles, INICIALES, cteNuevoBgm, cteNuevoEasy }
+module.exports = { cteNuevoDisponibles, INICIALES, cteNuevoBgm, cteNuevoEasy ,cteNuevoClavo}
