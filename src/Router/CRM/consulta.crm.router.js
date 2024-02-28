@@ -10,7 +10,7 @@ const { getDoubt, getAtrasos, getVencimientoValido, getDebtEasy } = require("../
 const express = require("express");
 const path = require("path");
 const { getBaseDetalle } = require("../../shared/model/cteData.js");
-const { getMaster } = require("../../shared/calificaciones/calcularCalificaciones.js");
+const { getMaster, getMasterPorLote } = require("../../shared/calificaciones/calcularCalificaciones.js");
 
 Router.use(isLoggedIn, express.static(path.join("..", "ImagenesDeClientes")));
 
@@ -94,17 +94,23 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
 
     query_result.Disponible = [{ BGM: disponibleFinalBgm, CALIF: calificacionBgm, CAPITAL: disponibleFinalEasy }]
     query_result.Domicilio = await getDomicilio(cte_data.CALLE);
-
+    const clientesDelDomicilio = query_result.Domicilio.map(cte => cte.CTE);
+    const calificacionesDeClientesDelDomicilio = await getMasterPorLote(clientesDelDomicilio);
+    
     query_result.Domicilio = query_result.Domicilio.map(cliente => {
+        const {calificacionBgm : CALIF} = calificacionesDeClientesDelDomicilio.find(cte => cte.CTE == cliente.CTE);
+
 
         if (cliente => cliente.FICHA && cliente.FICHA < 50000) {
             const { VENCIMIENTO, PRIMER_PAGO, CUOTAS, SALDO, CUOTA, TOTAL } = cliente;
             const { VENCIMIENTO_EVALUA } = getVencimientoValido({ VENCIMIENTO, PRIMER_PAGO });
             const { atraso_eval } = getAtrasos({ CUOTAS, CUOTA, SALDO, TOTAL, VENCIMIENTO_EVALUA });
-            return { CALIF: cliente.CALIF, NOMBRE: cliente.NOMBRE, CTE: cliente.CTE, CREDITO: cliente.FICHA, atraso: atraso_eval };
+
+            
+            return { CALIF, NOMBRE: cliente.NOMBRE, CTE: cliente.CTE, CREDITO: cliente.FICHA, atraso: atraso_eval };
         }
 
-        return { CALIF: cliente.CALIF, NOMBRE: cliente.NOMBRE, CTE: cliente.CTE, CREDITO: cliente.FICHA, atraso: null }
+        return { CALIF, NOMBRE: cliente.NOMBRE, CTE: cliente.CTE, CREDITO: cliente.FICHA, atraso: null }
 
     })
 
