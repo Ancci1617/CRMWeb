@@ -17,7 +17,9 @@ table td{
 table th{
     background-color: inherit;
 }
-
+thead{
+    z-index: 30;
+}
 table tr td:nth-child(-n+3) ,table tr th:nth-child(-n+3) {
     text-align: left;
 }

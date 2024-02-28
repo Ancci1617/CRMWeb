@@ -25,12 +25,13 @@
       </header>
 
       <div class="mb-3">
-        <div>Total : <%= formatNumber(String(resumenFichas.TOTAL)) %></div>
-        <div>Ventas : <%= fichas.length %></div>
+        <div>Total : <%= formatNumber(String(resumenFichas.TOTAL)) %> (<%= fichas.length %>)</div>
 
 
         <% USUARIOS.forEach(usuario => { %>
-          <div><%= usuario %> : <%= formatNumber(String(resumenFichas.VENDEDORES[usuario])) %></div>
+          <div>
+            <%= usuario %> : <%= formatNumber(String(resumenFichas.VENDEDORES[usuario].TOTAL)) %> (<%= resumenFichas.VENDEDORES[usuario].CANTIDAD %>)
+          </div>
         <% }) %>
 
       </div>
