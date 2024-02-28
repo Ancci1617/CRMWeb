@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "set NODE_ENV=&&nodemon src/index.js",
+    "devProdu" : "set NODE_ENV=production&&nodemon src/index.js",
     "devcss": "npx tailwindcss -i ./src/public/shared/tailwindcss/input.css -o ./src/public/shared/tailwindcss/output.css --watch",
     "run": "node src/index.js",
     "start": "node src/index.js"
