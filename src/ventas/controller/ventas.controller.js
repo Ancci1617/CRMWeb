@@ -21,7 +21,7 @@ const verVentasGeneral = async (req, res) => {
         const ventas = await ventasModel.getVentas({ filter: { FECHA_VENTA } })
         const aside = await getAside()
 
-        // res.render("ventas/ventas.cargadas.vendedores.ejs", { vendedores, fechas });
+
         const { fichas, prestamos } = splitPrestamosFichas(ventas);
         const resumenFichas = generarResumenDeVentas(fichas)
 

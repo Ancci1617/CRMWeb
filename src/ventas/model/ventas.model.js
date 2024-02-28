@@ -57,7 +57,7 @@ const getVentas = async ({ filter }) => {
         FROM
             VentasCargadas
         LEFT JOIN UBICACIONESSV ON UBICACIONESSV.ID_VENTA = VentasCargadas.INDICE
-		LEFT JOIN Fichas ON Fichas.ID_VENTA = VentasCargadas.INDICE
+		INNER JOIN Fichas ON Fichas.ID_VENTA = VentasCargadas.INDICE
         WHERE 
         ${keys_sql} AND Visible = 1 ORDER BY VentasCargadas.Usuario,VentasCargadas.FICHA`
             , [...Object.values(filter)]);
