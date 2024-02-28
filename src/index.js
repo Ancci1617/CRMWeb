@@ -36,7 +36,7 @@ app.use(session({
     secret: 'session_cookie_secret',
     store: require("./model/connection-sessionstorage"),
     resave: false,
-    cookie: { maxAge: (1000 * 60 * 60 * 10) },
+    cookie: { maxAge: (1000 * 60 * 60 * 15) },
     saveUninitialized: false
 }));
 // app.use(morgan("dev"));
