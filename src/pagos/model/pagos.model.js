@@ -425,7 +425,7 @@ const getAcumuladoDetalle = async (query = { "true": true }) => {
     try {
         const [pagos] = await pool.query(
             `SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR FROM PagosSVAcumulado WHERE ? 
-            UNION 
+            UNION ALL
             SELECT FICHA,VALOR,SERV,MORA,FECHA,COBRADOR From PagosSV WHERE ? AND PagosSV.CONFIRMACION != 'INVALIDO' order by FECHA`, [query, query]);
 
         return pagos;

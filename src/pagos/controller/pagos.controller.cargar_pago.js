@@ -4,7 +4,6 @@ const { getDoubt, getDebtEasy } = require("../../lib/doubt.js");
 const { getClientes } = require("../../model/CRM/get_tablas/get_clientes.js");
 const { getRandomCode } = require("../../lib/random_code.js");
 const { getNombresDeUsuariosByRango } = require("../../model/auth/getUsers.js");
-const pool = require("../../model/connection-database.js");
 const { getRendicion } = require("../model/rendicion.model.js");
 const permisos = require("../../constants/permisos.js");
 const { getClienteEnFichas } = require("../../model/CRM/tipos/get_data_por_tipo.js");
