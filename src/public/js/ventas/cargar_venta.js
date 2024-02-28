@@ -240,7 +240,7 @@ btn_submit.addEventListener("click", async e => {
     if (isAprobado)
         return form.submit()
 
-    if (confirm("La venta esta DESAPROBADA, ¿cargar igualmente?")) {
+    if (confirm(`La venta esta DESAPROBADA, NO ENTREGAR EL PRODUCTO \n¿cargar igualmente?`)) {
         aprobado.value = "DESAPROBADO";
         return form.submit()
     }
