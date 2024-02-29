@@ -36,12 +36,13 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
 }
 
 const calcularTomado = ({ fichasVigentesEasy, fichasVigentesBgm }) => {
+    
+    const esValida = ficha => ficha.ESTADO == "ACTIVO" || ficha.ESTADO == "PENDIENTE";
 
     const { tomadoPrestamosEasy, tomadoPrestamosBGM } = fichasVigentesEasy.reduce((acum, prestamo) => {
 
         //Solo calcula el tomado de los prestamos activos
-        const esValido = prestamo.ESTADO == "ACTIVO";
-        if(!esValido) return acum;
+        if(!esValida(prestamo)) return acum;
 
 
         return  {
@@ -51,7 +52,7 @@ const calcularTomado = ({ fichasVigentesEasy, fichasVigentesBgm }) => {
     }, { tomadoPrestamosEasy: 0, tomadoPrestamosBGM: 0 })
 
     //Solo calcula el tomado de las fichas activas
-    const tomadoFichasBGM = fichasVigentesBgm.reduce((acum, ficha) => ficha.ESTADO == "ACTIVO" ? acum + ficha.VALOR_UNITARIO : 0, 0)
+    const tomadoFichasBGM = fichasVigentesBgm.reduce((acum, ficha) => esValida(ficha) ? acum + ficha.VALOR_UNITARIO : 0, 0)
     const tomadoFichasEasy = tomadoFichasBGM * 12000
     return { tomadoFichasBGM, tomadoFichasEasy, tomadoPrestamosEasy, tomadoPrestamosBGM }
 

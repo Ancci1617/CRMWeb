@@ -18,7 +18,7 @@ const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCamb
 
     const fichasVigentes = fichasRaw.map(ficha => {
         const abonado = ficha.TOTAL - ficha.CUOTA_ANT + ficha.CUOTA_PAGO;
-        const VALOR_UNITARIO_TOMADO = abonado >= ficha.TOTAL * 0.66 ? ficha.VU : ficha.VALOR_UNITARIO_ORIGINAL;
+        const VALOR_UNITARIO_TOMADO = abonado >= ficha.TOTAL * 0.5 ? ficha.VU : ficha.VALOR_UNITARIO_ORIGINAL;
 
 
         return ficha.FICHA <= 50000 ?
