@@ -83,7 +83,6 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
             DATE_FORMAT(Fichas.FECHA, '%d/%m/%y') AS FECHA_FORMAT,
             Fichas.FECHA as FECHA,
             Fichas.CTE,
-            Fichas.ARTICULOS,
             CONVERT(Fichas.FICHA, INTEGER) as FICHA,
             Fichas.Z,
             Fichas.ANTICIPO,
@@ -245,7 +244,9 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
                         AND OFICINA = 0
                 ),
                 5
-            ) AS CAMBIOS_DE_FECHA_EXACTO
+            ) AS CAMBIOS_DE_FECHA_EXACTO,
+            Fichas.ARTICULOS
+
                     FROM
             Fichas
             LEFT JOIN acumulados ON acumulados.FICHA = Fichas.FICHA
