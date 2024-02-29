@@ -37,7 +37,7 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
 
 const calcularTomado = ({ fichasVigentesEasy, fichasVigentesBgm }) => {
     
-    const esValida = (ficha) => ficha.ESTADO == "ACTIVO" || ficha.ESTADO == "PENDIENTE";
+    const esValida = ficha => ficha.ESTADO == "ACTIVO" || ficha.ESTADO == "PENDIENTE";
 
     const { tomadoPrestamosEasy, tomadoPrestamosBGM } = fichasVigentesEasy.reduce((acum, prestamo) => {
 
