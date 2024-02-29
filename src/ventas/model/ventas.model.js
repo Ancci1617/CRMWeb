@@ -52,6 +52,7 @@ const getVentas = async ({ filter }) => {
             VentasCargadas.GARANTE_CRUCES2,
             VentasCargadas.GARANTE_TELEFONO,
             VentasCargadas.EVALUADO_POR,
+            VentasCargadas.OBS_EVALUACION,
             Fichas.VENCIMIENTO as PRIMER_VENCIMIENTO,
             DOMICILIO_LABORAL
         FROM
@@ -332,8 +333,8 @@ const getVentaCargada = async (ID) => {
 
 }
 
-const updateAprobacionVenta = async (ID,Usuario,APROBACION) => {
-    await pool.query(`UPDATE VentasCargadas SET APROBADO = ?,EVALUADO_POR = ? WHERE INDICE = ?`,[APROBACION,Usuario,ID])
+const updateAprobacionVenta = async (ID,Usuario,APROBACION,OBS) => {
+    await pool.query(`UPDATE VentasCargadas SET APROBADO = ?,EVALUADO_POR = ?,OBS_EVALUACION = ? WHERE INDICE = ?`,[APROBACION,Usuario,OBS,ID])
     const [venta] = await pool.query(`SELECT * from VentasCargadas where INDICE = ?`,[ID])
     return venta
 }

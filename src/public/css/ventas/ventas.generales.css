@@ -3,28 +3,36 @@ th {
     white-space: nowrap;
     text-align: right;
     padding-inline: 13px;
-    padding-bottom: 8px ;
-    padding-top: 8px ;
-
+    padding-bottom: 8px;
+    padding-top: 8px;
 }
-tr{
+
+tr {
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
 }
-table td{
+
+table td {
     background-color: white;
 }
-table th{
+
+table th {
     background-color: inherit;
 }
-thead{
+
+thead {
     z-index: 30;
 }
-table tr td:nth-child(-n+3) ,table tr th:nth-child(-n+3) {
+
+table tr td:nth-child(-n+3),
+table tr th:nth-child(-n+3),
+table tr td:last-child,
+table tr th:last-child {
     text-align: left;
 }
 
-table tr td:nth-child(3), table tr th:nth-child(3){
+table tr td:nth-child(3),
+table tr th:nth-child(3) {
     position: sticky;
     left: 0;
     z-index: 20;
@@ -33,7 +41,7 @@ table tr td:nth-child(3), table tr th:nth-child(3){
 
 
 
-table tbody tr:hover > td {
+table tbody tr:hover>td {
     background-color: #DFFFF4;
 
 }

@@ -2,64 +2,65 @@
 <%  %>
 
 <div class="overflow-x-auto mb-9 max-h-[65vh] text-[14px]">
-    <table class="">
-      <thead class="sticky top-0">
-        <tr class="bg-[#F2F2F2]">
-          <th>Vendedor</th>
-          <th>Aprobacion</th>
-          <th>CTE</th>
-          <th>Ficha</th>
-          <th>Zona</th>
-          <th>Nombre</th>
-          <th>Calle</th>
-          <th>Telefono</th>
-          <th>DNI</th>
-          <th>Art</th>
-          <th>Total</th>
-          <th>Cuotas</th>
-          <th>Cuota</th>
-          <th>Anticipo</th>
-          <th>Vence</th>
-          <th>Primer pago</th>
-          <th>Responsable</th>
-          <th>Evaluado por</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% ventas.forEach(venta => {  %>
-        <% const {USUARIO,APROBADO,CTE,FICHA,ZONA,NOMBRE,CALLE,WHATSAPP,DNI,ARTICULOS,TOTAL,CUOTAS,CUOTA,ANTICIPO,  DIA_VENCIMIENTO,PRIMER_PAGO,RESPONSABLE,INDICE,EVALUADO_POR} = venta %>
-        <tr>
-          <td><%= USUARIO %></td>
-          <td class="<%= APROBADO == "DESAPROBADO" ? "text-[#e74c3c]" : "text-[#009100]" %>  font-semibold"><%= APROBADO %></td>
-          <td><a target="_blank" class="hover:text-[#009100] font-medium" href="/CRM?CTE=<%= CTE %>"><%= CTE %></a></td>
-          <td><%= FICHA %></td>
-          <td class="text-[#e74c3c]"><%= ZONA %></td>
-          <td><%= NOMBRE %></td>
-          <td><%= CALLE %></td>
-          <td><%= WHATSAPP %></td>
-          <td><%= DNI %></td>
-          <td><%= ARTICULOS %></td>
-          <td><%= formatNumber(String(TOTAL)) %></td>
-          <td><%= CUOTAS %></td>
-          <td><%= formatNumber(String(CUOTA)) %></td>
-          <td><%= ANTICIPO %></td>
-          <td><%= DIA_VENCIMIENTO %></td>
-          <td><%= formatDate(PRIMER_PAGO) %></td>
-          <td><%= RESPONSABLE %></td>
-          <td><%= EVALUADO_POR %></td>
-          <td class="flex gap-4">
-            <a class="text-[#009100]" href="/ventas/aprobar/<%= INDICE %>">Aprobar</a>
-            <a class="text-[#e74c3c]" href="/ventas/desaprobar/<%= INDICE %>">Desaprobar</a>
-          </td>
-        </tr>
-        <% }) %>
+  <table class="">
+    <thead class="sticky top-0">
+      <tr class="bg-[#F2F2F2]">
+        <th>Vendedor</th>
+        <th>Aprobacion</th>
+        <th>CTE</th>
+        <th>Ficha</th>
+        <th>Zona</th>
+        <th>Nombre</th>
+        <th>Calle</th>
+        <th>Telefono</th>
+        <th>DNI</th>
+        <th>Art</th>
+        <th>Total</th>
+        <th>Cuotas</th>
+        <th>Cuota</th>
+        <th>Anticipo</th>
+        <th>Vence</th>
+        <th>Primer pago</th>
+        <th>Responsable</th>
+        <!-- <th>Evaluado por</th> -->
+        <th>Evaluado por</th>
+        <th>Observacion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ventas.forEach(venta => {  %>
+      <% const {USUARIO,APROBADO,CTE,FICHA,ZONA,NOMBRE,CALLE,WHATSAPP,DNI,ARTICULOS,TOTAL,CUOTAS,CUOTA,ANTICIPO,  DIA_VENCIMIENTO,PRIMER_PAGO,RESPONSABLE,INDICE,EVALUADO_POR,OBS_EVALUACION} = venta %>
+      <% const estaEvaluado = EVALUADO_POR != "AUTOMATICO" %>
+      <tr>
+        <td><%= USUARIO %></td>
+        <td class="<%= APROBADO == "DESAPROBADO" ? "text-[#e74c3c]" : "text-[#009100]" %>  font-semibold"><%= APROBADO %></td>
+        <td><a target="_blank" class="hover:text-[#009100] font-medium" href="/CRM?CTE=<%= CTE %>"><%= CTE %></a></td>
+        <td><%= FICHA %></td>
+        <td class="text-[#e74c3c]"><%= ZONA %></td>
+        <td><%= NOMBRE %></td>
+        <td><%= CALLE %></td>
+        <td><%= WHATSAPP %></td>
+        <td><%= DNI %></td>
+        <td><%= ARTICULOS %></td>
+        <td><%= formatNumber(String(TOTAL)) %></td>
+        <td><%= CUOTAS %></td>
+        <td><%= formatNumber(String(CUOTA)) %></td>
+        <td><%= ANTICIPO %></td>
+        <td><%= DIA_VENCIMIENTO %></td>
+        <td><%= formatDate(PRIMER_PAGO) %></td>
+        <td><%= RESPONSABLE %></td>
+        <td class="grid gap-4 grid-flow-col">
+          <% if(!estaEvaluado){ %>
+          <a class="text-[#009100] btn--aprobar" href="/ventas/aprobar/<%= INDICE %>">Aprobar</a>
+          <a class="text-[#e74c3c] btn--desaprobar" href="/ventas/desaprobar/<%= INDICE %>">Desaprobar</a>
+          <% }else{ %>
+          <%=EVALUADO_POR %>
+          <% } %>
+        </td>
+        <td><%= OBS_EVALUACION %></td>
+      </tr>
+      <% }) %>
 
-      </tbody>
-    </table>
-  </div>
-
-
-
-
-
+    </tbody>
+  </table>
+</div>
