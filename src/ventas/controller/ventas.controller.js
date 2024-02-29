@@ -72,10 +72,10 @@ const formCargarVenta = async (req, res) => {
 
 
 const cambiarAprobacion = (ESTADO) => async (req, res) => {
-
-    const { ID } = req.params
+    const {OBS} = req.query;
+    const { ID } = req.params;
     try {
-        const [venta] = await ventasModel.updateAprobacionVenta(ID,req.user.Usuario ,ESTADO);
+        const [venta] = await ventasModel.updateAprobacionVenta(ID,req.user.Usuario ,ESTADO,OBS);
         return res.redirect(`/ventas/pasar_ventas?USUARIO=General&FECHA_VENTA=${venta.FECHA_VENTA}`)
     } catch (error) {
         console.log(error);
