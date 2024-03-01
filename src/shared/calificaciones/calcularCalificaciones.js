@@ -11,7 +11,6 @@ const { cteNuevoDisponibles,cteNuevoClavo } = require("./constants/nuevos.js")
 
 
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
-    
     if (!fichasVigentes.length && !BaseDetalle.length) {
         if(cteData.ES_CLAVO) return cteNuevoClavo
         return cteNuevoDisponibles
@@ -24,9 +23,11 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
 
     const fichasVigentesAsBaseDetalle = fichasAsBaseDetalle(fichasVigentes,Pagos)
 
-    const BaseDetalleResumen = generateSummaryBaseDetalle([...BaseDetalle, ...fichasVigentesAsBaseDetalle])
+    const BaseDetalleConActivas = [...BaseDetalle, ...fichasVigentesAsBaseDetalle]
+    
+    const BaseDetalleResumen = generateSummaryBaseDetalle(BaseDetalleConActivas)
 
-    const { fichas: BaseDetalleBgm, prestamos: BaseDetalleEasy } = splitPrestamosFichas(BaseDetalle)
+    const { fichas: BaseDetalleBgm, prestamos: BaseDetalleEasy } = splitPrestamosFichas(BaseDetalleConActivas)
 
     //Intentar traer desde getFichasVigentes
     const ratioCreditoVencido = fichasVigentes.reduce((acum, ficha) => acum + ficha.ratioCreditoVencido, 0)
@@ -41,7 +42,7 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     const easy = calcularMasterEasy({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleEasy, promedioDiasDeAtraso, fichasVigentesEasy, tomadoPrestamosEasy, tomadoFichasEasy, ZFinal })
 
 
-    const bgm = calcularMasterBgm({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleBgm : [...BaseDetalleBgm,...fichasVigentesAsBaseDetalle], promedioDiasDeAtraso, fichasVigentesBgm, tomadoPrestamosBGM, tomadoFichasBGM, ZFinal, limiteEasy: easy.limite })
+    const bgm = calcularMasterBgm({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleBgm , promedioDiasDeAtraso, fichasVigentesBgm, tomadoPrestamosBGM, tomadoFichasBGM, ZFinal, limiteEasy: easy.limite })
 
 
 
@@ -95,7 +96,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-// getMaster(1615).then(res => console.log("respuesta con solid", res))
+// getMaster(25793).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {

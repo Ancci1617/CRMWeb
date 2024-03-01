@@ -15,7 +15,6 @@ const calcularIncremento = (Z, BaseDetalle, promedioDiasDeAtraso, summary, diasD
     const ultimosBienAbonados = cantidadDeCreditos == 1 ? ultBienAbonado : ultBienAbonado && anteUltBienAbonado
 
 
-
     if (Z >= 0.5 || !ultimosBienAbonados) {
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[0]) return 0
         if (promedioDiasDeAtraso <= diasDeAtrasoPorGrupo[1]) return -1

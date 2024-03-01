@@ -81,6 +81,8 @@ const calcularMasterEasy = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseD
 
     const disponible = calcularDisponible(ZFinal, BaseDetalleResumen)
 
+
+
     //Abstraer incremento
     const incremento = calcularIncremento(ZFinal, BaseDetalleEasy, promedioDiasDeAtraso, BaseDetalleResumen)
 

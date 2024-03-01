@@ -82,7 +82,6 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
         CREDITOS_BGM: 0,
         CREDITOS_BGM_TOTALES : 0
     })
-
     //SUSTITUYA si no encontro ningun valor que sirva por los valores iniciales
     summary.MINIMO_TOMADO_CAPITAL = sustituirInfinite(summary.MINIMO_TOMADO_CAPITAL,INICIALES.EASY)
     summary.MAXIMO_TOMADO_CAPITAL = sustituirInfinite(summary.MAXIMO_TOMADO_CAPITAL,INICIALES.EASY)

@@ -12,7 +12,6 @@ const getFichasVigentes = async (CTE, options = { withAcumulado: false, withCamb
     if (exceptoFichas) criteriosWhere.push(`Fichas.FICHA not in (${exceptoFichas.join(",")})`)
 
     const fichasRaw = await getFichasOptimized(options, criteriosWhere);
-    
 
     //Hacer que retorne un objeto con propiedad termiandas y vigentes? para ahorras FichasAsBaseDetalle,quizas retorna el ratio de credito vencido
 
