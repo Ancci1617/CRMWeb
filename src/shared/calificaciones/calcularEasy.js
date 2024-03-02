@@ -47,7 +47,7 @@ const calcularMasterEasy = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseD
 
     /*Criterio de clientes nuevos */ /*INICIALES - tomado (con evaluacion de limitantes) */
     if (!BaseDetalleEasy.length) {    
-        const disponible = INICIALES.EASY - tomadoFichasEasy - tomadoPrestamosEasy;
+        const disponible = INICIALES.EASY;
         const incremento = 0;
         const limitante = calcularLimitante(fichasVigentes, cteData,BaseDetalleEasy)
 

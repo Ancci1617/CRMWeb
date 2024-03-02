@@ -90,7 +90,7 @@ const calcularMasterBgm = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDe
 
     /*Clientes nuevos */
     if (!BaseDetalleBgm.length) {
-        const disponible = INICIALES.BGM - tomadoFichasBGM - tomadoPrestamosBGM;
+        const disponible = INICIALES.BGM;
         const incremento = 0;
         const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalleResumen.DEVOLUCIONES + BaseDetalleResumen.RETIRADAS, BaseDetalleResumen.CREDITOS_BGM, BaseDetalleBgm)
 
