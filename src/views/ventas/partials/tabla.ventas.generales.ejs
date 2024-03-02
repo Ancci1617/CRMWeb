@@ -31,6 +31,12 @@
       <% ventas.forEach(venta => {  %>
       <% const {USUARIO,APROBADO,CTE,FICHA,ZONA,NOMBRE,CALLE,WHATSAPP,DNI,ARTICULOS,TOTAL,CUOTAS,CUOTA,ANTICIPO,  DIA_VENCIMIENTO,PRIMER_PAGO,RESPONSABLE,INDICE,EVALUADO_POR,OBS_EVALUACION} = venta %>
       <% const estaEvaluado = EVALUADO_POR != "AUTOMATICO" %>
+
+      <% const articulosEnLaFicha = articulos.filter(art => ARTICULOS.split(" ").includes(art.Art) ) %>
+      <% const articulosEnFicha = ARTICULOS.trim().split(" ") %>
+      <% const articulosEnFichaObj = articulosEnFicha.map(art => articulos.find(artObj => artObj.Art == art) || {Producto : "No encontrado"}) %>
+      <% const articulosString  = articulosEnFichaObj.map(art => art.Producto).join(" | ") %>
+
       <tr>
         <td><%= USUARIO %></td>
         <td class="<%= APROBADO == "DESAPROBADO" ? "text-[#e74c3c]" : "text-[#009100]" %>  font-semibold"><%= APROBADO %></td>
@@ -41,7 +47,7 @@
         <td><%= CALLE %></td>
         <td><%= WHATSAPP %></td>
         <td><%= DNI %></td>
-        <td><%= ARTICULOS %></td>
+        <td title="<%= articulosString %>"><%= ARTICULOS %></td>
         <td><%= formatNumber(String(TOTAL)) %></td>
         <td><%= CUOTAS %></td>
         <td><%= formatNumber(String(CUOTA)) %></td>

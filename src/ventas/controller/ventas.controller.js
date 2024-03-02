@@ -13,6 +13,8 @@ const { splitPrestamosFichas } = require("../../lib/fichas.js");
 const { generarResumenDeVentas } = require("./lib/resumenVentas.js")
 
 const emitter = require("../../shared/EventNotifier/emitter.js");
+const { getArticulos } = require("../../shared/MysqlTable/model/lp.js");
+// const { getArticulos } = require("../../shared/MysqlTable/model/LP.js");
 
 
 const verVentasGeneral = async (req, res) => {
@@ -24,12 +26,16 @@ const verVentasGeneral = async (req, res) => {
 
         const { fichas, prestamos } = splitPrestamosFichas(ventas);
         const resumenFichas = generarResumenDeVentas(fichas)
-
         const resumenPrestamos = generarResumenDeVentas(prestamos)
-        
-        const USUARIOS = [...new Set(fichas.map(ficha => ficha.USUARIO))]
 
-        res.render("ventas/ventas.generales.ejs", { fichas, prestamos, aside, FECHA_VENTA, resumenFichas, resumenPrestamos ,USUARIOS})
+        const articulosPorBuscar = [...new Set(fichas.reduce((ac,f) => ac + f.ARTICULOS + " ","").trim().split(" "))]
+
+        const articulos = await getArticulos(articulosPorBuscar);
+    
+
+        const USUARIOS = [...new Set(fichas.map(ficha => ficha.USUARIO))]
+        
+        res.render("ventas/ventas.generales.ejs", { fichas, prestamos, aside, FECHA_VENTA, resumenFichas, resumenPrestamos ,USUARIOS,articulos})
 
 
     } catch (error) {

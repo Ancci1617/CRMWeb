@@ -36,7 +36,7 @@
 
       </div>
       
-      <%- include("./partials/tabla.ventas.generales.ejs",{ventas : fichas}) %>
+      <%- include("./partials/tabla.ventas.generales.ejs",{ventas : fichas,articulos}) %>
       
       <div class="mb-3">
         <div>Total : <%= formatNumber(String(resumenPrestamos.COLOCADO)) %></div>
