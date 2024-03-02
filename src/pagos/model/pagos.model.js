@@ -108,6 +108,7 @@ const getFichasByCte = async (CTE = "%", MODO = "CTE", filtrarTerminadas = false
     Fichas.ARTICULOS,
     PagosSV.SERV_PAGO,
     Fichas.ANTICIPO,
+    Fichas.ESTADO,
     SERV_UNIT,
     CUOTA,
     CUOTA_ANT,

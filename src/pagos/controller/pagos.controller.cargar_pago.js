@@ -20,7 +20,8 @@ async function deudaCte(req, res) {
 
     const CTE = req.query.CTE || await getClienteEnFichas(FICHA_PRIMERA);
 
-    const fichas_data = await pagosModel.getFichasByCte(CTE,undefined,EsRecorrido);
+    const fichas_data = (await pagosModel.getFichasByCte(CTE,undefined,EsRecorrido)).filter(f => EsRecorrido ?  f.ESTADO == "ACTIVO" || f.ESTADO == "PENDIENTE" : true );
+
     const usuarios = await getNombresDeUsuariosByRango(["VENDEDOR", "ADMIN", "COBRADOR"], [""]);
     const [cte_data] = await getClientes(CTE);
 
