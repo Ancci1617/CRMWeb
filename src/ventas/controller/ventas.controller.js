@@ -13,7 +13,7 @@ const { splitPrestamosFichas } = require("../../lib/fichas.js");
 const { generarResumenDeVentas } = require("./lib/resumenVentas.js")
 
 const emitter = require("../../shared/EventNotifier/emitter.js");
-const { getArticulos } = require("../../shared/MysqlTable/model/lp.js");
+const { getArticulos } = require("../../shared/MysqlTable/model/LP.js");
 // const { getArticulos } = require("../../shared/MysqlTable/model/LP.js");
 
 
