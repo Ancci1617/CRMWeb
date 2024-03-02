@@ -151,7 +151,6 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     atraso_eval = (atraso_eval == 0 && SALDO > 0 && vencidas == TOTAL / CUOTA) ? 1 : atraso_eval;
     const ratioCreditoVencido = vencidas / CUOTAS
 
-
     return {
         cuota: deudaCuota,
         servicio: deuda_serv,
@@ -160,7 +159,8 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
         atraso,
         atraso_evaluado: atraso_eval,
         pagas, vencimiento_vigente, EsPrimerPago,
-        ratioCreditoVencido
+        ratioCreditoVencido,
+
     }
 }
 
