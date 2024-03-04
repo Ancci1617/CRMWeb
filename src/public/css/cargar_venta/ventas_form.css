@@ -135,7 +135,11 @@ label {
 }
 
 .button .button__input--retirada {
-  background: rgb(248, 62, 62);
+  background: rgb(235 20 20);
+}
+.button .button__input--perdida {
+  background: rgb(123, 121, 121);
+  color: rgba(0, 0, 0, 0.876);
 }
 
 .button input[type='submit']:disabled {

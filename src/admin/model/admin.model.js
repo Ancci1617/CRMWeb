@@ -56,7 +56,7 @@ const updateEstado = async (ficha, USUARIO, ESTADO) => {
             USUARIO, ANTERIOR: JSON.stringify({ ESTADO: "ACTIVO" }),
             VIGENTE: JSON.stringify({ ESTADO }),
             PRIMARIA: ficha,
-            TIPO: "DEVOLUCION"
+            TIPO: ESTADO
         });
 
 

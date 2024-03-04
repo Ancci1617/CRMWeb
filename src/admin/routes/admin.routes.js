@@ -38,13 +38,16 @@ router.post("/editarFicha/:FICHA",
 
 router.get("/cargarDevolucion/:FICHA",
     hasPermission(permisos.ADMIN_ADMIN),
-    adminController.cargarDevolucion);
+    adminController.darDeBaja("DEVOLUCION"));
 
 router.get("/cargarRetirada/:FICHA",
     hasPermission(permisos.ADMIN_ADMIN),
-    adminController.cargarRetirada);
+    adminController.darDeBaja("RETIRADA"));
 
-
+router.get("/cargarPerdida/:FICHA",
+    hasPermission(permisos.ADMIN_ADMIN),
+    adminController.darDeBaja("PERDIDA"));
+    
 
 
 module.exports = router;
