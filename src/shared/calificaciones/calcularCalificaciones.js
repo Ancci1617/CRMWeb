@@ -11,6 +11,8 @@ const { cteNuevoDisponibles,cteNuevoClavo } = require("./constants/nuevos.js")
 
 
 const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
+    // console.log("Evaluando si es clavo",cteData.CTE,cteData);
+
     if (!fichasVigentes.length && !BaseDetalle.length) {
         if(cteData.ES_CLAVO) return cteNuevoClavo
         return cteNuevoDisponibles
@@ -131,11 +133,10 @@ const getMasterPorLote = async (listOfCte) => {
 
     console.timeEnd("genera indices")
 
-
     console.time("calificaciones")
     const disponibles = await Promise.all(listOfCte.map(async CTE => {
 
-        const cteData = cteDataIT[CTE] || [];
+        const [cteData] = cteDataIT[CTE] || [];
         const fichasVigentes = fichasVigentesIT[CTE] || [];
         const BaseDetalle = BaseDetalleIT[CTE] || [];
         const Pagos = PagosIT[CTE] || [];

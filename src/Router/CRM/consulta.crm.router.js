@@ -86,11 +86,16 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     const { disponibleFinalBgm, calificacionBgm, disponibleFinalEasy } = await getMaster(cte)
 
     query_result.Disponible = [{ BGM: disponibleFinalBgm, CALIF: calificacionBgm, CAPITAL: disponibleFinalEasy }]
-    query_result.Domicilio = await getDomicilio(cte_data.CALLE);
-    const clientesDelDomicilio = query_result.Domicilio.map(cte => cte.CTE);
-    const calificacionesDeClientesDelDomicilio = await getMasterPorLote(clientesDelDomicilio);
+    const domicilio = await getDomicilio(cte_data.CALLE);
+    const clientesEnDomicilio = domicilio.map(cte => cte.CTE);
 
-    query_result.Domicilio = query_result.Domicilio.map(cliente => {
+    console.log(clientesEnDomicilio);
+
+    const calificacionesDeClientesDelDomicilio = await getMasterPorLote(clientesEnDomicilio);
+
+    console.log(calificacionesDeClientesDelDomicilio);
+
+    query_result.Domicilio = domicilio.map(cliente => {
         const { calificacionBgm: CALIF } = calificacionesDeClientesDelDomicilio.find(cte => cte.CTE == cliente.CTE);
 
 
