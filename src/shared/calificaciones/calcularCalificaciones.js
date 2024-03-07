@@ -14,6 +14,7 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     // console.log("Evaluando si es clavo",cteData.CTE,cteData);
 
     if (!fichasVigentes.length && !BaseDetalle.length) {
+
         if(cteData.ES_CLAVO) return cteNuevoClavo
         return cteNuevoDisponibles
     
@@ -35,6 +36,7 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     const ratioCreditoVencido = fichasVigentes.reduce((acum, ficha) => acum + ficha.ratioCreditoVencido, 0)
 
     //Ver de donde lo puedo traer
+    console.log(Pagos);
     const promedioDiasDeAtraso = Pagos.reduce((acum, pago) => acum + pago.diasDeAtraso, 0) / Pagos.length || 0
 
 
@@ -98,7 +100,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-// getMaster(25480).then(res => console.log("respuesta con solid", res))
+getMaster(17219).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {
