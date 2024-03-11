@@ -89,11 +89,9 @@ Router.post("/query_CRM", isLoggedIn, async (req, res) => {
     const domicilio = await getDomicilio(cte_data.CALLE);
     const clientesEnDomicilio = domicilio.map(cte => cte.CTE);
 
-    console.log(clientesEnDomicilio);
 
     const calificacionesDeClientesDelDomicilio = await getMasterPorLote(clientesEnDomicilio);
 
-    console.log(calificacionesDeClientesDelDomicilio);
 
     query_result.Domicilio = domicilio.map(cliente => {
         const { calificacionBgm: CALIF } = calificacionesDeClientesDelDomicilio.find(cte => cte.CTE == cliente.CTE);
