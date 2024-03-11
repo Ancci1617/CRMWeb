@@ -165,7 +165,7 @@ const getSaldoEnCuentasPorReporte = async (req, res) => {
 
             if (error.response && error.response.data.error == "report_conf_not_found") {
                 console.log("Error de no configurado")
-                return Object.assign(data, { error: "Reportes no configuradors" });
+                return Object.assign(data, { error: "Reportes no configurados" });
             }
             return Object.assign(data, { error: "Error desconocido" });
 
