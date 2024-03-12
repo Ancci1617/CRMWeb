@@ -50,19 +50,21 @@ const generateSummaryBaseDetalle = (BaseDetalle) => {
                 CREDITOS_BGM_TOTALES : CREDITOS_BGM_TOTALES +  Number(!esPrestamo)
             },
             ...esValida && {
-                VIEJAS: VIEJAS + Number(esVieja),
-                NUEVAS: NUEVAS + Number(!esVieja),
                 ACUM_VU: ACUM_VU + VALOR_UNITARIO,
                 ACUM_CAPITAL: ACUM_CAPITAL + CAPITAL,
                 MINIMO_TOMADO: Math.min(VALOR_UNITARIO, MINIMO_TOMADO),
                 VALIDAS: VALIDAS + 1,
                 CREDITOS_BGM: CREDITOS_BGM + Number(!esPrestamo),
-                CREDITOS_EASY: CREDITOS_EASY + Number(esPrestamo)
+                CREDITOS_EASY: CREDITOS_EASY + Number(esPrestamo),
+                NUEVAS: NUEVAS + Number(!esVieja),
+
             },
             ...esValida && esVieja && !esPrestamo && {
                 MINIMO: Math.min(MINIMO, TEORICA),
                 MAXIMO: Math.max(MAXIMO, TEORICA),
-                SUMA_TEORICA: SUMA_TEORICA + TEORICA
+                SUMA_TEORICA: SUMA_TEORICA + TEORICA,
+                VIEJAS: VIEJAS + Number(esVieja),
+
             }
 
         }
