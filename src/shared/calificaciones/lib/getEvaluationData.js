@@ -11,17 +11,17 @@ const getEvaluationData = async (CTE) => {
 
     // console.log("Base detalle consultada");
     const PagosRaw = await getPagosAcumulados({CTE})
-    console.time("pagos format")
+    // console.time("pagos format")
     // console.log("Pagos consultados");
 
     const pagos = formatPagosAcumulados(PagosRaw)
-    console.timeEnd("pagos format")
+    // console.timeEnd("pagos format")
      
 
-    console.time("Detalle format")
+    // console.time("Detalle format")
     // console.log("pagos Formateados");
     const BaseDetalle = formatBaseDetalle(BaseDetalleRaw,pagos)
-    console.timeEnd("Detalle format")
+    // console.timeEnd("Detalle format")
 
     // console.log("BaseDetalleFormateada");
     return {BaseDetalle,pagos}

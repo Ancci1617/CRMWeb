@@ -107,7 +107,7 @@ const getMasterPorLote = async (listOfCte) => {
     // const listOfCteRaw = JSON.parse(fs.readFileSync("C:/A - Blanco GusMar/1 - Actual GusMar/Master acceso directo/ListaDeClientes.json")).CLIENTES;
 
     // const listOfCte = listOfCteRaw.slice(0, 1000);
-    console.log("A");
+    // console.log("A");
     const cteDataArr = await getCliente({ CTE: listOfCte })
 
     const fichasVigentesArr = await getFichasVigentes(listOfCte);
@@ -126,16 +126,16 @@ const getMasterPorLote = async (listOfCte) => {
         });
         return indice;
     }
-    console.time("genera indices")
+    // console.time("genera indices")
 
     const cteDataIT = createItArr(cteDataArr)
     const fichasVigentesIT = createItArr(fichasVigentesArr)
     const BaseDetalleIT = createItArr(BaseDetalleArr)
     const PagosIT = createItArr(PagosArr)
 
-    console.timeEnd("genera indices")
+    // console.timeEnd("genera indices")
 
-    console.time("calificaciones")
+    // console.time("calificaciones")
     const disponibles = await Promise.all(listOfCte.map(async CTE => {
 
         const [cteData] = cteDataIT[CTE] || [];
@@ -155,7 +155,7 @@ const getMasterPorLote = async (listOfCte) => {
 
     }))
 
-    console.timeEnd("calificaciones")
+    // console.timeEnd("calificaciones")
     return disponibles
 }
 
