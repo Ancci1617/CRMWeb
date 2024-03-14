@@ -32,7 +32,7 @@ const calcularLimitante = (fichasVigentes, cteData, BaseDetalle) => {
 const calcularLimite = (limitante, disponible, incremento, MAXIMO_TOMADO) => {
     if (limitante) return LIMITANTES[limitante] * 10000
     return round(Math.min(Math.max(disponible + (incremento * 10000), 0), Math.max(MAXIMO_TOMADO * 2, 15000)), 2)
-
+    
 }
 
 
@@ -43,7 +43,6 @@ const calcularDisponibleFinalEasy = (limite, { tomadoPrestamosEasy, tomadoFichas
 
 
 const calcularMasterEasy = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleEasy, promedioDiasDeAtraso, fichasVigentesEasy, tomadoPrestamosEasy, tomadoFichasEasy, ZFinal }) => {
-
 
     /*Criterio de clientes nuevos */ /*INICIALES - tomado (con evaluacion de limitantes) */
     if (!BaseDetalleEasy.length) {    
@@ -85,7 +84,6 @@ const calcularMasterEasy = ({ cteData, fichasVigentes, BaseDetalleResumen, BaseD
 
     //Abstraer incremento
     const incremento = calcularIncremento(ZFinal, BaseDetalleEasy, promedioDiasDeAtraso, BaseDetalleResumen)
-
 
     //Abstraer limitante
     const limitante = calcularLimitante(fichasVigentes, cteData, BaseDetalleEasy)

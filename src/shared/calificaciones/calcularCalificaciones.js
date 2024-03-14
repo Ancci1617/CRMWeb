@@ -43,6 +43,7 @@ const getDisponibles = ({ BaseDetalle, Pagos, fichasVigentes, cteData }) => {
     const ZInicial = getZInicial(BaseDetalleResumen);
     const ZFinal = calcularZFinal(ZInicial, BaseDetalleResumen.VIEJAS, BaseDetalleResumen.VALIDAS, Pagos, ratioCreditoVencido)
 
+
     const easy = calcularMasterEasy({ cteData, fichasVigentes, BaseDetalleResumen, BaseDetalleEasy, promedioDiasDeAtraso, fichasVigentesEasy, tomadoPrestamosEasy, tomadoFichasEasy, ZFinal })
 
 
@@ -100,7 +101,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-// getMaster(23751).then(res => console.log("respuesta con solid", res))
+// getMaster(24187).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {
