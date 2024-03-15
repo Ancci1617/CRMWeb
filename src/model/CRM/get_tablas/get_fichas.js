@@ -141,7 +141,7 @@ const getFichas = async (campo, condicion, criterio = "like", criterio2 = "TRUE"
             Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER) AS SALDO,
             Fichas.CUOTA,
             CONVERT(
-                Fichas.TOTAL / Fichas.CUOTA,
+                (Fichas.TOTAL-Fichas.ANTICIPO) / Fichas.CUOTA,
                 INTEGER
             ) AS CUOTAS,
             Fichas.ESTADO,
@@ -451,7 +451,7 @@ const getFichasOptimized = async ({ withAcumulado = false, withCambiosDeFecha = 
         Fichas.CUOTA_ANT - CONVERT(IFNULL(pagos.CUOTA_PAGO, 0), INTEGER) AS SALDO,
         Fichas.CUOTA,
         CONVERT(
-            Fichas.TOTAL / Fichas.CUOTA,
+            (Fichas.TOTAL - Fichas.ANTICIPO) / Fichas.CUOTA  ,
             INTEGER
         ) AS CUOTAS,
         ${withAtraso ? atrasoString : ""}
