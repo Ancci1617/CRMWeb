@@ -117,11 +117,11 @@ function getDoubt({ VENCIMIENTO, PRIMER_PAGO, CUOTAS, CUOTA, TOTAL, CUOTA_ANT, C
     En caso que sea prepago calcula la deuda de cuota de la siguiente manera
     1er Cuota = ANTICIPO DEL PREPAGO DE 2DA a ultima cuota, algoritmo normal*/
     const esPrepago = !!ANTICIPO;
-
+    const totalAbonado = CUOTA_PAGO + (TOTAL-CUOTA_ANT)
     const deudaCuota =
-        (pagas < 1) && ANTICIPO ?
-            Math.max(ANTICIPO - CUOTA_PAGO, 0) :
-            Math.max(CUOTA * vencidas - TOTAL + CUOTA_ANT - CUOTA_PAGO + (ANTICIPO ? ANTICIPO - CUOTA : 0), 0);
+        vencidas < 1 && esPrepago ?
+            Math.max(ANTICIPO - totalAbonado , 0) :
+            Math.max(CUOTA * vencidas - totalAbonado + (esPrepago ? ANTICIPO - CUOTA : 0), 0);
 
 
 
