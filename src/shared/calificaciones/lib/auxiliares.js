@@ -69,7 +69,7 @@ const calcularZFinal = (ZInicial, cantidadDeCreditosViejos, cantidadDeCreditosTo
 
 
 
-    const ZFinal = round(sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos), 2);
+    const ZFinal = Math.max(round(sumVariableDeAtraso / (cantidadDeCreditosTotales + ratioCreditosActivos), 2),0);
 
     return !ZFinal || ZFinal == Infinity ? 0 : ZFinal
 
