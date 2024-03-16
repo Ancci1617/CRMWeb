@@ -12,6 +12,8 @@ const fs = require("fs");
 const https = require('https');
 const config = require("config")
 const {setFormaters} = require("./middlewares/formaters.js");
+const { getToday } = require('./lib/dates.js');
+const { format } = require('date-fns');
 
 
 //Set Variables;
@@ -49,8 +51,14 @@ app.use(setFormaters);
 app.use(userView);
 require("./lib/passport.lib");
 
+// morgan.format('myformat', '[:date[clf]] ":method :url" :status :res[content-length] - :response-time ms');
+
+
 morgan.token('user', function (req, res) { return req.user ? req.user.Usuario : "WL" });
-app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :user"));
+
+morgan.token('now', () =>format(new Date(),"dd/MM hh:mm") );
+
+app.use(morgan(":method :url :status :response-time ms - :res[content-length] - :now - :user"));
 
 /*Rutas de eventos */
 require("./contactos/routes/events.routes.js")
