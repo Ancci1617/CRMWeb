@@ -27,6 +27,6 @@ module.exports = {
     LP_ADMIN : "LP_ADMIN",
     LP_GERENCIA : "LP_GERENCIA",
 
-
+    CRMV2_USER : "CRMV2_USER" //ACCESSO a la version del crm con REACT
 
 }

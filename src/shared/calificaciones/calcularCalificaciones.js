@@ -101,7 +101,7 @@ const getMaster = async (CTE, EXCEPCIONES) => {
 }
 
 
-// getMaster(22050).then(res => console.log("respuesta con solid", res))
+// getMaster(18583).then(res => console.log("respuesta con solid", res))
 
 
 const getMasterPorLote = async (listOfCte) => {
